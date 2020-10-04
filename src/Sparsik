@@ -4,10 +4,13 @@ import Base: +, *, ==, !=
 
 
 #=
+    This version of Vector is a
+        a test site for Julia
+
     Sparsik<T>
     Implements SparseVector<T>
 
-    scale, inner, ∑, reduce,
+    scale, inner, sum, reduce,
     is_zero, first_nonzero
 =#
 
@@ -54,7 +57,7 @@ function scale(v::Sparsik, c)
 end
 
 
-function ∑(v1::Sparsik, v2::Sparsik)
+function sum(v1::Sparsik, v2::Sparsik)
 
     new_indices = []
     newdata = Dict()
@@ -144,7 +147,12 @@ function from_array(a::Vector{T}) where {T<:Integer}
 end
 
 
-+(v::Sparsik, u::Sparsik) = ∑(v, u)
+∑(x::Sparsik) = x
+∑(x, xs...) = sum(x, ∑(xs...))
+
+
+
++(v::Sparsik, u::Sparsik) = sum(v, u)
 *(v::Sparsik, c::Integer) = scale(v, c)
 *(c::Integer, v::Sparsik) = v * c
 ==(v::Sparsik, u::Sparsik) = (v.dim == u.dim;
@@ -176,5 +184,9 @@ v2 = Sparsik{Integer}(7, [2, 3, 5, 6],
 @assert first_nonzero(v2) == 2
 
 @assert inner(v1, v2) == -132
+
+@assert ∑(from_array([1, 2]),
+        from_array([-1, 3]),
+        from_array([0, 1])) == from_array([0, 6])
 
 println("OK")
