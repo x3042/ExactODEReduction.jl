@@ -14,11 +14,13 @@ import Base: +, *, ==, !=
     is_zero, first_nonzero
 =#
 
+# Gleb: the coordinates of the vectors will be (at least at first)
+# usually rational numbers (I would go for Nemo.fmpq)
+# You can check that it is not a subtype of Integer
 struct Sparsik{T<:Integer}
     dim::Int
     nonzero::Vector{Int}
     data::Dict{Int, T}
-
 end
 
 
@@ -37,7 +39,6 @@ function print_vector(v::Sparsik)
         i += 1
     end
     println(")")
-
 end
 
 
@@ -49,7 +50,14 @@ function first_nonzero(v::Sparsik)
     return v.nonzero[1]
 end
 
+# Gleb: I do not insist on comprehensive typing for the prototype
+# but here a more natural would be something like
+# scale(v::Sparsik{T}, c::T)
 function scale(v::Sparsik, c)
+    # Gleb: I also find the support of Unicode a fun feature
+    # However, I suggest we do not use it in the "working" code
+    # (as opposed to "presentational code").
+    # Reason: problematic to type/search in many programming environments
     for idx ∈ v.nonzero
         v.data[idx] *= c
     end
@@ -98,17 +106,21 @@ function sum(v1::Sparsik, v2::Sparsik)
 
     end
 
+    # Gleb: why integer?!
     return Sparsik{Integer}(v1.dim, new_indices, newdata)
 
 end
 
-
+# Gleb: this should be a docstring
 # returns v1 + v2 * c
 function reduce(v::Sparsik, u::Sparsik, c)
     return ∑(v, scale_(u, c))
 end
 
-
+# Gleb: this is the algorithm used in CLUE, I suggest 
+# we go deeper. A puzzle for you (should not be hard):
+# if the vectors are with a and b nonzeroes, respectively,
+# do this in O(min(a, b)) (randomized, amortized)
 function inner(v::Sparsik, u::Sparsik)
     i, j = 1, 1
     ans = 0
@@ -163,9 +175,8 @@ end
 
 # --------------------------------------------
 
-
-
-
+# Gleb: first, I am really happy to work with people who write tests for their code!
+# Second: tests should be in a separate file in folder (tests/). I will send an example of how to organize
 v1 = Sparsik{Integer}(7, [1, 3, 5, 7],
             Dict(1 => 10, 3 => -2, 5 => 8, 7 => 4))
 v2 = Sparsik{Integer}(7, [2, 3, 5, 6],
