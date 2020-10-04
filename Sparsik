@@ -1,16 +1,16 @@
 
-import Base64.+
+import Base64.+, Base64.*, Base64.==
 
 
 
 #=
-    _Sparsik:
+    Sparsik:
 
     scale, inner, ∑, reduce,
     is_zero, first_nonzero
 =#
 
-struct _Sparsik
+struct Sparsik
     _dim::Integer
     _nonzero::Any
     _data::Any
@@ -19,7 +19,7 @@ end
 
 
 
-function print_vector(v)
+function print_vector(v::Sparsik)
     i = 1
     j = 1
     print("(")
@@ -36,15 +36,15 @@ function print_vector(v)
 end
 
 
-function is_zero(v)
+function is_zero(v::Sparsik)::Bool
     return length(v._nonzero) == 0
 end
 
-function first_nonzero(v)
+function first_nonzero(v::Sparsik)::Integer
     return v._nonzero[1]
 end
 
-function scale_(v, c)
+function scale_(v::Sparsik, c::Integer)::Sparsik
     for idx ∈ v._nonzero
         v._data[idx] *= c
     end
@@ -53,10 +53,10 @@ end
 
 
 
-function ∑(v1, v2)
+function ∑(v1::Sparsik, v2::Sparsik)::Sparsik
 
     new_indices = []
-    new_data = Dict{Integer, Integer}()
+    new_data = Dict()
 
     i, j = 1, 1
 
@@ -94,26 +94,26 @@ function ∑(v1, v2)
 
     end
 
-    return _Sparsik(v1._dim, new_indices, new_data)
+    return Sparsik(v1._dim, new_indices, new_data)
 
 end
 
 
 # returns v1 + v2 * c
-function reduce_(v1, v2, c)
-    return ∑(v1, scale_(v2, c))
+function reduce_(v::Sparsik, u::Sparsik, c::Integer)::Sparsik
+    return ∑(v, scale_(u, c))
 end
 
 
-function inner_(v1, v2)
+function inner_(v::Sparsik, u::Sparsik)::Integer
     i, j = 1, 1
     ans = 0
-    while i <= length(v1._nonzero) && j <= length(v2._nonzero)
-        if v1._nonzero[i] == v2._nonzero[j]
-            ans += v1._data[v1._nonzero[i]] * v2._data[v2._nonzero[j]]
+    while i <= length(v._nonzero) && j <= length(u._nonzero)
+        if v._nonzero[i] == u._nonzero[j]
+            ans += v._data[v._nonzero[i]] * u._data[u._nonzero[j]]
             i += 1
             j += 1
-        elseif v1._nonzero[i] < v2._nonzero[j]
+        elseif v._nonzero[i] < u._nonzero[j]
             i += 1
         else
             j += 1
@@ -123,27 +123,31 @@ function inner_(v1, v2)
 end
 
 
-function get_(v, i)
+function get_(v::Sparsik, i::Integer)::Integer
     return get(v._data, i, 0)
 end
 
 
-+(v::_Sparsik, u::_Sparsik) = ∑(v, u)
++(v::Sparsik, u::Sparsik) = ∑(v, u)
+*(v::Sparsik, c::Integer) = scale_(v, c)
+==(v::Sparsik, u::Sparsik) = (v._dim == u._dim;
+                                v._data == u._data;
+                                v._nonzero == u._nonzero)
+
+# ---------------------------------------
 
 
-v1 = _Sparsik(7, [1, 3, 5, 7], Dict{Int64, Int64}(1 => 10, 3 => -2, 5 => 8, 7 => 4))
-v2 = _Sparsik(7, [2, 3, 5, 6],  Dict{Int64, Int64}(2 => 2, 3 => 1, 5 => -8, 6 => 11))
-
-print_vector(v1 + v2)
+v1 = Sparsik(7, [1, 3, 5, 7], Dict(1 => 10, 3 => -2, 5 => 8, 7 => 4))
+v2 = Sparsik(7, [2, 3, 5, 6],  Dict(2 => 2, 3 => 1, 5 => -8, 6 => 11))
 
 
-print_vector(v1)
-print_vector(v2)
 
-s = reduce_(v1, v2, 2)
-print_vector(s)
-print("vector of $(s._dim) with $(length(s._nonzero)) nonzero")
+@assert (v1 + v2) == Sparsik(7, [1, 2, 3, 6, 7], Dict(1=>10, 2=>2, 3=>-1, 6=>11, 7=>4))
 
-abcd = Dict{Int64, Int64}(1 => 10, 3 => -2, 5 => 8, 7 => 4)
+@assert (v1 * 2) == Sparsik(7, [1, 3, 5, 7], Dict(1=>20, 3=>-4, 5=>16, 7=>8))
 
-println(get_(s, 1))
+@assert is_zero(Sparsik(3, [], Dict()))
+
+@assert first_nonzero(v2) == 2
+
+@assert inner_(v1, v2) == -132
