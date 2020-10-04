@@ -95,7 +95,7 @@ function ∑(v1::Sparsik, v2::Sparsik)
 
     end
 
-    return Sparsik{T}(v1.dim, new_indices, newdata)
+    return Sparsik{Integer}(v1.dim, new_indices, newdata)
 
 end
 
@@ -164,17 +164,17 @@ v2 = Sparsik{Integer}(7, [2, 3, 5, 6],
             Dict(2 => 2, 3 => 1, 5 => -8, 6 => 11))
 
 
-print_vector(v1)
-
-@assert v1 == from_list([10, 0, -2, 0, 8, 0, 4])
+@assert v1 == from_array([10, 0, -2, 0, 8, 0, 4])
 
 @assert (v1 + v2) == from_array([10, 2, -1, 0, 0, 11, 4])
 
 @assert (v1 * 2) == from_array([20, 0, -4, 0, 16, 0, 8])
 
 @assert is_zero(Sparsik{Int64}(3, [], Dict()))
-@assert is_zero(from_list([0, 0, 0]))
+@assert is_zero(from_array([0, 0, 0]))
 
 @assert first_nonzero(v2) == 2
 
 @assert inner(v1, v2) == -132
+
+println("OK")
