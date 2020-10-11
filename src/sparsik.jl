@@ -1,71 +1,72 @@
 
 
-import Base: +, *, ==, !=
+import Base: +, *, ==, !=, zero
 
 
 #=
-    This version of Vector is a
-        a test site for Julia
+    The File contains Sparsik<Real>
+    which implements SparseVector<Real>
 
-    Sparsik<T>
-    Implements SparseVector<T>
-
-    scale, inner, sum, reduce,
-    is_zero, first_nonzero
+    Sparsik:
+        scale, inner, sum, reduce,
+        from_vector
 =#
+
+# Alex: SPOILER - type info deleted
+
+# TODO: - write convenience functions, e.g array-subscription
+#       - read documentation about documentation
+
 
 # Gleb: the coordinates of the vectors will be (at least at first)
 # usually rational numbers (I would go for Nemo.fmpq)
 # You can check that it is not a subtype of Integer
-struct Sparsik{T<:Integer}
+struct Sparsik
     dim::Int
     nonzero::Vector{Int}
-    data::Dict{Int, T}
+    data::Dict{Int, Any}
 end
 
 
 
-function print_vector(v::Sparsik)
-    i, j = 1, 1
-
+function print_vector(v)
     print("(")
-    while i <= v.dim
-        if j <= length(v.nonzero) && v.nonzero[j] == i
-            print(v.data[i], ", ")
-            j += 1
-        else
-            print(0, ", ")
-        end
-        i += 1
+
+    for i in 1 : v.dim
+        print(get!(v.data, i, 0))
+        i == v.dim || print(", ")
     end
-    println(")")
+
+    print(")\n")
 end
 
 
-function is_zero(v::Sparsik)
+function is_zero(v)
     return length(v.nonzero) == 0
 end
 
-function first_nonzero(v::Sparsik)
+function first_nonzero(v)
     return v.nonzero[1]
 end
 
 # Gleb: I do not insist on comprehensive typing for the prototype
 # but here a more natural would be something like
 # scale(v::Sparsik{T}, c::T)
-function scale(v::Sparsik, c)
+# Alex: types erased
+function scale(v, c)
     # Gleb: I also find the support of Unicode a fun feature
     # However, I suggest we do not use it in the "working" code
     # (as opposed to "presentational code").
     # Reason: problematic to type/search in many programming environments
-    for idx ∈ v.nonzero
+    # Alex: fixed
+    for idx in v.nonzero
         v.data[idx] *= c
     end
     return v
 end
 
 
-function sum(v1::Sparsik, v2::Sparsik)
+function sum(v1, v2)
 
     new_indices = []
     newdata = Dict()
@@ -107,21 +108,24 @@ function sum(v1::Sparsik, v2::Sparsik)
     end
 
     # Gleb: why integer?!
-    return Sparsik{Integer}(v1.dim, new_indices, newdata)
+    # Alex: fixed
+    return Sparsik(v1.dim, new_indices, newdata)
 
 end
 
 # Gleb: this should be a docstring
-# returns v1 + v2 * c
-function reduce(v::Sparsik, u::Sparsik, c)
-    return ∑(v, scale_(u, c))
+# Alex: to be fixed
+"returns v1 + v2 * c"
+function reduce(v, u, c)
+    return sum(v, scale(u, c))
 end
 
-# Gleb: this is the algorithm used in CLUE, I suggest 
+# Gleb: this is the algorithm used in CLUE, I suggest
 # we go deeper. A puzzle for you (should not be hard):
 # if the vectors are with a and b nonzeroes, respectively,
 # do this in O(min(a, b)) (randomized, amortized)
-function inner(v::Sparsik, u::Sparsik)
+# Alex: see inner_2
+function inner(v, u)
     i, j = 1, 1
     ans = 0
     while i <= length(v.nonzero) && j <= length(u.nonzero)
@@ -139,65 +143,67 @@ function inner(v::Sparsik, u::Sparsik)
 end
 
 
-function get(v::Sparsik, i::Int)
-    return get(v.data, i, 0)
+# assuming `Dict` to provide constant-time lookups
+# and linear-time iterating
+function inner_2(v, u)
+    ans = 0
+
+    if length(v.nonzero) > length(u.nonzero)
+        # !!!
+        # how to swap in O(1)?
+        # swap(v, u)
+    end
+
+    if length(v.nonzero) > length(u.nonzero)
+        for (i, x) in u.data
+            ans += x * get(v, i)
+        end
+    else
+        for (i, x) in v.data
+            ans += x * get(u, i)
+        end
+    end
+
+    return ans
 end
 
 
-function from_array(a::Vector{T}) where {T<:Integer}
-    new_idx = Vector{T}()
-    new_data = Dict{Int, T}()
 
-    for (i, x) ∈ enumerate(a)
-        if x != 0
-            append!(new_idx, i)
+function get(v, i)
+    return get!(v.data, i, 0)
+end
+
+
+function from_vector(a)
+    new_idx = []
+    new_data = Dict()
+
+    for (i, x) in enumerate(a)
+        # generalized
+        if !iszero(x)
+            push!(new_idx, i)
             new_data[i] = x
         end
     end
 
-    return Sparsik{T}(length(a), new_idx, new_data)
+    return Sparsik(length(a), new_idx, new_data)
 end
-
-
-∑(x::Sparsik) = x
-∑(x, xs...) = sum(x, ∑(xs...))
 
 
 
 +(v::Sparsik, u::Sparsik) = sum(v, u)
-*(v::Sparsik, c::Integer) = scale(v, c)
-*(c::Integer, v::Sparsik) = v * c
+*(v::Sparsik, c::Real) = scale(v, c)
+*(c::Real, v::Sparsik) = v * c
 ==(v::Sparsik, u::Sparsik) = (v.dim == u.dim;
-                                v.data == u.data;
-                                v.nonzero == u.nonzero)
+            v.data == u.data;
+            v.nonzero == u.nonzero)
 !=(v::Sparsik, u::Sparsik) = !(v == u)
 
+zero(v::Sparsik) = Sparsik(v.dim, [], Dict())
 
-# --------------------------------------------
 
 # Gleb: first, I am really happy to work with people who write tests for their code!
 # Second: tests should be in a separate file in folder (tests/). I will send an example of how to organize
-v1 = Sparsik{Integer}(7, [1, 3, 5, 7],
-            Dict(1 => 10, 3 => -2, 5 => 8, 7 => 4))
-v2 = Sparsik{Integer}(7, [2, 3, 5, 6],
-            Dict(2 => 2, 3 => 1, 5 => -8, 6 => 11))
+# Alex: tests moved
 
-
-@assert v1 == from_array([10, 0, -2, 0, 8, 0, 4])
-
-@assert (v1 + v2) == from_array([10, 2, -1, 0, 0, 11, 4])
-
-@assert (v1 * 2) == from_array([20, 0, -4, 0, 16, 0, 8])
-
-@assert is_zero(Sparsik{Int64}(3, [], Dict()))
-@assert is_zero(from_array([0, 0, 0]))
-
-@assert first_nonzero(v2) == 2
-
-@assert inner(v1, v2) == -132
-
-@assert ∑(from_array([1, 2]),
-        from_array([-1, 3]),
-        from_array([0, 1])) == from_array([0, 6])
-
-println("OK")
+# --------------------------------------------
