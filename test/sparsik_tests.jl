@@ -1,6 +1,6 @@
 @testset "Base functionality" begin
 
-    include("../sparsik.jl")
+    include("../src/sparsik.jl")
 
 
     v1 = Sparsik(7, [1, 3, 5, 7],

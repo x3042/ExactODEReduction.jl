@@ -18,55 +18,54 @@ import Base: +, *, ==, !=, zero
 #       - read documentation about documentation
 
 
-# Gleb: the coordinates of the vectors will be (at least at first)
-# usually rational numbers (I would go for Nemo.fmpq)
-# You can check that it is not a subtype of Integer
 struct Sparsik
     dim::Int
     nonzero::Vector{Int}
     data::Dict{Int, Any}
 end
 
+#------------------------------------------------------------------------------
 
-
-function print_vector(v)
+function print_vector(v::Sparsik)
     print("(")
 
     for i in 1 : v.dim
+        # Gleb: important thing: in Julia, there is a convention that functions changing the arguments end with !
+        # Therefore, this get! may change the argument. In fact, it there is no i, it will insert zero, so your vector
+        # will soon become not so sparse. Use simply get instead
         print(get!(v.data, i, 0))
+        # Gleb: if would be more readable. By the way, there is a join function like in Python
         i == v.dim || print(", ")
     end
 
     print(")\n")
 end
 
+#------------------------------------------------------------------------------
 
-function is_zero(v)
+function is_zero(v::Sparsik)
     return length(v.nonzero) == 0
 end
 
-function first_nonzero(v)
+#------------------------------------------------------------------------------
+
+function first_nonzero(v::Sparsik)
     return v.nonzero[1]
 end
 
-# Gleb: I do not insist on comprehensive typing for the prototype
-# but here a more natural would be something like
-# scale(v::Sparsik{T}, c::T)
-# Alex: types erased
-function scale(v, c)
-    # Gleb: I also find the support of Unicode a fun feature
-    # However, I suggest we do not use it in the "working" code
-    # (as opposed to "presentational code").
-    # Reason: problematic to type/search in many programming environments
-    # Alex: fixed
+#------------------------------------------------------------------------------
+
+function scale(v::Sparsik, c)
+    # Gleb: treat the case c = 0 (and include it to tests)
     for idx in v.nonzero
         v.data[idx] *= c
     end
     return v
 end
 
+#------------------------------------------------------------------------------
 
-function sum(v1, v2)
+function sum(v1::Sparsik, v2::Sparsik)
 
     new_indices = []
     newdata = Dict()
@@ -107,18 +106,19 @@ function sum(v1, v2)
 
     end
 
-    # Gleb: why integer?!
-    # Alex: fixed
     return Sparsik(v1.dim, new_indices, newdata)
-
 end
+
+#------------------------------------------------------------------------------
 
 # Gleb: this should be a docstring
 # Alex: to be fixed
 "returns v1 + v2 * c"
-function reduce(v, u, c)
+function reduce(v::Sparsik, u::Sparsik, c)
     return sum(v, scale(u, c))
 end
+
+#------------------------------------------------------------------------------
 
 # Gleb: this is the algorithm used in CLUE, I suggest
 # we go deeper. A puzzle for you (should not be hard):
@@ -142,9 +142,11 @@ function inner(v, u)
     return ans
 end
 
+#------------------------------------------------------------------------------
 
 # assuming `Dict` to provide constant-time lookups
 # and linear-time iterating
+# Gleb: valid assumption
 function inner_2(v, u)
     ans = 0
 
@@ -152,6 +154,7 @@ function inner_2(v, u)
         # !!!
         # how to swap in O(1)?
         # swap(v, u)
+        # Gleb: just call inner_2(u, v)
     end
 
     if length(v.nonzero) > length(u.nonzero)
@@ -167,12 +170,14 @@ function inner_2(v, u)
     return ans
 end
 
+#------------------------------------------------------------------------------
 
-
-function get(v, i)
+# Gleb: again, get! is mutating
+function get(v::Sparsik, i::Int)
     return get!(v.data, i, 0)
 end
 
+#------------------------------------------------------------------------------
 
 function from_vector(a)
     new_idx = []
@@ -189,11 +194,11 @@ function from_vector(a)
     return Sparsik(length(a), new_idx, new_data)
 end
 
-
+#------------------------------------------------------------------------------
 
 +(v::Sparsik, u::Sparsik) = sum(v, u)
-*(v::Sparsik, c::Real) = scale(v, c)
-*(c::Real, v::Sparsik) = v * c
+*(v::Sparsik, c::Any) = scale(v, c)
+*(c::Any, v::Sparsik) = v * c
 ==(v::Sparsik, u::Sparsik) = (v.dim == u.dim;
             v.data == u.data;
             v.nonzero == u.nonzero)
@@ -201,9 +206,4 @@ end
 
 zero(v::Sparsik) = Sparsik(v.dim, [], Dict())
 
-
-# Gleb: first, I am really happy to work with people who write tests for their code!
-# Second: tests should be in a separate file in folder (tests/). I will send an example of how to organize
-# Alex: tests moved
-
-# --------------------------------------------
+# -----------------------------------------------------------------------------
