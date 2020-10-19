@@ -1,23 +1,43 @@
 
 
-import Base: +, *, ==, !=, zero
-
-
 #=
-    The File contains Sparsik<Real>
-    which implements SparseVector<Real>
+    The File contains Sparsik<Real> and related funcs
 
-    Sparsik:
-        scale, inner, sum, reduce,
-        from_vector
+    Overloaded functions:
+        get, getindex, zero, iszero, reduce, empty!, length
 =#
 
-# Alex: SPOILER - type info deleted
 
-# TODO: - write convenience functions, e.g array-subscription
+# TODO:
+#       - write convenience functions, e.g array-subscription
 #       - read documentation about documentation
 
+#------------------------------------------------------------------------------
 
+import Base: ==, !=, +, -, *, get
+
+#------------------------------------------------------------------------------
+
+
+"""
+Sparsik
+
+`Sparsik` implements Sparse Vector to store Real numbers. One can
+instantiate `Sparsik` via a default constructor
+
+```
+v = Sparsik(3, [1, 3], Dict(1 => 4, 3 => -1))
+```
+which is essentially equal to constructing a vector (4, 0, -1)
+
+Alternatively, a sequence of values may be passed into `from_dense`
+
+```
+u = from_dense([4, 0, -1])
+```
+
+Note that `v` and `u` are considered equal
+"""
 struct Sparsik
     dim::Int
     nonzero::Vector{Int}
@@ -26,37 +46,21 @@ end
 
 #------------------------------------------------------------------------------
 
-function print_vector(v::Sparsik)
-    print("(")
-
-    for i in 1 : v.dim
-        # Gleb: important thing: in Julia, there is a convention that functions changing the arguments end with !
-        # Therefore, this get! may change the argument. In fact, it there is no i, it will insert zero, so your vector
-        # will soon become not so sparse. Use simply get instead
-        print(get!(v.data, i, 0))
-        # Gleb: if would be more readable. By the way, there is a join function like in Python
-        i == v.dim || print(", ")
-    end
-
-    print(")\n")
-end
-
-#------------------------------------------------------------------------------
-
-function is_zero(v::Sparsik)
-    return length(v.nonzero) == 0
-end
-
-#------------------------------------------------------------------------------
-
+# Alex: should this throw?
+# O(1)
 function first_nonzero(v::Sparsik)
     return v.nonzero[1]
 end
 
 #------------------------------------------------------------------------------
 
-function scale(v::Sparsik, c)
-    # Gleb: treat the case c = 0 (and include it to tests)
+# if `v` has k nonzeroes
+# O(k) (randomized, amortized)
+function scale!(v::Sparsik, c)
+    if iszero(c)
+        return empty!(v)
+    end
+
     for idx in v.nonzero
         v.data[idx] *= c
     end
@@ -65,72 +69,70 @@ end
 
 #------------------------------------------------------------------------------
 
-function sum(v1::Sparsik, v2::Sparsik)
+# if `v` has k nonzeroes
+#  O(k) (randomized, amortized)
+function scale(v::Sparsik, c)
+    return scale!(deepcopy(v), c)
+end
 
-    new_indices = []
-    newdata = Dict()
+#------------------------------------------------------------------------------
+
+# returns v + c * u
+# if the vectors `v` and `u` have k and r nonzeroes respectively
+# O(k + r) (randomized, amortized)
+function Base.reduce(v::Sparsik, u::Sparsik, c)
+    new_nonzero = []
+    new_data = Dict()
 
     i, j = 1, 1
 
-    while i <= length(v1.nonzero) || j <= length(v2.nonzero)
-        new_idx, new_val = 1, 0
-        if i <= length(v1.nonzero) && j <= length(v2.nonzero)
-            if v1.nonzero[i] == v2.nonzero[j]
-                new_val = v1.data[v1.nonzero[i]] + v2.data[v2.nonzero[j]]
-                new_idx = v1.nonzero[i]
-                i += 1
-                j += 1
-            elseif v1.nonzero[i] < v2.nonzero[j]
-                new_val = v1.data[v1.nonzero[i]]
-                new_idx = v1.nonzero[i]
-                i += 1
-            else
-                new_val = v2.data[v2.nonzero[j]]
-                new_idx = v2.nonzero[j]
-                j += 1
-            end
-        elseif i <= length(v1.nonzero)
-            new_val = v1.data[v1.nonzero[i]]
-            new_idx = v1.nonzero[i]
+    while i <= length(v) || j < length(u)
+        new_val = v[i] + c * u[j]
+        new_idx = 0
+
+        if i > length(v)
+            new_idx = j
+            j += 1
+        elseif j > length(u)
+            new_idx = i
             i += 1
         else
-            new_val = v2.data[v2.nonzero[j]]
-            new_idx = v2.nonzero[j]
-            j += 1
+            if v.nonzero[i] < u.nonzero[j]
+                new_idx = i
+                i += 1
+            elseif v.nonzero[i] > u.nonzero[j]
+                new_idx = j
+                j += 1
+            else
+                new_idx = i
+                i += 1
+                j += 1
+            end
         end
 
-        if new_val != 0
-            append!(new_indices, new_idx)
-            newdata[new_idx] = new_val
+        if !iszero(new_val)
+            push!(new_nonzero, new_idx)
+            new_data[new_idx] = new_val
         end
 
     end
 
-    return Sparsik(v1.dim, new_indices, newdata)
+    return Sparsik(size(v, 1), new_nonzero, new_data)
 end
 
 #------------------------------------------------------------------------------
 
-# Gleb: this should be a docstring
-# Alex: to be fixed
-"returns v1 + v2 * c"
-function reduce(v::Sparsik, u::Sparsik, c)
-    return sum(v, scale(u, c))
-end
-
-#------------------------------------------------------------------------------
-
-# Gleb: this is the algorithm used in CLUE, I suggest
-# we go deeper. A puzzle for you (should not be hard):
-# if the vectors are with a and b nonzeroes, respectively,
-# do this in O(min(a, b)) (randomized, amortized)
-# Alex: see inner_2
-function inner(v, u)
+# if the vectors `v` and `u` have k and r nonzeroes respectively
+# O(k + r) (randomized, amortized)
+function inner(v::Sparsik, u::Sparsik)
     i, j = 1, 1
+
+    # zero(...) instead of `0`
     ans = 0
-    while i <= length(v.nonzero) && j <= length(u.nonzero)
+
+    while i <= length(v) && j <= length(u)
         if v.nonzero[i] == u.nonzero[j]
-            ans += v.data[v.nonzero[i]] * u.data[u.nonzero[j]]
+            ans += v[v.nonzero[i]] * u[u.nonzero[j]]
             i += 1
             j += 1
         elseif v.nonzero[i] < u.nonzero[j]
@@ -144,27 +146,19 @@ end
 
 #------------------------------------------------------------------------------
 
-# assuming `Dict` to provide constant-time lookups
-# and linear-time iterating
-# Gleb: valid assumption
-function inner_2(v, u)
+# if the vectors `v` and `u` have k and r nonzeroes respectively
+# O(min(k, r)) (randomized, amortized)
+function inner_2(v::Sparsik, u::Sparsik)
+
+    # zero(...) instead of `0`
     ans = 0
 
-    if length(v.nonzero) > length(u.nonzero)
-        # !!!
-        # how to swap in O(1)?
-        # swap(v, u)
-        # Gleb: just call inner_2(u, v)
+    if length(v) > length(u)
+        inner_2(u, v)
     end
 
-    if length(v.nonzero) > length(u.nonzero)
-        for (i, x) in u.data
-            ans += x * get(v, i)
-        end
-    else
-        for (i, x) in v.data
-            ans += x * get(u, i)
-        end
+    for (i, x) in v.data
+        ans += x * u[i]
     end
 
     return ans
@@ -172,38 +166,69 @@ end
 
 #------------------------------------------------------------------------------
 
-# Gleb: again, get! is mutating
-function get(v::Sparsik, i::Int)
-    return get!(v.data, i, 0)
-end
-
-#------------------------------------------------------------------------------
-
-function from_vector(a)
-    new_idx = []
+# constructs a `Sparsik` instance from an one-dimensional collection
+# O(n) where n = length(a) (randomized, amortized)
+function from_dense(a)
+    new_nonzero = []
     new_data = Dict()
 
-    for (i, x) in enumerate(a)
-        # generalized
-        if !iszero(x)
-            push!(new_idx, i)
-            new_data[i] = x
-        end
+    for idx in findall(!iszero, a)
+        push!(new_nonzero, idx[1])
+        new_data[idx[1]] = a[idx]
     end
 
-    return Sparsik(length(a), new_idx, new_data)
+    return Sparsik(length(a), new_nonzero, new_data)
 end
 
 #------------------------------------------------------------------------------
 
-+(v::Sparsik, u::Sparsik) = sum(v, u)
+# if the vector `v` has k nonzeroes,
+# O(k)
+function Base.empty!(v::Sparsik)
+    empty!(v.nonzero)
+    empty!(v.data)
+    return v
+end
+
+#------------------------------------------------------------------------------
+
+function zero_sparsik(dim::Int)
+    return zero(Sparsik(dim, [], Dict()))
+end
+
+#------------------------------------------------------------------------------
+
+Base.zero(v::Sparsik) = Sparsik(v.dim, [], Dict())
+Base.iszero(v::Sparsik) = length(v) == 0
+
+# `zero(...)` instead of `0`
+Base.get(v::Sparsik, i::Int) = get(v.data, i, 0)
+
+Base.getindex(v::Sparsik, i::Int) = get(v, i)
+
+Base.size(v::Sparsik) = (v.dim, )
+Base.size(v::Sparsik, i::Int) = v.dim
+
+Base.length(v::Sparsik) = length(v.nonzero)
+
+# -----------------------------------------------------------------------------
+
++(v::Sparsik, u::Sparsik) = reduce(v, u, 1)
+-(v::Sparsik, u::Sparsik) = reduce(v, u, -1)
+-(v::Sparsik) = scale(v, -1)
+
 *(v::Sparsik, c::Any) = scale(v, c)
 *(c::Any, v::Sparsik) = v * c
-==(v::Sparsik, u::Sparsik) = (v.dim == u.dim;
-            v.data == u.data;
+
+==(v::Sparsik, u::Sparsik) = (v.dim == u.dim &&
+            v.data == u.data &&
             v.nonzero == u.nonzero)
 !=(v::Sparsik, u::Sparsik) = !(v == u)
 
-zero(v::Sparsik) = Sparsik(v.dim, [], Dict())
+# -----------------------------------------------------------------------------
+
+function print_vector(v::Sparsik)
+    println("($(join(map(idx -> get(v, idx), 1 : v.dim), ", ")))")
+end
 
 # -----------------------------------------------------------------------------
