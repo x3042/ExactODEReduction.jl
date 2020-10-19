@@ -456,6 +456,9 @@ end
 # erases all entries of `A`
 # let k = length(A)
 # O(k)
+#
+# note that `transposition` state is not vanishing
+# probably it should be..
 function Base.empty!(A::BidimSparsik)
     empty!(A.nnz_rows)
     empty!(A.rows)
@@ -471,6 +474,7 @@ Base.zero(A::BidimSparsik) = from_COO(size(A)..., [], [], Dict())
 
 #------------------------------------------------------------------------------
 
+# this should be checked in other way
 ==(A::BidimSparsik, B::BidimSparsik) = (A.n == B.n;
             A.T == B.T;
             A.m == B.m;
