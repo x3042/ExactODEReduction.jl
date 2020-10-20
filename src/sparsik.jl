@@ -48,6 +48,7 @@ end
 
 # Alex: should this throw?
 # O(1)
+# Gleb: I would say yes
 function first_nonzero(v::Sparsik)
     return v.nonzero[1]
 end

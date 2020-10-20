@@ -17,6 +17,15 @@
             then creating a BidimSparsik object will cost us an instant
             allocation of 2×(2⁴)² buckets for several discontinuous hashtables
           It seems to be quite a number..
+
+          Gleb: 2 * (2^4)^2 = 2^9 = 512 - I would not worry about this too much, but
+          let us keep this in mind. Two things:
+          1. I am not sure that you will get this number of buckets because you do not
+             create 2 * 2^4 Sparsik's immediately. Am I missing something?
+          2. Doing 
+          @btime a = BidimSparsik(10, 10, Vector{Int}(), Vector{Int}(), Dict{Int, Sparsik}(), Dict{Int, Sparsik}())
+          on my laptop gives 240 nanoseconds of execution time. I think we can live with this.
+
           (2⁴ is a default number of buckets in Dict hashtable)
 
         -
@@ -74,6 +83,7 @@ mutable struct BidimSparsik
 
     # default ctor
     # O(1) (Q: is it actually?)
+    # Gleb: why not O(1)?
     function BidimSparsik(m, n, nnz_rows, nnz_cols, rows, cols)
         return new(m, n, false, nnz_rows, nnz_cols, rows, cols)
     end
@@ -98,6 +108,8 @@ end
 
 # checks whether A is transposed
 # O(1)
+# Gleb: this function looks a bit strange to me as there is no such a matrix 
+#       property "to be transposed", it is more like a detail of your implementation
 function is_transposed(A::BidimSparsik)
     return A.T
 end
@@ -108,6 +120,7 @@ end
 # (actually, the product of returned elements equals
 #    the dimension of the ambient space of `A`)
 # O(1)
+# Gleb: why do you return n => m, not, say, a tuple?
 function Base.size(A::BidimSparsik)
     if is_transposed(A)
         return A.n => A.m
@@ -207,6 +220,7 @@ function from_COO(m::Int, n::Int, nnz_rows, nnz_cols, nnz_coords)
     #   Sparsik.data and Sparsik.nonzero fields
     #   so will not they be used directly
     # (Q: is it ok?)
+    # Gleb: Yes, this looks good
     return BidimSparsik(
         m, n,
         nnz_rows, nnz_cols,
@@ -265,6 +279,9 @@ end
 # note that `length(A)` and `number of nonzeroes in A` are synonyms
 # let k = length(A), r = length(B)
 # O(k + r) (randomized, amortized)
+#
+# Gleb: it looks like you do not use reduce function for Sparsik's here, 
+#       I suggest to do so, hope this will simplify the code
 function Base.reduce(A::BidimSparsik, B::BidimSparsik, c)
     m, n = size(A)
     new_nnz_rows, new_nnz_cols = [], []
@@ -327,6 +344,14 @@ end
 # returns A × B
 # let k = length(A), r = length(B)
 # O(kr + klogk + rlogr) (randomized, amortized)
+#
+# Gleb: two thoughts:
+#   - I think you can avoid one of the sortings depending on the order of iteration
+#     (first i, then j or vice versa)
+#   - Maybe you can construct first "a half" of the product
+#     (row or col) and then compute the transpose (should be linear in size)
+# Combining them, it may be possible to get rid of the log part
+#
 function Base.prod(A::BidimSparsik, B::BidimSparsik)
     new_nnz_rows = []
     new_nnz_cols = []
