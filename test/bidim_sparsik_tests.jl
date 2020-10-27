@@ -15,7 +15,7 @@ if !isdefined(Main, :BidimSparsik)
 end
 
 
-@testset "Base functionality" begin
+@testset "BidimSparsik - Base functionality" begin
 
     A = from_dense([0 2 0;
                     0 0 0;
@@ -41,13 +41,16 @@ end
                                        0 0;])
     @test empty!(A) == zero(A)
     @test length(A) == 0
-    @test size(transposed(A)) == (3 => 2)
-    @test size(A) == (2 => 3)
+    @test size(transposed(A)) == (3, 2)
+    @test size(A) == (2, 3)
+
+
+    @info "OK"
 
 end
 
 
-@testset "Arithmetic operations" begin
+@testset "BidimSparsik - Arithmetic operations" begin
 
     A = from_dense([2 5 -2;
                     -3 -4 7;])
@@ -93,5 +96,7 @@ end
     @test 4 * D * D == X5
 
     @test X1 + X2 + X3 + X4 + X5 == X6
+
+    @info "OK"
 
 end
