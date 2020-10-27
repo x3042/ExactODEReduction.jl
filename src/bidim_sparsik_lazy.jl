@@ -170,9 +170,6 @@ function reconstruct!(A::BidimSparsikLazy)
         end
     end
 
-    # how to copy objects in O(1)
-    # ( probably some pointers swap mechanic? )
-
     return A
 end
 
