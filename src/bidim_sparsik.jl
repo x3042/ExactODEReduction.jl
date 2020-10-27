@@ -1,12 +1,14 @@
 
 
 #=
-    The File contains the straightforward BidimSparsik<Real> implementation
-        and related funcs
+    The File contains the BidimSparsik<Real> - the straightforward
+        implementation of a Sparse Matrix
+    and related funcs
 
     Overloaded functions:
         get, zero, length, transpose!, prod, empty!, reduce
 =#
+
 
 #=
     Questions to be asked
@@ -22,22 +24,23 @@
           let us keep this in mind. Two things:
           1. I am not sure that you will get this number of buckets because you do not
              create 2 * 2^4 Sparsik's immediately. Am I missing something?
-          2. Doing 
+          2. Doing
           @btime a = BidimSparsik(10, 10, Vector{Int}(), Vector{Int}(), Dict{Int, Sparsik}(), Dict{Int, Sparsik}())
           on my laptop gives 240 nanoseconds of execution time. I think we can live with this.
 
           (2⁴ is a default number of buckets in Dict hashtable)
 
-        -
+          Alex: On an instantiation of Dict{Any, Dict} object there is an Array of 16 values
+                of type `Dict` to be allocated internally. Since it is filled
+                with `undef` values on creation, I guess no recursive Dict creation occurs
+
 
 =#
 
-# Quite a mess
-#
+
+
 # TODO:
 #           - rewrite in terms of array-subscription
-#           - get rid of the logarithms in the estimates
-#                (Q: is it possible?)
 
 
 #------------------------------------------------------------------------------
@@ -82,8 +85,6 @@ mutable struct BidimSparsik
     cols::Dict{Int, Sparsik}
 
     # default ctor
-    # O(1) (Q: is it actually?)
-    # Gleb: why not O(1)?
     function BidimSparsik(m, n, nnz_rows, nnz_cols, rows, cols)
         return new(m, n, false, nnz_rows, nnz_cols, rows, cols)
     end
@@ -93,22 +94,21 @@ end
 #------------------------------------------------------------------------------
 
 # transposes matrix modifying the `A` object itself
-# ϴ(1) =)
 function transpose!(A::BidimSparsik)
     A.T = !A.T
     return A
 end
 
-# transposes matrix never touching the `A` object
+# transposes the object representation never touching the `A` object
 # O(k) where k = length(A)
 # note that it is not an overloaded function
 function transposed(A::BidimSparsik)
     return transpose!(deepcopy(A))
 end
 
-# checks whether A is transposed
+# checks whether the `A` object is `transposed`
 # O(1)
-# Gleb: this function looks a bit strange to me as there is no such a matrix 
+# Gleb: this function looks a bit strange to me as there is no such a matrix
 #       property "to be transposed", it is more like a detail of your implementation
 function is_transposed(A::BidimSparsik)
     return A.T
@@ -116,16 +116,17 @@ end
 
 #------------------------------------------------------------------------------
 
-# returns the pair of `A` dimensions
+# returns the tuple of `A` dimensions
 # (actually, the product of returned elements equals
 #    the dimension of the ambient space of `A`)
 # O(1)
 # Gleb: why do you return n => m, not, say, a tuple?
+# Alex: fixed
 function Base.size(A::BidimSparsik)
     if is_transposed(A)
-        return A.n => A.m
+        return (A.n, A.m)
     end
-    return A.m => A.n
+    return (A.m, A.n)
 end
 
 # returns the ith dimension of `A`
@@ -189,7 +190,7 @@ end
 #   `nnz_rows`    - indices of the future matrix rows every of which contains
 #       at least one nonzero value
 #       Must be sorted
-#  `nnz_cols`    - −//−
+#   `nnz_cols`    - −//−
 #   `nnz_coords`  - `Dict` of items ((i, j) => x) where i and j mark
 #       the position of the nonzero element in the matrix and x - its value
 #
@@ -210,17 +211,6 @@ function from_COO(m::Int, n::Int, nnz_rows, nnz_cols, nnz_coords)
 
     end
 
-    # encapsulation :(
-    # We can create `Dict{Int, Sparsik}` right away
-    #   instead of creating `Dict{Int, Vector => Dict}` and
-    #   then converting it to `Dict` of Sparsiks
-    #   (here `Vector => Dict` stands for `Sparsik` as
-    #       they are intrinsically the same)
-    # Why I wrote it this way - I want to encapsulate
-    #   Sparsik.data and Sparsik.nonzero fields
-    #   so will not they be used directly
-    # (Q: is it ok?)
-    # Gleb: Yes, this looks good
     return BidimSparsik(
         m, n,
         nnz_rows, nnz_cols,
@@ -239,8 +229,7 @@ end
 function from_dense(A)
     nnz_rows, nnz_cols = [], []
 
-    # I hope that hash(Pair{Int, Int}) works fine
-    # to be checked
+    # ok
     nonzero_coords = Dict{Pair{Int, Int}, Any}()
 
     for idx in findall(!iszero, A)
@@ -280,7 +269,7 @@ end
 # let k = length(A), r = length(B)
 # O(k + r) (randomized, amortized)
 #
-# Gleb: it looks like you do not use reduce function for Sparsik's here, 
+# Gleb: it looks like you do not use reduce function for Sparsik's here,
 #       I suggest to do so, hope this will simplify the code
 function Base.reduce(A::BidimSparsik, B::BidimSparsik, c)
     m, n = size(A)
@@ -305,7 +294,7 @@ function Base.reduce(A::BidimSparsik, B::BidimSparsik, c)
                 i += 1
             else
 
-                new_row = get_row(A, A_nnz_rows[i]) + c * get_row(B, B_nnz_rows[j])
+                new_row = reduce(get_row(A, A_nnz_rows[i]), get_row(B, B_nnz_rows[j]), c)
                 new_idx = A_nnz_rows[i]
                 if A_nnz_rows[i] > B_nnz_rows[j]
                     new_idx = B_nnz_rows[j]
@@ -391,7 +380,7 @@ end
 # let k = length(A), r = length(v)
 # O(kr) (randomized, amortized)
 # to be covered in tests
-function apply_right(A::BidimSparsik, v::Sparsik)
+function apply_vector(A::BidimSparsik, v::Sparsik)
     new_nonzero = []
     new_data = Dict()
 
@@ -406,28 +395,6 @@ function apply_right(A::BidimSparsik, v::Sparsik)
     end
 
     return Sparsik(size(A, 1), new_nonzero, new_data)
-end
-
-# returns v × A
-# where v is considered to be a row vector
-# let k = length(A), r = length(v)
-# O(kr) (randomized, amortized)
-# to be covered in tests
-function apply_left(A::BidimSparsik, v::Sparsik)
-    new_nonzero = []
-    new_data = Dict()
-
-    for i in get_nnz_cols(A)
-        product = inner_2(get_col(A, i), v)
-
-        if !iszero(product)
-            push!(new_nonzero, i)
-            new_data[i] = product
-        end
-
-    end
-
-    return Sparsik(size(A, 2), new_nonzero, new_data)
 end
 
 #------------------------------------------------------------------------------
@@ -459,16 +426,6 @@ end
 
 #------------------------------------------------------------------------------
 
-function gaussian_elimination(A::BidimSparsik)
-    # pass
-end
-
-function backwards_gaussian_elimination(A::BidimSparsik)
-    # pass
-end
-
-#------------------------------------------------------------------------------
-
 # returns A[i, j] or zero if not present
 # O(1) (randomized, amortized)
 function Base.get(A::BidimSparsik, i::Int, j::Int)
@@ -481,14 +438,12 @@ end
 # erases all entries of `A`
 # let k = length(A)
 # O(k)
-#
-# note that `transposition` state is not vanishing
-# probably it should be..
 function Base.empty!(A::BidimSparsik)
     empty!(A.nnz_rows)
     empty!(A.rows)
     empty!(A.nnz_cols)
     empty!(A.cols)
+    A.T = false
     return A
 end
 
@@ -500,9 +455,7 @@ Base.zero(A::BidimSparsik) = from_COO(size(A)..., [], [], Dict())
 #------------------------------------------------------------------------------
 
 # this should be checked in other way
-==(A::BidimSparsik, B::BidimSparsik) = (A.n == B.n;
-            A.T == B.T;
-            A.m == B.m;
+==(A::BidimSparsik, B::BidimSparsik) = (size(A) == size(B) &&
             A.rows == B.rows;
             A.cols == B.cols;
             A.nnz_cols == B.nnz_cols;

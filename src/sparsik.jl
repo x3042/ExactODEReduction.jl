@@ -4,13 +4,13 @@
     The File contains Sparsik<Real> and related funcs
 
     Overloaded functions:
-        get, getindex, zero, iszero, reduce, empty!, length
+        get, getindex, zero, iszero, reduce, empty!, length,
+        show
 =#
 
 
 # TODO:
-#       - write convenience functions, e.g array-subscription
-#       - read documentation about documentation
+#       - write nnz iterator
 
 #------------------------------------------------------------------------------
 
@@ -30,10 +30,10 @@ v = Sparsik(3, [1, 3], Dict(1 => 4, 3 => -1))
 ```
 which is essentially equal to constructing a vector (4, 0, -1)
 
-Alternatively, a sequence of values may be passed into `from_dense`
+Alternatively, a sequence of values may be passed into `from_vector`
 
 ```
-u = from_dense([4, 0, -1])
+u = from_vector([4, 0, -1])
 ```
 
 Note that `v` and `u` are considered equal
@@ -46,9 +46,17 @@ end
 
 #------------------------------------------------------------------------------
 
-# Alex: should this throw?
+function get_nnz(v::Sparsik)
+    return v.nonzero
+end
+
+function get_data(v::Sparsik)
+    return v.data
+end
+
+#------------------------------------------------------------------------------
+
 # O(1)
-# Gleb: I would say yes
 function first_nonzero(v::Sparsik)
     return v.nonzero[1]
 end
@@ -87,25 +95,34 @@ function Base.reduce(v::Sparsik, u::Sparsik, c)
 
     i, j = 1, 1
 
+    v_nnz = get_nnz(v)
+    u_nnz = get_nnz(u)
+
     while i <= length(v) || j < length(u)
-        new_val = v[i] + c * u[j]
+        new_val = 0
         new_idx = 0
 
         if i > length(v)
             new_idx = j
+            new_val = c * u[u_nnz[j]]
             j += 1
         elseif j > length(u)
             new_idx = i
+            new_val = v[v_nnz[i]]
             i += 1
         else
-            if v.nonzero[i] < u.nonzero[j]
-                new_idx = i
+            new_val = v[v_nnz[i]] + c * u[u_nnz[j]]
+
+            if v_nnz[i] < u_nnz[j]
+                new_idx = v_nnz[i]
+                new_val = v[v_nnz[i]]
                 i += 1
-            elseif v.nonzero[i] > u.nonzero[j]
-                new_idx = j
+            elseif v_nnz[i] > u_nnz[j]
+                new_idx = u_nnz[j]
+                new_val = c * u[u_nnz[j]]
                 j += 1
             else
-                new_idx = i
+                new_idx = v_nnz[i]
                 i += 1
                 j += 1
             end
@@ -118,7 +135,7 @@ function Base.reduce(v::Sparsik, u::Sparsik, c)
 
     end
 
-    return Sparsik(size(v, 1), new_nonzero, new_data)
+    return Sparsik(size(v), new_nonzero, new_data)
 end
 
 #------------------------------------------------------------------------------
@@ -126,10 +143,11 @@ end
 # if the vectors `v` and `u` have k and r nonzeroes respectively
 # O(k + r) (randomized, amortized)
 function inner(v::Sparsik, u::Sparsik)
-    i, j = 1, 1
 
     # zero(...) instead of `0`
     ans = 0
+
+    i, j = 1, 1
 
     while i <= length(v) && j <= length(u)
         if v.nonzero[i] == u.nonzero[j]
@@ -142,6 +160,7 @@ function inner(v::Sparsik, u::Sparsik)
             j += 1
         end
     end
+
     return ans
 end
 
@@ -151,7 +170,7 @@ end
 # O(min(k, r)) (randomized, amortized)
 function inner_2(v::Sparsik, u::Sparsik)
 
-    # zero(...) instead of `0`
+    # zero(...) instead of `0
     ans = 0
 
     if length(v) > length(u)
@@ -169,7 +188,7 @@ end
 
 # constructs a `Sparsik` instance from an one-dimensional collection
 # O(n) where n = length(a) (randomized, amortized)
-function from_dense(a)
+function from_vector(a::Vector)
     new_nonzero = []
     new_data = Dict()
 
@@ -207,7 +226,7 @@ Base.get(v::Sparsik, i::Int) = get(v.data, i, 0)
 
 Base.getindex(v::Sparsik, i::Int) = get(v, i)
 
-Base.size(v::Sparsik) = (v.dim, )
+Base.size(v::Sparsik) = v.dim
 Base.size(v::Sparsik, i::Int) = v.dim
 
 Base.length(v::Sparsik) = length(v.nonzero)
@@ -228,8 +247,10 @@ Base.length(v::Sparsik) = length(v.nonzero)
 
 # -----------------------------------------------------------------------------
 
+Base.show(v::Sparsik) = "($(join(map(idx -> v[idx], 1 : v.dim), ", ")))"
+
 function print_vector(v::Sparsik)
-    println("($(join(map(idx -> get(v, idx), 1 : v.dim), ", ")))")
+    println(show(v))
 end
 
 # -----------------------------------------------------------------------------
