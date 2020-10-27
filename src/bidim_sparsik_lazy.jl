@@ -41,7 +41,7 @@ struct BidimSparsikLazy
     # Guaranteed to be sorted
     nnz_rows::Vector{Int}
 
-    # Nonzero rows indices
+    # Nonzero cols indices
     # Guaranteed to be sorted
     # Defaults to [] when self is not thorough
     nnz_cols::Vector{Int}
