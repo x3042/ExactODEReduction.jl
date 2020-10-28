@@ -381,6 +381,8 @@ end
 # if k = length(A) and r = length(v)
 # roughly
 # O(kr)
+# 
+# Liza: probably it's just O(k)
 function apply_vector(A::BidimSparsikLazy, v::Sparsik)
     nonzero = []
     data = Dict{Int, Any}()
@@ -432,6 +434,7 @@ end
 function Base.get(A::BidimSparsikLazy, i::Int, j::Int)
     if !haskey(A.rows, i)
         # why 0
+        # should return additive identity instead of 0 (upd)
         return 0
     end
     return get_row(A, i)[j]
