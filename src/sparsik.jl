@@ -5,7 +5,7 @@
 
     Overloaded functions:
         get, getindex, zero, iszero, reduce, empty!, length,
-        show
+        show, isempty
 =#
 
 
@@ -98,7 +98,7 @@ function Base.reduce(v::Sparsik, u::Sparsik, c)
     v_nnz = get_nnz(v)
     u_nnz = get_nnz(u)
 
-    while i <= length(v) || j < length(u)
+    while i <= length(v) || j <= length(u)
         new_val = 0
         new_idx = 0
 
@@ -230,6 +230,8 @@ Base.size(v::Sparsik) = v.dim
 Base.size(v::Sparsik, i::Int) = v.dim
 
 Base.length(v::Sparsik) = length(v.nonzero)
+
+Base.isempty(v::Sparsik) = length(v.nonzero) == 0
 
 # -----------------------------------------------------------------------------
 

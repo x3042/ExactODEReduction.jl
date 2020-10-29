@@ -23,6 +23,9 @@ if !isdefined(Main, :Sparsik)
     include("sparsik.jl")
 end
 
+
+import DataStructures
+
 #------------------------------------------------------------------------------
 
 struct BidimSparsikLazy
@@ -41,7 +44,7 @@ struct BidimSparsikLazy
     # Guaranteed to be sorted
     nnz_rows::Vector{Int}
 
-    # Nonzero cols indices
+    # Nonzero rows indices
     # Guaranteed to be sorted
     # Defaults to [] when self is not thorough
     nnz_cols::Vector{Int}
@@ -140,11 +143,6 @@ function reconstruct!(A::BidimSparsikLazy)
     # and a modified binsearch
     #
     # despite such an approach seems a bit cumbersome, someday I will code it
-    
-    # Gleb: I do not think this is cumbersome, I like the idea of using merge, 
-    # and it would be good to get rid of n in the complexity, it can be large.
-    # I think, instead of Huffman tree or binsearch, one could simply use a heap
-    # for storing the first elements of the lists to merge
 
 
     # in present implementation we will use the fact that `size(A, 2)` is
@@ -173,6 +171,55 @@ function reconstruct!(A::BidimSparsikLazy)
             A.cols[j] = Sparsik(size(A, 1), col...)
             push!(A.nnz_cols, j)
         end
+    end
+
+    return A
+end
+
+#------------------------------------------------------------------------------
+
+# reconstructs fields `A.cols` and `A.nnz_cols` from rows data
+# so that the resulting object is considered to be thorough
+#
+# let K = length(A)
+#     k = length(A.nnz_rows)
+#
+# note that O(Klogk) is a theoretical minimum for merging k lists
+# of K elements overall
+#
+# O(Klogk)
+function reconstruct2!(A::BidimSparsikLazy)
+    # k-way merge
+
+    nnz_buffer = DataStructures.BinaryMinHeap(
+                    [(first_nonzero(row), idx, 1) for (idx, row) in A.rows]
+                )
+
+    while !isempty(nnz_buffer)
+
+        (col_idx, row_idx, rel_idx) = pop!(nnz_buffer)
+        row = get_row(A, row_idx)
+
+        # add new col idx
+        if isempty(A.nnz_cols) || last(A.nnz_cols) != col_idx
+            push!(A.nnz_cols, col_idx)
+        end
+
+        # add new value
+        # and this thing does not work
+        if !haskey(A.cols, col_idx)
+            A.cols[col_idx] = zero_sparsik(size(A, 2))
+        end
+        if isempty(A.cols[col_idx]) || last(get_nnz(A.cols[col_idx])) != row_idx
+            push!(get_nnz(A.cols[col_idx]), row_idx)
+        end
+        get_data(A.cols[col_idx])[row_idx] = get(A, row_idx, col_idx)
+
+        # add next value from current row if present
+        if rel_idx < length(row)
+            push!(nnz_buffer, (get_nnz(row)[rel_idx + 1], row_idx, rel_idx + 1))
+        end
+
     end
 
     return A
@@ -261,10 +308,6 @@ end
 # Alex: actually we used `reduce` implicitly when calling `new_row = row1 + c * row2`
 #       I could not come up with any feasible code modification on this (
 #
-# Gleb: Oh, I see know. I think the logic can be streamlined as follows:
-#       in the big-else-block, we set s = min(i, j), and compute
-#       new_row as the result of reduction of s-th row in A w.r.t. s-th row in B
-#       regardless whether they are zero or not.
 #
 # returns A + c * B
 # the resulting object is Not Thorough
@@ -298,10 +341,9 @@ function Base.reduce(A::BidimSparsikLazy, B::BidimSparsikLazy, c)
 
             new_idx = A_nnz_rows[i]
 
-            # Gleb: multiplication by c is lost somewhere, isn't it?
             if A_nnz_rows[i] > B_nnz_rows[j]
                 new_idx = B_nnz_rows[j]
-                new_row = get_row(B, B_nnz_rows[j])
+                new_row = c * get_row(B, B_nnz_rows[j])
                 j += 1
             elseif A_nnz_rows[i] < B_nnz_rows[j]
                 new_idx = A_nnz_rows[i]
@@ -329,6 +371,16 @@ end
 
 #------------------------------------------------------------------------------
 
+# Gleb: two thoughts:
+#   - I think you can avoid one of the sortings depending on the order of iteration
+#     (first i, then j or vice versa)
+#   - Maybe you can construct first "a half" of the product
+#     (row or col) and then compute the transpose (should be linear in size)
+# Combining them, it may be possible to get rid of the log part
+#
+# Alex: something is done
+#
+#
 # returns A × B
 # the resulting object is Not Thorough
 #
@@ -356,7 +408,7 @@ function Base.prod(A::BidimSparsikLazy, B::BidimSparsikLazy)
             if !iszero(product)
 
                 push!(row_indices, j)
-                row_vals[i] = product
+                row_vals[j] = product
 
             end
         end
@@ -380,10 +432,7 @@ end
 #
 # if k = length(A) and r = length(v)
 # roughly
-# O(kr)
-# 
-# Liza: probably it's just O(k)
-# Gleb: Agree
+# O(k)
 function apply_vector(A::BidimSparsikLazy, v::Sparsik)
     nonzero = []
     data = Dict{Int, Any}()
@@ -434,8 +483,6 @@ end
 # O(1) (randomized, amortized)
 function Base.get(A::BidimSparsikLazy, i::Int, j::Int)
     if !haskey(A.rows, i)
-        # why 0
-        # should return additive identity instead of 0 (upd)
         return 0
     end
     return get_row(A, i)[j]
@@ -499,7 +546,11 @@ end
 
 function get_elem_for_stretched_bidim_sparsik_form(A::BidimSparsikLazy, idx::Int64)
      cols = size(A, 2)
-     i = div(idx, cols) + 1
+     if mod(idx, cols) == 0
+         i = div(idx, cols)
+     else
+         i = div(idx, cols) + 1
+     end
      j = idx - cols * (i - 1)
      return get(A, i, j)
  end
@@ -519,3 +570,16 @@ function apply_vector(A::BidimSparsikLazy, B::BidimSparsikLazy)
 end
 
 #------------------------------------------------------------------------------
+
+
+
+
+
+
+A = from_dense([1 1;
+                0 0;])
+B = from_dense([1 0;
+                0 0;])
+
+
+print_matrix(reduce(B, A, -1))
