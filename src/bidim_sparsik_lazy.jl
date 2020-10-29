@@ -496,3 +496,26 @@ function print_matrix(A::BidimSparsikLazy)
 end
 
 #------------------------------------------------------------------------------
+
+function get_elem_for_stretched_bidim_sparsik_form(A::BidimSparsikLazy, idx::Int64)
+     cols = size(A, 2)
+     i = div(idx, cols) + 1
+     j = idx - cols * (i - 1)
+     return get(A, i, j)
+ end
+
+Base.getindex(m::BidimSparsikLazy, idx::Int64) = get_elem_for_stretched_bidim_sparsik_form(m, idx)
+
+function first_nonzero(m::BidimSparsikLazy)
+    if iszero(m)
+        return -1
+    end
+    return (m.nnz_rows[1] - 1) * size(m, 2) + first_nonzero(m.rows[m.nnz_rows[1]])
+end
+
+# redefinition for find_basis in Subspace
+function apply_vector(A::BidimSparsikLazy, B::BidimSparsikLazy)
+    return A * B
+end
+
+#------------------------------------------------------------------------------
