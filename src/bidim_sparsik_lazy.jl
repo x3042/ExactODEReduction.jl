@@ -140,6 +140,11 @@ function reconstruct!(A::BidimSparsikLazy)
     # and a modified binsearch
     #
     # despite such an approach seems a bit cumbersome, someday I will code it
+    
+    # Gleb: I do not think this is cumbersome, I like the idea of using merge, 
+    # and it would be good to get rid of n in the complexity, it can be large.
+    # I think, instead of Huffman tree or binsearch, one could simply use a heap
+    # for storing the first elements of the lists to merge
 
 
     # in present implementation we will use the fact that `size(A, 2)` is
@@ -256,6 +261,10 @@ end
 # Alex: actually we used `reduce` implicitly when calling `new_row = row1 + c * row2`
 #       I could not come up with any feasible code modification on this (
 #
+# Gleb: Oh, I see know. I think the logic can be streamlined as follows:
+#       in the big-else-block, we set s = min(i, j), and compute
+#       new_row as the result of reduction of s-th row in A w.r.t. s-th row in B
+#       regardless whether they are zero or not.
 #
 # returns A + c * B
 # the resulting object is Not Thorough
@@ -289,6 +298,7 @@ function Base.reduce(A::BidimSparsikLazy, B::BidimSparsikLazy, c)
 
             new_idx = A_nnz_rows[i]
 
+            # Gleb: multiplication by c is lost somewhere, isn't it?
             if A_nnz_rows[i] > B_nnz_rows[j]
                 new_idx = B_nnz_rows[j]
                 new_row = get_row(B, B_nnz_rows[j])
@@ -319,16 +329,6 @@ end
 
 #------------------------------------------------------------------------------
 
-# Gleb: two thoughts:
-#   - I think you can avoid one of the sortings depending on the order of iteration
-#     (first i, then j or vice versa)
-#   - Maybe you can construct first "a half" of the product
-#     (row or col) and then compute the transpose (should be linear in size)
-# Combining them, it may be possible to get rid of the log part
-#
-# Alex: something is done
-#
-#
 # returns A × B
 # the resulting object is Not Thorough
 #
@@ -383,6 +383,7 @@ end
 # O(kr)
 # 
 # Liza: probably it's just O(k)
+# Gleb: Agree
 function apply_vector(A::BidimSparsikLazy, v::Sparsik)
     nonzero = []
     data = Dict{Int, Any}()
