@@ -8,18 +8,7 @@ import Nemo
 using Nemo
 
 
-#=
-2. Написать функцию, получающую на вход набор матриц "в ступенчатом
- виде" и вектор, редуцирующую вектор, и добавляющую его если надо.
- Это аналогично функции absorb_new_vector из CLUE
- (шаг 3а из алгоритма 2 из статьи)
 
-3. Написать функцию, получающую на вход набор матриц и находящую
-базис пространства матриц, получаемых из этих матриц ариметическими
- операциями. Аналогично методу apply_matrices_inplace из CLUE
- (шаг 3 алгоритма 2 из статьи)
-
- =#
 
  struct Subspace
 
@@ -42,9 +31,10 @@ using Nemo
 
  function eat_sparsik!(V::Subspace, new_vector)
 
+
      for (piv, vect) in V.echelon_form
 
-         if new_vector[piv] != 0
+         if !iszero(new_vector[piv])
              new_vector = reduce(new_vector, vect, -new_vector[piv])
          end
 
@@ -58,24 +48,21 @@ using Nemo
 
      pivot = first_nonzero(new_vector)
 
-
-     scale!(new_vector, 1 / new_vector[pivot])
+     new_vector_2 = scale(new_vector, 1 // new_vector[pivot])
 
      for (piv, vect) in V.echelon_form
-         if vect[pivot] != 0
-             V.echelon_form[piv] = reduce(V.echelon_form[piv], new_vector, -vect[pivot])
+         if !iszero(vect[pivot])
+             V.echelon_form[piv] = reduce(V.echelon_form[piv], new_vector_2, -vect[pivot])
          end
      end
 
-     V.echelon_form[pivot] = new_vector
-
+     V.echelon_form[pivot] = new_vector_2
      return pivot
 
  end
 
  function apply_matrices_inplace!(V::Subspace, matrices)
 
-     # why is it ordered originally?
      new_pivots = collect(keys(V.echelon_form))
 
      while !isempty(new_pivots)
@@ -89,6 +76,7 @@ using Nemo
 
 
                 product = apply_vector(V.echelon_form[pivot], matr)
+
 
                  if !iszero(product)
 
@@ -111,9 +99,7 @@ using Nemo
      alg = Subspace()
      for matr in matrices
          eat_sparsik!(alg, matr)
-
      end
-
 
      apply_matrices_inplace!(alg, matrices)
      return alg
@@ -124,24 +110,3 @@ function print_manifold(V::Subspace)
 end
 
 
-
-
-#=
-
-
-Question 1
-
-A = from_dense([1 1 0; 0 2 3; 51 0 23])
-B = from_dense([0 0 1; 2 2 4; 3 0 5])
-print_manifold(find_basis([A, B]))
-
-
-=#
-
-#=
-
-...
-x = Generic.Frac{fmpq}(fmpq(1), fmpq(2))
-y = Generic.Frac{fmpq}(fmpq(3), fmpq(5))
-
-=#
