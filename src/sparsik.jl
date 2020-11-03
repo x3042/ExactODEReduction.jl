@@ -1,11 +1,11 @@
 
 
 #=
-    The File contains Sparsik<Real> and related funcs
+    The File contains Sparsik<Rational> and related funcs
 
     Overloaded functions:
-        get, getindex, zero, iszero, reduce, empty!, length,
-        show, isempty
+        get, getindex, zero, iszero, reduce,
+        empty!, length, show, isempty
 =#
 
 
@@ -13,6 +13,9 @@
 #       - write nnz iterator
 
 #------------------------------------------------------------------------------
+
+using Nemo
+
 
 import Base: ==, !=, +, -, *, get
 
@@ -22,7 +25,7 @@ import Base: ==, !=, +, -, *, get
 """
 Sparsik
 
-`Sparsik` implements Sparse Vector to store Real numbers. One can
+`Sparsik` implements Sparse Vector to store Rational numbers. One can
 instantiate `Sparsik` via a default constructor
 
 ```
@@ -41,7 +44,7 @@ Note that `v` and `u` are considered equal
 struct Sparsik
     dim::Int
     nonzero::Vector{Int}
-    data::Dict{Int, Any}
+    data::Dict{Int, fmpq}
 end
 
 #------------------------------------------------------------------------------
@@ -58,6 +61,9 @@ end
 
 # O(1)
 function first_nonzero(v::Sparsik)
+    if iszero(v)
+        return -1
+    end
     return v.nonzero[1]
 end
 
@@ -87,46 +93,41 @@ end
 #------------------------------------------------------------------------------
 
 # returns v + c * u
+# mutates v
 # if the vectors `v` and `u` have k and r nonzeroes respectively
 # O(k + r) (randomized, amortized)
-function Base.reduce(v::Sparsik, u::Sparsik, c)
+function Nemo.reduce!(v::Sparsik, u::Sparsik, c)
     new_nonzero = []
-    new_data = Dict()
+    new_data = Dict{Int, fmpq}()
 
     i, j = 1, 1
 
-    v_nnz = get_nnz(v)
-    u_nnz = get_nnz(u)
+    v_nnz = v.nonzero
+    u_nnz = u.nonzero
 
     while i <= length(v) || j <= length(u)
-        new_val = 0
+        new_val = zero(QQ)
         new_idx = 0
 
         if i > length(v)
-            new_idx = j
-            new_val = c * u[u_nnz[j]]
+            new_idx = u_nnz[j]
             j += 1
         elseif j > length(u)
-            new_idx = i
-            new_val = v[v_nnz[i]]
+            new_idx = v_nnz[i]
             i += 1
         else
-            new_val = v[v_nnz[i]] + c * u[u_nnz[j]]
-
+            new_idx = min(v_nnz[i], u_nnz[j])
             if v_nnz[i] < u_nnz[j]
-                new_idx = v_nnz[i]
-                new_val = v[v_nnz[i]]
                 i += 1
             elseif v_nnz[i] > u_nnz[j]
-                new_idx = u_nnz[j]
-                new_val = c * u[u_nnz[j]]
                 j += 1
             else
-                new_idx = v_nnz[i]
                 i += 1
                 j += 1
             end
         end
+
+        new_val = v[new_idx] + c * u[new_idx]
 
         if !iszero(new_val)
             push!(new_nonzero, new_idx)
@@ -134,47 +135,28 @@ function Base.reduce(v::Sparsik, u::Sparsik, c)
         end
 
     end
-
-    return Sparsik(size(v), new_nonzero, new_data)
+    v = Sparsik(size(v), new_nonzero, new_data)
+    return v
 end
 
 #------------------------------------------------------------------------------
 
-# if the vectors `v` and `u` have k and r nonzeroes respectively
+# returns v + c * u
 # O(k + r) (randomized, amortized)
-function inner(v::Sparsik, u::Sparsik)
-
-    # zero(...) instead of `0`
-    ans = 0
-
-    i, j = 1, 1
-
-    while i <= length(v) && j <= length(u)
-        if v.nonzero[i] == u.nonzero[j]
-            ans += v[v.nonzero[i]] * u[u.nonzero[j]]
-            i += 1
-            j += 1
-        elseif v.nonzero[i] < u.nonzero[j]
-            i += 1
-        else
-            j += 1
-        end
-    end
-
-    return ans
+function Base.reduce(v::Sparsik, u::Sparsik, c)
+    return reduce!(deepcopy(v), u, c)
 end
 
 #------------------------------------------------------------------------------
 
 # if the vectors `v` and `u` have k and r nonzeroes respectively
 # O(min(k, r)) (randomized, amortized)
-function inner_2(v::Sparsik, u::Sparsik)
+function inner(v::Sparsik, u::Sparsik)
 
-    # zero(...) instead of `0
-    ans = 0
+    ans = zero(QQ)
 
     if length(v) > length(u)
-        inner_2(u, v)
+        inner(u, v)
     end
 
     for (i, x) in v.data
@@ -190,7 +172,7 @@ end
 # O(n) where n = length(a) (randomized, amortized)
 function from_vector(a::Vector)
     new_nonzero = []
-    new_data = Dict()
+    new_data = Dict{Int, fmpq}()
 
     for idx in findall(!iszero, a)
         push!(new_nonzero, idx[1])
@@ -213,16 +195,15 @@ end
 #------------------------------------------------------------------------------
 
 function zero_sparsik(dim::Int)
-    return zero(Sparsik(dim, [], Dict()))
+    return zero(Sparsik(dim, [], Dict{Int, fmpq}()))
 end
 
 #------------------------------------------------------------------------------
 
-Base.zero(v::Sparsik) = Sparsik(v.dim, [], Dict())
+Base.zero(v::Sparsik) = Sparsik(v.dim, [], Dict{Int, fmpq}())
 Base.iszero(v::Sparsik) = length(v) == 0
 
-# `zero(...)` instead of `0`
-Base.get(v::Sparsik, i::Int) = get(v.data, i, 0)
+Base.get(v::Sparsik, i::Int) = get(v.data, i, zero(QQ))
 
 Base.getindex(v::Sparsik, i::Int) = get(v, i)
 
@@ -235,9 +216,9 @@ Base.isempty(v::Sparsik) = length(v.nonzero) == 0
 
 # -----------------------------------------------------------------------------
 
-+(v::Sparsik, u::Sparsik) = reduce(v, u, 1)
--(v::Sparsik, u::Sparsik) = reduce(v, u, -1)
--(v::Sparsik) = scale(v, -1)
++(v::Sparsik, u::Sparsik) = reduce(v, u, QQ(1))
+-(v::Sparsik, u::Sparsik) = reduce(v, u, QQ(-1))
+-(v::Sparsik) = scale(v, QQ(-1))
 
 *(v::Sparsik, c::Any) = scale(v, c)
 *(c::Any, v::Sparsik) = v * c
