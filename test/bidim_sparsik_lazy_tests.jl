@@ -12,7 +12,7 @@ if !isdefined(Main, :testset)
 end
 
 if !isdefined(Main, :BidimSparsikLazy)
-    include("..\\src/bidim_sparsik_lazy.jl")
+    include("../src/bidim_sparsik_lazy.jl")
 end
 
 
@@ -22,7 +22,7 @@ end
                     0 0 0;
                     0 8 -3;])
     B = from_COO(3, 3,
-                Dict((1=>1) => 1, (3=>2) => 8, (3=>3) => -3))
+                [(1, 1, 1), (3, 2, 8), (3, 3, -3)])
     @test A == B
     @test length(A) == length(B) == 3
     @test length(get_nnz_cols(A)) == 3
@@ -32,7 +32,7 @@ end
 
     A = from_dense([0 0 0
                     0 1 0])
-    B = from_COO(2, 3, Dict((2=>2) => 1))
+    B = from_COO(2, 3, [(2, 2, 1)])
     @test A == B
     @test length(A) == 1
     @test length(get_nnz_cols(A)) == length(get_nnz_rows(A)) ==  1

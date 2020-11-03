@@ -11,7 +11,7 @@ if !isdefined(Main, :testset)
 end
 
 if !isdefined(Main, :BidimSparsik)
-    include("..\\src/bidim_sparsik.jl")
+    include("../src/bidim_sparsik.jl")
 end
 
 

@@ -11,7 +11,7 @@ if !isdefined(Main, :testset)
 end
 
 if !isdefined(Main, :Sparsik)
-    include("..\\src/sparsik.jl")
+    include("../src/sparsik.jl")
 end
 
 
@@ -37,14 +37,12 @@ end
     v = from_vector([0, 0, 1, 10])
     @test first_nonzero(v) == 3
     v = from_vector([0, 0])
-    @test_throws BoundsError first_nonzero(v)
+    @test first_nonzero(v) == -1
 
-    # inner & inner_2
     v, u = from_vector([1, 0, 3, 0, 5]), from_vector([0, -1, -4, 3, 3])
     @test inner(v, u) == 3
-    @test inner_2(v, u) == 3
     v, u = from_vector([1, 2, 3]), from_vector([-1, -2, 1])
-    @test inner_2(v, u) == -2
+    @test inner(v, u) == -2
 
     # reduce
     v, u, c = from_vector([1, 2, 3]), from_vector([2, 1, 1]), -1
