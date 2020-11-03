@@ -1,7 +1,7 @@
 
 
 if !isdefined(Main, :BidimSparsikLazy)
-    include("..\\src/bidim_sparsik_lazy.jl")
+    include("../src/bidim_sparsik_lazy.jl")
 end
 
 import Nemo
@@ -48,15 +48,15 @@ using Nemo
 
      pivot = first_nonzero(new_vector)
 
-     new_vector_2 = scale(new_vector, 1 // new_vector[pivot])
+     new_vector = scale(new_vector, 1 // new_vector[pivot])
 
      for (piv, vect) in V.echelon_form
          if !iszero(vect[pivot])
-             V.echelon_form[piv] = reduce(V.echelon_form[piv], new_vector_2, -vect[pivot])
+             V.echelon_form[piv] = reduce(V.echelon_form[piv], new_vector, -vect[pivot])
          end
      end
 
-     V.echelon_form[pivot] = new_vector_2
+     V.echelon_form[pivot] = new_vector
      return pivot
 
  end
@@ -73,7 +73,6 @@ using Nemo
          for pivot in pivots_to_process
 
              for matr in matrices
-
 
                 product = apply_vector(V.echelon_form[pivot], matr)
 
