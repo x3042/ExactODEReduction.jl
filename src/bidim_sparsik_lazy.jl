@@ -13,6 +13,11 @@
 =#
 
 
+#=
+    TODO :  - rewrite reduce
+
+=#
+
 #------------------------------------------------------------------------------
 
 if !isdefined(Main, :(==))
@@ -23,6 +28,7 @@ if !isdefined(Main, :Sparsik)
     include("sparsik.jl")
 end
 
+using Nemo
 
 import DataStructures
 
@@ -71,6 +77,7 @@ end
 # checks whether the `A.col` and `A.nnz_cols` fields are valid
 # note that zero matrix object is always thorough
 # O(1)
+# Problems with data relevance when scaling/reducing inplace
 function is_thorough(A::BidimSparsikLazy)
     return length(A.nnz_cols) != 0 || length(A.nnz_rows) == 0
 end
@@ -136,15 +143,6 @@ end
 # O(n + k) (randomized, amortized)
 function reconstruct!(A::BidimSparsikLazy)
 
-    # one thought:
-    # the constructing of columns data essentially
-    # reducts to a problem of merging some ordered lists (rows),
-    # which can be done optimally with the help of a Huffman Tree
-    # and a modified binsearch
-    #
-    # despite such an approach seems a bit cumbersome, someday I will code it
-
-
     # in present implementation we will use the fact that `size(A, 2)` is
     # relatively a small number
     # so the counting sort will do
@@ -153,11 +151,7 @@ function reconstruct!(A::BidimSparsikLazy)
         return A
     end
 
-    # `cols_data` maps the column index j to the pair (Indices, Vals) where
-    # Indices is an ordered Array of row coordinates of nonzeroes at the jth column
-    # and Vals is the Dict of pairs (row_idx, value)
-    # (its essentially an Array of Sparsiks)
-    cols_data = [Vector{Int}() => Dict{Int, Any}() for _ in 1 : size(A, 2)]
+    cols_data = [Vector{Int}() => Dict{Int, fmpq}() for _ in 1 : size(A, 2)]
 
     for i in get_nnz_rows(A)
         for j in get_row(A, i).nonzero
@@ -195,31 +189,30 @@ function reconstruct2!(A::BidimSparsikLazy)
                     [(first_nonzero(row), idx, 1) for (idx, row) in A.rows]
                 )
 
+    # reconstructing ordered cols-nnz list
     while !isempty(nnz_buffer)
 
         (col_idx, row_idx, rel_idx) = pop!(nnz_buffer)
         row = get_row(A, row_idx)
 
-        # add new col idx
         if isempty(A.nnz_cols) || last(A.nnz_cols) != col_idx
             push!(A.nnz_cols, col_idx)
         end
 
-        # add new value
-        # and this thing does not work
-        if !haskey(A.cols, col_idx)
-            A.cols[col_idx] = zero_sparsik(size(A, 2))
-        end
-        if isempty(A.cols[col_idx]) || last(get_nnz(A.cols[col_idx])) != row_idx
-            push!(get_nnz(A.cols[col_idx]), row_idx)
-        end
-        get_data(A.cols[col_idx])[row_idx] = get(A, row_idx, col_idx)
-
-        # add next value from current row if present
         if rel_idx < length(row)
             push!(nnz_buffer, (get_nnz(row)[rel_idx + 1], row_idx, rel_idx + 1))
         end
+    end
 
+    # reconstructing cols-data dict
+    for i in get_nnz_rows(A)
+        for (j, x) in get_data(get_row(A, i))
+            if !haskey(A.cols, j)
+                A.cols[j] = zero_sparsik(size(A, 1))
+            end
+            push!(A.cols[j].nonzero, i)
+            A.cols[j].data[i] = x
+        end
     end
 
     return A
@@ -239,7 +232,7 @@ end
 #
 # O(1)
 function from_rows(m::Int, n::Int, nnz_rows, rows)
-    return BidimSparsikLazy(m, n, nnz_rows, [], rows, Dict())
+    return BidimSparsikLazy(m, n, nnz_rows, [], rows, Dict{Int, fmpq}())
 end
 
 #------------------------------------------------------------------------------
@@ -254,13 +247,14 @@ end
 # the resulting object is Thorough
 #
 # O(mn) (randomized, amortized)
+# To speed this up
 function from_COO(m::Int, n::Int, nnz_coords)
 
-    # it's not fast, though it's not used
     a = fill(0, m, n)
-    for ((i, j), x) in nnz_coords
+    for (i, j, x) in nnz_coords
         a[i, j] = x
     end
+
     return from_dense(a)
 end
 
@@ -280,13 +274,13 @@ function from_dense(A)
 
     for i in 1 : m
 
-        row_vals = Dict{Int, Any}()
+        row_vals = Dict{Int, fmpq}()
         row_nnz = []
 
         for j in 1 : n
             if !iszero(A[i, j])
                 push!(row_nnz, j)
-                row_vals[j] = A[i, j]
+                row_vals[j] = QQ(A[i, j])
             end
         end
 
@@ -302,21 +296,14 @@ end
 
 #------------------------------------------------------------------------------
 
-# Gleb: it looks like you do not use reduce function for Sparsik's here,
-#       I suggest to do so, hope this will simplify the code
-#
-# Alex: actually we used `reduce` implicitly when calling `new_row = row1 + c * row2`
-#       I could not come up with any feasible code modification on this (
-#
-#
 # returns A + c * B
+# mutates A
 # the resulting object is Not Thorough
 #
 # note that `length(A)` and `number of nonzeroes in A` are synonyms
 # let k = length(A), r = length(B)
 # O(k + r) (randomized, amortized)
-function Base.reduce(A::BidimSparsikLazy, B::BidimSparsikLazy, c)
-    m, n = size(A)
+function Nemo.reduce!(A::BidimSparsikLazy, B::BidimSparsikLazy, c)
     nnz_rows = []
     rows = Dict{Int, Sparsik}()
 
@@ -324,46 +311,38 @@ function Base.reduce(A::BidimSparsikLazy, B::BidimSparsikLazy, c)
     A_nnz_rows, B_nnz_rows = get_nnz_rows(A), get_nnz_rows(B)
 
     while i <= length(A_nnz_rows) || j <= length(B_nnz_rows)
-
         if i > length(A_nnz_rows)
-            push!(nnz_rows, B_nnz_rows[j])
-            rows[B_nnz_rows[j]] = get_row(B, B_nnz_rows[j])
+            new_idx = B_nnz_rows[j]
             j += 1
         elseif j > length(B_nnz_rows)
-            push!(nnz_rows, A_nnz_rows[i])
-            rows[A_nnz_rows[i]] = get_row(A, A_nnz_rows[i])
+            new_idx = A_nnz_rows[i]
             i += 1
         else
-
-            new_row = reduce(get_row(A, A_nnz_rows[i]),
-                            get_row(B, B_nnz_rows[j]),
-                            c)
-
-            new_idx = A_nnz_rows[i]
+            new_idx = min(A_nnz_rows[i], B_nnz_rows[j])
 
             if A_nnz_rows[i] > B_nnz_rows[j]
-                new_idx = B_nnz_rows[j]
-                new_row = c * get_row(B, B_nnz_rows[j])
                 j += 1
             elseif A_nnz_rows[i] < B_nnz_rows[j]
-                new_idx = A_nnz_rows[i]
-                new_row = get_row(A, A_nnz_rows[i])
                 i += 1
             else
                 i += 1
                 j += 1
             end
-
-            if (!iszero(new_row))
-                push!(nnz_rows, new_idx)
-                rows[new_idx] = new_row
-            end
-
         end
+
+        new_row = reduce(get_row(A, new_idx),
+                get_row(B, new_idx),
+                c)
+
+        if (!iszero(new_row))
+            push!(nnz_rows, new_idx)
+            rows[new_idx] = new_row
+        end
+
     end
 
     return from_rows(
-        m, n,
+        size(A)...,
         nnz_rows,
         rows
     )
@@ -371,16 +350,18 @@ end
 
 #------------------------------------------------------------------------------
 
-# Gleb: two thoughts:
-#   - I think you can avoid one of the sortings depending on the order of iteration
-#     (first i, then j or vice versa)
-#   - Maybe you can construct first "a half" of the product
-#     (row or col) and then compute the transpose (should be linear in size)
-# Combining them, it may be possible to get rid of the log part
+# returns A + c * B
+# the resulting object is Not Thorough
 #
-# Alex: something is done
-#
-#
+# let k = length(A), r = length(B)
+# O(k + r) (randomized, amortized)
+function Nemo.reduce(A::BidimSparsikLazy, B::BidimSparsikLazy, c)
+    return reduce!(deepcopy(A), B, c)
+end
+
+#------------------------------------------------------------------------------
+
+
 # returns A × B
 # the resulting object is Not Thorough
 #
@@ -398,12 +379,12 @@ function Base.prod(A::BidimSparsikLazy, B::BidimSparsikLazy)
 
     for i in get_nnz_rows(A)
 
-        row_vals = Dict{Int, Any}()
+        row_vals = Dict{Int, fmpq}()
         row_indices = []
 
         for j in get_nnz_cols(B)
 
-            product = inner_2(get_row(A, i), get_col(B, j))
+            product = inner(get_row(A, i), get_col(B, j))
 
             if !iszero(product)
 
@@ -435,7 +416,7 @@ end
 # O(k)
 function apply_vector(A::BidimSparsikLazy, v::Sparsik)
     nonzero = []
-    data = Dict{Int, Any}()
+    data = Dict{Int, fmpq}()
 
     for row_idx in get_nnz_rows(A)
         product = inner(get_row(A, row_idx), v)
@@ -468,6 +449,8 @@ function scale!(A::BidimSparsikLazy, c)
     return A
 end
 
+#------------------------------------------------------------------------------
+
 # returns A * c, does not modify `A`
 # the resulting object is Not Thorough
 #
@@ -483,7 +466,7 @@ end
 # O(1) (randomized, amortized)
 function Base.get(A::BidimSparsikLazy, i::Int, j::Int)
     if !haskey(A.rows, i)
-        return 0
+        return zero(QQ)
     end
     return get_row(A, i)[j]
 end
@@ -507,10 +490,10 @@ end
 #------------------------------------------------------------------------------
 
 # returns zero matrix of the dimensions (m, n)
-zero_matrix(m, n) = from_rows(m, n, [], Dict())
+zero_matrix(m, n) = from_rows(m, n, [], Dict{Int, fmpq}())
 
 # returns zero matrix of the dimensions of `A`
-Base.zero(A::BidimSparsikLazy) = from_rows(size(A)..., [], Dict())
+Base.zero(A::BidimSparsikLazy) = from_rows(size(A)..., [], Dict{Int, fmpq}())
 
 #------------------------------------------------------------------------------
 
@@ -524,9 +507,9 @@ Base.iszero(A::BidimSparsikLazy) = length(get_nnz_rows(A)) == 0
             A.nnz_rows == B.nnz_rows)
 !=(A::BidimSparsikLazy, u::BidimSparsikLazy) = !(A == B)
 
-+(A::BidimSparsikLazy, B::BidimSparsikLazy) = reduce(A, B, 1)
--(A::BidimSparsikLazy, B::BidimSparsikLazy) = reduce(A, B, -1)
--(A::BidimSparsikLazy) = scale(A, -1)
++(A::BidimSparsikLazy, B::BidimSparsikLazy) = reduce(A, B, QQ(1))
+-(A::BidimSparsikLazy, B::BidimSparsikLazy) = reduce(A, B, QQ(-1))
+-(A::BidimSparsikLazy) = scale(A, QQ(-1))
 
 *(A::BidimSparsikLazy, c) = scale(A, c)
 *(c, A::BidimSparsikLazy) = scale(A, c)
@@ -570,16 +553,3 @@ function apply_vector(A::BidimSparsikLazy, B::BidimSparsikLazy)
 end
 
 #------------------------------------------------------------------------------
-
-
-
-
-
-
-A = from_dense([1 1;
-                0 0;])
-B = from_dense([1 0;
-                0 0;])
-
-
-print_matrix(reduce(B, A, -1))
