@@ -4,7 +4,7 @@
     The File contains Sparsik<Rational> and related funcs
 
     Overloaded functions:
-        get, getindex, zero, iszero, reduce,
+        get, getindex, zero, iszero, reduce, reduce!,
         empty!, length, show, isempty
 =#
 
@@ -59,6 +59,9 @@ end
 
 #------------------------------------------------------------------------------
 
+# returns the index of first nonzero
+# or -1 if not present
+# does not throw
 # O(1)
 function first_nonzero(v::Sparsik)
     if iszero(v)
@@ -106,7 +109,6 @@ function Nemo.reduce!(v::Sparsik, u::Sparsik, c)
     u_nnz = u.nonzero
 
     while i <= length(v) || j <= length(u)
-        new_val = zero(QQ)
         new_idx = 0
 
         if i > length(v)
@@ -135,6 +137,7 @@ function Nemo.reduce!(v::Sparsik, u::Sparsik, c)
         end
 
     end
+
     v = Sparsik(size(v), new_nonzero, new_data)
     return v
 end
@@ -203,7 +206,7 @@ end
 Base.zero(v::Sparsik) = Sparsik(v.dim, [], Dict{Int, fmpq}())
 Base.iszero(v::Sparsik) = length(v) == 0
 
-Base.get(v::Sparsik, i::Int) = get(v.data, i, zero(QQ))
+Base.get(v::Sparsik, i::Int) = get(v.data, i, zero(fmpq))
 
 Base.getindex(v::Sparsik, i::Int) = get(v, i)
 

@@ -1,7 +1,7 @@
 
 
 #=
-    The File contains the BidimSparsikLazy<Real> -
+    The File contains the BidimSparsikLazy<Rational> -
         - The Lazy Sparse Matrix Implementation
         and related funcs
 
@@ -9,9 +9,17 @@
 
     Overloaded functions:
         get, zero, iszero, length, prod, empty!, reduce,
-        show
+        reduce!, show
 =#
 
+#=
+    Questions:
+            - Why is it called 'fmpq', 'QQ'?
+            - Why is the phrase
+            'Nemo comes with absolutely no warranty whatsoever'
+            so important that it even comes along with
+            'Welcome to Nemo..' every time Nemo is imported?
+=#
 
 #=
     TODO :  - rewrite reduce
@@ -77,7 +85,8 @@ end
 # checks whether the `A.col` and `A.nnz_cols` fields are valid
 # note that zero matrix object is always thorough
 # O(1)
-# Problems with data relevance when scaling/reducing inplace
+# Problems with data relevance when scaling/reducing inplace,
+# have not broke everything, yet keep this feature in mind
 function is_thorough(A::BidimSparsikLazy)
     return length(A.nnz_cols) != 0 || length(A.nnz_rows) == 0
 end
@@ -143,15 +152,12 @@ end
 # O(n + k) (randomized, amortized)
 function reconstruct!(A::BidimSparsikLazy)
 
-    # in present implementation we will use the fact that `size(A, 2)` is
-    # relatively a small number
-    # so the counting sort will do
-
     if is_thorough(A)
         return A
     end
 
-    cols_data = [Vector{Int}() => Dict{Int, fmpq}() for _ in 1 : size(A, 2)]
+    cols_data = [Vector{Int}() => Dict{Int, fmpq}()
+                for _ in 1 : size(A, 2)]
 
     for i in get_nnz_rows(A)
         for j in get_row(A, i).nonzero
@@ -182,25 +188,28 @@ end
 # of K elements overall
 #
 # O(Klogk)
-function reconstruct2!(A::BidimSparsikLazy)
+function reconstruct_2!(A::BidimSparsikLazy)
     # k-way merge
 
     nnz_buffer = DataStructures.BinaryMinHeap(
-                    [(first_nonzero(row), idx, 1) for (idx, row) in A.rows]
+                    [(first_nonzero(row), idx, 1)
+                    for (idx, row) in A.rows]
                 )
 
     # reconstructing ordered cols-nnz list
     while !isempty(nnz_buffer)
 
         (col_idx, row_idx, rel_idx) = pop!(nnz_buffer)
-        row = get_row(A, row_idx)
+        row = A.rows[row_idx]
 
         if isempty(A.nnz_cols) || last(A.nnz_cols) != col_idx
             push!(A.nnz_cols, col_idx)
         end
 
         if rel_idx < length(row)
-            push!(nnz_buffer, (get_nnz(row)[rel_idx + 1], row_idx, rel_idx + 1))
+            push!(nnz_buffer,
+                (get_nnz(row)[rel_idx + 1], row_idx, rel_idx + 1)
+            )
         end
     end
 
@@ -227,6 +236,7 @@ end
 #   `rows`        - Dict of items (i => row) where i is
 #                       the index of the nonzero row in the matrix
 #                       and row - its Sparsik representation
+#                   data must be converted to fmpq
 #
 # the resulting object is Not Thorough
 #
@@ -240,22 +250,36 @@ end
 # constructs `BidimSparsikLazy` object from
 #   `m`           - number of rows
 #   `n`           - number of cols
-#   `nnz_coords`  - `Dict` of items ((i, j) => x) where i and j mark
+#   `nnz_coords`  - a collection-like object of items (i, j, x),
+#                       where i and j mark
 #                       the position of the nonzero element
-#                       in the matrix and x - its value
+#                       in the matrix and x - its value,
+#                       the order is not implied
 #
 # the resulting object is Thorough
 #
-# O(mn) (randomized, amortized)
-# To speed this up
+# O(klogk + R) (randomized, amortized)
+# where k is length(nnz_coords) and R is reconstruction cost
 function from_COO(m::Int, n::Int, nnz_coords)
+    nnz_rows = []
+    rows = Dict{Int, Sparsik}()
 
-    a = fill(0, m, n)
     for (i, j, x) in nnz_coords
-        a[i, j] = x
+        if !haskey(rows, i)
+            rows[i] = Sparsik(n, [], Dict{Int, fmpq}())
+        end
+
+        get_data(rows[i])[j] = x
+        push!(get_nnz(rows[i]), j)
+
+        push!(nnz_rows, i)
     end
 
-    return from_dense(a)
+    unique!(sort!(nnz_rows))
+    map(xs -> unique!(sort!(get_nnz(xs))), values(rows))
+
+    # and this can be speed up
+    return reconstruct!(from_rows(m, n, nnz_rows, rows))
 end
 
 #------------------------------------------------------------------------------
@@ -266,7 +290,8 @@ end
 # the resulting object is Thorough
 #
 # let (m, n) = size(A)
-# O(mn) (randomized, amortized)
+# O(mn + R) (randomized, amortized)
+# where R is reconstruction cost
 function from_dense(A)
     m, n = size(A, 1), size(A, 2)
     nnz_rows = []
@@ -341,11 +366,63 @@ function Nemo.reduce!(A::BidimSparsikLazy, B::BidimSparsikLazy, c)
 
     end
 
-    return from_rows(
+    A = from_rows(
         size(A)...,
         nnz_rows,
         rows
     )
+
+    return A
+end
+
+# returns A + c * B
+# mutates A
+# the resulting object is Not Thorough
+#
+# let k = length(A), r = length(B)
+# O(k + r) (randomized, amortized)
+# The same as the above version, but new rows are not
+# constructed from scratch
+function reduce_2!(A::BidimSparsikLazy, B::BidimSparsikLazy, c)
+    nnz_rows = []
+
+    for (i, row) in B.rows
+        A.rows[i] = reduce(get_row(A, i), row, c)
+    end
+
+    i, j = 1, 1
+    A_nnz_rows = deepcopy(get_nnz_rows(A))
+    B_nnz_rows = get_nnz_rows(B)
+
+    empty!(A.nnz_rows)
+
+    while i <= length(A_nnz_rows) || j <= length(B_nnz_rows)
+        if i > length(A_nnz_rows)
+            new_idx = B_nnz_rows[j]
+            j += 1
+        elseif j > length(B_nnz_rows)
+            new_idx = A_nnz_rows[i]
+            i += 1
+        else
+            new_idx = min(A_nnz_rows[i], B_nnz_rows[j])
+
+            if A_nnz_rows[i] > B_nnz_rows[j]
+                j += 1
+            elseif A_nnz_rows[i] < B_nnz_rows[j]
+                i += 1
+            else
+                i += 1
+                j += 1
+            end
+        end
+
+        if (!iszero(A.rows[new_idx]))
+            push!(A.nnz_rows, new_idx)
+        end
+
+    end
+
+    return A
 end
 
 #------------------------------------------------------------------------------
@@ -367,7 +444,7 @@ end
 #
 # let k = length(A), r = length(B)
 # O(kr) if `B` Is Thorough
-# O(kr + n) where `n = size(B, 2)` otherwise
+# O(kr + R) where R is reconstruction cost otherwise
 function Base.prod(A::BidimSparsikLazy, B::BidimSparsikLazy)
 
     if !is_thorough(B)
