@@ -4,12 +4,14 @@ if !isdefined(Main, :BidimSparsikLazy)
     include("../src/bidim_sparsik_lazy.jl")
 end
 
+# Gleb: why both?
 import Nemo
 using Nemo
 
 
+# Gleb: why an extra space of identation?
 
-
+ # Gleb: I would say, you would like to store the dimension of the ambient space for completeness of the picture...
  struct Subspace
 
      echelon_form::Dict{Int, Any}
@@ -29,11 +31,15 @@ using Nemo
      return size(V.echelon_form)
  end
 
+ # Gleb: I guess you do not put any types here because you would like to use it for 1-d and 2-d sparsiks
+ # I encourage the flexibility but typing would help reading. How about we make 1-d and 2-d sparsiks subtypes of
+ # a common abstract type?
  function eat_sparsik!(V::Subspace, new_vector)
 
 
      for (piv, vect) in V.echelon_form
 
+         # Gleb: reduce! would be more natutal, wouldn't it?
          if !iszero(new_vector[piv])
              new_vector = reduce(new_vector, vect, -new_vector[piv])
          end
@@ -48,6 +54,7 @@ using Nemo
 
      pivot = first_nonzero(new_vector)
 
+     # Gleb: scale!  ?
      new_vector = scale(new_vector, 1 // new_vector[pivot])
 
      for (piv, vect) in V.echelon_form
@@ -61,6 +68,7 @@ using Nemo
 
  end
 
+ # Gleb: too many empty lines to my taste
  function apply_matrices_inplace!(V::Subspace, matrices)
 
      new_pivots = collect(keys(V.echelon_form))
@@ -104,6 +112,7 @@ using Nemo
      return alg
 end
 
+# Gleb: I am not sure you want to call this manifold
 function print_manifold(V::Subspace)
     println("<\n $(join(map(v -> show(v), values(V.echelon_form)), "\n\n"))\n>\n")
 end

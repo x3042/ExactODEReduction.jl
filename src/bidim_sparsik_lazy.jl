@@ -15,10 +15,15 @@
 #=
     Questions:
             - Why is it called 'fmpq', 'QQ'?
+            Gleb: The standard notation for rational numbers is (a thick) Q, this is why QQ
+            fmpq is inherited from the FLINT library (written in C). I think 'pq' is the standard
+            for rational numbers (like p/q) used in, for example, GMP
+
             - Why is the phrase
             'Nemo comes with absolutely no warranty whatsoever'
             so important that it even comes along with
             'Welcome to Nemo..' every time Nemo is imported?
+            Gleb: Yeah, they are a bit peculiar about the welcome message (see also https://github.com/Nemocas/Nemo.jl/issues/817)
 =#
 
 #=
@@ -328,6 +333,8 @@ end
 # note that `length(A)` and `number of nonzeroes in A` are synonyms
 # let k = length(A), r = length(B)
 # O(k + r) (randomized, amortized)
+#
+# Gleb: reduce here has a very different meaning from the reduce from Nemo, I suggest to do this dispatching
 function Nemo.reduce!(A::BidimSparsikLazy, B::BidimSparsikLazy, c)
     nnz_rows = []
     rows = Dict{Int, Sparsik}()
@@ -604,6 +611,7 @@ end
 
 #------------------------------------------------------------------------------
 
+# Gleb: why do you create a separate function and not just overload Base.getindex?
 function get_elem_for_stretched_bidim_sparsik_form(A::BidimSparsikLazy, idx::Int64)
      cols = size(A, 2)
      if mod(idx, cols) == 0
