@@ -30,7 +30,7 @@ end
 function load_COO_set(filename::String)
     model = []
 
-    filepath = "src/data/matrices/$(filename)"
+    filepath = "$(normpath(joinpath(@__FILE__, "..", "..")))/src/data/matrices/$(filename)"
 
     str_to_nom = (x -> parse(BigInt, first(split(x, '/'))))
     str_to_den = (x -> (if occursin('/', x) parse(BigInt, last(split(x, '/'))) else 1 end))

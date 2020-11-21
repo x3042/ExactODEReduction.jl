@@ -1,5 +1,4 @@
 
-
 #=
     The File contains `AbstractSparsik<T>` interface
     and related funcs definitions
@@ -32,7 +31,7 @@ function scale!(::AbstractSparsik, ::C) where {C} end
 function Base.reduce(::T, ::T, ::C) where {T<:AbstractSparsik{F}} where {F, C} end
 function reduce!(::T, ::T, ::C) where {T<:AbstractSparsik{F}} where {F, C} end
 
-function inner(::AbstractSparsik) end
+function inner(::AbstractSparsik, ::AbstractSparsik) end
 
 # we dont have this for vectors
 function Base.prod(::T, ::T) where {T<:AbstractSparsik{F}} where {F} end
@@ -54,15 +53,15 @@ function !=(::T, ::T) where {T<:AbstractSparsik{F}} where {F} end
 
 function Base.iterate(::AbstractSparsik) end
 
-function Base.valtype(A::AbstractSparsik) end
-function Base.eltype(A::AbstractSparsik) end
+function Base.valtype(::AbstractSparsik) end
+function Base.eltype(::AbstractSparsik) end
 
-function Base.show(x::AbstractSparsik) end
+function Base.show(::AbstractSparsik) end
 function print_sparsik(::AbstractSparsik) end
 
-function modular_reduction(A::AbstractSparsik, field) end
-function rational_reconstruction(A::AbstractSparsik) end
+function modular_reduction(::AbstractSparsik, field) end
+function rational_reconstruction(::AbstractSparsik) end
 
-function Base.iterate(A::AbstractSparsik, state) end
+function Base.iterate(::AbstractSparsik, state) end
 
 #------------------------------------------------------------------------------

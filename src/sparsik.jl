@@ -82,7 +82,7 @@ end
 # if `v` has k nonzeroes
 # O(k)
 function scale!(v::Sparsik, c)
-    if iszero(c)
+    if iszero(v.field(c))
         return empty!(v)
     end
 
@@ -106,7 +106,7 @@ end
 # returns v + c * u
 # mutates v
 # if the vectors `v` and `u` have k and r nonzeroes respectively
-# O(k + r) (randomized, amortized)
+# O(k + r)
 function reduce!(v::Sparsik{T}, u::Sparsik{T}, c) where {T}
     new_nonzero = Int[]
     i, j = 1, 1
@@ -149,16 +149,16 @@ end
 #------------------------------------------------------------------------------
 
 # returns v + c * u
-# O(k + r) (randomized, amortized)
+# O(k + r)
 function Base.reduce(v::Sparsik{T}, u::Sparsik{T}, c) where {T}
     return reduce!(Sparsik(v), u, c)
 end
 
 #------------------------------------------------------------------------------
 
-# returns standard inner product
+# returns standard inner product of v and u
 # if the vectors `v` and `u` have k and r nonzeroes respectively
-# O(min(k, r)) (randomized, amortized)
+# O(min(k, r))
 function inner(v::Sparsik{T}, u::Sparsik{T}) where {T}
     ans = zero(v.field)
 
@@ -182,7 +182,7 @@ function from_dense(a::AbstractVector, field)
     new_nonzero = Int[]
     new_data = Dict{Int, elem_type(field)}()
 
-    for idx in findall(!iszero, a)
+    for idx in findall(!(iszero ∘ field), a)
         push!(new_nonzero, idx[1])
         new_data[idx[1]] = field(a[idx])
     end
@@ -296,9 +296,8 @@ end
 #-----------------------------------------------------------------------------
 
 # returns a new Sparsik object consisting of elements
-# from the `v` each reconstructed in a given finite field
+# from the `v` each reconstructed from v.field to QQ
 #
-# throws
 # O†(k) if k is the number of nonzero in `v`
 # † reconstruction cost not included
 function rational_reconstruction(v::Sparsik)

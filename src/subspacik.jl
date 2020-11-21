@@ -17,9 +17,6 @@ struct Subspacik
         new(dim, Dict{Int, AbstractSparsik}())
     end
 
-    function Subspacik(dim::Int, echelon_form)
-        new(dim, echelon_form)
-    end
 end
 
 #------------------------------------------------------------------------------
@@ -142,7 +139,7 @@ end
 
 R = GF(2^31 - 1)
 
-for (i, (mfn, mdim, msz, mdata)) in enumerate(load_COO_if(from_dim=0, to_dim=50))
+for (i, (mfn, mdim, msz, mdata)) in enumerate(load_COO_if(from_dim=50, to_dim=60))
 
     println("$(i)th model: $mfn, dim = $mdim, size = $msz")
     As = map(matr -> from_COO(matr..., QQ), mdata)

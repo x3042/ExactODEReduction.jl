@@ -131,7 +131,7 @@ end
 # reconstructs fields `A.cols` and `A.nnz_cols` from rows data
 # so that the resulting object is considered to be thorough
 # let n = size(A, 2), k = length(A)
-# O(n + k) (randomized, amortized)
+# O(n + k)
 function reconstruct!(A::BidimSparsikLazy)
     if is_thorough(A)
         return A
@@ -272,19 +272,12 @@ function from_dense(A::AbstractMatrix, field)
     rows = Dict{Int, Sparsik{typeof(field)}}()
 
     for i in 1 : m
-        row_vals = Dict{Int, elem_type(field)}()
-        row_nnz = Int[]
 
-        for j in 1 : n
-            if !iszero(A[i, j])
-                push!(row_nnz, j)
-                row_vals[j] = field(A[i, j])
-            end
-        end
+        row = from_dense(A[i, :], field)
 
-        if !isempty(row_nnz)
+        if !iszero(row)
             push!(nnz_rows, i)
-            rows[i] = Sparsik(n, field, row_nnz, row_vals)
+            rows[i] = row
         end
     end
 
@@ -294,12 +287,12 @@ end
 #------------------------------------------------------------------------------
 
 # returns A + c * B
-# mutates A
+# mutates A, constructs A.rows inplace
 # the resulting object is Not Thorough
 #
 # note that `length(A)` and `number of nonzeroes in A` are synonyms
 # let k = length(A), r = length(B)
-# O(k + r) (randomized, amortized)
+# O(k + r)
 function reduce!(A::BidimSparsikLazy{T}, B::BidimSparsikLazy{T}, c) where {T}
     nnz_rows = Int[]
     # equality of field types ensures that
@@ -351,7 +344,7 @@ end
 # the resulting object is Not Thorough
 #
 # let k = length(A), r = length(B)
-# O(k + r) (randomized, amortized)
+# O(k + r)
 function Base.reduce(A::BidimSparsikLazy, B::BidimSparsikLazy, c)
     return reduce!(BidimSparsikLazy(A), B, c)
 end
@@ -428,7 +421,7 @@ end
 # the resulting object is Not Thorough
 #
 # let k = length(A)
-# O(k) (randomized, amortized)
+# O(k)
 function scale!(A::BidimSparsikLazy, c)
     if iszero(c)
         return empty!(A)
@@ -447,7 +440,7 @@ end
 # the resulting object is Not Thorough
 #
 # let k = length(A)
-# O(k) (randomized, amortized)
+# O(k)
 function scale(A::BidimSparsikLazy, c)
     return scale!(BidimSparsikLazy(A), c)
 end
@@ -455,7 +448,7 @@ end
 #------------------------------------------------------------------------------
 
 # returns A[i, j] or zero if not present
-# O(1) (randomized, amortized)
+# O(1)
 function Base.get(A::BidimSparsikLazy, i::Int, j::Int)
     if !haskey(A.rows, i)
         return zero(A.field)
@@ -483,7 +476,7 @@ end
 
 # returns zero matrix of the dimensions (m, n)
 function zero_sparsik(m, n, field)
-    from_rows(m, n, field, Int[], Dict{Int, typeof(field)}())
+    from_rows(m, n, field, Int[], Dict{Int, Sparsik{typeof(field)}}())
 end
 zero_sparsik(sz::Tuple{Int, Int}, field) = zero_sparsik(sz..., field)
 
@@ -506,8 +499,8 @@ Base.iszero(A::BidimSparsikLazy) = length(get_nnz_rows(A)) == 0
 -(A::BidimSparsikLazy{T}, B::BidimSparsikLazy{T}) where {T} = reduce(A, B, - one(A.field))
 -(A::BidimSparsikLazy) = scale(A, -one(A.field))
 
-*(A::BidimSparsikLazy, c) = scale(A, c)
-*(c, A::BidimSparsikLazy) = scale(A, c)
+*(A::BidimSparsikLazy, c::Number) = scale(A, c)
+*(c::Number, A::BidimSparsikLazy) = scale(A, c)
 *(A::BidimSparsikLazy{T}, B::BidimSparsikLazy{T}) where {T} = prod(A, B)
 
 #------------------------------------------------------------------------------
@@ -541,8 +534,13 @@ function to_cartesian(A::BidimSparsikLazy, idx::Int)
 
 #------------------------------------------------------------------------------
 
+# returns the idx-th element of m if m is treated as
+# a vector stretched across the rows
+# O(1)
 Base.getindex(m::BidimSparsikLazy, idx::Int) = m[to_cartesian(m, idx)...]
 
+# returns the (i, j) element of m as a matrix
+# O(1)
 Base.getindex(m::BidimSparsikLazy, i::Int, j::Int) = get(m, i, j)
 
 function first_nonzero(m::BidimSparsikLazy)
@@ -559,13 +557,14 @@ Base.eltype(A::BidimSparsikLazy) = (Int, valtype(A))
 
 #------------------------------------------------------------------------------
 
-# linear in size
+# iterates over A nonzeroes
+# each returned item is of type eltype(A)
+# linear in the nimber of nonzeroes in A
 function Base.iterate(A::BidimSparsikLazy, state=(1, 1))
     (i, j) = state
     if i > length(A.nnz_rows) || j > length(A.rows[A.nnz_rows[i]])
         (i, j) = (i + 1, 1)
     end
-
     if i > length(A.nnz_rows)
         return nothing
     else
@@ -578,6 +577,10 @@ end
 
 # -----------------------------------------------------------------------------
 
+# returns a new AbstractSparsik object consisting of elements
+# from the given `A` each converted to the `field`
+#
+# O(k) if k is the number of nonzero in `A`
 function modular_reduction(A::BidimSparsikLazy, field)
     new_nnz_rows = Int[]
     new_rows = Dict{Int, Sparsik{typeof(field)}}()
@@ -595,6 +598,12 @@ end
 
 # -----------------------------------------------------------------------------
 
+# returns a new BidimSparsikLazy object consisting of elements
+# from the `A` each reconstructed from A.field to QQ
+#
+# roughly
+# O(klog²(ch)) if k is the number of nonzero in `v`
+# and ch is the field characteristic
 function rational_reconstruction(A::BidimSparsikLazy)
     new_nnz_rows = Int[]
     new_rows = Dict{Int, Sparsik{typeof(QQ)}}()
@@ -608,6 +617,25 @@ function rational_reconstruction(A::BidimSparsikLazy)
     end
 
     return from_rows(size(A)..., QQ, new_nnz_rows, new_rows)
+end
+
+# -----------------------------------------------------------------------------
+
+# returns standard inner product of A and B
+# if the vectors A and B have k and r nonzeroes respectively
+# O(min(k, r))
+function inner(A::BidimSparsikLazy{T}, B::BidimSparsikLazy{T}) where {T}
+    ans = zero(A.field)
+
+    if length(A) > length(B)
+        inner(u, v)
+    end
+
+    for (i, row) in A.rows
+        ans += inner(row, get_row(B, i))
+    end
+
+    return ans
 end
 
 # -----------------------------------------------------------------------------
