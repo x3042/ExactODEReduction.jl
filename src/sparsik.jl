@@ -1,54 +1,59 @@
 
-
 #=
-    The File contains Sparsik<Rational> and related funcs
+    The File contains `Sparsik<T>` and related funcs implementation
 
-    Overloaded functions:
-        get, getindex, zero, iszero, reduce, reduce!,
-        empty!, length, show, isempty
+    `Sparsik` implements `AbstractSparsik` interface
 =#
 
+#------------------------------------------------------------------------------
 
-# TODO:
-#       - write nnz iterator
+include("typics.jl")
+include("gizmos.jl")
 
 #------------------------------------------------------------------------------
 
-using Nemo
-
-
-import Base: ==, !=, +, -, *, get
+import Base: ==, !=, +, -, *
+import AbstractAlgebra: elem_type, Field, FieldElem, FracField,
+                        characteristic
 
 #------------------------------------------------------------------------------
-
 
 """
 Sparsik
-
-`Sparsik` implements Sparse Vector to store Rational numbers. One can
-instantiate `Sparsik` via a default constructor
-
-```
-v = Sparsik(3, [1, 3], Dict(1 => 4, 3 => -1))
-```
-which is essentially equal to constructing a vector (4, 0, -1)
-
-Alternatively, a sequence of values may be passed into `from_vector`
-
-```
-u = from_vector([4, 0, -1])
-```
-
-Note that `v` and `u` are considered equal
 """
-struct Sparsik
+struct Sparsik{T<:Field} <: AbstractSparsik{T}
+
+    # so now we are bound to AbstractAlgebra
+    # with Field, FieldElem, elem_type
     dim::Int
+    field::T
     nonzero::Vector{Int}
-    data::Dict{Int, fmpq}
+    data::Dict{Int, <:FieldElem}
 end
 
 #------------------------------------------------------------------------------
 
+# Quick fix for "Field problem"
+#
+# "Field problem": seems like Nemo(AbstractAlgebra) does not allow
+#                  field arithmetics on different field instances
+#                  There are some immediate consequences:
+#                  . deepcopy(::AbstractSparsik) should not be called
+#                  .
+#
+# this is a substitute for deepcopy,
+# as we do not want to change the behavior of original one
+function Sparsik(other::Sparsik{T}) where {T}
+    return Sparsik(other.dim,
+                    other.field,
+                    deepcopy(other.nonzero),
+                    deepcopy(other.data))
+end
+
+#------------------------------------------------------------------------------
+
+# do we really need these getters
+# seems like obj.field is more of julia-like syntax
 function get_nnz(v::Sparsik)
     return v.nonzero
 end
@@ -59,21 +64,23 @@ end
 
 #------------------------------------------------------------------------------
 
-# returns the index of first nonzero
-# or -1 if not present
-# does not throw
+# returns the index of first nonzero or -1 if not present
 # O(1)
 function first_nonzero(v::Sparsik)
     if iszero(v)
         return -1
     end
-    return v.nonzero[1]
+    # v.nonzero[1] or first(v.nonzero)...
+    # I guess second one may be even confusing
+    return first(v.nonzero)
 end
 
 #------------------------------------------------------------------------------
 
+# returns v * c
+# does modify `v`
 # if `v` has k nonzeroes
-# O(k) (randomized, amortized)
+# O(k)
 function scale!(v::Sparsik, c)
     if iszero(c)
         return empty!(v)
@@ -87,10 +94,11 @@ end
 
 #------------------------------------------------------------------------------
 
+# returns v * c
 # if `v` has k nonzeroes
-#  O(k) (randomized, amortized)
+#  O(k)
 function scale(v::Sparsik, c)
-    return scale!(deepcopy(v), c)
+    return scale!(Sparsik(v), c)
 end
 
 #------------------------------------------------------------------------------
@@ -99,22 +107,21 @@ end
 # mutates v
 # if the vectors `v` and `u` have k and r nonzeroes respectively
 # O(k + r) (randomized, amortized)
-function Nemo.reduce!(v::Sparsik, u::Sparsik, c)
-    new_nonzero = []
-    new_data = Dict{Int, fmpq}()
-
+function reduce!(v::Sparsik{T}, u::Sparsik{T}, c) where {T}
+    new_nonzero = Int[]
     i, j = 1, 1
 
-    v_nnz = v.nonzero
+    v_nnz = deepcopy(v.nonzero)
     u_nnz = u.nonzero
+    empty!(v.nonzero)
 
-    while i <= length(v) || j <= length(u)
+    while i <= length(v_nnz) || j <= length(u_nnz)
         new_idx = 0
 
-        if i > length(v)
+        if i > length(v_nnz)
             new_idx = u_nnz[j]
             j += 1
-        elseif j > length(u)
+        elseif j > length(u_nnz)
             new_idx = v_nnz[i]
             i += 1
         else
@@ -128,17 +135,14 @@ function Nemo.reduce!(v::Sparsik, u::Sparsik, c)
                 j += 1
             end
         end
-
-        new_val = v[new_idx] + c * u[new_idx]
-
-        if !iszero(new_val)
-            push!(new_nonzero, new_idx)
-            new_data[new_idx] = new_val
+        v.data[new_idx] = v[new_idx] + c * u[new_idx]
+        if !iszero(v[new_idx])
+            push!(v.nonzero, new_idx)
+        else
+            delete!(v.data, new_idx)
         end
-
     end
 
-    v = Sparsik(size(v), new_nonzero, new_data)
     return v
 end
 
@@ -146,22 +150,21 @@ end
 
 # returns v + c * u
 # O(k + r) (randomized, amortized)
-function Base.reduce(v::Sparsik, u::Sparsik, c)
-    return reduce!(deepcopy(v), u, c)
+function Base.reduce(v::Sparsik{T}, u::Sparsik{T}, c) where {T}
+    return reduce!(Sparsik(v), u, c)
 end
 
 #------------------------------------------------------------------------------
 
+# returns standard inner product
 # if the vectors `v` and `u` have k and r nonzeroes respectively
 # O(min(k, r)) (randomized, amortized)
-function inner(v::Sparsik, u::Sparsik)
-
-    ans = zero(QQ)
+function inner(v::Sparsik{T}, u::Sparsik{T}) where {T}
+    ans = zero(v.field)
 
     if length(v) > length(u)
         inner(u, v)
     end
-
     for (i, x) in v.data
         ans += x * u[i]
     end
@@ -171,23 +174,26 @@ end
 
 #------------------------------------------------------------------------------
 
-# constructs a `Sparsik` instance from an one-dimensional collection
-# O(n) where n = length(a) (randomized, amortized)
-function from_vector(a::Vector)
-    new_nonzero = []
-    new_data = Dict{Int, fmpq}()
+# constructs a `Sparsik` instance from a dense Vector
+# and the provided field
+# each `a` element is forcibly converted to its field representation
+# O(n) where n = length(a)
+function from_dense(a::AbstractVector, field)
+    new_nonzero = Int[]
+    new_data = Dict{Int, elem_type(field)}()
 
     for idx in findall(!iszero, a)
         push!(new_nonzero, idx[1])
-        new_data[idx[1]] = a[idx]
+        new_data[idx[1]] = field(a[idx])
     end
 
-    return Sparsik(length(a), new_nonzero, new_data)
+    return Sparsik(length(a), field, new_nonzero, new_data)
 end
 
 #------------------------------------------------------------------------------
 
-# if the vector `v` has k nonzeroes,
+# empties the `v`
+# if the vector `v` has k nonzeroes
 # O(k)
 function Base.empty!(v::Sparsik)
     empty!(v.nonzero)
@@ -197,46 +203,118 @@ end
 
 #------------------------------------------------------------------------------
 
-function zero_sparsik(dim::Int)
-    return zero(Sparsik(dim, [], Dict{Int, fmpq}()))
+# function for Sparsiks compatibility
+# O(1)
+function zero_sparsik(dim, field)
+    return Sparsik(dim, field, Int[], Dict{Int, elem_type(field)}())
 end
 
 #------------------------------------------------------------------------------
 
-Base.zero(v::Sparsik) = Sparsik(v.dim, [], Dict{Int, fmpq}())
+Base.zero(v::Sparsik) = zero_sparsik(v.dim, v.field)
 Base.iszero(v::Sparsik) = length(v) == 0
 
-Base.get(v::Sparsik, i::Int) = get(v.data, i, zero(fmpq))
-
+Base.get(v::Sparsik, i::Int) = get(v.data, i, zero(v.field))
 Base.getindex(v::Sparsik, i::Int) = get(v, i)
 
-Base.size(v::Sparsik) = v.dim
-Base.size(v::Sparsik, i::Int) = v.dim
-
+Base.size(v::Sparsik) = (v.dim, )
+Base.size(v::Sparsik, i::Int) = size(v)[i]
 Base.length(v::Sparsik) = length(v.nonzero)
+dim(v::Sparsik) = v.dim
 
 Base.isempty(v::Sparsik) = length(v.nonzero) == 0
 
 # -----------------------------------------------------------------------------
 
-+(v::Sparsik, u::Sparsik) = reduce(v, u, QQ(1))
--(v::Sparsik, u::Sparsik) = reduce(v, u, QQ(-1))
--(v::Sparsik) = scale(v, QQ(-1))
+# Strategy of types promotion:
+# explicit restriction to the operands types
++(v::Sparsik{T}, u::Sparsik{T}) where {T} = reduce(v, u, one(v.field))
+-(v::Sparsik{T}, u::Sparsik{T}) where {T} = reduce(v, u, - one(v.field))
+-(v::Sparsik) = scale(v, - one(v.field))
 
-*(v::Sparsik, c::Any) = scale(v, c)
-*(c::Any, v::Sparsik) = v * c
+*(v::Sparsik, c) = scale(v, c)
+*(c, v::Sparsik) = v * c
 
-==(v::Sparsik, u::Sparsik) = (v.dim == u.dim &&
+==(v::Sparsik{T}, u::Sparsik{T}) where {T} = (v.dim == u.dim &&
+            v.field == u.field &&
             v.data == u.data &&
             v.nonzero == u.nonzero)
-!=(v::Sparsik, u::Sparsik) = !(v == u)
+!=(v::Sparsik{T}, u::Sparsik{T}) where {T} = !(v == u)
 
 # -----------------------------------------------------------------------------
 
 Base.show(v::Sparsik) = "($(join(map(idx -> v[idx], 1 : v.dim), ", ")))"
 
-function print_vector(v::Sparsik)
+function print_sparsik(v::Sparsik)
     println(show(v))
 end
 
 # -----------------------------------------------------------------------------
+
+# iterates over all nonzeroes in `v`
+# each returned element is a pair (idx, value)
+# representing a nonzero element from `v`
+# linear in number of nonzeroes
+function Base.iterate(v::Sparsik, state=1)
+    if state <= length(v)
+        idx = v.nonzero[state]
+        state += 1
+        return ((idx, v[idx]), state)
+    else
+        return nothing
+    end
+end
+
+# -----------------------------------------------------------------------------
+
+Base.valtype(v::Sparsik) = elem_type(v.field)
+Base.eltype(v::Sparsik) = (Int, valtype(v))
+
+#-----------------------------------------------------------------------------
+
+# returns a new Sparsik object consisting of elements
+# from the given `v` each converted to the `field`
+#
+# O(k) if k is the number of nonzero in `v`
+function modular_reduction(v::Sparsik, field)
+    new_nonzero = Int[]
+    new_data = Dict{Int, elem_type(field)}()
+
+    for (i, x) in v
+        # this could be generalized
+        # yet I doubt it should be
+        y = field(numerator(x)) // field(denominator(x))
+        if !iszero(y)
+            push!(new_nonzero, i)
+            new_data[i] = y
+        end
+    end
+
+    return Sparsik(dim(v), field, new_nonzero, new_data)
+end
+
+#-----------------------------------------------------------------------------
+
+# returns a new Sparsik object consisting of elements
+# from the `v` each reconstructed in a given finite field
+#
+# throws
+# O†(k) if k is the number of nonzero in `v`
+# † reconstruction cost not included
+function rational_reconstruction(v::Sparsik)
+    new_nonzero = Int[]
+    new_data = Dict{Int, FieldElem}()
+    ch = convert(Int, characteristic(v.field))
+
+    for (i, x) in v
+        y = rational_reconstruction(convert(Int, x), ch)
+        if !iszero(y)
+            push!(new_nonzero, i)
+            new_data[i] = y
+        end
+    end
+
+    return Sparsik(dim(v), QQ, new_nonzero, new_data)
+end
+
+#-----------------------------------------------------------------------------
