@@ -54,6 +54,7 @@ end
 
 # do we really need these getters
 # seems like obj.field is more of julia-like syntax
+# Gleb: agree, no need for them
 function get_nnz(v::Sparsik)
     return v.nonzero
 end
@@ -72,6 +73,7 @@ function first_nonzero(v::Sparsik)
     end
     # v.nonzero[1] or first(v.nonzero)...
     # I guess second one may be even confusing
+    # Gleb: what is wrong with this?
     return first(v.nonzero)
 end
 
@@ -176,7 +178,7 @@ end
 
 # constructs a `Sparsik` instance from a dense Vector
 # and the provided field
-# each `a` element is forcibly converted to its field representation
+# each `a` element is explicitly converted to its field representation
 # O(n) where n = length(a)
 function from_dense(a::AbstractVector, field)
     new_nonzero = Int[]
@@ -272,6 +274,7 @@ Base.eltype(v::Sparsik) = (Int, valtype(v))
 
 #-----------------------------------------------------------------------------
 
+# Gleb: should raise an exception if any of the denominators reduces to zero
 # returns a new Sparsik object consisting of elements
 # from the given `v` each converted to the `field`
 #
@@ -302,6 +305,7 @@ end
 # † reconstruction cost not included
 function rational_reconstruction(v::Sparsik)
     new_nonzero = Int[]
+    # Gleb: I would suggest to say fmpq explicitly here
     new_data = Dict{Int, FieldElem}()
     ch = convert(Int, characteristic(v.field))
 

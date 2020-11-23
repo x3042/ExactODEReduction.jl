@@ -9,6 +9,7 @@ import Nemo: QQ, GF
 
 #------------------------------------------------------------------------------
 
+# Gleb: parametrization?
 struct Subspacik
     ambient_dim::Int
     echelon_form::Dict{Int, AbstractSparsik}
@@ -31,7 +32,7 @@ end
 
 #------------------------------------------------------------------------------
 
-#
+# Gleb: should new_vector has a type?
 function eat_sparsik!(V::Subspacik, new_vector)
     for (piv, vect) in V.echelon_form
         if !iszero(new_vector[piv])
@@ -136,6 +137,11 @@ function rational_reconstruction(xs)
 end
 
 #------------------------------------------------------------------------------
+
+# Gleb: two things to do:
+#  * make this as a function
+#  * add a postcheck: that the original vectors are in the subspace and that the subspace is invariant
+#    if the postcheck fails, go to a larger prime
 
 R = GF(2^31 - 1)
 

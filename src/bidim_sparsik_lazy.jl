@@ -392,6 +392,7 @@ end
 
 #------------------------------------------------------------------------------
 
+# Gleb: wouldn't this just be another method for Base.prod?
 # returns A(v) = Av
 # if k = length(A) and r = length(v)
 # O(k)
@@ -513,10 +514,6 @@ print_sparsik(A::BidimSparsikLazy) = println(show(A))
 
 #------------------------------------------------------------------------------
 
-# Gleb: why do you create a separate function and not just overload Base.getindex?
-# Alex: as far as I understand, that feature has a semantic purpose -
-#   - to show that calling A[i] returns nothing but i-th matrix-as-a-vector element
-#   (function signature changed, now it returns indices instead of element)
 function to_cartesian(A::BidimSparsikLazy, idx::Int)
     cols = size(A, 2)
     if mod(idx, cols) == 0
