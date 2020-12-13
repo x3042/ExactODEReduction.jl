@@ -12,7 +12,7 @@ import Base: ==, !=, +, -, *
 
 # AbstractSparsik<T>
 #
-# T is the type of the ground field
+# T is the field of the ground field
 #
 # Base interface for the Sparsiks family
 # an Object which implements `AbstractSparsik` can be treated
@@ -25,20 +25,19 @@ function first_nonzero(::T) where {T<:AbstractSparsik} end
 function getindex(::AbstractSparsik, i::Int) end
 
 # Gleb: shouldn't we restrict C to the field of coefficients?
+# Alex: I guess not, we want to be able to use standard `Number` subtypes,
+#       such as Ints
 function scale(::AbstractSparsik, ::C) where {C} end
 function scale!(::AbstractSparsik, ::C) where {C} end
 
-# what if we do not want to extend Base.reduce..
-# Gleb: I think Base.reduce has completely different semantic, so we do not want to extend it
-# maybe just use a different name for the fucntion at all
+# To Be Changed sometime
 function Base.reduce(::T, ::T, ::C) where {T<:AbstractSparsik{F}} where {F, C} end
 function reduce!(::T, ::T, ::C) where {T<:AbstractSparsik{F}} where {F, C} end
 
 function inner(::AbstractSparsik, ::AbstractSparsik) end
 
-# we dont have this for vectors
+# hmmm
 function Base.prod(::T, ::T) where {T<:AbstractSparsik{F}} where {F} end
-# Gleb: why? We do multiply matrix by a vector, don't we?
 
 function Base.zero(::AbstractSparsik) end
 function Base.isempty(::AbstractSparsik) end
@@ -50,7 +49,6 @@ function Base.size(::AbstractSparsik) end
 function Base.size(::AbstractSparsik, i::Int) end
 
 function density(::AbstractSparsik) end
-
 
 function ==(::T, ::T) where {T<:AbstractSparsik{F}} where {F} end
 function !=(::T, ::T) where {T<:AbstractSparsik{F}} where {F} end
@@ -67,5 +65,7 @@ function modular_reduction(::AbstractSparsik, field) end
 function rational_reconstruction(::AbstractSparsik) end
 
 function Base.iterate(::AbstractSparsik, state) end
+
+function unit_vector(dim, i, field) end
 
 #------------------------------------------------------------------------------
