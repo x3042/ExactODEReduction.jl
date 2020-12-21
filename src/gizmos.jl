@@ -4,13 +4,7 @@ include("typics.jl")
 #------------------------------------------------------------------------------
 
 import Nemo: QQ, GF, PolynomialRing, PolyElem, gfp_elem,
-            degree, trail
-
-#------------------------------------------------------------------------------
-
-function Base.convert(::Type{Int}, x::gfp_elem)
-    return Int(x.data)
-end
+            degree, trail, gfp_fmpz_elem, FracElem
 
 #------------------------------------------------------------------------------
 
@@ -21,7 +15,7 @@ end
 #
 # let n = max( λ(a), λ(m) ) , where λ(x) is a number of bits for x
 # O(n^2)
-function rational_reconstruction(a::Int, m::Int)
+function rational_reconstruction(a::I, m::I) where {I<:Union{Int, BigInt}}
     a = mod(a, m)
     if a == 0 || m == 0
         return QQ(0, 1)
@@ -53,7 +47,21 @@ function rational_reconstruction(a::Int, m::Int)
         return QQ(r, t)
     end
 
-    error("rational reconstruction of $a (mod $m) does not exist")
+    throw(AlgebraException(
+        "rational reconstruction of $a (mod $m) does not exist"
+    ))
+end
+
+#------------------------------------------------------------------------------
+
+function modular_reduction(x::R, field) where {R<:FracElem}
+    n, d = field(numerator(x)), field(denominator(x))
+    if iszero(d)
+        throw(AlgebraException(
+            "the denominator $(denominator(x)) vanishes under the $(field)!"
+        ))
+    end
+    n // d
 end
 
 #------------------------------------------------------------------------------
@@ -91,7 +99,9 @@ function minimal_polynomial(h::PolyElem, m::PolyElem)
     s, t = V[3], V[2]
 
     if iszero(coeff(t, 0))
-        error("the trailing coef of $h (mod $m) vanishes")
+        throw(AlgebraException(
+            "the trailing coef of the Euclid row $t (mod $m) vanishes"
+        ))
     end
 
     t *= inv(coeff(t, 0))
@@ -101,7 +111,9 @@ function minimal_polynomial(h::PolyElem, m::PolyElem)
         return reverse(t, d + 1)
     end
 
-    error("minimal polynomial of $h (mod $m) does not exist")
+    throw(AlgebraException(
+        "minimal polynomial of $h (mod $m) does not exist"
+    ))
 end
 
 #------------------------------------------------------------------------------
@@ -115,12 +127,10 @@ end
 #
 # note that vectors may be modified;
 # it is guaranteed that after the function yields,
-# vectors will have the original state
+# `vectors` will be in the original state
 function find_orthogonal!(vectors::AbstractDict)
     first_vector = first(values(vectors))
-
-    # why  .field but not field(...) ....
-    field = first_vector.field
+    field = ground(first_vector)
     n = dim(first_vector)
 
     i = 0
@@ -147,7 +157,11 @@ function find_orthogonal!(vectors::AbstractDict)
             f = square_nonsingular_deterministic_wiedemann(B, b)
             found = true
         catch e
-            @info e
+            if isa(e, AlgebraException)
+                @info e
+            else
+                rethrow()
+            end
         end
 
         i += 1

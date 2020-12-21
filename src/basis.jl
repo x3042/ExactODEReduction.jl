@@ -1,4 +1,9 @@
 
+#=
+
+=#
+
+#------------------------------------------------------------------------------
 
 include("parsik.jl")
 include("gizmos.jl")
@@ -9,33 +14,18 @@ include("../src/structs/subspacik.jl")
 
 #------------------------------------------------------------------------------
 
-function modular_reduction(xs, field)
-    [modular_reduction(x, field) for x in xs]
-end
-
-function rational_reconstruction(xs)
-    [rational_reconstruction(x) for x in xs]
-end
+import Primes: nextprime
+import Nemo: fmpz
 
 # TODO:
-#           Add postcheck
-#           Fix many other things
+#           Tests
+#           Measure time
 
 #------------------------------------------------------------------------------
 
-function find_basis(vectors)
-    alg = Subspacik(dim(first(vectors)), first(vectors).field)
-
-    # reduction
-
-    for v in vectors
-        eat_sparsik!(alg, deepcopy(v))
-    end
-
-    apply_vectors_inplace!(alg, deepcopy(vectors))
-
-    # reconstruction and answer verification
-
+function find_basis_1(vectors)
+    alg = linear_span!(deepcopy(vectors))
+    apply_matrices_inplace!(alg, deepcopy(vectors))
     return alg
 end
 
@@ -43,8 +33,6 @@ end
 
 #
 function find_basis_2(vectors)
-
-    # reduction
 
     first_vector = first(vectors)
     first_pivot = first_nonzero(first_vector)
@@ -188,30 +176,69 @@ function find_basis_2(vectors)
 
     end
 
-    # reconstruction
-
-    return current_vectors
+    return linear_span!(current_vectors)
 end
 
 #------------------------------------------------------------------------------
 
+# input:
+#       vectors - an array-like of AbstractSparsiks over Q
+# output:
+#       V - a Subspacik consisting of basis vectors
+# O(∞)
+function find_basis(vectors; used_algorithm=find_basis_1)
+    # used_algorithm is assumed not to throw normally
+    # and to handle errors by thyself
+    V = Subspacik(QQ)
+    primes = BigInt[ 2^31 - 1 ]
 
-function uwu()
-    R = GF(2^31 - 1)
+    while true
+        prime = last(primes)
+        # GF can not be constructed from BigInt,
+        # yet BigInt -> fmpz -> GF works fine
+        field = GF(fmpz(prime))
 
+        @info "new modulo = $prime"
+
+        # reduction
+        xs = [ modular_reduction(x, field) for x in vectors ]
+        # brrrr...
+        V = used_algorithm(xs)
+        # reconstruction
+        xs = [ rational_reconstruction(x)
+               for x in values(V.echelon_form) ]
+
+        # postcheck
+        # ---
+        # how can one say "причесать векторы" ?)
+        V = linear_span!(xs)
+        #
+        if check_inclusion(V, vectors)
+            if check_invariance(V, vectors)
+                break
+            end
+            @info "invariance check failed.."
+        end
+        @info "inclusion check failed.."
+
+        # how to choose the next better?
+        push!(primes, nextprime(prime ^ 2))
+    end
+
+    return V
+end
+
+#------------------------------------------------------------------------------
+
+# I've broke find_basis_2 a bit, but it worked fine
+
+function owo()
     for (i, (mfn, mdim, msz, mdata)) in enumerate(load_COO_if(from_dim=4, to_dim=8))
 
         println("$(i)th model: $mfn, dim = $mdim, size = $msz")
         As = map(matr -> from_COO(matr..., QQ), mdata)
 
-        As_reduced = modular_reduction(As, R)
-
-        @time V1 = find_basis(As_reduced)
-        @time V2 = find_basis_2(As_reduced)
-
-        @info "good = $(dim(V1))"
-        @info "my = $(length(V2))"
-        # we are loosing some basis vectors!
+        @time V = find_basis(As, used_algorithm=find_basis_1)
 
         println("~~~~~~~~~~~~~~~")
         println()
@@ -219,25 +246,4 @@ function uwu()
     end
 end
 
-function owo()
-    R = GF(2^31 - 1)
-
-    for (i, (mfn, mdim, msz, mdata)) in enumerate(load_COO_if(from_dim=10, to_dim=25))
-
-        println("$(i)th model: $mfn, dim = $mdim, size = $msz")
-        As = map(matr -> from_COO(matr..., QQ), mdata)
-
-        As_reduced = modular_reduction(As, R)
-        @time V_reduced = find_basis(As_reduced)
-        e_reconstructed = rational_reconstruction(basis(V_reduced))
-
-        @time V_orig = find_basis(As)
-        e_orig = basis(V_orig)
-
-        @info e_orig == e_reconstructed
-        # only trues
-        println("~~~~~~~~~~~~~~~")
-        println()
-
-    end
-end
+owo()

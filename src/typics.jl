@@ -6,7 +6,12 @@
 
 #------------------------------------------------------------------------------
 
+include("errors.jl")
+
+#------------------------------------------------------------------------------
+
 import Base: ==, !=, +, -, *
+import Nemo: gfp_elem, gfp_fmpz_elem
 
 #------------------------------------------------------------------------------
 
@@ -20,6 +25,8 @@ import Base: ==, !=, +, -, *
 abstract type AbstractSparsik{T} end
 
 #------------------------------------------------------------------------------
+
+function ground(::AbstractSparsik) end
 
 function first_nonzero(::T) where {T<:AbstractSparsik} end
 function getindex(::AbstractSparsik, i::Int) end
@@ -53,19 +60,29 @@ function density(::AbstractSparsik) end
 function ==(::T, ::T) where {T<:AbstractSparsik{F}} where {F} end
 function !=(::T, ::T) where {T<:AbstractSparsik{F}} where {F} end
 
-function Base.iterate(::AbstractSparsik) end
-
 function Base.valtype(::AbstractSparsik) end
 function Base.eltype(::AbstractSparsik) end
 
 function Base.show(::AbstractSparsik) end
 function print_sparsik(::AbstractSparsik) end
 
-function modular_reduction(::AbstractSparsik, field) end
+function modular_reduction(::AbstractSparsik, ::T) where {T} end
 function rational_reconstruction(::AbstractSparsik) end
 
 function Base.iterate(::AbstractSparsik, state) end
 
-function unit_vector(dim, i, field) end
+function unit_vector(::Int, ::Int, ::T) where {T} end
+
+function random_sparsik(::Tuple{Int}, ::T) where {T} end
+
+#------------------------------------------------------------------------------
+
+function Base.convert(::Type{Int}, x::gfp_elem)
+    return Int(x.data)
+end
+
+function Base.convert(::Type{BigInt}, x::gfp_fmpz_elem)
+    return BigInt(x.data)
+end
 
 #------------------------------------------------------------------------------

@@ -10,6 +10,13 @@ import Nemo: QQ, GF, PolynomialRing, PolyElem, gfp_elem,
 
 #------------------------------------------------------------------------------
 
+# A thought:
+#   evaluation of f at x₀ for x₀::Sparsik can probably be done faster
+#   if we somehow define the "MatrixRing" consisting of Sparsiks
+#   in terms of Nemo;
+#   then f will represent a Polynomial over the "MatrixRing" and we can use
+#   the default, assumably much faster, evaluation f(x₀)
+
 # returns f(x₀)
 # O(d) multiplications/additions of x₀ if d = degree(f)
 
@@ -52,6 +59,13 @@ function square_nonsingular_randomized_wiedemann(A::AbstractSparsik, b::Abstract
     k = 0
     d = 0
 
+    B = one(A)
+    A_pows = []
+    for i in 1 : 2n
+        push!(A_pows, B)
+        B = B * A
+    end
+
     # 2
     while !iszero(b)
         # beda s randomom
@@ -61,10 +75,8 @@ function square_nonsingular_randomized_wiedemann(A::AbstractSparsik, b::Abstract
 
         # 4
         seq = elem_type(field)[]
-        B = one(A)
         for i in 1 : 2(n - d)
-            push!(seq, inner(u, apply_vector(B, b)))
-            B = B * A
+            push!(seq, inner(u, apply_vector(A_pows[i], b)))
         end
 
         # 5
@@ -148,7 +160,9 @@ function square_nonsingular_deterministic_wiedemann(A::AbstractSparsik, b::Abstr
 
     # 9
     if iszero(coeff(g, 0))
-        error("the matrix is singular!")
+        throw(AlgebraException(
+            "the matrix passed for wiedemann is singular!"
+        ))
     end
 
     f = g * inv(coeff(g, 0))
