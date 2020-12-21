@@ -13,7 +13,7 @@ include("../gizmos.jl")
 #------------------------------------------------------------------------------
 
 import Base: ==, !=, +, -, *
-import Nemo: GaloisField, fmpq
+import Nemo: GaloisField, GaloisFmpzField, fmpq
 import Distributions: Bernoulli
 import AbstractAlgebra: elem_type, Field, FieldElem,
                         characteristic, FracField
@@ -29,6 +29,11 @@ mutable struct Sparsik{T<:Field} <: AbstractSparsik{T}
     nonzero::Vector{Int}
     data::Dict{Int, <:FieldElem}
 end
+
+#------------------------------------------------------------------------------
+
+# Ground field!
+ground(v::Sparsik) = v.field
 
 #------------------------------------------------------------------------------
 
@@ -271,12 +276,8 @@ function modular_reduction(v::Sparsik, field)
     new_data = Dict{Int, elem_type(field)}()
 
     for (i, x) in v
-        d = field(denominator(x))
-        if iszero(d)
-            error("the denominator $(denominator(x)) vanishes under $field !")
-        end
-        y = field(numerator(x)) // d
-
+        # wrapped into a function
+        y = modular_reduction(x, field)
         if !iszero(y)
             push!(new_nonzero, i)
             new_data[i] = y
@@ -296,10 +297,15 @@ end
 function rational_reconstruction(v::Sparsik)
     new_nonzero = Int[]
     new_data = Dict{Int, fmpq}()
-    ch = convert(Int, characteristic(v.field))
+
+    tmp_type = BigInt
+    if isa(ground(v), GaloisField)
+        tmp_type = Int
+    end
+    ch = convert(tmp_type, characteristic(v.field))
 
     for (i, x) in v
-        y = rational_reconstruction(convert(Int, x), ch)
+        y = rational_reconstruction(convert(tmp_type, x), ch)
         if !iszero(y)
             push!(new_nonzero, i)
             new_data[i] = y
@@ -331,10 +337,13 @@ function random_sparsik(sz::Int, field::T) where {T<:Field}
     if T <: FracField
         # todo!
         return unit_sparsik(sz, rand(1:sz), field)
-    elseif T <: GaloisField
+    elseif T <: Union{GaloisField, GaloisFmpzField}
         # todo!
-        coin_flips = rand(Bernoulli(0.2), sz)
-        nonzero = filter(i -> !iszero(coin_flips[i]), 1:sz)
+        # magical constant
+        density = 0.5
+        λ = density * sz
+        # O(λlogλ)
+        nonzero = unique!(sort!(rand([1, sz], floor(Int, λ))))
         # generating some zeroes in addition, ignoring this fact for now
         data = Dict(i => rand(field) for i in nonzero)
         return Sparsik(sz, field, nonzero, data)

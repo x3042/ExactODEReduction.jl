@@ -35,8 +35,11 @@ end
 
 #------------------------------------------------------------------------------
 
-# x2
-#
+# Ground field!
+ground(v::BidimSparsikLazy) = v.field
+
+#------------------------------------------------------------------------------
+
 # O(k) where k is the number of nonzeroes in `other`
 function BidimSparsikLazy(other::BidimSparsikLazy{T}) where {T}
     return BidimSparsikLazy(other.m, other.n,
@@ -512,8 +515,6 @@ Base.iszero(A::BidimSparsikLazy) = length(get_nnz_rows(A)) == 0
 
 #------------------------------------------------------------------------------
 
-# 1. we can check only rows
-# 2. explicit type asserting
 ==(A::BidimSparsikLazy{T}, B::BidimSparsikLazy{T}) where {T} = (size(A) == size(B) &&
             A.field == B.field;
             A.rows == B.rows;
