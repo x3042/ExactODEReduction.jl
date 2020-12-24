@@ -11,6 +11,8 @@ import Base: showerror, show
 # and must be handled usually
 #
 # how can we name it....
+#
+# Gleb: I suggest to look at the errors thrown by Nemo/Oscar. It would be nice to be coherent
 struct AlgebraException <: Exception
     msg::String
 end

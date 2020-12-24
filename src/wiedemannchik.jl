@@ -21,7 +21,14 @@ import Nemo: QQ, GF, PolynomialRing, PolyElem, gfp_elem,
 # O(d) multiplications/additions of x₀ if d = degree(f)
 
 # We understand we should avoid using unicode, but
-# x₀ just looks too cute ^=^
+# x₀ just looks too cute ^=^ // Gleb: ok)
+#
+# Gleb: my impression is that a correct implementation of W. algorithm
+# should avoid multiplying a matrix by a matrix. Therefore, I think the
+# function we would like to have is rather // and how on earth you type these indices?
+#     evaluate(f, x_0, b)
+# so that it computes f(x_0) * b by computing only matrix-vector products
+# using the same Horner scheme
 function evaluate(f::PolyElem, x₀)
     accum = lead(f) * one(x₀)
     d = degree(f)
@@ -36,6 +43,7 @@ end
 #------------------------------------------------------------------------------
 
 # returns the thing named f⁻
+# Gleb: How about shift_right_x ?
 function name_me_please(f::PolyElem)
     x = gen(parent(f))
     divexact(f - coeff(f, 0), x)
@@ -46,8 +54,9 @@ end
 # Solves Ay = b
 # Throws if A is singular
 function square_nonsingular_randomized_wiedemann(A::AbstractSparsik, b::AbstractSparsik)
-    # ^⌣^
-    #
+    # the function implements Algorithm 1 given on page 55
+    # in https://doi.org/10.1109/TIT.1986.1057137
+    # the notation and step numbering are taken from there
 
     field = A.field
     S, x = PolynomialRing(field, "x")
@@ -59,9 +68,13 @@ function square_nonsingular_randomized_wiedemann(A::AbstractSparsik, b::Abstract
     k = 0
     d = 0
 
+    # Gleb: (see also lines 26-28 above)
+    # W. algorithm should not compute matrix-matrix
+    # products, only matrix-vector products
+    # Therefore, I think this part can be eliminated
     B = one(A)
     A_pows = []
-    for i in 1 : 2n
+    for i in 1 : 2 * n
         push!(A_pows, B)
         B = B * A
     end
@@ -71,16 +84,23 @@ function square_nonsingular_randomized_wiedemann(A::AbstractSparsik, b::Abstract
         # beda s randomom
 
         # 3
+        # Gleb: my understanding is that the randomization in the algorithm
+        # affects only the runtime but the result will be always correct.
+        # Therefore, we can afford different choice strategies for u.
+        # One is outline in Section VI of the paper and suggests to generate a
+        # random dense vector, then the average number of the iteration will be small.
+        # We can start with this and then experiment what happens if we have u sparser
         u = random_sparsik(n, field)
 
         # 4
         seq = elem_type(field)[]
-        for i in 1 : 2(n - d)
+        for i in 1 : 2 * (n - d)
+            # Gleb: here we should just multiply the result of the previous iteration by A
             push!(seq, inner(u, apply_vector(A_pows[i], b)))
         end
 
         # 5
-        f = minimal_polynomial(S(seq), x^(2(n - d)))
+        f = minimal_polynomial(S(seq), x^(2 * (n - d)))
         f = f * inv(coeff(f, 0))
 
         # 6
@@ -117,8 +137,9 @@ end
 #------------------------------------------------------------------------------
 
 function square_nonsingular_deterministic_wiedemann(A::AbstractSparsik, b::AbstractSparsik)
-    #
-    #
+    # the function implements Algorithm 2 given on page 55
+    # in https://doi.org/10.1109/TIT.1986.1057137
+    # the notation and step numbering are taken from there
 
     field = A.field
     S, x = PolynomialRing(field, "x")
@@ -161,7 +182,7 @@ function square_nonsingular_deterministic_wiedemann(A::AbstractSparsik, b::Abstr
     # 9
     if iszero(coeff(g, 0))
         throw(AlgebraException(
-            "the matrix passed for wiedemann is singular!"
+            "the matrix passed for Wiedemann is singular!"
         ))
     end
 

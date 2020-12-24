@@ -65,6 +65,7 @@ function find_basis_2(vectors)
 
     # select hashing vector
     # we should adjust the hash_vector density
+    # Gleb: I think we should just make it dense, otherwise we can loose some vectors
     hash_vector = random_sparsik(size(first_vector), field)
     hash_col = [ inner(hash_vector, first_vector) ]
 
@@ -117,6 +118,7 @@ function find_basis_2(vectors)
                         # ( because otherwise y will be the coeffs of the columns, not of the rows )
                         # (iii) finding dependencies
                         transpose!(current_square)
+                        # Gleb: we can do randomized as it is is guaranteed to give a correct result
                         y = square_nonsingular_deterministic_wiedemann(current_square, product_restricted)
                         # should be O(1)
                         transpose!(current_square)
@@ -129,6 +131,9 @@ function find_basis_2(vectors)
                         accum = zero(field)
                         col = 0
                         while iszero(accum)
+                            # Gleb: I think we should skip the columns that are already pivots, this can be a big speedup
+                            # Another option for the future would be to do sort-of binary search by multiplying by some
+                            # new hash vectors
                             col += 1
                             accum = sum(y[j] * current_vectors[j][col]
                                           for j in 1:k) - product[col]
@@ -149,6 +154,9 @@ function find_basis_2(vectors)
 
                         # append -> find_orthogonal -> pop
                         # it must be simplified
+                        # Gleb: how about making the value of the hash to be 
+                        # the first coordinate of the restricted vector?
+                        # Then there will be non need in this push-pop every time
                         for (i, row) in enumerate(current_rows)
                             append!(row, current_vectors[i][new_pivot])
                         end
@@ -211,6 +219,7 @@ function find_basis(vectors; used_algorithm=find_basis_1)
         # postcheck
         # ---
         # how can one say "причесать векторы" ?)
+        # Gleb: why would you want to do this anyway?
         V = linear_span!(xs)
         #
         if check_inclusion(V, vectors)

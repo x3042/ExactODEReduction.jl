@@ -72,6 +72,7 @@ function minimal_polynomial(h::PolyElem, m::PolyElem)
     # trying to find mₕ - minimal(annihilating) polynomial of h
     #
     # 'Modern Computer Algebra':
+    # Gleb: we should put an explicit reference
     # s = ht + ml (mod m)
     # s = ht  ⇒  h ≡ s//t (mod m) (†)
     #
@@ -118,6 +119,9 @@ end
 
 #------------------------------------------------------------------------------
 
+# Gleb: I think it would be more natural to place this function 
+# to wiedemannchik.jl
+
 # Returns such vector, that it is orthogonal to the given vector set
 # The given `vectors` set must be linearly independent
 # and for any vect from `vectors` the following must hold
@@ -143,6 +147,12 @@ function find_orthogonal!(vectors::AbstractDict)
         # We need a strategy for choosing a random vector
         # probably, parameters like density or components distribution
         # of the vector could be adjusted
+        # Gleb: an idea too funny to be true:
+        #       let the hash coordinate be the first one;
+        #       then I think we can guarantee that the vector
+        #       1, 0, 0, ...
+        #       is *not* in the linear span of others so we can take it 
+        #       instead of a random one.
         u = random_sparsik(n, field)
         # the only change of `vectors`
         vectors[n] = u
@@ -154,6 +164,7 @@ function find_orthogonal!(vectors::AbstractDict)
         try
             # if the selected `u` is not independent with `vectors`
             # then the wiedemann must fail and we should choose a new vector
+            # Gleb: we could use probabilistic here
             f = square_nonsingular_deterministic_wiedemann(B, b)
             found = true
         catch e
