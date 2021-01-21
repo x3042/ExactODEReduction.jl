@@ -7,7 +7,7 @@
 
 #------------------------------------------------------------------------------
 
-include("bidim_sparsik_lazy.jl")
+include("dok_sparsik.jl")
 
 #------------------------------------------------------------------------------
 
@@ -21,14 +21,14 @@ mutable struct Subspacik{T<:Field}
     # now it is just redundant
     field::T
     # the echelon form of vectors is an invariant!
-    echelon_form::Dict{Int, AbstractSparsik{T}}
+    echelon_form::Dict{Int, AbstractSparseMatrix{T}}
 end
 
 #------------------------------------------------------------------------------
 
 # convenience ctor
 function Subspacik(field::T) where {T}
-    return Subspacik(field, Dict{Int, AbstractSparsik{T}}())
+    return Subspacik(field, Dict{Int, AbstractSparseMatrix{T}}())
 end
 
 # deepcopy redefinition in order to preserve the field
@@ -68,7 +68,7 @@ end
 # adds `new_vector` to the set of spanning vectors of V
 # while modifying both
 # returns -1 if `new_vector` lies in V, new pivot index otherwise
-function eat_sparsik!(V::Subspacik, new_vector::AbstractSparsik)
+function eat_sparsik!(V::Subspacik, new_vector::AbstractSparseMatrix)
     for (piv, vect) in V.echelon_form
         if !iszero(new_vector[piv])
             reduce!(new_vector, vect, -new_vector[piv])
@@ -76,6 +76,36 @@ function eat_sparsik!(V::Subspacik, new_vector::AbstractSparsik)
     end
 
     if iszero(new_vector)
+        return -1
+    end
+
+    pivot = first_nonzero(new_vector)
+    scale!(new_vector, inv(new_vector[pivot]))
+
+    for (piv, vect) in V.echelon_form
+        if !iszero(vect[pivot])
+            reduce!(V.echelon_form[piv], new_vector, -vect[pivot])
+        end
+    end
+
+    V.echelon_form[pivot] = new_vector
+    return pivot
+end
+
+
+function eat_sparsik_2!(V::Subspacik, new_vector::AbstractSparseMatrix)
+    for (piv, vect) in V.echelon_form
+        if !iszero(new_vector[piv])
+            reduce!(new_vector, vect, -new_vector[piv])
+        end
+    end
+
+    if iszero(new_vector)
+        return -1
+    end
+
+    if density(new_vector) > 0.1
+        push!(fat_vectors, new_vector)
         return -1
     end
 
@@ -121,7 +151,7 @@ function apply_matrices_inplace!(V::Subspacik, matrices)
                 product = apply_vector(V.echelon_form[pivot], vect)
 
                 i += 1
-                i % 100 == 0 && print(".")
+                i % 10 == 0 && print(".")
 
                 if !iszero(product)
                     new_pivot = eat_sparsik!(V, product)
@@ -139,7 +169,9 @@ function apply_matrices_inplace!(V::Subspacik, matrices)
 #------------------------------------------------------------------------------
 
 # checks whether the given vector lies in V
-function check_inclusion(V::Subspacik, vector::AbstractSparsik)
+#
+# TODO: check_inclusion!
+function check_inclusion(V::Subspacik, vector::AbstractSparseMatrix)
     new_vector = deepcopy(vector)
     for (piv, vect) in V.echelon_form
         if ! iszero(new_vector[piv])

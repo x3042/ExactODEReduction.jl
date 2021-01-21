@@ -23,7 +23,7 @@ import AbstractAlgebra: elem_type, Field, FieldElem,
 """
 Sparsik
 """
-mutable struct Sparsik{T<:Field} <: AbstractSparsik{T}
+mutable struct Sparsik{T<:Field} <: AbstractSparseVector{T}
     dim::Int
     field::T
     nonzero::Vector{Int}
@@ -32,19 +32,17 @@ end
 
 #------------------------------------------------------------------------------
 
+# returns the density of `v`,
+# i.e the percentage of nonzero-valued elements in `v`
+density(v::Sparsik) = length(v.nonzero) / v.dim
+
+# returns the number of nonzero-valued elements in `v`
+nnz(v::Sparsik) = length(v.nonzero)
+
 # Ground field!
 ground(v::Sparsik) = v.field
 
 #------------------------------------------------------------------------------
-
-# this is a substitute for deepcopy,
-# as we do not want to change the behavior of original one
-function Sparsik(other::Sparsik{T}) where {T}
-    return Sparsik(other.dim,
-                    other.field,
-                    deepcopy(other.nonzero),
-                    deepcopy(other.data))
-end
 
 # hitherto `Sparsik(other::Sparik)` has stood for the `deepcopy`,
 # from now on we override Base.deepcopy
@@ -74,7 +72,7 @@ end
 # if `v` has k nonzeroes
 # O(k)
 function scale!(v::Sparsik, c)
-    if iszero(v.field(c))
+    if iszero(ground(v)(c))
         return empty!(v)
     end
 
@@ -84,13 +82,9 @@ function scale!(v::Sparsik, c)
     return v
 end
 
-#------------------------------------------------------------------------------
-
 # returns v * c
-# if `v` has k nonzeroes
-#  O(k)
 function scale(v::Sparsik, c)
-    return scale!(Sparsik(v), c)
+    return scale!(deepcopy(v), c)
 end
 
 #------------------------------------------------------------------------------
@@ -138,12 +132,10 @@ function reduce!(v::Sparsik{T}, u::Sparsik{T}, c) where {T}
     return v
 end
 
-#------------------------------------------------------------------------------
-
 # returns v + c * u
 # O(k + r)
 function Base.reduce(v::Sparsik{T}, u::Sparsik{T}, c) where {T}
-    return reduce!(Sparsik(v), u, c)
+    return reduce!(deepcopy(v), u, c)
 end
 
 #------------------------------------------------------------------------------
@@ -236,11 +228,7 @@ Base.isempty(v::Sparsik) = length(v.nonzero) == 0
 
 # -----------------------------------------------------------------------------
 
-Base.show(v::Sparsik) = "($(join(map(idx -> v[idx], 1 : v.dim), ", ")))"
-
-function print_sparsik(v::Sparsik)
-    println(show(v))
-end
+Base.show(io::IO, v::Sparsik) = println(io, "($(join(map(idx -> v[idx], 1 : v.dim), ", ")))")
 
 # -----------------------------------------------------------------------------
 
@@ -265,10 +253,9 @@ Base.eltype(v::Sparsik) = (Int, valtype(v))
 
 #-----------------------------------------------------------------------------
 
-# Gleb: should raise an exception if any of the denominators reduces to zero
-#
-# returns a new Sparsik object consisting of elements
+# Returns a new Sparsik object consisting of elements
 # from the given `v` each converted to the `field`
+# Throws if any of the denominators reduces to zero
 #
 # O(k) if k is the number of nonzero in `v`
 function modular_reduction(v::Sparsik, field)
@@ -323,30 +310,25 @@ end
 
 #-----------------------------------------------------------------------------
 
-# actually, seems as we need slightly different 'random'
-# for different purposes:
-#   for hashing,
-#   for augmenting matrix n×(n-1) to square to calc the orthogonal,
-#   for randomized wiedemann
-#   ...
+
 #
-# thinking about it
-#
-function random_sparsik(sz::Int, field::T) where {T<:Field}
+function random_sparsik(sz::Int, field::T; density=0.1) where {T<:Field}
     # the function looks so nice and compact..  Julia <3
     if T <: FracField
         # todo!
         return unit_sparsik(sz, rand(1:sz), field)
     elseif T <: Union{GaloisField, GaloisFmpzField}
-        # todo!
-        # magical constant
-        density = 0.5
-        λ = density * sz
-        # O(λlogλ)
-        nonzero = unique!(sort!(rand([1, sz], floor(Int, λ))))
-        # generating some zeroes in addition, ignoring this fact for now
-        data = Dict(i => rand(field) for i in nonzero)
-        return Sparsik(sz, field, nonzero, data)
+        dense_repr = map(field, rand(Bernoulli(density), sz))
+
+        for idx in findall(!iszero, dense_repr)
+            x = zero(field)
+            while iszero(x)
+                x = rand(field)
+            end
+            dense_repr[idx] = x
+        end
+
+        return from_dense(dense_repr, field)
     end
 
     error("random sparsik over $field is not implemented!")
@@ -410,3 +392,27 @@ function Base.pop!(v::Sparsik)
 end
 
 #-----------------------------------------------------------------------------
+
+function restrict(v::Sparsik, coords)
+    field = ground(v)
+    nonzero = Int[]
+    data = Dict{Int, elem_type(field)}()
+
+    for (i, col) in enumerate(coords)
+        if ! iszero(v[col])
+            push!(nonzero, i)
+            data[i] = v[col]
+        end
+    end
+
+    return Sparsik(length(coords), field, nonzero, data)
+end
+
+
+function to_dense(A::Sparsik)
+    ans = fill(zero(ground(A)), size(A))
+    for (i, x) in A
+        ans[i] = x
+    end
+    return ans
+end

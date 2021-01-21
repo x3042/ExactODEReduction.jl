@@ -1,8 +1,8 @@
 
 #=
-    The File contains `BidimSparsikLazy<T>` and related funcs implementation
+    The File contains `DOK_Sparsik<T>` and related funcs implementation
 
-    `BidimSparsikLazy` implements `AbstractSparsik` interface
+    `DOK_Sparsik` implements `AbstractSparsik` interface
 =#
 
 #------------------------------------------------------------------------------
@@ -18,7 +18,7 @@ import AbstractAlgebra: elem_type, Field, FieldElem, FracField,
 
 #------------------------------------------------------------------------------
 
-mutable struct BidimSparsikLazy{T<:Field} <: AbstractSparsik{T}
+mutable struct DOK_Sparsik{T<:Field} <: AbstractSparseMatrix{T}
     # This implementation stores rows data regularly while constructing
     # columns data only when needed
     m::Int
@@ -36,22 +36,13 @@ end
 #------------------------------------------------------------------------------
 
 # Ground field!
-ground(v::BidimSparsikLazy) = v.field
+ground(v::DOK_Sparsik) = v.field
 
 #------------------------------------------------------------------------------
 
-# O(k) where k is the number of nonzeroes in `other`
-function BidimSparsikLazy(other::BidimSparsikLazy{T}) where {T}
-    return BidimSparsikLazy(other.m, other.n,
-            other.field,
-            deepcopy(other.nnz_rows), deepcopy(other.nnz_cols),
-            Dict(map(i -> (i => Sparsik(other.rows[i])), other.nnz_rows)),
-            Dict(map(i -> (i => Sparsik(other.cols[i])), other.nnz_cols)))
-end
-
 # O(k)
-function Base.deepcopy_internal(x::BidimSparsikLazy, stackdict::IdDict)
-    y = BidimSparsikLazy(x.m, x.n, x.field,
+function Base.deepcopy_internal(x::DOK_Sparsik, stackdict::IdDict)
+    y = DOK_Sparsik(x.m, x.n, x.field,
             Base.deepcopy_internal(x.nnz_rows, stackdict),
             Base.deepcopy_internal(x.nnz_cols, stackdict),
             Base.deepcopy_internal(x.rows, stackdict),
@@ -67,43 +58,47 @@ end
 # O(1)
 # Problems with data relevance when scaling/reducing inplace,
 # have not broke everything, yet keep this feature in mind
-function is_thorough(A::BidimSparsikLazy)
+function is_thorough(A::DOK_Sparsik)
     return length(A.nnz_cols) != 0 || length(A.nnz_rows) == 0
 end
 
 #------------------------------------------------------------------------------
 
-function field(A::BidimSparsikLazy)
+function field(A::DOK_Sparsik)
     return A.field
 end
 
 # returns the dim of the ambient space
-function dim(A::BidimSparsikLazy)
+function dim(A::DOK_Sparsik)
     return size(A, 1) * size(A, 2)
 end
 
 # returns the order of the matrix
 # `A` must be square
-function order(A::BidimSparsikLazy)
+function order(A::DOK_Sparsik)
     return size(A, 1)
+end
+
+function issquare(A::DOK_Sparsik)
+    return size(A, 1) == size(A, 2)
 end
 
 #------------------------------------------------------------------------------
 
 # returns the tuple of `A` dimensions
 # O(1)
-function Base.size(A::BidimSparsikLazy)
+function Base.size(A::DOK_Sparsik)
     return (A.m, A.n)
 end
 
 # returns the ith dimension of `A`
-function Base.size(A::BidimSparsikLazy, i::Int)
+function Base.size(A::DOK_Sparsik, i::Int)
     return size(A)[i]
 end
 
 # returns number of nonzero entries of `A`
 # O(k) where k is the number of nonzeroes in `A`
-function Base.length(A::BidimSparsikLazy)
+function Base.length(A::DOK_Sparsik)
     return sum(map(row -> length(row), values(A.rows)))
 end
 
@@ -113,7 +108,7 @@ end
 # which equals the number of nonzeroes
 # divied by the dim of the ambient space
 # O(k) where k is the number of nonzeroes in `A`
-function density(A::BidimSparsikLazy)
+function density(A::DOK_Sparsik)
     return length(A) / dim(A)
 end
 
@@ -122,13 +117,13 @@ end
 # returns the ith column of `A` or `zero(Sparsik)` if not present
 # note that NO data validity checks are implied
 # O(1)
-function get_col(A::BidimSparsikLazy, i)
+function get_col(A::DOK_Sparsik, i)
     return get(A.cols, i, zero_sparsik(size(A, 1), A.field))
 end
 
 # returns the ith row of `A` or `zero(Sparsik)` if not present
 # O(1)
-function get_row(A::BidimSparsikLazy, i)
+function get_row(A::DOK_Sparsik, i)
     return get(A.rows, i, zero_sparsik(size(A, 2), A.field))
 end
 
@@ -138,14 +133,14 @@ end
 # essentially `get_nnz_cols(A) == sort(keys(A.cols))`
 # note that NO data validity checks are implied
 # O(1)
-function get_nnz_cols(A::BidimSparsikLazy)
+function get_nnz_cols(A::DOK_Sparsik)
     return A.nnz_cols
 end
 
 # returns the list of nonzero rows of `A`
 # essentially `get_nnz_rows(A) == sort(keys(A.rows))`
 # O(1)
-function get_nnz_rows(A::BidimSparsikLazy)
+function get_nnz_rows(A::DOK_Sparsik)
     return A.nnz_rows
 end
 
@@ -155,7 +150,7 @@ end
 # so that the resulting object is considered to be thorough
 # let n = size(A, 2), k = length(A)
 # O(n + k)
-function reconstruct!(A::BidimSparsikLazy)
+function reconstruct!(A::DOK_Sparsik)
     if is_thorough(A)
         return A
     end
@@ -187,7 +182,7 @@ end
 # let K = length(A)
 #     k = length(A.nnz_rows)
 # O(Klogk)
-function reconstruct_2!(A::BidimSparsikLazy)
+function reconstruct_2!(A::DOK_Sparsik)
     if is_thorough(A)
         return A
     end
@@ -228,7 +223,7 @@ end
 
 #------------------------------------------------------------------------------
 
-# constructs `BidimSparsikLazy` object from
+# constructs `DOK_Sparsik` object from
 #   `m`           - number of rows
 #   `n`           - number of cols
 #   `field`       - field of coefficients
@@ -241,14 +236,14 @@ end
 # the resulting object is Not Thorough
 # O(1)
 function from_rows(m, n, field, nnz_rows, rows)
-    return BidimSparsikLazy(m, n, field,
+    return DOK_Sparsik(m, n, field,
                             nnz_rows, Int[],
                             rows, Dict{Int, Sparsik{typeof(field)}}())
 end
 
 #------------------------------------------------------------------------------
 
-# constructs `BidimSparsikLazy` object from
+# constructs `DOK_Sparsik` object from
 #   `m`           - number of rows
 #   `n`           - number of cols
 #   `nnz_coords`  - a collection-like object of items (i, j, x),
@@ -284,7 +279,7 @@ end
 
 #------------------------------------------------------------------------------
 
-# constructs `BidimSparsikLazy` object from
+# constructs `DOK_Sparsik` object from
 #   `A`           - a collection-like object of 2 dimensions
 #   `field`       - field of coefficients
 #
@@ -320,7 +315,7 @@ end
 # note that `length(A)` and `number of nonzeroes in A` are synonyms
 # let k = length(A), r = length(B)
 # O(k + r)
-function reduce!(A::BidimSparsikLazy{T}, B::BidimSparsikLazy{T}, c) where {T}
+function reduce!(A::DOK_Sparsik{T}, B::DOK_Sparsik{T}, c) where {T}
     nnz_rows = Int[]
     # equality of field types ensures that
     # valtype(A) == valtype(B)
@@ -372,8 +367,8 @@ end
 #
 # let k = length(A), r = length(B)
 # O(k + r)
-function Base.reduce(A::BidimSparsikLazy, B::BidimSparsikLazy, c)
-    return reduce!(BidimSparsikLazy(A), B, c)
+function Base.reduce(A::DOK_Sparsik, B::DOK_Sparsik, c)
+    return reduce!(deepcopy(A), B, c)
 end
 
 #------------------------------------------------------------------------------
@@ -384,7 +379,7 @@ end
 # let k = length(A), r = length(B)
 # O(kr) if `B` Is Thorough
 # O(kr + R) where R is reconstruction cost otherwise
-function Base.prod(A::BidimSparsikLazy{T}, B::BidimSparsikLazy{T}) where {T}
+function Base.prod(A::DOK_Sparsik{T}, B::DOK_Sparsik{T}) where {T}
     if !is_thorough(B)
         reconstruct!(B)
     end
@@ -420,26 +415,59 @@ end
 #------------------------------------------------------------------------------
 
 # Gleb: wouldn't this just be another method for Base.prod?
+# Alex:
+#
 # returns A(v) = Av
 # if k = length(A) and r = length(v)
 # O(k)
-function apply_vector(A::BidimSparsikLazy, v::Sparsik)
+function apply_vector(A::DOK_Sparsik, v::Sparsik; policy=seq)
     nonzero = Int[]
-    data = Dict{Int, valtype(A)}()
+    field = ground(A)
+    data = Dict{Int, elem_type(field)}()
 
-    for row_idx in get_nnz_rows(A)
-        product = inner(get_row(A, row_idx), v)
-        if !iszero(product)
-            push!(nonzero, row_idx)
-            data[row_idx] = product
+    if isa(policy, SequencedPolicy)
+        # constructing the resulting vector inplace
+        for idx in A.nnz_rows
+            product = inner(A.rows[idx], v)
+            if ! iszero(product)
+                push!(nonzero, idx)
+                data[idx] = product
+            end
         end
+    elseif isa(policy, ParallelPolicy)
+        # could it be done in a single pass by the way?
+
+        # as I understand, `acyncmap` actually *does not* work in parallel,
+        # we should use threads
+        futures = asyncmap(
+            i -> inner(A.rows[i], v), A.nnz_rows;
+            ntasks=nthreads()
+        )
+
+        #=
+        # TODO: reduce to a single loop
+        futures = fill(zero(field), length(A.nnz_rows))
+        @threads for i in length(A.nnz_rows)
+            # let's hope Dict is read-concurrent-safe
+            futures[i] = inner(A.rows[A.nnz_rows[i]], v)
+        end
+        =#
+
+        for (i, x) in zip(A.nnz_rows, futures)
+            if !iszero(x)
+                push!(nonzero, i)
+                data[i] = x
+            end
+        end
+    else
+        error("unknown policy")
     end
 
-    return Sparsik(size(A, 1), A.field, nonzero, data)
+    return Sparsik(size(A, 1), field, nonzero, data)
 end
 
 # redefinition for find_basis in Subspace
-function apply_vector(A::BidimSparsikLazy, B::BidimSparsikLazy)
+function apply_vector(A::DOK_Sparsik, B::DOK_Sparsik)
     return prod(A, B)
 end
 
@@ -450,7 +478,7 @@ end
 #
 # let k = length(A)
 # O(k)
-function scale!(A::BidimSparsikLazy, c)
+function scale!(A::DOK_Sparsik, c)
     if iszero(c)
         return empty!(A)
     end
@@ -469,15 +497,15 @@ end
 #
 # let k = length(A)
 # O(k)
-function scale(A::BidimSparsikLazy, c)
-    return scale!(BidimSparsikLazy(A), c)
+function scale(A::DOK_Sparsik, c)
+    return scale!(deepcopy(A), c)
 end
 
 #------------------------------------------------------------------------------
 
 # returns A[i, j] or zero if not present
 # O(1)
-function Base.get(A::BidimSparsikLazy, i::Int, j::Int)
+function Base.get(A::DOK_Sparsik, i::Int, j::Int)
     if !haskey(A.rows, i)
         return zero(A.field)
     end
@@ -492,7 +520,7 @@ end
 #
 # let k = length(A)
 # O(k)
-function Base.empty!(A::BidimSparsikLazy)
+function Base.empty!(A::DOK_Sparsik)
     empty!(A.nnz_rows)
     empty!(A.rows)
     empty!(A.nnz_cols)
@@ -509,39 +537,37 @@ end
 zero_sparsik(sz::Tuple{Int, Int}, field) = zero_sparsik(sz..., field)
 
 # returns zero matrix of the dimensions of `A`
-Base.zero(A::BidimSparsikLazy) = zero_sparsik(size(A)..., A.field)
+Base.zero(A::DOK_Sparsik) = zero_sparsik(size(A)..., A.field)
 
-Base.iszero(A::BidimSparsikLazy) = length(get_nnz_rows(A)) == 0
+Base.iszero(A::DOK_Sparsik) = length(get_nnz_rows(A)) == 0
 
 #------------------------------------------------------------------------------
 
-==(A::BidimSparsikLazy{T}, B::BidimSparsikLazy{T}) where {T} = (size(A) == size(B) &&
+==(A::DOK_Sparsik{T}, B::DOK_Sparsik{T}) where {T} = (size(A) == size(B) &&
             A.field == B.field;
             A.rows == B.rows;
             A.nnz_rows == B.nnz_rows)
-!=(A::BidimSparsikLazy{T}, u::BidimSparsikLazy{T}) where {T} = !(A == B)
+!=(A::DOK_Sparsik{T}, u::DOK_Sparsik{T}) where {T} = !(A == B)
 
-+(A::BidimSparsikLazy{T}, B::BidimSparsikLazy{T}) where {T} = reduce(A, B, one(A.field))
--(A::BidimSparsikLazy{T}, B::BidimSparsikLazy{T}) where {T} = reduce(A, B, - one(A.field))
--(A::BidimSparsikLazy) = scale(A, -one(A.field))
++(A::DOK_Sparsik{T}, B::DOK_Sparsik{T}) where {T} = reduce(A, B, one(A.field))
+-(A::DOK_Sparsik{T}, B::DOK_Sparsik{T}) where {T} = reduce(A, B, - one(A.field))
+-(A::DOK_Sparsik) = scale(A, -one(A.field))
 
-*(A::BidimSparsikLazy, c::Number) = scale(A, c)
-*(c::Number, A::BidimSparsikLazy) = scale(A, c)
-*(A::BidimSparsikLazy, c::FieldElem)= scale(A, c)
-*(c::FieldElem, A::BidimSparsikLazy) = scale(A, c)
-*(A::BidimSparsikLazy{T}, B::BidimSparsikLazy{T}) where {T} = prod(A, B)
+*(A::DOK_Sparsik, c::Number) = scale(A, c)
+*(c::Number, A::DOK_Sparsik) = scale(A, c)
+*(A::DOK_Sparsik, c::FieldElem)= scale(A, c)
+*(c::FieldElem, A::DOK_Sparsik) = scale(A, c)
+*(A::DOK_Sparsik{T}, B::DOK_Sparsik{T}) where {T} = prod(A, B)
 
-#------------------------------------------------------------------------------
-
-function Base.show(A::BidimSparsikLazy)
-    return "$(join(map(i -> "|$(join(map(j -> get(A, i, j), 1 : A.n), "\t"))|", 1 : A.m), "\n"))"
-end
-
-print_sparsik(A::BidimSparsikLazy) = println(show(A))
+*(A::DOK_Sparsik{T}, v::Sparsik{T}) where {T} = apply_vector(A, b)
 
 #------------------------------------------------------------------------------
 
-function to_cartesian(A::BidimSparsikLazy, idx::Int)
+Base.show(io::IO, A::DOK_Sparsik) = println(io, "$(join(map(i -> "|$(join(map(j -> get(A, i, j), 1 : A.n), "\t"))|", 1 : A.m), "\n"))")
+
+#------------------------------------------------------------------------------
+
+function to_cartesian(A::DOK_Sparsik, idx::Int)
     cols = size(A, 2)
     if mod(idx, cols) == 0
         i = div(idx, cols)
@@ -561,13 +587,13 @@ function to_cartesian(A::BidimSparsikLazy, idx::Int)
 # returns the idx-th element of m if m is treated as
 # a vector stretched across the rows
 # O(1)
-Base.getindex(m::BidimSparsikLazy, idx::Int) = m[to_cartesian(m, idx)...]
+Base.getindex(m::DOK_Sparsik, idx::Int) = m[to_cartesian(m, idx)...]
 
 # returns the (i, j) element of m as a matrix
 # O(1)
-Base.getindex(m::BidimSparsikLazy, i::Int, j::Int) = get(m, i, j)
+Base.getindex(m::DOK_Sparsik, i::Int, j::Int) = get(m, i, j)
 
-function first_nonzero(m::BidimSparsikLazy)
+function first_nonzero(m::DOK_Sparsik)
     if iszero(m)
         return -1
     end
@@ -576,15 +602,15 @@ end
 
 #------------------------------------------------------------------------------
 
-Base.valtype(A::BidimSparsikLazy) = elem_type(A.field)
-Base.eltype(A::BidimSparsikLazy) = (Int, valtype(A))
+Base.valtype(A::DOK_Sparsik) = elem_type(A.field)
+Base.eltype(A::DOK_Sparsik) = (Int, valtype(A))
 
 #------------------------------------------------------------------------------
 
 # iterates over A nonzeroes
 # each returned item is of type eltype(A)
 # linear in the nimber of nonzeroes in A
-function Base.iterate(A::BidimSparsikLazy, state=(1, 1))
+function Base.iterate(A::DOK_Sparsik, state=(1, 1))
     (i, j) = state
     if i > length(A.nnz_rows) || j > length(A.rows[A.nnz_rows[i]])
         (i, j) = (i + 1, 1)
@@ -599,13 +625,13 @@ function Base.iterate(A::BidimSparsikLazy, state=(1, 1))
     end
 end
 
-# -----------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 # returns a new AbstractSparsik object consisting of elements
 # from the given `A` each converted to the `field`
 #
 # O(k) if k is the number of nonzero in `A`
-function modular_reduction(A::BidimSparsikLazy, field)
+function modular_reduction(A::DOK_Sparsik, field)
     new_nnz_rows = Int[]
     new_rows = Dict{Int, Sparsik{typeof(field)}}()
 
@@ -620,15 +646,15 @@ function modular_reduction(A::BidimSparsikLazy, field)
     return from_rows(size(A)..., field, new_nnz_rows, new_rows)
 end
 
-# -----------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
-# returns a new BidimSparsikLazy object consisting of elements
+# returns a new DOK_Sparsik object consisting of elements
 # from the `A` each reconstructed from A.field to QQ
 #
 # roughly
 # O(klog²(ch)) if k is the number of nonzero in `v`
 # and ch is the field characteristic
-function rational_reconstruction(A::BidimSparsikLazy)
+function rational_reconstruction(A::DOK_Sparsik)
     new_nnz_rows = Int[]
     new_rows = Dict{Int, Sparsik{typeof(QQ)}}()
 
@@ -643,12 +669,12 @@ function rational_reconstruction(A::BidimSparsikLazy)
     return from_rows(size(A)..., QQ, new_nnz_rows, new_rows)
 end
 
-# -----------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 # returns standard inner product of A and B
 # if the vectors A and B have k and r nonzeroes respectively
 # O(min(k, r))
-function inner(A::BidimSparsikLazy{T}, B::BidimSparsikLazy{T}) where {T}
+function inner(A::DOK_Sparsik{T}, B::DOK_Sparsik{T}) where {T}
     ans = zero(A.field)
 
     if length(A) > length(B)
@@ -662,54 +688,79 @@ function inner(A::BidimSparsikLazy{T}, B::BidimSparsikLazy{T}) where {T}
     return ans
 end
 
-# -----------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 # returns the Id matrix
 # this one can be pretty slow
-function Base.one(A::BidimSparsikLazy{T}) where {T}
-    from_rows(size(A)...,
-        A.field,
+function Base.one(A::DOK_Sparsik{T}) where {T}
+    field = ground(A)
+    from_rows(
+        size(A)...,
+        field,
         Array(1:order(A)),
         Dict{Int, Sparsik{T}}(
-            i => unit_sparsik(order(A), i, A.field)
+            i => unit_sparsik(order(A), i, field)
             for i in 1:order(A)
         )
     )
 end
 
-# -----------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
-function random_sparsik(sz::Tuple{Int, Int}, field::T) where {T<:Field}
-    m, n = sz
-    nnz_rows = Int[]
-    rows = Dict(i => random_sparsik(n, field) for i in 1:m)
-    for i in 1 : m
-        if haskey(rows, i)
-            push!(nnz_rows, i)
-        else
-            delete!(rows, i)
+function random_sparsik(sz::Tuple{Int, Int}, field; density=0.1)
+    dense_repr = map(field, rand(Bernoulli(density), sz))
+
+    for idx in findall(!iszero, dense_repr)
+        x = zero(field)
+        while iszero(x)
+            x = rand(field)
         end
+        dense_repr[idx] = x
     end
-    return from_rows(sz..., field, nnz_rows, rows)
+
+    return from_dense(dense_repr, field)
 end
 
-# -----------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
-# restricts the given BidimSparsik object to the given `coords`
+# restricts the given DOK_Sparsik object to the given `coords`
 # if the sparsik is treated as a vector
 # `coords` - a collection-like object of Ints
 #
 # O(length(coords))
-function restrict(A::BidimSparsikLazy, coords)
+function restrict(A::DOK_Sparsik, coords)
     nonzero = Int[]
-    data = Dict{Int, elem_type(A.field)}()
+    field = ground(A)
+    data = Dict{Int, elem_type(field)}()
     for (i, idx) in enumerate(coords)
         if !iszero(A[idx])
             push!(nonzero, i)
             data[i] = A[idx]
         end
     end
-    return Sparsik(length(coords), A.field, nonzero, data)
+    return Sparsik(length(coords), field, nonzero, data)
+end
+
+# the same as the above
+# BUT !
+# O(length(coords))
+function restrict(A::DOK_Sparsik, coords, first_value)
+    nonzero = Int[]
+    field = ground(A)
+    data = Dict{Int, elem_type(field)}()
+
+    if ! iszero(first_value)
+        push!(nonzero, 1)
+        data[1] = first_value
+    end
+
+    for (i, idx) in enumerate(coords)
+        if !iszero(A[idx])
+            push!(nonzero, i + 1)
+            data[i + 1] = A[idx]
+        end
+    end
+    return Sparsik(length(coords) + 1, field, nonzero, data)
 end
 
 # -----------------------------------------------------------------------------
@@ -717,7 +768,7 @@ end
 # well, it transposes the matrix
 # O(R)
 # where R is the reconstruction cost
-function transpose!(A::BidimSparsikLazy)
+function transpose!(A::DOK_Sparsik)
     reconstruct_2!(A)
     A.m, A.n = A.n, A.m
     A.nnz_rows, A.nnz_cols = A.nnz_cols, A.nnz_rows
@@ -726,3 +777,11 @@ function transpose!(A::BidimSparsikLazy)
 end
 
 # -----------------------------------------------------------------------------
+
+function to_dense(A::DOK_Sparsik)
+    ans = fill(zero(ground(A)), size(A))
+    for (i, x) in A
+        ans[i] = x
+    end
+    return ans
+end
