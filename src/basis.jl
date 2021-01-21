@@ -5,10 +5,11 @@
 
 #------------------------------------------------------------------------------
 
+
 include("parsik.jl")
 include("gizmos.jl")
 include("wiedemannchik.jl")
-include("../src/structs/bidim_sparsik_lazy.jl")
+include("../src/structs/dok_sparsik.jl")
 include("../src/structs/sparsik.jl")
 include("../src/structs/subspacik.jl")
 
@@ -17,9 +18,6 @@ include("../src/structs/subspacik.jl")
 import Primes: nextprime
 import Nemo: fmpz
 
-# TODO:
-#           Tests
-#           Measure time
 
 #------------------------------------------------------------------------------
 
@@ -40,7 +38,7 @@ function find_basis_2(vectors)
 
     # the size of the current square
     k = 1
-    field = first_vector.field
+    field = ground(first_vector)
 
     # indices of column pivots
     current_pivots = Int[ first_pivot ]
@@ -48,35 +46,32 @@ function find_basis_2(vectors)
     # long rows, not restricted to current_pivots
     current_vectors = [ deepcopy(first_vector) ]
 
-    # this is the rows of the `square` k×k of our big matrix
-    # actually, current_rows = current_vectors|current_pivots
-    # if `|` is the restriction to some coordinates
-    current_rows = [
-        Sparsik(1, field, Int[1],
-            Dict(1 => first_vector[first_pivot])
-        )
-    ]
-
-    # the same as the `current_rows`, but as a matrix
-    current_square = from_rows(
-        1, 1, field, Int[1],
-        Dict(1 => current_rows[1])
-    )
-
     # select hashing vector
     # we should adjust the hash_vector density
     # Gleb: I think we should just make it dense, otherwise we can loose some vectors
-    hash_vector = random_sparsik(size(first_vector), field)
+    hash_vector = random_sparsik(size(first_vector), field, density=1)
     hash_col = [ inner(hash_vector, first_vector) ]
 
-    # the feature with append/pop actually appends the hash to the vector
-    #  ( so it would look like (v₁, v₂, ..., vₙ, hash(v))ᵀ )
-    # treated as an array, computes the orthogonal vector,
-    # and then pops the appended hash
-    append!(first(current_rows), first(hash_col))
+
+    # this is the rows of the `square` k×k of our big matrix
+    # actually, current_rows = current_vectors|current_pivots
+    # if `|` is the restriction to some coordinates
+    first_row = Sparsik(1, field, Int[1], Dict(1 => first_vector[first_pivot]))
+    current_square = from_rows(
+        1, 1, field, Int[1],
+        Dict(1 => first_row)
+    )
+    current_rows = Dict(
+        1 => deepcopy(first_row)
+    )
+
+    first_row_extended = restrict(first_vector, first_pivot, first(hash_col))
+    current_rows_extended = Dict(
+        1 => first_row_extended
+    )
+
     # ort vector of size 2×1 ( orthogonal for extended rows with hashes )
-    ort_vector = find_orthogonal!(current_rows)
-    pop!(first(current_rows))
+    ort_vector = find_orthogonal!(current_rows_extended)
 
     new_vectors = deepcopy(vectors)
     i = 0
@@ -90,6 +85,7 @@ function find_basis_2(vectors)
 
         for new_vect in buffer
             for vect in vectors
+
                 product = apply_vector(new_vect, vect)
 
                 i += 1
@@ -102,24 +98,19 @@ function find_basis_2(vectors)
                     # product_restricted is a Sparsik vector ( plain , one dimension )
                     # and only columns from `current_pivots` are present in product_restricted
                     product_restricted = restrict(product, current_pivots)
-
-                    append!(
-                        product_restricted,
-                        product_hash
-                    )
+                    product_restricted_extended = restrict(product, current_pivots, product_hash)
 
                     # (ii) checking for linear dependency
-                    if !iszero(inner(product_restricted, ort_vector))
-                        # the inverse of append!
-                        pop!(product_restricted)
+                    if ! iszero(inner(product_restricted_extended, ort_vector))
 
                         # now we want `y`, such that rows of A|k with coeffs `y`
                         # give us the product|k  ,  so we transpose A|k
                         # ( because otherwise y will be the coeffs of the columns, not of the rows )
                         # (iii) finding dependencies
+
                         transpose!(current_square)
                         # Gleb: we can do randomized as it is is guaranteed to give a correct result
-                        y = square_nonsingular_deterministic_wiedemann(current_square, product_restricted)
+                        y = square_nonsingular_deterministic_wiedemann(current_square, product_restricted, policy=par)
                         # should be O(1)
                         transpose!(current_square)
 
@@ -147,33 +138,27 @@ function find_basis_2(vectors)
                         k += 1
 
                         push!(current_vectors, product)
-                        push!(current_rows, product_restricted)
+                        current_rows_extended[k] = product_restricted_extended
+                        current_rows[k] = product_restricted
 
                         push!(current_pivots, new_pivot)
                         push!(hash_col, product_hash)
 
                         # append -> find_orthogonal -> pop
                         # it must be simplified
-                        # Gleb: how about making the value of the hash to be 
+                        # Gleb: how about making the value of the hash to be
                         # the first coordinate of the restricted vector?
                         # Then there will be non need in this push-pop every time
-                        for (i, row) in enumerate(current_rows)
-                            append!(row, current_vectors[i][new_pivot])
-                        end
-                        idx_to_row = Dict(
-                            i => append!(current_rows[i], hash_col[i])
-                            for i in 1 : k
-                        )
-                        ort_vector = find_orthogonal!(idx_to_row)
-                        for row in current_rows
-                            pop!(row)
-                        end
+                        for i in 1 : k
+                            append!(current_rows_extended[i],
+                                    current_vectors[i][new_pivot])
 
-                        current_square = from_rows(
-                            k, k, field,
-                            Array(1 : k),
-                            idx_to_row
-                        )
+                            append!(current_rows[i],
+                                    current_vectors[i][new_pivot])
+                        end
+                        ort_vector = find_orthogonal!(current_rows_extended)
+
+                        current_square = from_rows(k, k, field, Array(1 : k), current_rows)
 
                         push!(new_vectors, product)
 
@@ -199,6 +184,8 @@ function find_basis(vectors; used_algorithm=find_basis_1)
     # and to handle errors by thyself
     V = Subspacik(QQ)
     primes = BigInt[ 2^31 - 1 ]
+    empty!(fat_vectors)
+    i = 0
 
     while true
         prime = last(primes)
@@ -209,9 +196,11 @@ function find_basis(vectors; used_algorithm=find_basis_1)
         @info "new modulo = $prime"
 
         # reduction
-        xs = [ modular_reduction(x, field) for x in vectors ]
+        xs = [ modular_reduction(x, field)
+               for x in vectors ]
         # brrrr...
-        V = used_algorithm(xs)
+        @time V = used_algorithm(xs)
+
         # reconstruction
         xs = [ rational_reconstruction(x)
                for x in values(V.echelon_form) ]
@@ -220,18 +209,25 @@ function find_basis(vectors; used_algorithm=find_basis_1)
         # ---
         # how can one say "причесать векторы" ?)
         # Gleb: why would you want to do this anyway?
+        # Alex: ((
+
         V = linear_span!(xs)
+
         #
         if check_inclusion(V, vectors)
             if check_invariance(V, vectors)
                 break
             end
             @info "invariance check failed.."
+        else
+            @info "inclusion check failed.."
         end
-        @info "inclusion check failed.."
 
         # how to choose the next better?
         push!(primes, nextprime(prime ^ 2))
+
+        i += 1
+        i % 10 == 0 && error("something is wrong..")
     end
 
     return V
@@ -239,20 +235,46 @@ end
 
 #------------------------------------------------------------------------------
 
-# I've broke find_basis_2 a bit, but it worked fine
+timeit(start) = (time_ns() - start) * 1e-9
+
+fat_vectors = [ ]
+
+#   70×70, discarding ω > 0.1  (ω > 0.05)
+#
+#   NAME                     DISCARDED     ACTUAL    FAT_EATEN   INCLUS / INVAR
+#   BIIOMD0000000152.json    3286, 170s    ?, ∞      3287        + / +
+#   MODEL1604100000.json     3037, 320s    ?, ∞      3056        + / -   (†)
+#   MODEL9071122126.json     3086, 70s     ?, ∞      3087        + / +
+#   MODEL9147232940.json     2753, 50s     ?, ∞      2763        + / -   (†)
+
+#   (†)  F×A ∉ V for some A ∈ V, F ∈ fat_vectors
+#   Possible fix: apply vectors again
+#
+
+
 
 function owo()
-    for (i, (mfn, mdim, msz, mdata)) in enumerate(load_COO_if(from_dim=4, to_dim=8))
+    for (i, (mfn, mdim, msz, mdata)) in enumerate(load_COO_if(from_dim=100, to_dim=150))
 
-        println("$(i)th model: $mfn, dim = $mdim, size = $msz")
+
+
         As = map(matr -> from_COO(matr..., QQ), mdata)
 
-        @time V = find_basis(As, used_algorithm=find_basis_1)
 
-        println("~~~~~~~~~~~~~~~")
-        println()
+        V = find_basis(As, used_algorithm=find_basis_1)
+
+        println(dim(V))
 
     end
 end
 
 owo()
+
+
+
+# Strange SuitSparse
+#   ### Big Rationals??
+#       bfwa62/bfwa62.mtx, bfwb62/bfwb62.mtx, west0067/west0067.mtx
+#   ### What??
+#       Journals/Journals.mtx
+#

@@ -82,3 +82,94 @@ function load_COO_if(;from_dim, to_dim, from_size=0, to_size=Inf)
 end
 
 #------------------------------------------------------------------------------
+
+#
+# [filename, dim, size, matrices-data]
+#
+function load_MTX(group, name)
+    model = []
+
+    # seems to be a default separator
+    sep = "%" * "-"^79 * "\n"
+
+    filepath = replace(
+        "$(normpath(joinpath(@__FILE__, "..", "..")))src/data/sscollection/$group/$name",
+        "\\" => "/"
+    )
+
+    open(filepath, "r") do input_stream
+        # some models have >3 sections, taking the last
+        data = last(split(read(input_stream, String), sep))
+
+        # should be ok
+        data = split(data, '\n')
+        meta = map(x -> parse(Int, x), split(first(data), ' '))
+
+        # strange matrices, discard them
+        if length(meta) != 3
+            return []
+        end
+
+        m, n, nnz = meta
+        # we want only square ones
+        if m != n
+            return []
+        end
+
+        try
+            model = [
+                group * '/' * name, # filename
+                m,                  # dim
+                1,                  # size
+                collect(            # data
+                    map(
+                        # `Any` disallows auto-promoting Int to Rational
+                        X -> Any[ parse(Int, X[1]),
+                                  parse(Int, X[2]),
+                                  Rational(parse(Float64, X[3])) ] ,
+                        filter(!isempty, map(split, view(data, 1:length(data))))
+                    )
+                )
+            ]
+        catch e
+            if isa(e, InexactError)
+                # occurrs if floats are impossibly small/big,
+                # discard the model then
+                return []
+            else
+                rethrow(e)
+            end
+        end
+    end
+
+    return model
+end
+
+#------------------------------------------------------------------------------
+
+function load_MTX_if(;from_dim, to_dim)
+    models = []
+
+    extension = ".mtx"
+    dir = "src/data/sscollection/"
+
+    for group in readdir(dir)
+        for name in readdir("$dir/$group/")
+            if endswith(name, extension)
+                model = load_MTX(group, name)
+                if ! isempty(model)
+                    fn, dim, sz, data = model
+                    if from_dim <= model[2] <= to_dim
+                        push!(models, [ fn, dim, sz, [ dim, dim, data ] ] )
+                    end
+                end
+            end
+        end
+    end
+
+    @info "loaded models: $(length(models))"
+
+    return models
+end
+
+#------------------------------------------------------------------------------

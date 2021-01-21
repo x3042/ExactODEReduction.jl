@@ -66,25 +66,15 @@ end
 
 #------------------------------------------------------------------------------
 
-# if n is max(deg(h), deg(m))
+# Returns the minimal polynomial of the sequence `h` modulo `m`,
+# the sequence `h` is formed as the given polynomial coefficients
+# If n is max(deg(h), deg(m))
 # O(n^2)
 function minimal_polynomial(h::PolyElem, m::PolyElem)
-    # trying to find mₕ - minimal(annihilating) polynomial of h
-    #
-    # 'Modern Computer Algebra':
-    # Gleb: we should put an explicit reference
-    # s = ht + ml (mod m)
-    # s = ht  ⇒  h ≡ s//t (mod m) (†)
-    #
-    # if  . gcd(s, t) = 1  ⇔  gcd(t, m) = 1
-    #     . deg(s) < n
-    #     . deg(t) ≤ n
-    #     . !(x ⎸t)  ⇔  t(0) = const
-    # then such s, t solve (†)
-    #
-    # let d = max(1 + deg(s), deg(t))
-    # normalize t so that t(0) = 1
-    # then the reversal of t modulo d is mₕ
+    # The function implements Algorithm 12.9 from
+    #   "Modern Computer Algebra", second edition,
+    #   Joachim von zur Gathen, Jürgen Gerhard
+
     n = div(degree(m), 2)
     FF = parent(h)
 
@@ -119,18 +109,18 @@ end
 
 #------------------------------------------------------------------------------
 
-# Gleb: I think it would be more natural to place this function 
+# Gleb: I think it would be more natural to place this function
 # to wiedemannchik.jl
 
 # Returns such vector, that it is orthogonal to the given vector set
 # The given `vectors` set must be linearly independent
 # and for any vect from `vectors` the following must hold
-# length(vectors) = dim(vect) - 1
+#   length(vectors) = dim(vect) - 1
 #
 # vectors :: dict of elems (row_idx, row)
 #
-# note that vectors may be modified;
-# it is guaranteed that after the function yields,
+# Note that vectors may be modified, CAREFUL ABOUT CONCURRENCY!
+# It is guaranteed that after the function yields,
 # `vectors` will be in the original state
 function find_orthogonal!(vectors::AbstractDict)
     first_vector = first(values(vectors))
@@ -151,9 +141,9 @@ function find_orthogonal!(vectors::AbstractDict)
         #       let the hash coordinate be the first one;
         #       then I think we can guarantee that the vector
         #       1, 0, 0, ...
-        #       is *not* in the linear span of others so we can take it 
+        #       is *not* in the linear span of others so we can take it
         #       instead of a random one.
-        u = random_sparsik(n, field)
+        u = random_sparsik(n, field, density=0.5)
         # the only change of `vectors`
         vectors[n] = u
 
@@ -165,7 +155,7 @@ function find_orthogonal!(vectors::AbstractDict)
             # if the selected `u` is not independent with `vectors`
             # then the wiedemann must fail and we should choose a new vector
             # Gleb: we could use probabilistic here
-            f = square_nonsingular_deterministic_wiedemann(B, b)
+            f = square_nonsingular_deterministic_wiedemann(B, b, policy=par)
             found = true
         catch e
             if isa(e, AlgebraException)
@@ -176,7 +166,7 @@ function find_orthogonal!(vectors::AbstractDict)
         end
 
         i += 1
-        i % 100 == 0 && error("something is wrong")
+        i % 10 == 0 && error("something is wrong")
     end
 
     # undo the change
