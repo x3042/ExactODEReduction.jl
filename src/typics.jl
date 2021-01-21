@@ -1,75 +1,106 @@
 
 #=
-    The File contains `AbstractSparsik<T>` interface
-    and related funcs definitions
+    The File contains types and interfaces definitions
 =#
+
+
+# All interfaces defined here must provide one-based indexing,
+# yet internal indexing is implementation-defined
 
 #------------------------------------------------------------------------------
 
 include("errors.jl")
+include("policiks.jl")
 
 #------------------------------------------------------------------------------
 
 import Base: ==, !=, +, -, *
 import Nemo: gfp_elem, gfp_fmpz_elem
+import AbstractAlgebra: Field
 
 #------------------------------------------------------------------------------
 
-# AbstractSparsik<T>
+# AbstractSparseObject<T>
 #
-# T is the field of the ground field
+# `T` is the type if the ground field
 #
-# Base interface for the Sparsiks family
-# an Object which implements `AbstractSparsik` can be treated
-# as a vector from a Vector space
-abstract type AbstractSparsik{T} end
+# Base interface for anything Sparse implemented in this project
+abstract type AbstractSparseObject{T} end
 
 #------------------------------------------------------------------------------
 
-function ground(::AbstractSparsik) end
+# AbstractSparseVector<T>
+#
+# `T` is the type if the ground field
+#
+# Base interface for Sparse vectors family
+# An object which implements `AbstractSparseVector` can be treated
+# as an element of Rⁿ vectorspace. Thus, some vectorspace operations and
+# left matrix multiplication are supported for such objects
+abstract type AbstractSparseVector{T} <: AbstractSparseObject{T} end
 
-function first_nonzero(::T) where {T<:AbstractSparsik} end
-function getindex(::AbstractSparsik, i::Int) end
+#------------------------------------------------------------------------------
 
-# Gleb: shouldn't we restrict C to the field of coefficients?
-# Alex: I guess not, we want to be able to use standard `Number` subtypes,
-#       such as Ints
-function scale(::AbstractSparsik, ::C) where {C} end
-function scale!(::AbstractSparsik, ::C) where {C} end
+# AbstractSparseMatrix<T>
+#
+# `T` is the type if the ground field
+#
+# Base interface for Sparse matrices family
+# An object which implements `AbstractSparseMatrix` can be treated
+# as an element from a Matrix algebra
+# An object which implements `AbstractSparseMatrix` can be treated
+# as a linear operator in Rⁿ
+#
+#
+# Implementing some functions for other sparse formats
+# rather than DOK is tricky,
+# probably, this interface it too strong to be applied to every class
+abstract type AbstractSparseMatrix{T} <: AbstractSparseObject{T} end
+
+#------------------------------------------------------------------------------
+
+function ground(::AbstractSparseMatrix) end
+
+function first_nonzero(::T) where {T<:AbstractSparseMatrix} end
+function getindex(::AbstractSparseMatrix, i::Int) end
+
+function scale(::AbstractSparseMatrix, ::C) where {C} end
+function scale!(::AbstractSparseMatrix, ::C) where {C} end
 
 # To Be Changed sometime
-function Base.reduce(::T, ::T, ::C) where {T<:AbstractSparsik{F}} where {F, C} end
-function reduce!(::T, ::T, ::C) where {T<:AbstractSparsik{F}} where {F, C} end
+# !!!
+function Base.reduce(::T, ::T, ::C) where {T<:AbstractSparseMatrix{F}} where {F, C} end
+function reduce!(::T, ::T, ::C) where {T<:AbstractSparseMatrix{F}} where {F, C} end
 
-function inner(::AbstractSparsik, ::AbstractSparsik) end
+function inner(::AbstractSparseMatrix, ::AbstractSparseMatrix) end
 
 # hmmm
-function Base.prod(::T, ::T) where {T<:AbstractSparsik{F}} where {F} end
+function Base.prod(::T, ::T) where {T<:AbstractSparseMatrix{F}} where {F} end
 
-function Base.zero(::AbstractSparsik) end
-function Base.isempty(::AbstractSparsik) end
-function Base.iszero(::AbstractSparsik) end
+function Base.zero(::AbstractSparseMatrix) end
+function Base.isempty(::AbstractSparseMatrix) end
+function Base.iszero(::AbstractSparseMatrix) end
 
-function dim(::AbstractSparsik) end
-function Base.length(::AbstractSparsik) end
-function Base.size(::AbstractSparsik) end
-function Base.size(::AbstractSparsik, i::Int) end
+function dim(::AbstractSparseMatrix) end
+function Base.length(::AbstractSparseMatrix) end
+function Base.size(::AbstractSparseMatrix) end
+function Base.size(::AbstractSparseMatrix, i::Int) end
 
-function density(::AbstractSparsik) end
+function density(::AbstractSparseMatrix) end
 
-function ==(::T, ::T) where {T<:AbstractSparsik{F}} where {F} end
-function !=(::T, ::T) where {T<:AbstractSparsik{F}} where {F} end
+function ==(::T, ::T) where {T<:AbstractSparseMatrix{F}} where {F} end
+function !=(::T, ::T) where {T<:AbstractSparseMatrix{F}} where {F} end
 
-function Base.valtype(::AbstractSparsik) end
-function Base.eltype(::AbstractSparsik) end
+function Base.valtype(::AbstractSparseMatrix) end
+function Base.eltype(::AbstractSparseMatrix) end
 
-function Base.show(::AbstractSparsik) end
-function print_sparsik(::AbstractSparsik) end
+function Base.show(::AbstractSparseMatrix) end
+function print_sparsik(::AbstractSparseMatrix) end
 
-function modular_reduction(::AbstractSparsik, ::T) where {T} end
-function rational_reconstruction(::AbstractSparsik) end
+function modular_reduction(::AbstractSparseMatrix, ::T) where {T} end
+function rational_reconstruction(::AbstractSparseMatrix) end
 
-function Base.iterate(::AbstractSparsik, state) end
+function Base.iterate(::AbstractSparseMatrix, state) end
 
 function unit_vector(::Int, ::Int, ::T) where {T} end
 
