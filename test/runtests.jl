@@ -8,8 +8,9 @@ using TestSetExtensions
 
 @testset "All the tests" begin
 
-    @includetests [:sparsik_tests, :parsik_tests, :bidim_sparsik_lazy_tests]
+    @includetests [:sparsik_tests, :parsik_tests,
+                    :dok_sparsik_tests, :wiedemannchik_tests]
 
 end
 
-@info "All tests OK"
+@info "All (the) tests OK"
