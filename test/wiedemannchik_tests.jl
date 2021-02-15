@@ -46,7 +46,7 @@ end
             try
                 y = square_nonsingular_deterministic_wiedemann(A, b)
             catch e
-                if isa(e, AlgebraException)
+                if isa(e, SingularException)
                     continue
                 else
                     rethrow(e)
@@ -59,6 +59,10 @@ end
         @test apply_vector(A, y) == b
     end
 
+    A = from_dense([1 1; 1 1;], QQ)
+    b = from_dense([1, 2], QQ)
+    @test_throws SingularException square_nonsingular_deterministic_wiedemann(A, b)
+    @test_throws SingularException square_nonsingular_randomized_wiedemann(A, b)
 
 end
 

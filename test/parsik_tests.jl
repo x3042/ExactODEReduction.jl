@@ -17,7 +17,7 @@ end
 
 #------------------------------------------------------------------------------
 
-@testset "parser - JSON to BidimSparsikLazy" begin
+@testset "parser - JSON to DOK_Sparsik" begin
 
     set_fn = "matrices_1.json"
     matrices = [from_COO(arr..., QQ) for arr in load_COO_set(set_fn)]
@@ -35,5 +35,21 @@ end
     @test iszero(matrices[3])
 
 end
+
+@testset "parser - MTX to DOK_Sparsik" begin
+
+    set_group = "test"
+    set_name  = "test_set.mtx"
+
+    fn, dim, sz, matrix = load_MTX(set_group, set_name)
+
+    # hmmm
+    matrix = matrix[2:end]
+
+    @test fn == set_group*'/'*set_name && dim == 3 && sz == 1
+    @test from_COO(dim, dim, matrix, QQ) == from_dense([1 3 0; 3//2 1 0; 0 0 0;], QQ)
+
+end
+
 
 @info "OK"
