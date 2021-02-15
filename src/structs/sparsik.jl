@@ -228,7 +228,8 @@ Base.isempty(v::Sparsik) = length(v.nonzero) == 0
 
 # -----------------------------------------------------------------------------
 
-Base.show(io::IO, v::Sparsik) = println(io, "($(join(map(idx -> v[idx], 1 : v.dim), ", ")))")
+Base.repr(::MIME"text/plain", A::Sparsik) = "($(join(map(idx -> A[idx], 1 : A.dim), ", ")))"
+Base.show(io::IO, A::Sparsik) = print(io, repr(MIME("text/plain"), A))
 
 # -----------------------------------------------------------------------------
 
@@ -305,7 +306,10 @@ end
 #-----------------------------------------------------------------------------
 
 function unit_sparsik(dim, i, field)
-    return Sparsik(dim, field, [i], Dict(i => one(field)))
+    # Int unfolding results into Int
+    # Tuple{Int} unfolding results into Int
+    # We can generalize it!
+    return Sparsik(dim..., field, [i], Dict(i => one(field)))
 end
 
 #-----------------------------------------------------------------------------
@@ -313,9 +317,8 @@ end
 
 #
 function random_sparsik(sz::Int, field::T; density=0.1) where {T<:Field}
-    # the function looks so nice and compact..  Julia <3
     if T <: FracField
-        # todo!
+        # todo!  ??????
         return unit_sparsik(sz, rand(1:sz), field)
     elseif T <: Union{GaloisField, GaloisFmpzField}
         dense_repr = map(field, rand(Bernoulli(density), sz))
@@ -334,8 +337,8 @@ function random_sparsik(sz::Int, field::T; density=0.1) where {T<:Field}
     error("random sparsik over $field is not implemented!")
 end
 
-function random_sparsik(sz::Tuple{Int}, field::T) where {T<:Field}
-    random_sparsik(sz..., field)
+function random_sparsik(sz::Tuple{Int}, field::T; density=0.1) where {T<:Field}
+    random_sparsik(sz..., field, density=density)
 end
 
 #-----------------------------------------------------------------------------

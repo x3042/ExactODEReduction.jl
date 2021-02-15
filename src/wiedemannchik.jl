@@ -9,38 +9,17 @@ include("../src/structs/csr_sparsik.jl")
 import Nemo: QQ, GF, PolynomialRing, PolyElem, gfp_elem,
              degree, trail, coeff, gen, divexact, lead
 
+import LinearAlgebra: SingularException
+
+# hmmm
 # using ADCME
 
 
 #------------------------------------------------------------------------------
 
-# A thought:
-#   evaluation of f at x₀ for x₀::Sparsik can probably be done faster
-#   if we somehow define the "MatrixRing" consisting of Sparsiks
-#   in terms of Nemo;
-#   then f will represent a Polynomial over the "MatrixRing" and we can use
-#   the default, assumably much faster, evaluation f(x₀)
 
 # returns f(x₀)
 # O(d) multiplications/additions of x₀ if d = degree(f)
-
-# We understand we should avoid using unicode, but
-# x₀ just looks too cute ^=^ // Gleb: ok)
-#
-# Gleb: my impression is that a correct implementation of W. algorithm
-# should avoid multiplying a matrix by a matrix. Therefore, I think the
-# function we would like to have is rather // and how on earth you type these indices?
-#     evaluate(f, x_0, b)
-#
-# Alex: seems like '\' key enters Tex mode. So, the sequence to type x₀ is:
-#   x\_0
-#   TAB or ENTER
-#   x₀
-#
-# yet I doubt it works for Vim by default
-#
-# so that it computes f(x_0) * b by computing only matrix-vector products
-# using the same Horner scheme
 function evaluate(f::PolyElem, x₀)
     accum = lead(f) * one(x₀)
     d = degree(f)
@@ -53,7 +32,7 @@ function evaluate(f::PolyElem, x₀)
 end
 
 # returns f(x₀) * b
-# expanding the brackets into:
+# expands the brackets into:
 #   f₀b + f₁x₀b + f₂x₀²b + ... + fₙx₀ⁿb
 # and using the Horner scheme
 function evaluate(f::PolyElem, x₀, b)
@@ -72,6 +51,7 @@ end
 
 # returns the thing named f⁻
 # Gleb: How about shift_right_x ?
+# Looks cool
 function shift_right_x(f::PolyElem)
     x = gen(parent(f))
     divexact(f - coeff(f, 0), x)
@@ -81,7 +61,7 @@ end
 
 # Solves Ay = b
 # Throws if A is singular
-function square_nonsingular_randomized_wiedemann(A::AbstractSparseMatrix, b::AbstractSparseVector; policy=seq)
+function square_nonsingular_randomized_wiedemann(A::AbstractSparseMatrix, b::AbstractSparseVector)
     # the function implements Algorithm 1 given on page 55
     # in https://doi.org/10.1109/TIT.1986.1057137
     # the notation and step numbering are taken from there
@@ -98,13 +78,11 @@ function square_nonsingular_randomized_wiedemann(A::AbstractSparseMatrix, b::Abs
 
     subspace = [ b ]
     for i in 1 : 2n - 1
-        push!(subspace, apply_vector(A, last(subspace), policy=policy))
+        push!(subspace, apply_vector(A, last(subspace)))
     end
 
     # 2
     while !iszero(b)
-        # beda s randomom
-
         # 3
         # Gleb: my understanding is that the randomization in the algorithm
         # affects only the runtime but the result will be always correct.
@@ -112,12 +90,15 @@ function square_nonsingular_randomized_wiedemann(A::AbstractSparseMatrix, b::Abs
         # One is outline in Section VI of the paper and suggests to generate a
         # random dense vector, then the average number of the iteration will be small.
         # We can start with this and then experiment what happens if we have u sparser
-        u = random_sparsik(n, field)
+
+        # Alex: absolutely dense random vector works fine.
+        # While we decrease density runtime is mostly the same
+        # but it starts to degenerate crucially in some cases
+        u = random_sparsik(n, field, density=1)
 
         # 4
         seq = elem_type(field)[]
         for i in 1 : 2 * (n - d)
-            # Gleb: here we should just multiply the result of the previous iteration by A
             push!(seq, inner(u, subspace[i]))
         end
 
@@ -125,9 +106,7 @@ function square_nonsingular_randomized_wiedemann(A::AbstractSparseMatrix, b::Abs
         f = minimal_polynomial(S(seq), x^(2 * (n - d)))
 
         if coeff(f, 0) == 0
-            throw(AlgebraException(
-                "the matrix passed for Wiedemann is singular!"
-            ))
+            throw(SingularException(0))
         end
 
         f = f * inv(coeff(f, 0))
@@ -169,7 +148,7 @@ end
 
 #------------------------------------------------------------------------------
 
-function square_nonsingular_deterministic_wiedemann(A::AbstractSparseMatrix, b::AbstractSparseVector; policy=seq)
+function square_nonsingular_deterministic_wiedemann(A::AbstractSparseMatrix, b::AbstractSparseVector)
     # the function implements Algorithm 2 given on page 55
     # in https://doi.org/10.1109/TIT.1986.1057137
     # the notation and step numbering are taken from there
@@ -182,7 +161,7 @@ function square_nonsingular_deterministic_wiedemann(A::AbstractSparseMatrix, b::
     # O(nω) if ω is the number of nonzeroes in A
     subspace = [ b ]
     for i in 1 : 2n - 1
-        push!(subspace, apply_vector(A, last(subspace), policy=policy))
+        push!(subspace, apply_vector(A, last(subspace)))
     end
 
     # 2
@@ -214,9 +193,7 @@ function square_nonsingular_deterministic_wiedemann(A::AbstractSparseMatrix, b::
     end
 
     if iszero(coeff(g, 0))
-        throw(AlgebraException(
-            "the matrix passed for Wiedemann is singular!"
-        ))
+        throw(SingularException(0))
     end
 
     # 9
@@ -233,12 +210,12 @@ end
 
 #------------------------------------------------------------------------------
 
-function wiedemann_solve(A, b; policy=seq, proved=true)
+function wiedemann_solve(A, b; proved=true)
     if issquare(A)
         if proved
-            return square_nonsingular_deterministic_wiedemann(A, b, policy=policy)
+            return square_nonsingular_deterministic_wiedemann(A, b)
         else
-            return square_nonsingular_randomized_wiedemann(A, b, policy=policy)
+            return square_nonsingular_randomized_wiedemann(A, b)
         end
     end
 
@@ -246,41 +223,3 @@ function wiedemann_solve(A, b; policy=seq, proved=true)
 end
 
 #------------------------------------------------------------------------------
-
-sizes = 10 : 10 : 500
-ZZ = GF(2^31 - 1)
-
-density_A = 0.05
-
-
-function do_things()
-
-    # b and A density would be adjusted
-
-    for n in sizes
-        println("n = ", n)
-        while true
-            dataA = map(x -> x * rand(1:2^31), rand(Bernoulli(density_A), (n, n)))
-            dataB = map(x -> x * rand(1:2^31), rand(Bernoulli(density_A), (n, 1)))
-            A = from_dense(dataA, ZZ)
-            b = from_dense(view(dataB, 1, :), ZZ)
-            try
-                println("W.")
-                @time y = wiedemann_solve(A, b, policy=seq, proved=true)
-                println("default solver")
-                @time y = dataA \ dataB
-            catch e
-                if isa(e, AlgebraException) || isa(e, SingularException)
-                    @info e
-                else
-                    rethrow(e)
-                end
-            end
-            break
-        end
-        println("-------------")
-    end
-end
-
-
-# do_things()

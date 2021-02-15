@@ -47,8 +47,8 @@ function rational_reconstruction(a::I, m::I) where {I<:Union{Int, BigInt}}
         return QQ(r, t)
     end
 
-    throw(AlgebraException(
-        "rational reconstruction of $a (mod $m) does not exist"
+    throw(DomainError(
+        a//m, "rational reconstruction of $a (mod $m) does not exist"
     ))
 end
 
@@ -57,8 +57,10 @@ end
 function modular_reduction(x::R, field) where {R<:FracElem}
     n, d = field(numerator(x)), field(denominator(x))
     if iszero(d)
-        throw(AlgebraException(
-            "the denominator $(denominator(x)) vanishes under the $(field)!"
+        throw(DomainError(a//m, "rational reconstruction of $a (mod $m) does not exist"))
+
+        throw(DomainError(
+            x, "the denominator $(denominator(x)) vanishes under the $(field)!"
         ))
     end
     n // d
@@ -90,9 +92,7 @@ function minimal_polynomial(h::PolyElem, m::PolyElem)
     s, t = V[3], V[2]
 
     if iszero(coeff(t, 0))
-        throw(AlgebraException(
-            "the trailing coef of the Euclid row $t (mod $m) vanishes"
-        ))
+        throw(SingularException(0))
     end
 
     t *= inv(coeff(t, 0))
@@ -102,15 +102,17 @@ function minimal_polynomial(h::PolyElem, m::PolyElem)
         return reverse(t, d + 1)
     end
 
-    throw(AlgebraException(
-        "minimal polynomial of $h (mod $m) does not exist"
+    throw(DomainError(
+        h, "minimal polynomial of $h (mod $m) does not exist"
     ))
+
 end
 
 #------------------------------------------------------------------------------
 
 # Gleb: I think it would be more natural to place this function
 # to wiedemannchik.jl
+# Alex: We want wiedemannchik.jl not to contain any derived functions
 
 # Returns such vector, that it is orthogonal to the given vector set
 # The given `vectors` set must be linearly independent
@@ -122,12 +124,14 @@ end
 # Note that vectors may be modified, CAREFUL ABOUT CONCURRENCY!
 # It is guaranteed that after the function yields,
 # `vectors` will be in the original state
+#
+# NOT GUARANTEED FOR RETURNED VECTOR TO BE ORTHOGONAL))
 function find_orthogonal!(vectors::AbstractDict)
     first_vector = first(values(vectors))
     field = ground(first_vector)
     n = dim(first_vector)
 
-    i = 0
+    i = 1
     found = false
     nnz_rows = Array(1 : n)
     f = zero(first_vector)
@@ -143,7 +147,14 @@ function find_orthogonal!(vectors::AbstractDict)
         #       1, 0, 0, ...
         #       is *not* in the linear span of others so we can take it
         #       instead of a random one.
-        u = random_sparsik(n, field, density=0.5)
+        # Alex: it works
+        #
+
+        # u = random_sparsik(n, field, density=0.5)
+
+        # taking the i-th unit vector
+        u = unit_sparsik(n, i, field)
+
         # the only change of `vectors`
         vectors[n] = u
 
@@ -155,10 +166,12 @@ function find_orthogonal!(vectors::AbstractDict)
             # if the selected `u` is not independent with `vectors`
             # then the wiedemann must fail and we should choose a new vector
             # Gleb: we could use probabilistic here
-            f = square_nonsingular_deterministic_wiedemann(B, b, policy=par)
+            # Alex: we could, so, the answer could be "almost orthogonal"
+            # (only orthogonal to some of the vectors)
+            f = square_nonsingular_randomized_wiedemann(B, b)
             found = true
         catch e
-            if isa(e, AlgebraException)
+            if isa(e, SingularException)
                 @info e
             else
                 rethrow()

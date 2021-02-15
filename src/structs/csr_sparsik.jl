@@ -20,12 +20,14 @@ import CustomUnitRanges: filename_for_zerorange
 include("dok_sparsik.jl")
 include(filename_for_zerorange)
 
+#------------------------------------------------------------------------------
+
+# It is convenient to have 0-based indexing in this file
+
 ZeroBased(arr::Array) = OffsetArray(arr, Origin(0))
 ZeroBased(T::Type) = OffsetArray(T[], Origin(0))
 
 #------------------------------------------------------------------------------
-
-# It is convenient to have 0-based indexing in this file
 
 # T
 mutable struct CSR_Sparsik{T<:Field} <: AbstractSparseMatrix{T}
@@ -37,6 +39,9 @@ mutable struct CSR_Sparsik{T<:Field} <: AbstractSparseMatrix{T}
 
     field::T
 
+    #
+    #
+    #
     row_ptr::OffsetVector{Int}
     col_idx::OffsetVector{Int}
     val::OffsetVector{<:FieldElem}
@@ -46,7 +51,8 @@ end
 
 nnz(A::CSR_Sparsik) = length(A.val)
 
-Base.size(A::CSR_Sparsik) = (A.n, A.m)
+Base.size(A::CSR_Sparsik) = (A.m, A.n)
+Base.size(A::CSR_Sparsik, i::Int) = (A.m, A.n)[i]
 
 issquare(A::CSR_Sparsik) = A.n == A.m
 
@@ -145,3 +151,97 @@ function apply_vector(A::CSR_Sparsik, x; policy=seq)
 end
 
 #------------------------------------------------------------------------------
+
+Base.iszero(A::CSR_Sparsik) = isempty(A.val)
+
+
+function first_nonzero(A::CSR_Sparsik)
+    if iszero(A)
+        return -1
+    end
+
+    i = 0
+    while A.row_ptr[i] == 0
+        i += 1
+    end
+
+    return to_plain(size(A), i, A.col_idx[A.row_ptr[i - 1]] + 1)
+end
+
+
+function Base.zero(A::CSR_Sparsik)
+    row_ptr = OffsetArray(zeros(Int, size(A, 1) + 1), Origin(0))
+    return CSR_Sparsik(
+        size(A)...,
+        ground(A),
+        row_ptr,
+        ZeroBased(Int),
+        ZeroBased(elem_type(ground(A)))
+    )
+end
+
+
+function scale!(A::CSR_Sparsik, c)
+    if iszero(c)
+        return A = zero(A)
+    end
+
+    for i in LinearIndices(A.val)
+        A.val[i] *= c
+    end
+
+    return A
+end
+
+function reduce!(A::CSR_Sparsik{T}, B::CSR_Sparsik{T}, c) where {T}
+    field = ground(A)
+
+    val = ZeroBased(elem_type(field))
+    col_idx = ZeroBased(Int)
+    row_ptr = ZeroBased(Int)
+
+    for ridx in LinearIndices(A.row_ptr)
+        begin_i, end_i = A.row_ptr[ridx - 1], A.row_ptr[ridx] - 1
+        begin_j, end_j = B.row_ptr[ridx - 1], B.row_ptr[ridx] - 1
+
+        i = begin_i
+        j = begin_j
+        while i <= end_i || j <= end_j
+            if i > end_i
+                new_idx = B.col_idx[j]
+                j += 1
+            elseif j > end_j
+                new_idx = A.col_idx[i]
+                i += 1
+            else
+                new_idx = min(A.col_idx[i], B.col_idx[j])
+                if A.col_idx[i] > B.col_idx[j]
+                    j += 1
+                elseif A.col_idx[i] < B.col_idx[j]
+                    i += 1
+                else
+                    i += 1
+                    j += 1
+                end
+            end
+
+
+            push!(col_idx, new_idx)
+
+
+        end
+
+    end
+
+
+
+
+
+
+end
+
+
+
+==(A::CSR_Sparsik{T}, B::CSR_Sparsik{T}) where {T} = (size(A) == size(B) &&
+                    A.col_idx == B.col_idx;
+                    A.val == B.val;)

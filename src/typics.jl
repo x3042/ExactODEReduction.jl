@@ -9,7 +9,6 @@
 
 #------------------------------------------------------------------------------
 
-include("errors.jl")
 include("policiks.jl")
 
 #------------------------------------------------------------------------------
@@ -22,7 +21,7 @@ import AbstractAlgebra: Field
 
 # AbstractSparseObject<T>
 #
-# `T` is the type if the ground field
+# `T` is the type of the ground field
 #
 # Base interface for anything Sparse implemented in this project
 abstract type AbstractSparseObject{T} end
@@ -69,6 +68,7 @@ function scale!(::AbstractSparseMatrix, ::C) where {C} end
 
 # To Be Changed sometime
 # !!!
+# A tender for a better name!
 function Base.reduce(::T, ::T, ::C) where {T<:AbstractSparseMatrix{F}} where {F, C} end
 function reduce!(::T, ::T, ::C) where {T<:AbstractSparseMatrix{F}} where {F, C} end
 

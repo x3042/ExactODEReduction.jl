@@ -5,7 +5,7 @@ import JSON
 #------------------------------------------------------------------------------
 
 # returns a model parsed from the given `filename`
-# (with matrices in a dense format)
+# (with matrices in dense format)
 # each returned matrix is represented with a dense array
 function load_dense_set(filename::String)
     ans = []
@@ -24,7 +24,7 @@ end
 #------------------------------------------------------------------------------
 
 # returns a model parsed from the given `filename`
-# (with matrices in a coordinate format)
+# (with matrices in coordinate format)
 # each returned matrix is represented with an array of
 # items (i, j, x) where typeof(x) is Rational
 function load_COO_set(filename::String)
@@ -83,14 +83,19 @@ end
 
 #------------------------------------------------------------------------------
 
+# returns a model parsed from the given `group\name` file
+# (with matrices in MTX format)
+# each returned matrix is represented with an array of
+#   [filename, dim, size, data]
+# where data is stored as items (i, j, x) where typeof(x) is Rational
 #
-# [filename, dim, size, matrices-data]
-#
+# In case of any parse error occurred, e.g inexact rationals encountered,
+# returs an empty array []
 function load_MTX(group, name)
     model = []
 
     # seems to be a default separator
-    sep = "%" * "-"^79 * "\n"
+    sep = r"%-+\r?\n"
 
     filepath = replace(
         "$(normpath(joinpath(@__FILE__, "..", "..")))src/data/sscollection/$group/$name",
@@ -102,10 +107,10 @@ function load_MTX(group, name)
         data = last(split(read(input_stream, String), sep))
 
         # should be ok
-        data = split(data, '\n')
+        data = split(data, r"\r?\n")
         meta = map(x -> parse(Int, x), split(first(data), ' '))
-
         # strange matrices, discard them
+        # NEED TO BE HANDLED IN ANOTHER WAY
         if length(meta) != 3
             return []
         end
@@ -124,9 +129,11 @@ function load_MTX(group, name)
                 collect(            # data
                     map(
                         # `Any` disallows auto-promoting Int to Rational
-                        X -> Any[ parse(Int, X[1]),
-                                  parse(Int, X[2]),
-                                  Rational(parse(Float64, X[3])) ] ,
+                        X -> Any[
+                            parse(Int, X[1]),
+                            parse(Int, X[2]),
+                            length(X) > 2 ? Rational(parse(Float64, X[3])) : Rational(1)
+                        ] ,
                         filter(!isempty, map(split, view(data, 1:length(data))))
                     )
                 )
@@ -147,7 +154,16 @@ end
 
 #------------------------------------------------------------------------------
 
-function load_MTX_if(;from_dim, to_dim)
+# returns an array of all models from data/sscollection that satisfy
+# the given criterias:
+#   `from_dim`  - lower bound for the model's matrices one-side dimension
+#   `to_dim`    - upper bound -//-
+#
+# each returned model is represented with an array:
+#   [filename, dim, size, matrices-data]
+# each returned matrix is represented with an array of
+# items (i, j, x) of nonzeroes where typeof(x) is Rational
+function load_MTX_if(;from_dim=0, to_dim=Inf)
     models = []
 
     extension = ".mtx"

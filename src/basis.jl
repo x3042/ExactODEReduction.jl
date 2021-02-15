@@ -5,7 +5,6 @@
 
 #------------------------------------------------------------------------------
 
-
 include("parsik.jl")
 include("gizmos.jl")
 include("wiedemannchik.jl")
@@ -27,6 +26,36 @@ function find_basis_1(vectors)
     return alg
 end
 
+function find_basis_1_beta(vectors)
+    # eat all input vectors
+    alg = linear_span!(deepcopy(vectors))
+
+    # apply them with the threshold of ω
+    fat_vectors = apply_matrices_inplace!(alg, deepcopy(vectors), ω=0.08)
+
+    # eat discarded veced vectors
+    for vect in fat_vectors
+        eat_sparsik!(alg, vect)
+    end
+
+    # apply again, but not no vectors would be discarded
+    apply_matrices_inplace!(alg, deepcopy(vectors), ω=1.0)
+
+    return alg
+end
+
+#
+#          3 players
+#    990                1420
+#     >_<                ^=^
+#
+#
+#
+#            UωU
+#              590
+#
+#
+#                 54
 #------------------------------------------------------------------------------
 
 #
@@ -110,7 +139,8 @@ function find_basis_2(vectors)
 
                         transpose!(current_square)
                         # Gleb: we can do randomized as it is is guaranteed to give a correct result
-                        y = square_nonsingular_deterministic_wiedemann(current_square, product_restricted, policy=par)
+                        # Alex: seems untrue..., but randomized one is indeed much faster
+                        y = square_nonsingular_randomized_wiedemann(current_square, product_restricted)
                         # should be O(1)
                         transpose!(current_square)
 
@@ -125,6 +155,12 @@ function find_basis_2(vectors)
                             # Gleb: I think we should skip the columns that are already pivots, this can be a big speedup
                             # Another option for the future would be to do sort-of binary search by multiplying by some
                             # new hash vectors
+                            # Alex: Agreed.
+                            #       I tried searching for new pivot by descending the binary tree
+                            #       induced by multiple hash-vectors
+                            #       It works fine in test and that Algorithm is
+                            #       guaranteed to be better asymptotically,
+                            #       but I do not want to paste it here just yet
                             col += 1
                             accum = sum(y[j] * current_vectors[j][col]
                                           for j in 1:k) - product[col]
@@ -149,6 +185,7 @@ function find_basis_2(vectors)
                         # Gleb: how about making the value of the hash to be
                         # the first coordinate of the restricted vector?
                         # Then there will be non need in this push-pop every time
+                        # Done
                         for i in 1 : k
                             append!(current_rows_extended[i],
                                     current_vectors[i][new_pivot])
@@ -169,6 +206,7 @@ function find_basis_2(vectors)
 
     end
 
+
     return linear_span!(current_vectors)
 end
 
@@ -184,7 +222,6 @@ function find_basis(vectors; used_algorithm=find_basis_1)
     # and to handle errors by thyself
     V = Subspacik(QQ)
     primes = BigInt[ 2^31 - 1 ]
-    empty!(fat_vectors)
     i = 0
 
     while true
@@ -213,9 +250,26 @@ function find_basis(vectors; used_algorithm=find_basis_1)
 
         V = linear_span!(xs)
 
-        #
-        if check_inclusion(V, vectors)
-            if check_invariance(V, vectors)
+        #=
+        quick check
+
+        start = time_ns()
+        ans1 = check_inclusion(V, vectors)
+        push!(norm, timeit(start))
+
+        start = time_ns()
+        ans2 = check_inclusion_alpha!(V, deepcopy(vectors))
+        push!(alpha, timeit(start))
+
+        start = time_ns()
+        ans3 = check_inclusion_beta!(V, deepcopy(vectors))
+        push!(beta, timeit(start))
+
+        @assert ans1 == ans2 == ans3
+        =#
+
+        if check_inclusion!(V, vectors)
+            if check_invariance!(V, vectors)
                 break
             end
             @info "invariance check failed.."
@@ -224,10 +278,10 @@ function find_basis(vectors; used_algorithm=find_basis_1)
         end
 
         # how to choose the next better?
-        push!(primes, nextprime(prime ^ 2))
+        push!(primes, nextprime(prime ^ 2 + 1))
 
         i += 1
-        i % 10 == 0 && error("something is wrong..")
+        i % 2 == 0 && return V
     end
 
     return V
@@ -237,39 +291,42 @@ end
 
 timeit(start) = (time_ns() - start) * 1e-9
 
-fat_vectors = [ ]
+norm = []
+alpha = []
+beta = []
 
-#   70×70, discarding ω > 0.1  (ω > 0.05)
-#
-#   NAME                     DISCARDED     ACTUAL    FAT_EATEN   INCLUS / INVAR
-#   BIIOMD0000000152.json    3286, 170s    ?, ∞      3287        + / +
-#   MODEL1604100000.json     3037, 320s    ?, ∞      3056        + / -   (†)
-#   MODEL9071122126.json     3086, 70s     ?, ∞      3087        + / +
-#   MODEL9147232940.json     2753, 50s     ?, ∞      2763        + / -   (†)
-
-#   (†)  F×A ∉ V for some A ∈ V, F ∈ fat_vectors
-#   Possible fix: apply vectors again
-#
-
-
+times_W  = []
+times_1B = []
+times_1  = []
 
 function owo()
-    for (i, (mfn, mdim, msz, mdata)) in enumerate(load_COO_if(from_dim=100, to_dim=150))
+    for (i, (mfn, mdim, msz, mdata)) in enumerate(load_COO_if(from_dim=15, to_dim=20))
 
-
+        @info "$i-th model : $mfn of dim : $mdim"
 
         As = map(matr -> from_COO(matr..., QQ), mdata)
 
+        start = time_ns()
+        @time V = find_basis(As, used_algorithm=find_basis_1_beta)
+        push!(times_1B, timeit(start))
 
-        V = find_basis(As, used_algorithm=find_basis_1)
+        #start = time_ns()
+        #@time V = find_basis(As, used_algorithm=find_basis_2)
+        #push!(times_W, timeit(start))
 
-        println(dim(V))
+        @info "OK. dim = $(dim(V))"
 
     end
 end
 
-owo()
+# owo()
 
+
+#=
+plot(1:length(norm), norm, label="norm")
+plot!(1:length(norm), alpha, label="alpha")
+plot!(1:length(norm), beta, label="beta")
+=#
 
 
 # Strange SuitSparse
@@ -278,3 +335,9 @@ owo()
 #   ### What??
 #       Journals/Journals.mtx
 #
+# !! BIOMD0000000259.json
+# !! MODEL1604100000.json
+
+
+# big numbers:
+#   Hamrle1/Hamrle1.mtx

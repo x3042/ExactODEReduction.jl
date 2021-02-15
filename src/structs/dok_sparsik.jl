@@ -15,6 +15,7 @@ import Base: ==, !=, +, -, *
 import DataStructures: BinaryMinHeap
 import AbstractAlgebra: elem_type, Field, FieldElem, FracField,
                         characteristic
+import Distributions: Bernoulli
 
 #------------------------------------------------------------------------------
 
@@ -563,24 +564,34 @@ Base.iszero(A::DOK_Sparsik) = length(get_nnz_rows(A)) == 0
 
 #------------------------------------------------------------------------------
 
-Base.show(io::IO, A::DOK_Sparsik) = println(io, "$(join(map(i -> "|$(join(map(j -> get(A, i, j), 1 : A.n), "\t"))|", 1 : A.m), "\n"))")
+Base.repr(::MIME"text/plain", A::DOK_Sparsik) = "$(join(map(i -> "|$(join(map(j -> get(A, i, j), 1 : A.n), "\t"))|", 1 : A.m), "\n"))"
+Base.show(io::IO, A::DOK_Sparsik) = print(io, repr(MIME("text/plain"), A))
 
 #------------------------------------------------------------------------------
 
 function to_cartesian(A::DOK_Sparsik, idx::Int)
-    cols = size(A, 2)
+    return to_cartesian(size(A), idx)
+ end
+
+ function to_plain(A, i::Int, j::Int)
+     return to_plain(size(A), i, j)
+ end
+
+function to_cartesian(sz::Tuple{Int, Int}, idx::Int)
+    cols = sz[2]
     if mod(idx, cols) == 0
         i = div(idx, cols)
     else
         i = div(idx, cols) + 1
     end
-    j = idx - cols * (i - 1)
+        j = idx - cols * (i - 1)
     return (i, j)
  end
 
- function to_plain(A, i::Int, j::Int)
-     return (i - 1) * size(A, 1) + j
- end
+function to_plain(sz::Tuple{Int, Int}, i::Int, j::Int)
+    return (i - 1) * sz[1] + j
+end
+
 
 #------------------------------------------------------------------------------
 
@@ -709,13 +720,15 @@ end
 
 function random_sparsik(sz::Tuple{Int, Int}, field; density=0.1)
     dense_repr = map(field, rand(Bernoulli(density), sz))
+    ch = characteristic(field)
+    ch = ch == 0 ? 2^31 - 1 : ch
 
     for idx in findall(!iszero, dense_repr)
         x = zero(field)
         while iszero(x)
-            x = rand(field)
+            x = rand(1:BigInt(ch))
         end
-        dense_repr[idx] = x
+        dense_repr[idx] = field(x)
     end
 
     return from_dense(dense_repr, field)
@@ -784,4 +797,18 @@ function to_dense(A::DOK_Sparsik)
         ans[i] = x
     end
     return ans
+end
+
+# -----------------------------------------------------------------------------
+
+function unit_sparsik(sz::Tuple{Int, Int}, idx::Int, field)
+    i, j = to_cartesian(sz, idx)
+    return DOK_Sparsik(
+        sz...,
+        field,
+        [ i ],
+        Int[],
+        Dict(i => unit_sparsik(sz[2], j, field)),
+        Dict{Int, Sparsik{typeof(field)}}()
+    )
 end
