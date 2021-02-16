@@ -42,6 +42,7 @@ end
 #------------------------------------------------------------------------------
 
 # Ground field!
+# Gleb: also suggest base_ring
 ground(v::Subspacik) = v.field
 
 #------------------------------------------------------------------------------
@@ -67,6 +68,7 @@ end
 
 @enum EatCode begin
     reduced   = -1
+    # Gleb: I would call discarded skipped
     discarded = -2
 end
 

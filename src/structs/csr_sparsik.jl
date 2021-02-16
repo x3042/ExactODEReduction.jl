@@ -101,6 +101,7 @@ end
 
 #------------------------------------------------------------------------------
 
+# Gleb: does x appear in this function at all?
 function __apply_vector_seq(A::CSR_Sparsik, x)
     field = ground(A)
     nnz = Int[]
