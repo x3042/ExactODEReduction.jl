@@ -2,7 +2,7 @@
 #=
     The File contains `DOK_Sparsik<T>` and related funcs implementation
 
-    `DOK_Sparsik` implements `AbstractSparsik` interface
+    `DOK_Sparsik` implements `AbstractSparseMatrix` interface
 =#
 
 #------------------------------------------------------------------------------
@@ -37,6 +37,13 @@ end
 #------------------------------------------------------------------------------
 
 # Ground field!
+# Gleb: to be coherent with the AbstractAlgebra naming, I would suggest call this base_ring
+# E.g.:
+# > using Nemo
+# > S = MatrixSpace(QQ, 5, 5)
+# > M = one(S)
+# > base_ring(M)
+# prints rational fiels
 ground(v::DOK_Sparsik) = v.field
 
 #------------------------------------------------------------------------------
@@ -417,6 +424,7 @@ end
 
 # Gleb: wouldn't this just be another method for Base.prod?
 # Alex:
+# Gleb: So?
 #
 # returns A(v) = Av
 # if k = length(A) and r = length(v)
