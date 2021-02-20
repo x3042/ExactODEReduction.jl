@@ -27,14 +27,13 @@ end
 #------------------------------------------------------------------------------
 
 # convenience ctor
-function Subspacik(field::T) where {T}
+function Subspacik(field::T) where {T<:Field}
     return Subspacik(field, Dict{Int, AbstractSparseObject{T}}())
 end
 
 # deepcopy redefinition in order to preserve the field
-function Base.deepcopy_internal(x::Subspacik, stackdict::IdDict)
-    y = Subspacik(x.ambient_dim, field,
-            Base.deepcopy_internal(x.echelon_form, stackdict))
+function Base.deepcopy_internal(x::Subspacik{T}, stackdict::IdDict) where {T<:Field}
+    y = Subspacik(ground(x), Base.deepcopy_internal(x.echelon_form, stackdict))
     stackdict[x] = y
     return y
 end
@@ -42,7 +41,6 @@ end
 #------------------------------------------------------------------------------
 
 # Ground field!
-# Gleb: also suggest base_ring
 ground(v::Subspacik) = v.field
 
 #------------------------------------------------------------------------------
@@ -68,7 +66,6 @@ end
 
 @enum EatCode begin
     reduced   = -1
-    # Gleb: I would call discarded skipped
     discarded = -2
 end
 
@@ -286,6 +283,6 @@ Base.show(io::IO, V::Subspacik) = print(io, repr(MIME("text/plain"), V))
 
 #------------------------------------------------------------------------------
 
-==(U::Subspacik{T}, V::Subspacik{T}) where {T} = (U.dim == V.dim &&
+==(U::Subspacik{T}, V::Subspacik{T}) where {T} = (
             U.field == V.field &&
             U.echelon_form == V.echelon_form;)

@@ -41,7 +41,6 @@ mutable struct CSR_Sparsik{T<:Field} <: AbstractSparseMatrix{T}
 
     #
     #
-    #
     row_ptr::OffsetVector{Int}
     col_idx::OffsetVector{Int}
     val::OffsetVector{<:FieldElem}
@@ -101,7 +100,6 @@ end
 
 #------------------------------------------------------------------------------
 
-# Gleb: does x appear in this function at all?
 function __apply_vector_seq(A::CSR_Sparsik, x)
     field = ground(A)
     nnz = Int[]
@@ -136,6 +134,8 @@ function __apply_vector_par(A::CSR_Sparsik, x)
 end
 
 # The resulting vectors are dense almost surely
+# ...
+# And that is not true
 function apply_vector(A::CSR_Sparsik, x; policy=seq)
     field = ground(A)
     m, n = size(A)
@@ -169,6 +169,7 @@ function first_nonzero(A::CSR_Sparsik)
     return to_plain(size(A), i, A.col_idx[A.row_ptr[i - 1]] + 1)
 end
 
+#------------------------------------------------------------------------------
 
 function Base.zero(A::CSR_Sparsik)
     row_ptr = OffsetArray(zeros(Int, size(A, 1) + 1), Origin(0))
@@ -181,6 +182,7 @@ function Base.zero(A::CSR_Sparsik)
     )
 end
 
+#------------------------------------------------------------------------------
 
 function scale!(A::CSR_Sparsik, c)
     if iszero(c)
@@ -194,55 +196,82 @@ function scale!(A::CSR_Sparsik, c)
     return A
 end
 
-function reduce!(A::CSR_Sparsik{T}, B::CSR_Sparsik{T}, c) where {T}
+#------------------------------------------------------------------------------
+
+function Base.reduce(A::CSR_Sparsik{T}, B::CSR_Sparsik{T}, c) where {T}
     field = ground(A)
+    m, n = size(A)
 
     val = ZeroBased(elem_type(field))
     col_idx = ZeroBased(Int)
     row_ptr = ZeroBased(Int)
 
-    for ridx in LinearIndices(A.row_ptr)
-        begin_i, end_i = A.row_ptr[ridx - 1], A.row_ptr[ridx] - 1
-        begin_j, end_j = B.row_ptr[ridx - 1], B.row_ptr[ridx] - 1
+    push!(row_ptr, 0)
 
-        i = begin_i
-        j = begin_j
+    for ridx in LinearIndices(A.row_ptr)[1:end]
+        i, end_i = A.row_ptr[ridx - 1], A.row_ptr[ridx] - 1
+        j, end_j = B.row_ptr[ridx - 1], B.row_ptr[ridx] - 1
+        added = 0
+
         while i <= end_i || j <= end_j
+            x = zero(field)
+
             if i > end_i
                 new_idx = B.col_idx[j]
+                x = c * B.val[j]
                 j += 1
             elseif j > end_j
                 new_idx = A.col_idx[i]
+                x = A.val[i]
                 i += 1
             else
                 new_idx = min(A.col_idx[i], B.col_idx[j])
                 if A.col_idx[i] > B.col_idx[j]
+                    x = c * B.val[j]
                     j += 1
                 elseif A.col_idx[i] < B.col_idx[j]
+                    x = A.val[i]
                     i += 1
                 else
+                    x = A.val[i] + c * B.val[j]
                     i += 1
                     j += 1
                 end
             end
 
-
-            push!(col_idx, new_idx)
-
+            if !iszero(x)
+                push!(col_idx, new_idx)
+                push!(val, x)
+                added += 1
+            end
 
         end
 
+        push!(row_ptr, last(row_ptr) + added)
+
     end
 
-
-
-
-
-
+    return CSR_Sparsik(m, n, field, row_ptr, col_idx, val)
 end
 
+#------------------------------------------------------------------------------
 
+# Do we really need this..
+
+#------------------------------------------------------------------------------
 
 ==(A::CSR_Sparsik{T}, B::CSR_Sparsik{T}) where {T} = (size(A) == size(B) &&
                     A.col_idx == B.col_idx;
                     A.val == B.val;)
+
+#------------------------------------------------------------------------------
+
+function to_dense(A::CSR_Sparsik)
+    ans = zeros(ground(A), size(A)...)
+    for ridx in LinearIndices(A.row_ptr)[1:end]
+        for i in A.row_ptr[ridx - 1] : A.row_ptr[ridx] - 1
+            ans[ridx, A.col_idx[i] + 1] = A.val[i]
+        end
+    end
+    return ans
+end

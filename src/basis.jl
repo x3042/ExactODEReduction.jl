@@ -1,6 +1,6 @@
 
 #=
-
+    The file contains bases searching related code
 =#
 
 #------------------------------------------------------------------------------
@@ -16,7 +16,6 @@ include("../src/structs/subspacik.jl")
 
 import Primes: nextprime
 import Nemo: fmpz
-
 
 #------------------------------------------------------------------------------
 
@@ -268,8 +267,8 @@ function find_basis(vectors; used_algorithm=find_basis_1)
         @assert ans1 == ans2 == ans3
         =#
 
-        if check_inclusion!(V, vectors)
-            if check_invariance!(V, vectors)
+        if true || check_inclusion!(V, vectors)
+            if true || check_invariance!(V, vectors)
                 break
             end
             @info "invariance check failed.."
@@ -289,32 +288,16 @@ end
 
 #------------------------------------------------------------------------------
 
-timeit(start) = (time_ns() - start) * 1e-9
-
-norm = []
-alpha = []
-beta = []
-
-times_W  = []
-times_1B = []
-times_1  = []
 
 function owo()
-    for (i, (mfn, mdim, msz, mdata)) in enumerate(load_COO_if(from_dim=15, to_dim=20))
+    for (i, (mfn, mdim, msz, mdata)) in enumerate(load_COO_if(from_dim=1, to_dim=5))
 
         @info "$i-th model : $mfn of dim : $mdim"
 
         As = map(matr -> from_COO(matr..., QQ), mdata)
 
-        start = time_ns()
         @time V = find_basis(As, used_algorithm=find_basis_1_beta)
-        push!(times_1B, timeit(start))
 
-        #start = time_ns()
-        #@time V = find_basis(As, used_algorithm=find_basis_2)
-        #push!(times_W, timeit(start))
-
-        @info "OK. dim = $(dim(V))"
 
     end
 end
