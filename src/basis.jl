@@ -19,6 +19,27 @@ import Nemo: fmpz
 
 #------------------------------------------------------------------------------
 
+function find_basis_1_γβ(vectors)
+    domain = ground(first(vectors))
+    sz = size(first(vectors))
+
+    # what if..
+    hash_vector = random_sparsik(sz, domain, density=1.0)
+    alg = linear_span!(deepcopy(vectors), hash_vector)
+
+    fat_vectors = apply_matrices_inplace!(alg, deepcopy(vectors), ω=0.05)
+
+    for vect in fat_vectors
+        eat_sparsik!(alg, vect)
+    end
+
+    apply_matrices_inplace!(alg, deepcopy(vectors), ω=1.0)
+
+    return alg
+end
+
+#------------------------------------------------------------------------------
+
 function find_basis_1(vectors)
     alg = linear_span!(deepcopy(vectors))
     apply_matrices_inplace!(alg, deepcopy(vectors))
@@ -30,7 +51,7 @@ function find_basis_1_beta(vectors)
     alg = linear_span!(deepcopy(vectors))
 
     # apply them with the threshold of ω
-    fat_vectors = apply_matrices_inplace!(alg, deepcopy(vectors), ω=0.08)
+    fat_vectors = apply_matrices_inplace!(alg, deepcopy(vectors), ω=0.05)
 
     # eat discarded veced vectors
     for vect in fat_vectors
@@ -219,6 +240,10 @@ end
 function find_basis(vectors; used_algorithm=find_basis_1)
     # used_algorithm is assumed not to throw normally
     # and to handle errors by thyself
+
+    # NEW LINE
+    #
+
     V = Subspacik(QQ)
     primes = BigInt[ 2^31 - 1 ]
     i = 0
@@ -237,6 +262,7 @@ function find_basis(vectors; used_algorithm=find_basis_1)
         # brrrr...
         @time V = used_algorithm(xs)
 
+        # THIS SHOULD BE HIDDEN INTO SUBSPACIK
         # reconstruction
         xs = [ rational_reconstruction(x)
                for x in values(V.echelon_form) ]
@@ -247,28 +273,13 @@ function find_basis(vectors; used_algorithm=find_basis_1)
         # Gleb: why would you want to do this anyway?
         # Alex: ((
 
+        # newline
+        break
+
         V = linear_span!(xs)
 
-        #=
-        quick check
-
-        start = time_ns()
-        ans1 = check_inclusion(V, vectors)
-        push!(norm, timeit(start))
-
-        start = time_ns()
-        ans2 = check_inclusion_alpha!(V, deepcopy(vectors))
-        push!(alpha, timeit(start))
-
-        start = time_ns()
-        ans3 = check_inclusion_beta!(V, deepcopy(vectors))
-        push!(beta, timeit(start))
-
-        @assert ans1 == ans2 == ans3
-        =#
-
-        if true || check_inclusion!(V, vectors)
-            if true || check_invariance!(V, vectors)
+        if true && check_inclusion!(V, vectors)
+            if true && check_invariance!(V, vectors)
                 break
             end
             @info "invariance check failed.."
@@ -280,7 +291,7 @@ function find_basis(vectors; used_algorithm=find_basis_1)
         push!(primes, nextprime(prime ^ 2 + 1))
 
         i += 1
-        i % 2 == 0 && return V
+        i % 5 == 0 && error("something is wrong")
     end
 
     return V
@@ -288,21 +299,33 @@ end
 
 #------------------------------------------------------------------------------
 
+timeit(start) = (time_ns() - start) * 1e-9
+
+times_γβ = []
+times_β = []
 
 function owo()
-    for (i, (mfn, mdim, msz, mdata)) in enumerate(load_COO_if(from_dim=1, to_dim=5))
+    for (i, (mfn, mdim, msz, mdata)) in enumerate(load_COO_if(from_dim=80, to_dim=150))
 
         @info "$i-th model : $mfn of dim : $mdim"
+        i == 1 && continue
 
         As = map(matr -> from_COO(matr..., QQ), mdata)
 
-        @time V = find_basis(As, used_algorithm=find_basis_1_beta)
 
+        start = time_ns()
+        @time V = find_basis(deepcopy(As), used_algorithm=find_basis_1_γβ)
+        push!(times_γβ, timeit(start))
+
+
+        start = time_ns()
+        @time V = find_basis(deepcopy(As), used_algorithm=find_basis_1_beta)
+        push!(times_β, timeit(start))
 
     end
 end
 
-# owo()
+owo()
 
 
 #=

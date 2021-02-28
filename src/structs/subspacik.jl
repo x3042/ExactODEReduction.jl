@@ -17,11 +17,30 @@ import Nemo: QQ, GF, Field
 
 # Subspacik
 mutable struct Subspacik{T<:Field}
-    # as I see, we do not need the dimension of the ambient space yet:
-    # now it is just redundant
     field::T
     # the echelon form of vectors is an invariant!
     echelon_form::Dict{Int, AbstractSparseObject{T}}
+end
+
+#------------------------------------------------------------------------------
+
+# Subspacik
+mutable struct HashedSubspacik{T<:Field}
+    # inherited from Subspacik
+    field::T
+    # pivot --> row
+    # maybe we can call this "rref"
+    echelon_form::Dict{Int, AbstractSparseObject{T}}
+
+    # -----
+    # new hash things
+
+    hash_vector::AbstractSparseObject{T}
+    # this vector is reduced over time
+    reduced_hash_vector::AbstractSparseObject{T}
+
+    # pivot --> hash
+    hashes::Dict{Int, FieldElem}
 end
 
 #------------------------------------------------------------------------------
@@ -41,24 +60,26 @@ end
 #------------------------------------------------------------------------------
 
 # Ground field!
-ground(v::Subspacik) = v.field
+# Gleb: also suggest base_ring
+# Alex: to be changed soon..
+ground(v::Union{Subspacik, HashedSubspacik}) = v.field
 
 #------------------------------------------------------------------------------
 
 # returns basis vectors of V sorted by pivot indices
-function basis(V::Subspacik)
+function basis(V::Union{Subspacik, HashedSubspacik})
     return sort(collect(deepcopy(values(V.echelon_form))), by=first_nonzero)
 end
 
 #------------------------------------------------------------------------------
 
 # returns the dimension of the ambient space of V
-function ambient_dim(V::Subspacik)
+function ambient_dim(V::Union{Subspacik, HashedSubspacik})
     return dim(first(values(V.echelon_form)))
 end
 
 # returns the dimension of V
-function dim(V::Subspacik)
+function dim(V::Union{Subspacik, HashedSubspacik})
     return length(V.echelon_form)
 end
 
@@ -67,13 +88,17 @@ end
 @enum EatCode begin
     reduced   = -1
     # Gleb: I would call discarded skipped
-    discarded = -2
+    skipped = -2
 end
 
 # adds `new_vector` to the set of spanning vectors of V
 # while modifying both
 # returns -1 if `new_vector` lies in V, new pivot index otherwise
+
+# O(kR)  if k = nnz(new_vector) and R = Σnnz(v) for v in echelon_form
 function eat_sparsik!(V::Subspacik, new_vector::AbstractSparseObject; ω=1.0)
+
+    # O(kr) if k = nnz(new_vector) and r = len(echelon_form)
     for (piv, vect) in V.echelon_form
         if !iszero(new_vector[piv])
             reduce!(new_vector, vect, -new_vector[piv])
@@ -84,13 +109,17 @@ function eat_sparsik!(V::Subspacik, new_vector::AbstractSparseObject; ω=1.0)
         return reduced
     end
 
+    # it should(must) be optimized somehow
+    # O(k)
     if density(new_vector) > ω
-        return discarded
+        return skipped
     end
 
+    # O(k)
     pivot = first_nonzero(new_vector)
     scale!(new_vector, inv(new_vector[pivot]))
 
+    # O(kR)  if k = nnz(new_vector) and R = Σnnz(v) for v in echelon_form
     for (piv, vect) in V.echelon_form
         if !iszero(vect[pivot])
             reduce!(V.echelon_form[piv], new_vector, -vect[pivot])
@@ -117,7 +146,7 @@ end
 
 # transformes V to the smallest subspace invariant under
 # the given matrices and containing the original one
-function apply_matrices_inplace!(V::Subspacik, matrices; ω=1.)
+function apply_matrices_inplace!(V::Union{Subspacik, HashedSubspacik}, matrices; ω=1.)
     fat_vectors = [ ]
     new_pivots = collect(keys(V.echelon_form))
     i = 0
@@ -131,11 +160,11 @@ function apply_matrices_inplace!(V::Subspacik, matrices; ω=1.)
                 product = apply_vector(V.echelon_form[pivot], vect)
 
                 i += 1
-                i % 1000 == 0 && print(".")
+                i % 500 == 0 && print(".")
 
                 if !iszero(product)
                     new_pivot = eat_sparsik!(V, product, ω=ω)
-                    if new_pivot == discarded
+                    if new_pivot == skipped
                         push!(fat_vectors, product)
                     elseif new_pivot != reduced
                         push!(new_pivots, new_pivot)
@@ -174,7 +203,7 @@ end
 #------------------------------------------------------------------------------
 
 # checks whether the given subspace is invariant under the matrices
-function check_invariance!(V::Subspacik, matrices)
+function check_invariance!(V::Union{Subspacik, HashedSubspacik}, matrices)
     for matr in matrices
         for vec in values(V.echelon_form)
             product = matr * vec
@@ -189,7 +218,7 @@ end
 #------------------------------------------------------------------------------
 
 # checks whether U ⊆ V using the provived algorithm for vector-wise check
-function check_inclusion!(V::Subspacik, U::Subspacik; algorithm=check_inclusion!)
+function check_inclusion!(V::Union{Subspacik, HashedSubspacik}, U::Subspacik; algorithm=check_inclusion!)
     return algorithm(V, basis(U))
 end
 
@@ -278,12 +307,154 @@ end
 
 #------------------------------------------------------------------------------
 
-Base.repr(::MIME"text/plain", V::Subspacik) = "<\n $(join(map(v -> repr(v), values(V.echelon_form)), ",\n"))\n>"
+Base.repr(::MIME"text/plain", V::Subspacik) = "<\n$(join(map(v -> repr(v), values(V.echelon_form)), ",\n"))\n>"
 Base.show(io::IO, V::Subspacik) = print(io, repr(MIME("text/plain"), V))
-
 
 #------------------------------------------------------------------------------
 
 ==(U::Subspacik{T}, V::Subspacik{T}) where {T} = (
             U.field == V.field &&
             U.echelon_form == V.echelon_form;)
+
+#------------------------------------------------------------------------------
+
+# convenience ctor
+function HashedSubspacik(hash_vector, field::T) where {T<:Field}
+    return HashedSubspacik(
+        field,
+        Dict{Int, AbstractSparseObject{T}}(),
+        deepcopy(hash_vector),
+        deepcopy(hash_vector),
+        Dict{Int, FieldElem}()
+    )
+end
+
+# deepcopy redefinition in order to preserve the field
+function Base.deepcopy_internal(x::HashedSubspacik{T}, stackdict::IdDict) where {T<:Field}
+    y = HashedSubspacik(
+                ground(x),
+                Base.deepcopy_internal(x.echelon_form, stackdict),
+                Base.deepcopy_internal(x.hash_vector, stackdict),
+                Base.deepcopy_internal(x.hashes, stackdict)
+    )
+    stackdict[x] = y
+    return y
+end
+
+Base.repr(::MIME"text/plain", V::HashedSubspacik) = "<\n$(join(map(v -> repr(v), values(V.echelon_form)), ",\n"))\n>\nwith hash vector $(repr(V.hash_vector))"
+Base.show(io::IO, V::HashedSubspacik) = print(io, repr(MIME("text/plain"), V))
+
+#------------------------------------------------------------------------------
+
+# adds `new_vector` to the set of spanning vectors of V
+# while modifying both
+# returns -1 if `new_vector` lies in V, new pivot index otherwise
+#
+
+# O(kn) if n = dim(hash_vector), k = nnz(new_vector)
+# if hash_vector is a matrix of sizes 100×100
+# kn ~ 0.01 × 100 × 100 × 100 × 100 ~ 1e6
+function eat_sparsik!(V::HashedSubspacik, new_vector::AbstractSparseObject; ω=1.0)
+    # ω is redundant here, is left for compatibility purposes
+
+    field = ground(V)
+
+    # O(k) if k = nnz(new_vector)
+    reduced_hash = inner(new_vector, V.reduced_hash_vector)
+    if iszero(reduced_hash)
+        return reduced
+    end
+
+    # searching for a pivot
+    # As I understand, if char(field) is relatively big,
+    # than even such naive approach will do,
+    # as we still rely on randomness
+    pivot = 0
+    # O(k) if k = nnz(new_vector)
+    for (piv, val) in new_vector
+        if !haskey(V.echelon_form, piv)
+            pivot = piv
+            break
+        end
+    end
+
+    # assuming generically a + b != 0
+    if pivot == 0
+        return reduced
+    end
+
+    # O(k) if k = nnz(new_vector)
+    scale!(new_vector, inv(new_vector[pivot]))
+    new_hash = inner(new_vector, V.hash_vector)
+
+    # compensating the contribution of nnz components of new_vector to the reduced_hash_vector,
+    # ( that is, if (idx in echelon_form.pivots) and (idx in new_vector.nnz) )
+    # ( than we can not just do reduce!(V.reduced_hash_vector, e_idx, -new_hash) )
+    reducer = unit_sparsik(size(new_vector), pivot, field)
+    # O(kn) if n = dim(hash_vector), k = nnz(new_vector)
+    for (idx, val) in new_vector
+        if idx != pivot && haskey(V.echelon_form, idx)
+            # as long as hash_vector is dense, reduced_hash_vector will be highly dense too
+            # (for the most of the time)
+            # Operations such as
+            #      inner(sparse, dense) or dense -= α*eᵢ
+            # seem to work nice with dense vectors
+            # So, we can make hash_vector to be just an Array
+            # and reduce the complexity tremendously
+            # O(n)
+            reduce!(V.reduced_hash_vector, reducer, new_vector[idx] * V.hashes[idx])
+        end
+    end
+
+    V.hashes[pivot] = new_hash
+    V.echelon_form[pivot] = new_vector
+
+    # O(n) if n = dim(hash_vector)
+    reduce!(V.reduced_hash_vector, reducer, -new_hash)
+
+    return pivot
+end
+
+#------------------------------------------------------------------------------
+
+function linear_span!(vectors, hash_vector)
+    V = HashedSubspacik(hash_vector, ground(first(vectors)))
+    for vect in vectors
+        eat_sparsik!(V, vect)
+    end
+    return V
+end
+
+#------------------------------------------------------------------------------
+
+# returns a Subspacik object consisting of REF elements
+# each reconstructed from V.field to QQ
+#
+# reconstructs inplace
+function rational_reconstruction!(V::Subspacik)
+    V.field = QQ
+    for piv in collect(keys(V.echelon_form))
+        V.echelon_form[piv] = rational_reconstruction(V.echelon_form[piv])
+    end
+    return V
+end
+
+# returns a HashedSubspacik object consisting of REF elements
+# each reconstructed from V.field to QQ
+#
+# hash vectors and hashes are reconstructed too
+#
+# reconstructs inplace
+function rational_reconstruction!(V::HashedSubspacik)
+    V.field = QQ
+    for piv in collect(keys(V.echelon_form))
+        V.echelon_form[piv] = rational_reconstruction(V.echelon_form[piv])
+    end
+    V.reduced_hash_vector = rational_reconstruction(V.reduced_hash_vector)
+    V.hash_vector = rational_reconstruction(V.hash_vector)
+    V.hashes = Dict(
+        i => rational_reconstruction(x, characteristic(ground(V)))
+        for (i, x) in V.hashes
+    )
+    return V
+end
