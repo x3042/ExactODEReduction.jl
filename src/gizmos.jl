@@ -4,7 +4,11 @@ include("typics.jl")
 #------------------------------------------------------------------------------
 
 import Nemo: QQ, GF, PolynomialRing, PolyElem, gfp_elem,
-            degree, trail, gfp_fmpz_elem, FracElem
+            degree, trail, gfp_fmpz_elem, FracElem,
+            fmpq_poly, fmpz_poly, gfp_poly
+
+import AbstractAlgebra: PolynomialRing, MPolyElem, derivative, PolyElem,
+                    vars
 
 #------------------------------------------------------------------------------
 

@@ -147,6 +147,8 @@ end
 # transformes V to the smallest subspace invariant under
 # the given matrices and containing the original one
 function apply_matrices_inplace!(V::Union{Subspacik, HashedSubspacik}, matrices; ω=1.)
+    global CNT
+
     fat_vectors = [ ]
     new_pivots = collect(keys(V.echelon_form))
     i = 0
@@ -158,6 +160,7 @@ function apply_matrices_inplace!(V::Union{Subspacik, HashedSubspacik}, matrices;
         for pivot in pivots_to_process
             for vect in matrices
                 product = apply_vector(V.echelon_form[pivot], vect)
+                CNT += 1
 
                 i += 1
                 i % 500 == 0 && print(".")
@@ -351,11 +354,13 @@ Base.show(io::IO, V::HashedSubspacik) = print(io, repr(MIME("text/plain"), V))
 # returns -1 if `new_vector` lies in V, new pivot index otherwise
 #
 
-# O(kn) if n = dim(hash_vector), k = nnz(new_vector)
-# if hash_vector is a matrix of sizes 100×100
-# kn ~ 0.01 × 100 × 100 × 100 × 100 ~ 1e6
+# O(k) if n = dim(hash_vector), k = nnz(new_vector)
 function eat_sparsik!(V::HashedSubspacik, new_vector::AbstractSparseObject; ω=1.0)
     # ω is redundant here, is left for compatibility purposes
+
+    if density(new_vector) > ω
+        return skipped
+    end
 
     field = ground(V)
 
@@ -390,27 +395,19 @@ function eat_sparsik!(V::HashedSubspacik, new_vector::AbstractSparseObject; ω=1
     # compensating the contribution of nnz components of new_vector to the reduced_hash_vector,
     # ( that is, if (idx in echelon_form.pivots) and (idx in new_vector.nnz) )
     # ( than we can not just do reduce!(V.reduced_hash_vector, e_idx, -new_hash) )
-    reducer = unit_sparsik(size(new_vector), pivot, field)
-    # O(kn) if n = dim(hash_vector), k = nnz(new_vector)
+    # O(k) if k = nnz(new_vector)
     for (idx, val) in new_vector
         if idx != pivot && haskey(V.echelon_form, idx)
-            # as long as hash_vector is dense, reduced_hash_vector will be highly dense too
-            # (for the most of the time)
-            # Operations such as
-            #      inner(sparse, dense) or dense -= α*eᵢ
-            # seem to work nice with dense vectors
-            # So, we can make hash_vector to be just an Array
-            # and reduce the complexity tremendously
-            # O(n)
-            reduce!(V.reduced_hash_vector, reducer, new_vector[idx] * V.hashes[idx])
+            # O(1)
+            reduce!(V.reduced_hash_vector, pivot, new_vector[idx] * V.hashes[idx])
         end
     end
 
     V.hashes[pivot] = new_hash
     V.echelon_form[pivot] = new_vector
 
-    # O(n) if n = dim(hash_vector)
-    reduce!(V.reduced_hash_vector, reducer, -new_hash)
+    # O(1)
+    reduce!(V.reduced_hash_vector, pivot, -new_hash)
 
     return pivot
 end

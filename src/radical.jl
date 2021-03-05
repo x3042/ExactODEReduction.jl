@@ -48,6 +48,7 @@ function find_radical_1(vectors)
     # println(AAAAAAA)
 
 
+    # wiedemannchik.jl
     char_poly = randomized_char_polynomial(A)
     println("m(AAAAAAA) = $(Int(iszero(evaluate(char_poly, A))))")
 
@@ -98,5 +99,62 @@ function OWO()
     find_radical_1(As)
 end
 
-uwu()
+# uwu()
 # OWO()
+
+
+#------------------------------------------------------------------------------
+
+#=
+function Jacobian(system)
+    nnz = [
+        (i, var_index(v), derivative(f, v))
+        for (i, f) in enumerate(system)
+            for v in vars(f)
+    ]
+    m, n = length(system), length(degrees(first(system)))
+    ring = parent(first(system))
+    return from_COO(m, n, nnz, ring)
+end
+=#
+
+function construct_jacobians(system)
+    domain = base_ring(first(system))
+    poly_ring = parent(first(system))
+
+    jacobians = Dict()
+
+    for (p_idx, poly) in enumerate(system)
+        for (v_idx, var) in enumerate(vars(poly))
+            # term is of form α*monomial
+            for term in terms(derivative(poly, var))
+                monom = monomial(term, 1)
+                cf = coeff(term, 1)
+
+                # how can we do it in a normal way..
+                !haskey(jacobians, monom) && (jacobians[monom] = Dict())
+                if !haskey(jacobians[monom], (p_idx, v_idx))
+                    jacobians[monom][(p_idx, v_idx)] = zero(domain)
+                end
+                jacobians[monom][(p_idx, v_idx)] += cf
+            end
+        end
+    end
+
+    m, n = length(system), length(gens(poly_ring))
+    factors = [
+        from_COO(m, n, jac, domain)
+        for jac in values(jacobians)
+    ]
+
+    return factors
+end
+
+#------------------------------------------------------------------------------
+
+S, (x, y) = QQ["x", "y"]
+f1 = x*y + 1
+f2 = 2x
+s = [f1, f2]
+
+Js = construct_jacobians(s)

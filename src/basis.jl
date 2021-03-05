@@ -10,6 +10,7 @@ include("gizmos.jl")
 include("wiedemannchik.jl")
 include("../src/structs/dok_sparsik.jl")
 include("../src/structs/sparsik.jl")
+include("../src/structs/densik.jl")
 include("../src/structs/subspacik.jl")
 
 #------------------------------------------------------------------------------
@@ -20,20 +21,32 @@ import Nemo: fmpz
 #------------------------------------------------------------------------------
 
 function find_basis_1_γβ(vectors)
+
+    #=
+        More multiplications,
+        Much slower sometimes (probably, influence of losing sparsity)
+    =#
+
+
     domain = ground(first(vectors))
     sz = size(first(vectors))
 
     # what if..
-    hash_vector = random_sparsik(sz, domain, density=1.0)
+    hash_vector = random_densik(sz, domain)
     alg = linear_span!(deepcopy(vectors), hash_vector)
 
-    fat_vectors = apply_matrices_inplace!(alg, deepcopy(vectors), ω=0.05)
+    fat_vectors = apply_matrices_inplace!(alg, deepcopy(vectors), ω=0.08)
+
+    #
+    println("\n..now to the dense ones.. ω = $(0.08)")
+    #
 
     for vect in fat_vectors
         eat_sparsik!(alg, vect)
     end
 
     apply_matrices_inplace!(alg, deepcopy(vectors), ω=1.0)
+
 
     return alg
 end
@@ -47,11 +60,17 @@ function find_basis_1(vectors)
 end
 
 function find_basis_1_beta(vectors)
+    global CNT
+
     # eat all input vectors
     alg = linear_span!(deepcopy(vectors))
 
     # apply them with the threshold of ω
-    fat_vectors = apply_matrices_inplace!(alg, deepcopy(vectors), ω=0.05)
+    fat_vectors = apply_matrices_inplace!(alg, deepcopy(vectors), ω=0.08)
+
+    push!(count_β_before, CNT)
+    push!(count_β_skipped, length(fat_vectors))
+    CNT = 0
 
     # eat discarded veced vectors
     for vect in fat_vectors
@@ -60,6 +79,9 @@ function find_basis_1_beta(vectors)
 
     # apply again, but not no vectors would be discarded
     apply_matrices_inplace!(alg, deepcopy(vectors), ω=1.0)
+
+    push!(count_β_after, CNT)
+    CNT = 0
 
     return alg
 end
@@ -260,7 +282,10 @@ function find_basis(vectors; used_algorithm=find_basis_1)
         xs = [ modular_reduction(x, field)
                for x in vectors ]
         # brrrr...
+
+        start = time_ns()
         @time V = used_algorithm(xs)
+        push!(time_β, timeit(start))
 
         # THIS SHOULD BE HIDDEN INTO SUBSPACIK
         # reconstruction
@@ -273,13 +298,13 @@ function find_basis(vectors; used_algorithm=find_basis_1)
         # Gleb: why would you want to do this anyway?
         # Alex: ((
 
-        # newline
+# TODO:
         break
 
         V = linear_span!(xs)
 
-        if true && check_inclusion!(V, vectors)
-            if true && check_invariance!(V, vectors)
+        if true || check_inclusion!(V, vectors)
+            if true || check_invariance!(V, vectors)
                 break
             end
             @info "invariance check failed.."
@@ -304,29 +329,49 @@ timeit(start) = (time_ns() - start) * 1e-9
 times_γβ = []
 times_β = []
 
+CNT = 0
+count_β_before = []
+count_β_skipped = []
+count_β_after = []
+time_β = []
+
 function owo()
-    for (i, (mfn, mdim, msz, mdata)) in enumerate(load_COO_if(from_dim=80, to_dim=150))
+    for (i, (mfn, mdim, msz, mdata)) in enumerate(load_COO_if(from_dim=75, to_dim=90))
 
         @info "$i-th model : $mfn of dim : $mdim"
-        i == 1 && continue
+
+        if i < 3
+            continue
+        end
 
         As = map(matr -> from_COO(matr..., QQ), mdata)
-
-
+        #=
         start = time_ns()
         @time V = find_basis(deepcopy(As), used_algorithm=find_basis_1_γβ)
         push!(times_γβ, timeit(start))
-
+        =#
 
         start = time_ns()
         @time V = find_basis(deepcopy(As), used_algorithm=find_basis_1_beta)
         push!(times_β, timeit(start))
+
 
     end
 end
 
 owo()
 
+datas = load_COO_if(from_dim=40, to_dim=60)
+As = [map(matr -> from_COO(matr..., QQ), data[4]) for data in datas ]
+
+function test_γβ(idx)
+    V = find_basis(deepcopy(As[idx]), used_algorithm=find_basis_1_γβ)
+    1
+end
+function test_β(idx)
+    V = find_basis(deepcopy(As[idx]), used_algorithm=find_basis_1_beta)
+    1
+end
 
 #=
 plot(1:length(norm), norm, label="norm")

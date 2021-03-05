@@ -166,8 +166,8 @@ function reconstruct!(A::DOK_Sparsik)
     cols_data = [Int[] => Dict{Int, valtype(A)}()
                 for _ in 1 : size(A, 2)]
 
-    for i in get_nnz_rows(A)
-        for (j, x) in get_row(A, i)
+    for i in A.nnz_rows
+        for (j, x) in A.rows[i]
             push!(cols_data[j][1], i)
             cols_data[j][2][i] = x
         end
@@ -216,8 +216,8 @@ function reconstruct_2!(A::DOK_Sparsik)
     end
 
     # reconstructing cols-data dict
-    for i in get_nnz_rows(A)
-        for (j, x) in get_row(A, i)
+    for i in A.nnz_rows
+        for (j, x) in A.rows[i]
             if !haskey(A.cols, j)
                 A.cols[j] = zero_sparsik(size(A, 1), A.field)
             end
@@ -283,6 +283,10 @@ function from_COO(m, n, nnz_coords, field)
 
     # and this can be speed up
     return reconstruct!(from_rows(m, n, field, nnz_rows, rows))
+end
+
+function from_COO(m, n, x::Dict, field)
+    from_COO(m, n, ((k[1], k[2], x[k]) for k in keys(x)), field)
 end
 
 #------------------------------------------------------------------------------
@@ -655,7 +659,7 @@ function modular_reduction(A::DOK_Sparsik, field)
     new_rows = Dict{Int, Sparsik{typeof(field)}}()
 
     for i in A.nnz_rows
-        y = modular_reduction(get_row(A, i), field)
+        y = modular_reduction(A.rows[i], field)
         if !iszero(y)
             push!(new_nnz_rows, i)
             new_rows[i] = y
@@ -678,7 +682,7 @@ function rational_reconstruction(A::DOK_Sparsik)
     new_rows = Dict{Int, Sparsik{typeof(QQ)}}()
 
     for i in A.nnz_rows
-        y = rational_reconstruction(get_row(A, i))
+        y = rational_reconstruction(A.rows[i])
         if !iszero(y)
             push!(new_nnz_rows, i)
             new_rows[i] = y

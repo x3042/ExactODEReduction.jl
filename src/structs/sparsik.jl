@@ -2,7 +2,7 @@
 #=
     The File contains `Sparsik<T>` and related funcs implementation
 
-    `Sparsik` implements `AbstractSparsik` interface
+    `Sparsik` implements `AbstractSparseObject` interface
 =#
 
 #------------------------------------------------------------------------------
@@ -411,6 +411,7 @@ function restrict(v::Sparsik, coords)
     return Sparsik(length(coords), field, nonzero, data)
 end
 
+#-----------------------------------------------------------------------------
 
 function to_dense(A::Sparsik)
     ans = fill(zero(ground(A)), size(A))
@@ -418,4 +419,31 @@ function to_dense(A::Sparsik)
         ans[i] = x
     end
     return ans
+end
+
+#-----------------------------------------------------------------------------
+
+# v[idx] += c
+# mutates v
+# O(k)
+# ( but O(1) generically )
+function reduce!(v::Sparsik{T}, idx::Int, c) where {T}
+    if iszero(c)
+        return v
+    end
+
+    if haskey(v.data, idx)
+        v.data[idx] += c
+        if !iszero(v.data[idx])
+
+        else
+            popat!(v.nonzero, idx)
+            delete!(v.data, idx)
+        end
+    else
+        v.data[idx] = c
+        pos = searchsortedfirst(v.nonzero, idx)
+        insert!(v.nonzero, pos, idx)
+    end
+    return v
 end
