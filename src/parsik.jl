@@ -1,5 +1,8 @@
 
 import JSON
+import Nemo: gen, terms, monomials
+
+include("myeval.jl")
 
 
 #------------------------------------------------------------------------------
@@ -190,6 +193,79 @@ end
 
 #------------------------------------------------------------------------------
 
-function load_ODE()
-    
+function load_ODEs(filename; pathabs=false)
+    # *.ode --> polynomial form of ode system
+
+    filepath = filename
+    if !pathabs
+        filepath = replace(
+            "$(normpath(joinpath(@__FILE__, "..", "..")))src/data/ODEs/$filename",
+            "\\" => "/"
+        )
+    end
+
+    lines = []
+    open(filepath, "r") do inputs
+        lines = map(strip, readlines(inputs))
+    end
+
+    # drop init out
+    reactions = filter(!isempty, map(strip, lines[
+        (findfirst(startswith("begin reactions"), lines) + 1
+        :
+        findlast(startswith("end reactions"), lines) - 1)
+    ]))
+
+    # scan reactions to discover all variables
+    sep1 = r"(->)|(,)|([+-/ \t\*])"
+    # assuming there is at least one utf letter in any variable
+    strings = map(String, unique(filter!(
+        x -> !isempty(findall(isletter, x)),
+        split(join(reactions, ' '), sep1)
+    )))
+
+    S, xs = QQ[strings...]
+
+    # symbol :x to x from QQ[x]
+    mapping = Dict{Symbol, fmpq_mpoly}(
+        Meta.parse(x) => gen(S, i)
+        for (i, x) in enumerate(strings)
+    )
+
+    ODEs = Dict(x => S(0) for x in xs)
+
+    sep2 = r"(->)|(,)"
+    for reaction in reactions
+        # divide each line into parts,
+        # expected to be three of them
+        lhs, rhs, speed = map(
+            Meta.parse ∘ String ∘ strip,
+            split(reaction, sep2)
+        )
+
+        reagents, products, speed = map(
+            x -> myeval(x, mapping),
+            (lhs, rhs, speed)
+        )
+
+        concentration = prod(terms(reagents))
+
+        for reagent in monomials(reagents)
+            ODEs[reagent] -= concentration * speed
+        end
+        for product in monomials(products)
+            ODEs[product] += concentration * speed
+        end
+
+    end
+
+    for key in collect(keys(ODEs))
+        if iszero(ODEs[key])
+            delete!(ODEs, key)
+        end
+    end
+
+    @info "loaded a system of $(length(ODEs)) ODEs from $filename"
+
+    return ODEs
 end
