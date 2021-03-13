@@ -10,15 +10,14 @@ include("basis.jl")
 
 #------------------------------------------------------------------------------
 
-# import iiiiiiiii
+import Nemo: base_ring, terms, monomial, derivative, gens
 
 #------------------------------------------------------------------------------
 
-algebra = 1
 
 function find_radical_1(vectors)
-    global algebra
-    algebra = find_basis(vectors)
+    global A
+    algebra = A
     As = basis(algebra)
     F = ground(first(As))
     n = dim(algebra)
@@ -47,6 +46,7 @@ function find_radical_1(vectors)
     @info "$n×$n-dim algebra matrix of densitu $(density(A))"
     # println(AAAAAAA)
 
+    print(A)
 
     # wiedemannchik.jl
     char_poly = randomized_char_polynomial(A)
@@ -65,6 +65,7 @@ function find_radical_1(vectors)
 end
 
 
+# find_radical_1([A1, A2, A3])
 #------------------------------------------------------------------------------
 
 
@@ -106,7 +107,7 @@ end
 #------------------------------------------------------------------------------
 
 #=
-function Jacobian(system)
+function construct_jacobians(system)
     nnz = [
         (i, var_index(v), derivative(f, v))
         for (i, f) in enumerate(system)
@@ -147,14 +148,18 @@ function construct_jacobians(system)
         for jac in values(jacobians)
     ]
 
+    @info "constructed a set of $(length(factors)) matrices $m×$n from the system Jacobian"
+
     return factors
 end
 
 #------------------------------------------------------------------------------
 
+#=
 S, (x, y) = QQ["x", "y"]
 f1 = x*y + 1
 f2 = 2x
 s = [f1, f2]
 
 Js = construct_jacobians(s)
+=#

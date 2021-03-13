@@ -91,7 +91,7 @@ Base.empty!(v::Densik) = error("O(n)")
 
 #------------------------------------------------------------------------------
 
-Base.zero(v::Densik) = zero_sparsik(dim(v), v.field)
+Base.zero(v::Densik) = error("O(n)")
 Base.iszero(v::Densik) = error("O(n)")
 
 Base.get(v::Densik, i::Int) = v.data[i]
@@ -183,7 +183,8 @@ end
 function random_densik(sz::Int, field::T) where {T<:Field}
     if T <: FracField
         # todo!  ??????
-        return unit_sparsik(sz, rand(1:sz), field)
+        dense_repr = broadcast(QQ, rand(1 : 2^31-1, sz))
+        return  Densik(field, dense_repr)
     elseif T <: Union{GaloisField, GaloisFmpzField}
         dense_repr = rand(field, sz)
         return Densik(field, dense_repr)

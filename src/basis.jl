@@ -21,13 +21,6 @@ import Nemo: fmpz
 #------------------------------------------------------------------------------
 
 function find_basis_1_γβ(vectors)
-
-    #=
-        More multiplications,
-        Much slower sometimes (probably, influence of losing sparsity)
-    =#
-
-
     domain = ground(first(vectors))
     sz = size(first(vectors))
 
@@ -37,16 +30,11 @@ function find_basis_1_γβ(vectors)
 
     fat_vectors = apply_matrices_inplace!(alg, deepcopy(vectors), ω=0.08)
 
-    #
-    println("\n..now to the dense ones.. ω = $(0.08)")
-    #
-
     for vect in fat_vectors
         eat_sparsik!(alg, vect)
     end
 
     apply_matrices_inplace!(alg, deepcopy(vectors), ω=1.0)
-
 
     return alg
 end
@@ -59,18 +47,24 @@ function find_basis_1(vectors)
     return alg
 end
 
+#------------------------------------------------------------------------------
+
 function find_basis_1_beta(vectors)
     global CNT
+    global NONZERO
 
     # eat all input vectors
     alg = linear_span!(deepcopy(vectors))
 
     # apply them with the threshold of ω
-    fat_vectors = apply_matrices_inplace!(alg, deepcopy(vectors), ω=0.08)
+    fat_vectors = apply_matrices_inplace!(alg, deepcopy(vectors), ω=0.05)
 
     push!(count_β_before, CNT)
     push!(count_β_skipped, length(fat_vectors))
     CNT = 0
+
+    push!(nonzero_β_before, NONZERO)
+    NONZERO = 0
 
     # eat discarded veced vectors
     for vect in fat_vectors
@@ -86,18 +80,6 @@ function find_basis_1_beta(vectors)
     return alg
 end
 
-#
-#          3 players
-#    990                1420
-#     >_<                ^=^
-#
-#
-#
-#            UωU
-#              590
-#
-#
-#                 54
 #------------------------------------------------------------------------------
 
 #
@@ -270,6 +252,8 @@ function find_basis(vectors; used_algorithm=find_basis_1)
     primes = BigInt[ 2^31 - 1 ]
     i = 0
 
+    @info "generating Algebra with $used_algorithm"
+
     while true
         prime = last(primes)
         # GF can not be constructed from BigInt,
@@ -298,18 +282,15 @@ function find_basis(vectors; used_algorithm=find_basis_1)
         # Gleb: why would you want to do this anyway?
         # Alex: ((
 
-# TODO:
-        break
-
         V = linear_span!(xs)
 
-        if true || check_inclusion!(V, vectors)
-            if true || check_invariance!(V, vectors)
+        if check_inclusion!(V, vectors)
+            if check_invariance!(V, vectors)
                 break
             end
-            @info "invariance check failed.."
+            @warn "invariance check failed.."
         else
-            @info "inclusion check failed.."
+            @warn "inclusion check failed.."
         end
 
         # how to choose the next better?
@@ -318,6 +299,8 @@ function find_basis(vectors; used_algorithm=find_basis_1)
         i += 1
         i % 5 == 0 && error("something is wrong")
     end
+
+    @info "constructed a basis for algebra of dim $(dim(V))"
 
     return V
 end
@@ -335,21 +318,23 @@ count_β_skipped = []
 count_β_after = []
 time_β = []
 
+NONZERO = 0
+nonzero_β_before = []
+
+# 100 - 150
 function owo()
-    for (i, (mfn, mdim, msz, mdata)) in enumerate(load_COO_if(from_dim=75, to_dim=90))
+    for (i, (mfn, mdim, msz, mdata)) in enumerate(load_COO_if(from_dim=45, to_dim=50))
 
-        @info "$i-th model : $mfn of dim : $mdim"
-
-        if i < 3
-            continue
-        end
+        @info "\n$i-th model : $mfn of dim : $mdim"
 
         As = map(matr -> from_COO(matr..., QQ), mdata)
-        #=
+
+
         start = time_ns()
         @time V = find_basis(deepcopy(As), used_algorithm=find_basis_1_γβ)
         push!(times_γβ, timeit(start))
-        =#
+
+
 
         start = time_ns()
         @time V = find_basis(deepcopy(As), used_algorithm=find_basis_1_beta)
@@ -359,10 +344,17 @@ function owo()
     end
 end
 
-owo()
+# owo()
 
-datas = load_COO_if(from_dim=40, to_dim=60)
-As = [map(matr -> from_COO(matr..., QQ), data[4]) for data in datas ]
+A1 = from_dense([1 0 0 0; 1 0 0 0; 0 0 0 0; 0 0 0 0], QQ)
+A2 = from_dense([1 0 0 0; 0 1 0 0; 0 0 0 0; 0 0 0 0], QQ)
+A3 = from_dense([0 0 0 1; 0 0 1 0; 0 1 0 1; 0 1 1 0], QQ)
+
+A = find_basis([A1, A2, A3])
+
+
+# datas = load_COO_if(from_dim=40, to_dim=60)
+# As = [map(matr -> from_COO(matr..., QQ), data[4]) for data in datas ]
 
 function test_γβ(idx)
     V = find_basis(deepcopy(As[idx]), used_algorithm=find_basis_1_γβ)

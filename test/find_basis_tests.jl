@@ -78,7 +78,7 @@ function test_the_algorithm(algorithm)
 
     # --------
     # a series of random tests
-    
+
     ZZ  = GF(2^31 - 1)
 
     dims      = [3, 3, 4, 4, 5, 5, 5, 5, 8, 8, 8, 8, 10, 10, 10]
@@ -122,6 +122,12 @@ end
 @testset "basis, Beta algorithm" begin
 
     test_the_algorithm(find_basis_1_beta)
+
+end
+
+@testset "basis, Gamma-Beta algorithm" begin
+
+    # test_the_algorithm(find_basis_1_γβ)
 
 end
 

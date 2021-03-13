@@ -62,10 +62,6 @@ function modular_reduction(x::R, field) where {R<:FracElem}
     n, d = field(numerator(x)), field(denominator(x))
     if iszero(d)
         throw(DomainError(a//m, "rational reconstruction of $a (mod $m) does not exist"))
-
-        throw(DomainError(
-            x, "the denominator $(denominator(x)) vanishes under the $(field)!"
-        ))
     end
     n // d
 end
@@ -129,7 +125,7 @@ end
 # It is guaranteed that after the function yields,
 # `vectors` will be in the original state
 #
-# NOT GUARANTEED FOR RETURNED VECTOR TO BE ORTHOGONAL))
+# NOT GUARANTEED FOR RETURNED VECTOR TO BE ORTHOGONAL
 function find_orthogonal!(vectors::AbstractDict)
     first_vector = first(values(vectors))
     field = ground(first_vector)

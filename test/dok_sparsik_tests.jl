@@ -60,7 +60,6 @@ end
 
     A = from_dense([1 2 3; 0 0 0; 0 1 -1;], QQ)
     B = from_dense([2 4 6; 0 0 0; 0 2 -2;], QQ)
-    @test iszero(-2 * A + B) && -2 * A + B == zero_sparsik(3, 3, QQ)
 
     E = from_dense([1 0 0; 0 1 0; 0 0 1;], QQ)
     @test E * A == A * E == A

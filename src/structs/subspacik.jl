@@ -8,6 +8,8 @@
 #------------------------------------------------------------------------------
 
 include("dok_sparsik.jl")
+include("densik.jl")
+
 
 #------------------------------------------------------------------------------
 
@@ -86,7 +88,7 @@ end
 #------------------------------------------------------------------------------
 
 @enum EatCode begin
-    reduced   = -1
+    reduced = -1
     # Gleb: I would call discarded skipped
     skipped = -2
 end
@@ -144,51 +146,52 @@ end
 
 #------------------------------------------------------------------------------
 
-# transformes V to the smallest subspace invariant under
-# the given matrices and containing the original one
-function apply_matrices_inplace!(V::Union{Subspacik, HashedSubspacik}, matrices; ω=1.)
-    global CNT
+ # transformes V to the smallest subspace invariant under
+ # the given matrices and containing the original one
+ function apply_matrices_inplace!(V::Union{Subspacik, HashedSubspacik}, matrices; ω=1.)
+     global CNT
+     global NONZERO
 
-    fat_vectors = [ ]
-    new_pivots = collect(keys(V.echelon_form))
-    i = 0
+     fat_vectors = [ ]
+     new_pivots = collect(keys(V.echelon_form))
+     i = 0
 
-    while !isempty(new_pivots)
-        pivots_to_process = sort(deepcopy(new_pivots))
-        empty!(new_pivots)
+     while !isempty(new_pivots)
+         pivots_to_process = sort(deepcopy(new_pivots))
+         empty!(new_pivots)
 
-        for pivot in pivots_to_process
-            for vect in matrices
-                product = apply_vector(V.echelon_form[pivot], vect)
-                CNT += 1
+         for pivot in pivots_to_process
+             for vect in matrices
+                 product = apply_vector(V.echelon_form[pivot], vect)
+                 CNT += 1
 
-                i += 1
-                i % 500 == 0 && print(".")
+                 i += 1
+                 i % 500 == 0 && print(".")
 
-                if !iszero(product)
-                    new_pivot = eat_sparsik!(V, product, ω=ω)
-                    if new_pivot == skipped
-                        push!(fat_vectors, product)
-                    elseif new_pivot != reduced
-                        push!(new_pivots, new_pivot)
-                    end
-                end
+                 if !iszero(product)
+                     new_pivot = eat_sparsik!(V, product, ω=ω)
+                     if new_pivot == skipped
+                         push!(fat_vectors, product)
+                     elseif new_pivot != reduced
+                         push!(new_pivots, new_pivot)
+                     end
+                 end
 
-            end
-        end
+             end
+         end
 
-    end
+     end
 
-    return fat_vectors
+     return fat_vectors
 
- end
+  end
+
+
 
 #------------------------------------------------------------------------------
 
 # checks whether the given vector lies in V
-#
-# TODO: check_inclusion!
-function check_inclusion(V::Subspacik, vector::AbstractSparseObject)
+function check_inclusion(V::Union{Subspacik, HashedSubspacik}, vector::AbstractSparseObject)
     return check_inclusion!(V, deepcopy(vector))
 end
 
@@ -201,6 +204,12 @@ function check_inclusion!(V::Subspacik, vector::AbstractSparseObject)
         end
     end
     return iszero(vector)
+end
+
+# checks whether the given vector lies in V
+#
+function check_inclusion!(V::HashedSubspacik, vector::AbstractSparseObject)
+    return iszero(inner(V.reduced_hash_vector, vector))
 end
 
 #------------------------------------------------------------------------------
@@ -221,7 +230,7 @@ end
 #------------------------------------------------------------------------------
 
 # checks whether U ⊆ V using the provived algorithm for vector-wise check
-function check_inclusion!(V::Union{Subspacik, HashedSubspacik}, U::Subspacik; algorithm=check_inclusion!)
+function check_inclusion!(V::Union{Subspacik, HashedSubspacik}, U::Union{Subspacik, HashedSubspacik}; algorithm=check_inclusion!)
     return algorithm(V, basis(U))
 end
 
@@ -230,81 +239,12 @@ end
 # check whether the given vectors lie in V
 # O(K)
 # where K = ∑ᵢnnz(vᵢ)  for vᵢ ∈ vectors
-function check_inclusion!(V::Subspacik, vectors)
+function check_inclusion!(V::Union{Subspacik, HashedSubspacik}, vectors::Array)
     for vec in vectors
         if ! check_inclusion!(V, vec)
             return false
         end
     end
-    return true
-end
-
-
-function check_inclusion_alpha!(V::Subspacik, vectors)
-    # In this approach we try to reduce hash of each vector to zero
-    # rather than the vector thyself
-
-    # O(n)
-    hash_vector = random_sparsik(
-        size(first(vectors)),
-        ground(first(vectors)),
-        density=1.0
-    )
-
-    # O(K)
-    # K = ∑ k_i  , k_i = nnz(v) from  V.echelon_form
-    subspace_hashes = [
-        inner(hash_vector, v)
-        for v in values(V.echelon_form)
-    ]
-
-    # O(C)
-    # C = length(vectors)
-    for vect in vectors
-        current_hash = inner(hash_vector, vect)
-
-        for (i, (pivot, row)) in enumerate(V.echelon_form)
-            current_hash -= vect[pivot] * subspace_hashes[i]
-        end
-
-        if ! iszero(current_hash)
-            return false
-        end
-
-    end
-
-    return true
-end
-
-
-function check_inclusion_beta!(V::Subspacik, vectors)
-    # In this approach we precompute reduced hash vector,
-    # whose wonderful properties are based on bilinearity of inner product
-
-    sz = size(first(vectors))
-    field = ground(first(vectors))
-
-    hash_vector = random_sparsik(
-        sz,
-        field,
-        density=1.0
-    )
-
-    reduced_hash_vector = deepcopy(hash_vector)
-    for (pivot, row) in V.echelon_form
-        reducer = scale!(
-            unit_sparsik(sz, pivot, field),
-            inner(row, hash_vector)
-        )
-        reduce!(reduced_hash_vector, reducer, -one(field))
-    end
-
-    for vect in vectors
-        if ! iszero(inner(vect, reduced_hash_vector))
-            return false
-        end
-    end
-
     return true
 end
 
@@ -338,6 +278,7 @@ function Base.deepcopy_internal(x::HashedSubspacik{T}, stackdict::IdDict) where 
                 ground(x),
                 Base.deepcopy_internal(x.echelon_form, stackdict),
                 Base.deepcopy_internal(x.hash_vector, stackdict),
+                Base.deepcopy_internal(x.reduced_hash_vector, stackdict),
                 Base.deepcopy_internal(x.hashes, stackdict)
     )
     stackdict[x] = y
@@ -352,61 +293,45 @@ Base.show(io::IO, V::HashedSubspacik) = print(io, repr(MIME("text/plain"), V))
 # adds `new_vector` to the set of spanning vectors of V
 # while modifying both
 # returns -1 if `new_vector` lies in V, new pivot index otherwise
-#
-
-# O(k) if n = dim(hash_vector), k = nnz(new_vector)
 function eat_sparsik!(V::HashedSubspacik, new_vector::AbstractSparseObject; ω=1.0)
-    # ω is redundant here, is left for compatibility purposes
-
-    if density(new_vector) > ω
-        return skipped
-    end
-
-    field = ground(V)
-
     # O(k) if k = nnz(new_vector)
     reduced_hash = inner(new_vector, V.reduced_hash_vector)
     if iszero(reduced_hash)
         return reduced
     end
 
-    # searching for a pivot
-    # As I understand, if char(field) is relatively big,
-    # than even such naive approach will do,
-    # as we still rely on randomness
-    pivot = 0
-    # O(k) if k = nnz(new_vector)
-    for (piv, val) in new_vector
-        if !haskey(V.echelon_form, piv)
-            pivot = piv
-            break
+    for (piv, vect) in V.echelon_form
+        if !iszero(new_vector[piv])
+            reduce!(new_vector, vect, -new_vector[piv])
         end
     end
 
-    # assuming generically a + b != 0
-    if pivot == 0
+    if iszero(new_vector)
         return reduced
     end
 
-    # O(k) if k = nnz(new_vector)
-    scale!(new_vector, inv(new_vector[pivot]))
-    new_hash = inner(new_vector, V.hash_vector)
+    # it should(must) be optimized somehow
+    # O(k)
+    if density(new_vector) > ω
+        return skipped
+    end
 
-    # compensating the contribution of nnz components of new_vector to the reduced_hash_vector,
-    # ( that is, if (idx in echelon_form.pivots) and (idx in new_vector.nnz) )
-    # ( than we can not just do reduce!(V.reduced_hash_vector, e_idx, -new_hash) )
-    # O(k) if k = nnz(new_vector)
-    for (idx, val) in new_vector
-        if idx != pivot && haskey(V.echelon_form, idx)
-            # O(1)
-            reduce!(V.reduced_hash_vector, pivot, new_vector[idx] * V.hashes[idx])
+    # O(k)
+    pivot = first_nonzero(new_vector)
+    scale!(new_vector, inv(new_vector[pivot]))
+    new_hash = inner(V.hash_vector, new_vector)
+
+    # O(kR)  if k = nnz(new_vector) and R = Σnnz(v) for v in echelon_form
+    for (piv, vect) in V.echelon_form
+        if !iszero(vect[pivot])
+            reduce!(V.echelon_form[piv], new_vector, -vect[pivot])
+            V.hashes[piv] -= new_hash * (-vect[pivot])
         end
     end
 
     V.hashes[pivot] = new_hash
     V.echelon_form[pivot] = new_vector
 
-    # O(1)
     reduce!(V.reduced_hash_vector, pivot, -new_hash)
 
     return pivot

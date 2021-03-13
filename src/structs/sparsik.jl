@@ -156,6 +156,14 @@ function inner(v::Sparsik{T}, u::Sparsik{T}) where {T}
     return ans
 end
 
+function inner(A::Sparsik{T}, c::FieldElem) where {T}
+    if iszero(c)
+        return zero(c)
+    end
+
+    error("not implemented!")
+end
+
 #------------------------------------------------------------------------------
 
 # constructs a `Sparsik` instance from a dense Vector
@@ -191,6 +199,7 @@ end
 # O(1)
 function zero_sparsik(dim, field)
     return Sparsik(dim, field, Int[], Dict{Int, elem_type(field)}())
+    # return zero(field)
 end
 
 #------------------------------------------------------------------------------

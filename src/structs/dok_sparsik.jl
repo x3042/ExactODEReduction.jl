@@ -271,7 +271,7 @@ function from_COO(m, n, nnz_coords, field)
 
     for (i, j, x) in nnz_coords
         if !haskey(rows, i)
-            rows[i] = zero_sparsik(n, field)
+            rows[i] = Sparsik(n, field, Int[], Dict{Int, elem_type(field)}())
         end
         rows[i].data[j] = field(x)
         push!(rows[i].nonzero, j)
@@ -328,6 +328,7 @@ end
 # let k = length(A), r = length(B)
 # O(k + r)
 function reduce!(A::DOK_Sparsik{T}, B::DOK_Sparsik{T}, c) where {T}
+    FF = ground(A)
     nnz_rows = Int[]
     # equality of field types ensures that
     # valtype(A) == valtype(B)
@@ -357,12 +358,14 @@ function reduce!(A::DOK_Sparsik{T}, B::DOK_Sparsik{T}, c) where {T}
             end
         end
 
-        if (!haskey(A.rows, new_idx))
+        if !haskey(A.rows, new_idx)
             A.rows[new_idx] = zero_sparsik(size(A, 2), A.field)
         end
-        reduce!(A.rows[new_idx], get_row(B, new_idx), c)
+        if haskey(B.rows, new_idx)
+            reduce!(A.rows[new_idx], B.rows[new_idx], c)
+        end
 
-        if (!iszero(get_row(A, new_idx)))
+        if !iszero(A.rows[new_idx])
             push!(A.nnz_rows, new_idx)
         else
             delete!(A.rows, new_idx)
@@ -396,15 +399,17 @@ function Base.prod(A::DOK_Sparsik{T}, B::DOK_Sparsik{T}) where {T}
         reconstruct!(B)
     end
 
+    FF = ground(A)
+
     nnz_rows = Int[]
     rows = Dict{Int, Sparsik{T}}()
 
-    for i in get_nnz_rows(A)
+    for i in A.nnz_rows
         row_vals = Dict{Int, valtype(A)}()
         row_indices = Int[]
 
-        for j in get_nnz_cols(B)
-            product = inner(get_row(A, i), get_col(B, j))
+        for j in B.nnz_cols
+            product = inner(A.rows[i], B.cols[j])
 
             if !iszero(product)
                 push!(row_indices, j)
@@ -546,13 +551,15 @@ end
 # returns zero matrix of the dimensions (m, n)
 function zero_sparsik(m, n, field)
     from_rows(m, n, field, Int[], Dict{Int, Sparsik{typeof(field)}}())
+    #zero(field)
 end
+
 zero_sparsik(sz::Tuple{Int, Int}, field) = zero_sparsik(sz..., field)
 
 # returns zero matrix of the dimensions of `A`
 Base.zero(A::DOK_Sparsik) = zero_sparsik(size(A)..., A.field)
 
-Base.iszero(A::DOK_Sparsik) = length(get_nnz_rows(A)) == 0
+Base.iszero(A::DOK_Sparsik) = length(A.nnz_rows) == 0
 
 #------------------------------------------------------------------------------
 
@@ -705,11 +712,24 @@ function inner(A::DOK_Sparsik{T}, B::DOK_Sparsik{T}) where {T}
     end
 
     for (i, row) in A.rows
-        ans += inner(row, get_row(B, i))
+        if haskey(B.rows, i)
+            ans += inner(row, B.rows[i])
+        end
     end
 
     return ans
 end
+
+# ad-hoc inner
+function inner(A::DOK_Sparsik{T}, c::FieldElem) where {T}
+    if iszero(c)
+        return zero(c)
+    end
+
+    error("not implemented!")
+end
+
+inner(c::FieldElem, A::DOK_Sparsik{T}) where {T} = inner(A, c)
 
 #-----------------------------------------------------------------------------
 

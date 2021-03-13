@@ -1,0 +1,14 @@
+begin model e2
+ begin init
+  1
+  2
+  3
+ end init
+ begin reactions
+  Au -> Ap , r1
+  Ap -> Au , r2
+  Au + B -> AuB, r3
+  AuB -> Au + B, r4
+  Ap + B -> ApB, r3
+  ApB -> Ap + B, r4
+ end reactions
