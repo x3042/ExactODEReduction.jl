@@ -101,7 +101,6 @@ function find_basis_2(vectors)
 
     # select hashing vector
     # we should adjust the hash_vector density
-    # Gleb: I think we should just make it dense, otherwise we can loose some vectors
     hash_vector = random_sparsik(size(first_vector), field, density=1)
     hash_col = [ inner(hash_vector, first_vector) ]
 
@@ -206,10 +205,6 @@ function find_basis_2(vectors)
 
                         # append -> find_orthogonal -> pop
                         # it must be simplified
-                        # Gleb: how about making the value of the hash to be
-                        # the first coordinate of the restricted vector?
-                        # Then there will be non need in this push-pop every time
-                        # Done
                         for i in 1 : k
                             append!(current_rows_extended[i],
                                     current_vectors[i][new_pivot])

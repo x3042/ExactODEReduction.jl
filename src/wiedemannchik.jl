@@ -49,9 +49,6 @@ end
 
 #------------------------------------------------------------------------------
 
-# returns the thing named f⁻
-# Gleb: How about shift_right_x ?
-# Looks cool
 function shift_right_x(f::PolyElem)
     x = gen(parent(f))
     divexact(f - coeff(f, 0), x)
@@ -84,16 +81,6 @@ function square_nonsingular_randomized_wiedemann(A::AbstractSparseMatrix, b::Abs
     # 2
     while !iszero(b)
         # 3
-        # Gleb: my understanding is that the randomization in the algorithm
-        # affects only the runtime but the result will be always correct.
-        # Therefore, we can afford different choice strategies for u.
-        # One is outline in Section VI of the paper and suggests to generate a
-        # random dense vector, then the average number of the iteration will be small.
-        # We can start with this and then experiment what happens if we have u sparser
-
-        # Alex: absolutely dense random vector works fine.
-        # While we decrease density runtime is mostly the same
-        # but it starts to degenerate crucially in some cases
         u = random_sparsik(n, field, density=1)
 
         # 4
