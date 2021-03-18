@@ -21,7 +21,7 @@ import AbstractAlgebra: Field
 
 # AbstractSparseObject<T>
 #
-# `T` is the type of the ground field
+# `T` is the type of the base_ring field
 #
 # Base interface for anything Sparse implemented in this project
 abstract type AbstractSparseObject{T} end
@@ -30,7 +30,7 @@ abstract type AbstractSparseObject{T} end
 
 # AbstractSparseVector<T>
 #
-# `T` is the type if the ground field
+# `T` is the type if the base_ring field
 #
 # Base interface for Sparse vectors family
 # An object which implements `AbstractSparseVector` can be treated
@@ -42,7 +42,7 @@ abstract type AbstractSparseVector{T} <: AbstractSparseObject{T} end
 
 # AbstractSparseMatrix<T>
 #
-# `T` is the type if the ground field
+# `T` is the type if the base_ring field
 #
 # Base interface for Sparse matrices family
 # An object which implements `AbstractSparseMatrix` can be treated
@@ -58,7 +58,7 @@ abstract type AbstractSparseMatrix{T} <: AbstractSparseObject{T} end
 
 #------------------------------------------------------------------------------
 
-function ground(::AbstractSparseMatrix) end
+function base_ring(::AbstractSparseMatrix) end
 
 function first_nonzero(::T) where {T<:AbstractSparseMatrix} end
 function getindex(::AbstractSparseMatrix, i::Int) end

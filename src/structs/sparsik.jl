@@ -39,8 +39,8 @@ density(v::Sparsik) = length(v.nonzero) / v.dim
 # returns the number of nonzero-valued elements in `v`
 nnz(v::Sparsik) = length(v.nonzero)
 
-# Ground field!
-ground(v::Sparsik) = v.field
+# base_ring field!
+base_ring(v::Sparsik) = v.field
 
 #------------------------------------------------------------------------------
 
@@ -72,7 +72,7 @@ end
 # if `v` has k nonzeroes
 # O(k)
 function scale!(v::Sparsik, c)
-    if iszero(ground(v)(c))
+    if iszero(base_ring(v)(c))
         return empty!(v)
     end
 
@@ -149,8 +149,12 @@ function inner(v::Sparsik{T}, u::Sparsik{T}) where {T}
     if length(v) > length(u)
         inner(u, v)
     end
-    for (i, x) in v.data
-        ans += x * u[i]
+    for i in v.nonzero
+        # zero values can be skipped instantly
+        # TODO: fix
+        if haskey(u.data, i)
+            ans += v.data[i] * u.data[i]
+        end
     end
 
     return ans
@@ -205,9 +209,14 @@ end
 #------------------------------------------------------------------------------
 
 Base.zero(v::Sparsik) = zero_sparsik(v.dim, v.field)
-Base.iszero(v::Sparsik) = length(v) == 0
+Base.iszero(v::Sparsik{T}) where {T} = length(v) == 0
 
 Base.get(v::Sparsik, i::Int) = get(v.data, i, zero(v.field))
+
+function Base.haskey(A::Sparsik, i::Int)
+    return haskey(A.data, i)
+end
+
 Base.getindex(v::Sparsik, i::Int) = get(v, i)
 
 Base.size(v::Sparsik) = (v.dim, )
@@ -296,7 +305,7 @@ function rational_reconstruction(v::Sparsik)
     new_data = Dict{Int, fmpq}()
 
     tmp_type = BigInt
-    if isa(ground(v), GaloisField)
+    if isa(base_ring(v), GaloisField)
         tmp_type = Int
     end
     ch = convert(tmp_type, characteristic(v.field))
@@ -406,7 +415,7 @@ end
 #-----------------------------------------------------------------------------
 
 function restrict(v::Sparsik, coords)
-    field = ground(v)
+    field = base_ring(v)
     nonzero = Int[]
     data = Dict{Int, elem_type(field)}()
 
@@ -423,7 +432,7 @@ end
 #-----------------------------------------------------------------------------
 
 function to_dense(A::Sparsik)
-    ans = fill(zero(ground(A)), size(A))
+    ans = fill(zero(base_ring(A)), size(A))
     for (i, x) in A
         ans[i] = x
     end

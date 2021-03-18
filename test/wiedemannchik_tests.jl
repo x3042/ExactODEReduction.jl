@@ -14,6 +14,8 @@ if !isdefined(Main, :testset)
     using TestSetExtensions
 end
 
+import Nemo: det
+
 #------------------------------------------------------------------------------
 
 @testset "W. square, det" begin
@@ -40,7 +42,7 @@ end
     for n in sizes
         A, b = 0, 0
         while true
-            A = random_sparsik((n, n), ZZ)
+            A = random_sparsik((n, n), ZZ, density=0.2)
             b = random_sparsik((n, ), ZZ)
 
             try
@@ -56,6 +58,11 @@ end
             break
         end
 
+        X = [convert(Int, x) for x in to_dense(A)]
+        if iszero(det(X))
+            error("W. did't notice singularity")
+        end
+
         @test apply_vector(A, y) == b
     end
 
@@ -65,5 +72,13 @@ end
     @test_throws SingularException square_nonsingular_randomized_wiedemann(A, b)
 
 end
+
+
+@testset "W. matrix minpolynomial" begin
+
+
+
+end
+
 
 @info "OK"

@@ -21,7 +21,7 @@ import Nemo: fmpz
 #------------------------------------------------------------------------------
 
 function find_basis_1_γβ(vectors)
-    domain = ground(first(vectors))
+    domain = base_ring(first(vectors))
     sz = size(first(vectors))
 
     # what if..
@@ -72,6 +72,8 @@ function find_basis_1_beta(vectors)
     end
 
     # apply again, but not no vectors would be discarded
+
+    # CONTROVERSIAL at the best
     apply_matrices_inplace!(alg, deepcopy(vectors), ω=1.0)
 
     push!(count_β_after, CNT)
@@ -91,7 +93,7 @@ function find_basis_2(vectors)
 
     # the size of the current square
     k = 1
-    field = ground(first_vector)
+    field = base_ring(first_vector)
 
     # indices of column pivots
     current_pivots = Int[ first_pivot ]
@@ -245,9 +247,6 @@ function find_basis(vectors; used_algorithm=find_basis_1)
     # used_algorithm is assumed not to throw normally
     # and to handle errors by thyself
 
-    # NEW LINE
-    #
-
     V = Subspacik(QQ)
     primes = BigInt[ 2^31 - 1 ]
     i = 0
@@ -256,33 +255,18 @@ function find_basis(vectors; used_algorithm=find_basis_1)
 
     while true
         prime = last(primes)
-        # GF can not be constructed from BigInt,
-        # yet BigInt -> fmpz -> GF works fine
         field = GF(fmpz(prime))
 
         @info "new modulo = $prime"
 
-        # reduction
         xs = [ modular_reduction(x, field)
                for x in vectors ]
-        # brrrr...
 
         start = time_ns()
         @time V = used_algorithm(xs)
         push!(time_β, timeit(start))
 
-        # THIS SHOULD BE HIDDEN INTO SUBSPACIK
-        # reconstruction
-        xs = [ rational_reconstruction(x)
-               for x in values(V.echelon_form) ]
-
-        # postcheck
-        # ---
-        # how can one say "причесать векторы" ?)
-        # Gleb: why would you want to do this anyway?
-        # Alex: ((
-
-        V = linear_span!(xs)
+        V = rational_reconstruction(V)
 
         if check_inclusion!(V, vectors)
             if check_invariance!(V, vectors)
@@ -297,7 +281,7 @@ function find_basis(vectors; used_algorithm=find_basis_1)
         push!(primes, nextprime(prime ^ 2 + 1))
 
         i += 1
-        i % 5 == 0 && error("something is wrong")
+        i % 10 == 0 && error("something is wrong")
     end
 
     @info "constructed a basis for algebra of dim $(dim(V))"
@@ -331,29 +315,31 @@ function owo()
 
 
         start = time_ns()
-        @time V = find_basis(deepcopy(As), used_algorithm=find_basis_1_γβ)
+        @time V = find_basis(deepcopy(As), used_algorithm=find_basis_1_beta)
         push!(times_γβ, timeit(start))
 
 
-
+        #=
         start = time_ns()
         @time V = find_basis(deepcopy(As), used_algorithm=find_basis_1_beta)
         push!(times_β, timeit(start))
-
+        =#
 
     end
 end
 
 # owo()
 
+
 A1 = from_dense([1 0 0 0; 1 0 0 0; 0 0 0 0; 0 0 0 0], QQ)
 A2 = from_dense([1 0 0 0; 0 1 0 0; 0 0 0 0; 0 0 0 0], QQ)
 A3 = from_dense([0 0 0 1; 0 0 1 0; 0 1 0 1; 0 1 1 0], QQ)
 
-A = find_basis([A1, A2, A3])
+
+# A = find_basis([A1, A2, A3],  used_algorithm=find_basis_1_γβ)
 
 
-# datas = load_COO_if(from_dim=40, to_dim=60)
+# datas = load_COO_if(from_dim=110, to_dim=140)
 # As = [map(matr -> from_COO(matr..., QQ), data[4]) for data in datas ]
 
 function test_γβ(idx)

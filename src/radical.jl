@@ -10,17 +10,20 @@ include("basis.jl")
 
 #------------------------------------------------------------------------------
 
-import Nemo: base_ring, terms, monomial, derivative, gens
+import Nemo: base_ring, terms, monomial, derivative, gens, kernel, MatrixSpace
 
 #------------------------------------------------------------------------------
 
+HIT = 0
+Algebra = 1
 
 function find_radical_1(vectors)
-    global A
-    algebra = A
-    As = basis(algebra)
-    F = ground(first(As))
-    n = dim(algebra)
+    global Algebra
+    Algebra = find_basis(deepcopy(vectors))
+
+    As = basis(Algebra)
+    F = base_ring(first(As))
+    n = dim(Algebra)
 
     # println("algebra = \n", algebra)
 
@@ -37,29 +40,54 @@ function find_radical_1(vectors)
                 if ! iszero(traces[min(i, j), max(i, j)])
     ]
 
-    AAAAAAA = from_COO(n, n, nnz_coords, F)
-
     ZZ = GF(2^31 - 1)
-
-    A = modular_reduction(AAAAAAA, ZZ)
+    A = from_COO(n, n, nnz_coords, F)
+    A = modular_reduction(A, ZZ)
 
     @info "$n×$n-dim algebra matrix of densitu $(density(A))"
     # println(AAAAAAA)
 
-    print(A)
-
     # wiedemannchik.jl
-    char_poly = randomized_char_polynomial(A)
-    println("m(AAAAAAA) = $(Int(iszero(evaluate(char_poly, A))))")
+    char_poly = minimal_polynomial(A, subspace_minpoly=__deterministic_min_poly)
+    @info "minimal poly of degree $(degree(char_poly))"
+    ok = iszero(evaluate(char_poly, A))
+    println("m(AAAAAAA) = $(ok)")
+    global HIT
+    HIT += ok
 
-    shifted_char_poly = shift_right_x(char_poly)
+    println("f = ", char_poly)
 
-    Image = evaluate(shifted_char_poly, A)
+    while iszero(coeff(char_poly, 0))
+        char_poly = shift_right_x(char_poly)
+    end
 
-    #
+    println("shifted f = ", char_poly)
 
-    # println(Image)
+    Image = evaluate(char_poly, A)
 
+    Image = rational_reconstruction(Image)
+
+    println(Image)
+    radical_basis = []
+    for i in [1, 3, 6, 7, 10]
+        vectors = []
+        for j in 1 : size(Image, 1)
+            if !iszero(Image[i, j])
+                push!(vectors, scale(As[j], Image[i, j]))
+            end
+        end
+        summator(x, y) = reduce(x, y, 1)
+        push!(radical_basis, to_dense(reduce(summator, vectors)))
+    end
+
+    stacked = vcat(radical_basis...)
+    println(stacked)
+    println(size(stacked))
+    Space = MatrixSpace(QQ, size(stacked)...)
+    mutual_kernel = kernel(Space(stacked))
+
+    println("kernel =",)
+    println(mutual_kernel)
 
 
 end
@@ -70,12 +98,13 @@ end
 
 
 function uwu()
-    for (i, (mfn, mdim, msz, mdata)) in enumerate(load_COO_if(from_dim=10, to_dim=20))
+    for (i, (mfn, mdim, msz, mdata)) in enumerate(load_COO_if(from_dim=8, to_dim=15))
 
         @info "$i-th model : $mfn of dim : $mdim"
-        #=if i in [2]
+
+        if i in [2, 29, 30]
             continue
-        end=#
+        end
 
         As = map(matr -> from_COO(matr..., QQ), mdata)
 
@@ -163,3 +192,6 @@ s = [f1, f2]
 
 Js = construct_jacobians(s)
 =#
+
+#  2-th model : BIOMD0000000050.json of dim : 14 !
+#  29-th model : MODEL1112150000.json of

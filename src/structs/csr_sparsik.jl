@@ -57,7 +57,7 @@ issquare(A::CSR_Sparsik) = A.n == A.m
 
 order(A::CSR_Sparsik) = A.n
 
-ground(v::CSR_Sparsik) = v.field
+base_ring(v::CSR_Sparsik) = v.field
 
 #------------------------------------------------------------------------------
 
@@ -101,7 +101,7 @@ end
 #------------------------------------------------------------------------------
 
 function __apply_vector_seq(A::CSR_Sparsik, x)
-    field = ground(A)
+    field = base_ring(A)
     nnz = Int[]
     data = Dict{Int, elem_type(field)}()
 
@@ -120,7 +120,7 @@ function __apply_vector_seq(A::CSR_Sparsik, x)
 end
 
 function __apply_vector_par(A::CSR_Sparsik, x)
-    field = ground(A)
+    field = base_ring(A)
     m, n = size(A)
     y = zeros(field, n)
 
@@ -137,7 +137,7 @@ end
 # ...
 # And that is not true
 function apply_vector(A::CSR_Sparsik, x; policy=seq)
-    field = ground(A)
+    field = base_ring(A)
     m, n = size(A)
     y = zeros(field, n)
 
@@ -153,7 +153,7 @@ end
 
 #------------------------------------------------------------------------------
 
-Base.iszero(A::CSR_Sparsik) = isempty(A.val)
+Base.iszero(A::CSR_Sparsik{T}) where {T} = isempty(A.val)
 
 
 function first_nonzero(A::CSR_Sparsik)
@@ -175,10 +175,10 @@ function Base.zero(A::CSR_Sparsik)
     row_ptr = OffsetArray(zeros(Int, size(A, 1) + 1), Origin(0))
     return CSR_Sparsik(
         size(A)...,
-        ground(A),
+        base_ring(A),
         row_ptr,
         ZeroBased(Int),
-        ZeroBased(elem_type(ground(A)))
+        ZeroBased(elem_type(base_ring(A)))
     )
 end
 
@@ -199,7 +199,7 @@ end
 #------------------------------------------------------------------------------
 
 function Base.reduce(A::CSR_Sparsik{T}, B::CSR_Sparsik{T}, c) where {T}
-    field = ground(A)
+    field = base_ring(A)
     m, n = size(A)
 
     val = ZeroBased(elem_type(field))
@@ -267,7 +267,7 @@ end
 #------------------------------------------------------------------------------
 
 function to_dense(A::CSR_Sparsik)
-    ans = zeros(ground(A), size(A)...)
+    ans = zeros(base_ring(A), size(A)...)
     for ridx in LinearIndices(A.row_ptr)[1:end]
         for i in A.row_ptr[ridx - 1] : A.row_ptr[ridx] - 1
             ans[ridx, A.col_idx[i] + 1] = A.val[i]

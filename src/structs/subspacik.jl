@@ -54,17 +54,17 @@ end
 
 # deepcopy redefinition in order to preserve the field
 function Base.deepcopy_internal(x::Subspacik{T}, stackdict::IdDict) where {T<:Field}
-    y = Subspacik(ground(x), Base.deepcopy_internal(x.echelon_form, stackdict))
+    y = Subspacik(base_ring(x), Base.deepcopy_internal(x.echelon_form, stackdict))
     stackdict[x] = y
     return y
 end
 
 #------------------------------------------------------------------------------
 
-# Ground field!
+# base_ring field!
 # Gleb: also suggest base_ring
 # Alex: to be changed soon..
-ground(v::Union{Subspacik, HashedSubspacik}) = v.field
+base_ring(v::Union{Subspacik, HashedSubspacik}) = v.field
 
 #------------------------------------------------------------------------------
 
@@ -99,10 +99,12 @@ end
 
 # O(kR)  if k = nnz(new_vector) and R = Σnnz(v) for v in echelon_form
 function eat_sparsik!(V::Subspacik, new_vector::AbstractSparseObject; ω=1.0)
+    # PRobably, we need eat_sparsik( ;verbose) which will return
+    # coordinates of new_vector if V basis in case of linear dependency
 
     # O(kr) if k = nnz(new_vector) and r = len(echelon_form)
     for (piv, vect) in V.echelon_form
-        if !iszero(new_vector[piv])
+        if haskey(new_vector, piv)
             reduce!(new_vector, vect, -new_vector[piv])
         end
     end
@@ -123,7 +125,7 @@ function eat_sparsik!(V::Subspacik, new_vector::AbstractSparseObject; ω=1.0)
 
     # O(kR)  if k = nnz(new_vector) and R = Σnnz(v) for v in echelon_form
     for (piv, vect) in V.echelon_form
-        if !iszero(vect[pivot])
+        if haskey(vect, pivot)
             reduce!(V.echelon_form[piv], new_vector, -vect[pivot])
         end
     end
@@ -137,7 +139,7 @@ end
 # returns a new Subspacik formed as a linear span
 # of the given vectors
 function linear_span!(vectors)
-    V = Subspacik(ground(first(vectors)))
+    V = Subspacik(base_ring(first(vectors)))
     for vect in vectors
         eat_sparsik!(V, vect)
     end
@@ -166,7 +168,7 @@ end
                  CNT += 1
 
                  i += 1
-                 i % 500 == 0 && print(".")
+                 # i % 500 == 0 && print(".")
 
                  if !iszero(product)
                      new_pivot = eat_sparsik!(V, product, ω=ω)
@@ -275,7 +277,7 @@ end
 # deepcopy redefinition in order to preserve the field
 function Base.deepcopy_internal(x::HashedSubspacik{T}, stackdict::IdDict) where {T<:Field}
     y = HashedSubspacik(
-                ground(x),
+                base_ring(x),
                 Base.deepcopy_internal(x.echelon_form, stackdict),
                 Base.deepcopy_internal(x.hash_vector, stackdict),
                 Base.deepcopy_internal(x.reduced_hash_vector, stackdict),
@@ -340,7 +342,7 @@ end
 #------------------------------------------------------------------------------
 
 function linear_span!(vectors, hash_vector)
-    V = HashedSubspacik(hash_vector, ground(first(vectors)))
+    V = HashedSubspacik(hash_vector, base_ring(first(vectors)))
     for vect in vectors
         eat_sparsik!(V, vect)
     end
@@ -349,34 +351,41 @@ end
 
 #------------------------------------------------------------------------------
 
-# returns a Subspacik object consisting of REF elements
+# returns a new Subspacik object consisting of REF elements
 # each reconstructed from V.field to QQ
 #
-# reconstructs inplace
-function rational_reconstruction!(V::Subspacik)
-    V.field = QQ
-    for piv in collect(keys(V.echelon_form))
-        V.echelon_form[piv] = rational_reconstruction(V.echelon_form[piv])
+# reconstructs *not* inplace
+function rational_reconstruction(V::Subspacik)
+    ans = Subspacik(QQ)
+    for piv in keys(V.echelon_form)
+        ans.echelon_form[piv] = rational_reconstruction(V.echelon_form[piv])
     end
-    return V
+    return ans
 end
 
-# returns a HashedSubspacik object consisting of REF elements
+# returns a new HashedSubspacik object consisting of REF elements
 # each reconstructed from V.field to QQ
 #
 # hash vectors and hashes are reconstructed too
 #
-# reconstructs inplace
-function rational_reconstruction!(V::HashedSubspacik)
-    V.field = QQ
-    for piv in collect(keys(V.echelon_form))
-        V.echelon_form[piv] = rational_reconstruction(V.echelon_form[piv])
+# reconstructs *not* inplace
+function rational_reconstruction(V::HashedSubspacik)
+    hash_vector = rational_reconstruction(V.hash_vector)
+    reduced_hash_vector = rational_reconstruction(V.reduced_hash_vector)
+    ans = HashedSubspacik(hash_vector, QQ)
+    ans.reduced_hash_vector = reduced_hash_vector
+    for piv in keys(V.echelon_form)
+        ans.echelon_form[piv] = rational_reconstruction(V.echelon_form[piv])
     end
-    V.reduced_hash_vector = rational_reconstruction(V.reduced_hash_vector)
-    V.hash_vector = rational_reconstruction(V.hash_vector)
-    V.hashes = Dict(
-        i => rational_reconstruction(x, characteristic(ground(V)))
+
+    tmp_type = BigInt
+    if isa(base_ring(V), GaloisField)
+        tmp_type = Int
+    end
+    ch = convert(tmp_type, characteristic(base_ring(V)))
+    ans.hashes = Dict(
+        i => rational_reconstruction(x, ch)
         for (i, x) in V.hashes
     )
-    return V
+    return ans
 end

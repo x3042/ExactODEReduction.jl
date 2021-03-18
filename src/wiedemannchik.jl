@@ -2,7 +2,7 @@
 
 include("../src/structs/dok_sparsik.jl")
 include("../src/structs/csr_sparsik.jl")
-
+include("../src/structs/subspacik.jl")
 
 #------------------------------------------------------------------------------
 
@@ -32,7 +32,7 @@ function evaluate(f::PolyElem, x₀)
 end
 
 # returns f(x₀) * b
-# expands the brackets into:
+# expanding the brackets into:
 #   f₀b + f₁x₀b + f₂x₀²b + ... + fₙx₀ⁿb
 # and using the Horner scheme
 function evaluate(f::PolyElem, x₀, b)
@@ -49,9 +49,6 @@ end
 
 #------------------------------------------------------------------------------
 
-# returns the thing named f⁻
-# Gleb: How about shift_right_x ?
-# Looks cool
 function shift_right_x(f::PolyElem)
     x = gen(parent(f))
     divexact(f - coeff(f, 0), x)
@@ -66,7 +63,7 @@ function square_nonsingular_randomized_wiedemann(A::AbstractSparseMatrix, b::Abs
     # in https://doi.org/10.1109/TIT.1986.1057137
     # the notation and step numbering are taken from there
 
-    field = ground(A)
+    field = base_ring(A)
     S, x = PolynomialRing(field, "x")
     n = order(A)
 
@@ -84,16 +81,6 @@ function square_nonsingular_randomized_wiedemann(A::AbstractSparseMatrix, b::Abs
     # 2
     while !iszero(b)
         # 3
-        # Gleb: my understanding is that the randomization in the algorithm
-        # affects only the runtime but the result will be always correct.
-        # Therefore, we can afford different choice strategies for u.
-        # One is outline in Section VI of the paper and suggests to generate a
-        # random dense vector, then the average number of the iteration will be small.
-        # We can start with this and then experiment what happens if we have u sparser
-
-        # Alex: absolutely dense random vector works fine.
-        # While we decrease density runtime is mostly the same
-        # but it starts to degenerate crucially in some cases
         u = random_sparsik(n, field, density=1)
 
         # 4
@@ -153,7 +140,7 @@ function square_nonsingular_deterministic_wiedemann(A::AbstractSparseMatrix, b::
     # in https://doi.org/10.1109/TIT.1986.1057137
     # the notation and step numbering are taken from there
 
-    field = ground(A)
+    field = base_ring(A)
     S, x = PolynomialRing(field, "x")
     n = order(A)
 
@@ -189,10 +176,9 @@ function square_nonsingular_deterministic_wiedemann(A::AbstractSparseMatrix, b::
 
         # 8
         k += 1
-
     end
 
-    if iszero(coeff(g, 0))
+    if iszero(coeff(g, 0)) || isone(g)
         throw(SingularException(0))
     end
 
@@ -210,7 +196,15 @@ end
 
 #------------------------------------------------------------------------------
 
-function wiedemann_solve(A, b; proved=true)
+# Returns a solution x to linear system Ax = b
+# under an assumtion of A being square and nonsingular
+# using Wiedemann system-solving algorithm as a base
+# Throws if system is singular
+function wiedemann_solve(
+        A::AbstractSparseMatrix,
+        b::AbstractSparseVector;
+        proved=true)
+
     if issquare(A)
         if proved
             return square_nonsingular_deterministic_wiedemann(A, b)
@@ -222,114 +216,167 @@ function wiedemann_solve(A, b; proved=true)
     error("nonsquare matrices are not supported")
 end
 
+
+# Returns minimal annihilating polynomial of matrix A, that is,
+# f ∈ F[x], such that
+#   f(A)  = 0
+#   f     = argmin(degree(f))
+#
+# The algorithm is randomized if subspace_minpoly is of W. family
+# We should probably do some probabilistic analysis
+# (or peek it at the W. paper)
+function minimal_polynomial(
+        A::AbstractSparseMatrix;
+        subspace_minpoly=__deterministic_wiedemann_minpoly)
+
+    S, _ = PolynomialRing(base_ring(A), "x")
+    f = S(1)
+
+    iterations = 10
+    for _ in 1 : iterations
+        f = lcm(f, subspace_minpoly(A, S))
+    end
+
+    return f
+end
+
 #------------------------------------------------------------------------------
 
-# hmm!
-# HMMMMM
-function deterministic_char_polynomial(A::AbstractSparseMatrix)
-    field = ground(A)
-    S, x = PolynomialRing(field, "x")
+# Deterministic algorithm
+# for minimal annihilating polynomial of complex matrix A
+#
+# Sadly, the source thyself does not contain any references
+# about this Algorithm complexity analysis
+#
+#   O(nL(n))   ( O(n^4) basically )
+# where n is the order of matrix
+# and L(n) is the cost of multiplying two matrices of n×n
+#
+# Throws if the given matrix is zero
+function __deterministic_simple_minpoly(A, PolySpace)
+    # the function implements the algorithm presented in paper
+    #   An algorithm for the calculation of the minimal polynomial,
+    #   S. BIAŁAS and M. BIAŁAS
+    # the paper is available at
+    #   http://bulletin.pan.pl/(56-4)391.pdf
+    # и должен ли прочесть я эти сотни книг //
+
+    if iszero(A)
+        throw(DomainError(A, "It is really zero"))
+    end
+
+    field = base_ring(A)
     n = order(A)
 
-    b = random_sparsik(n, field, density=1.)
+    columns = [ one(A) ]
+    for i in 1 : n
+        push!(columns, A * last(columns))
+    end
 
-    # 1
-    # O(nω) if ω is the number of nonzeroes in A
+    columns = Dict(i => vec(x) for (i, x) in enumerate(columns))
+
+    B = from_rows(n+1, n^2, field, Array(1:n+1), columns)
+    B = transpose!(B)
+
+    V = linear_span!(collect(values(B.rows)))
+
+    rows = Dict(i => x for (i, x) in enumerate(basis(V)))
+    C = from_rows(length(rows), n + 1, field, Array(1:length(rows)), rows)
+    C = transpose!(C)
+
+    V = Subspacik(field)
+    power = 0
+    for i in 1:size(C, 1)
+        eatcode = eat_sparsik!(V, deepcopy(C.rows[i]))
+        if !haskey(C.rows, i) || eatcode == reduced
+            power = i
+            break
+        end
+    end
+
+    x = gen(PolySpace)
+    f = x^(power-1)
+    last_row = haskey(C.rows, power) ? C.rows[power] : zero_sparsik(n + 1, field)
+    for (piv, val) in last_row
+        if haskey(V.echelon_form, piv)
+            f -= val * x^(piv-1)
+        end
+    end
+
+    return f
+end
+
+#------------------------------------------------------------------------------
+
+# Single deterministic iteration of minimal_polynomial algorithm
+# Returns annihilating polynomial for {Aⁱb} for some random vector b
+function __deterministic_wiedemann_minpoly(A::AbstractSparseMatrix, PolySpace)
+    field = base_ring(A)
+    n = order(A)
+    b = random_sparsik(n, field, density=1.0)
+
     subspace = [ b ]
     for i in 1 : 2n - 1
         push!(subspace, apply_vector(A, last(subspace)))
     end
 
-    # 2
     k = 0
-    g = one(S)
-
-
+    g = one(PolySpace)
     while k < n && degree(g) < n
-        # 3
         u = unit_sparsik(n, k + 1, field)
 
-        # 4
         # O(n)
         seq = [inner(x, u) for x in subspace]
 
-        # 5, O(nlogn)
+        # O(nlogn)
         d = degree(g)
-        h = apply_polynomial(S(seq), g)
+        h = apply_polynomial(PolySpace(seq), g)
 
-        # 6, O(n^2)
-        f = minimal_polynomial(h, x^(2n - d))
+        # O(n^2)
+        f = minimal_polynomial(h, gen(PolySpace)^(2n - d))
 
-        # 7, O(nlogn)
+        # O(nlogn)
         g *= f
-
-        # 8
         k += 1
-
     end
 
     return g
 end
 
 
-# hmm!
-# HMMMMM
-function randomized_char_polynomial(A::AbstractSparseMatrix)
-    field = ground(A)
-    S, x = PolynomialRing(field, "x")
+# Single randomized iteration of minimal_polynomial algorithm
+# Returns annihilating polynomial for {Aⁱb} for some random vector b
+function __randomized_wiedemann_minpoly(A::AbstractSparseMatrix, PolySpace)
+    field = base_ring(A)
     n = order(A)
-
-    # 1
-    b = random_sparsik(n, field, density=1)
-
-    b₀ = b
-    y = zero(b)
-    k = 0
-    d = 0
-
-    X = S(1)
+    b = random_sparsik(n, field, density=1.0)
+    g = PolySpace(1)
 
     subspace = [ b ]
     for i in 1 : 2n - 1
         push!(subspace, apply_vector(A, last(subspace)))
     end
 
-    # 2
-    while !iszero(b)
-        u = random_sparsik(n, field, density=1.)
+    while degree(g) < n
+        u = random_sparsik(n, field, density=1)
 
-        # 4
         seq = elem_type(field)[]
-        for i in 1 : 2 * (n - d)
+        for i in 1 : 2 * (n - degree(g))
             push!(seq, inner(u, subspace[i]))
         end
 
-        # 5
-        f = minimal_polynomial(S(seq), x^(2 * (n - d)))
-
-        if coeff(f, 0) == 0
-            return f
+        try
+            f = minimal_polynomial(
+                PolySpace(seq),
+                gen(PolySpace)^(2 * (n - degree(g)))
+            )
+        catch SingularException
+            # singular sequence is expected here, so do nothing
+            return g
         end
-        X *= f
 
-        f = f * inv(coeff(f, 0))
-
-        # 6
-        f⁻ = shift_right_x(f)
-
-        accum = zero_sparsik(n, field)
-        for j in 0 : degree(f⁻)
-            reduce!(accum, subspace[j + 1], coeff(f⁻, j))
-        end
-        reduce!(y, accum, 1)
-        b = b₀ + apply_vector(A, y)
-        d += degree(f)
-        k += 1
-
-        if d == n
-            break
-        end
+        g *= f
     end
 
-    return X
+    return g
 end

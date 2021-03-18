@@ -77,12 +77,6 @@ import Nemo: QQ, GF, FlintRationalField, characteristic
 
 end
 
-
-# it is important for Sparik's elements denominators not to
-# vanish under the given reduction Field
-#
-# hence, in basis computations we can probably multiply the whole vector
-# by something huge to make denominators smaller
 @testset "Sparsik - modular" begin
 
     R7 = GF(7)
@@ -108,5 +102,23 @@ end
     @test all(i -> iszero(R37(diff_rationals(r[i], v[i]))), 1:dim(v))
 
 end
+
+@testset "Sparsik - Advanced functionality" begin
+
+    # to_dense tests
+    sz = [1, 2, 3, 5]
+    densities = [0.5, 1.0]
+    ZZ = GF(2^31 - 1)
+
+    # to_dense tests
+    for n in sz
+        for λ in densities
+            v = random_sparsik(n, ZZ, density=λ)
+            @test v == from_dense(to_dense(v), ZZ)
+        end
+    end
+
+end
+
 
 @info "OK"

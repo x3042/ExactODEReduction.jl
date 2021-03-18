@@ -21,7 +21,7 @@ end
 # The latter is assumed to be correct
 #
 # Yet some tests are hardcoded just in case
-function test_the_algorithm(algorithm)
+function test_find_basis(algorithm)
 
     # nilpotent space
     set0 = [
@@ -106,7 +106,7 @@ end
 
 @testset "basis, just in case" begin
     # This must always pass
-    test_the_algorithm(find_basis_1)
+    test_find_basis(find_basis_1)
 
 end
 
@@ -115,19 +115,19 @@ end
     # the algorithm is probabilistic, we should probably apply_vectors once again
     # at the end to obtain the answer, just as in find_basis_1_beta
 
-    # test_the_algorithm(find_basis_2)
+    # test_find_basis(find_basis_2)
 
 end
 
 @testset "basis, Beta algorithm" begin
 
-    test_the_algorithm(find_basis_1_beta)
+    test_find_basis(find_basis_1_beta)
 
 end
 
 @testset "basis, Gamma-Beta algorithm" begin
 
-    # test_the_algorithm(find_basis_1_γβ)
+    # test_find_basis(find_basis_1_γβ)
 
 end
 

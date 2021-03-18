@@ -58,12 +58,16 @@ end
 
 #------------------------------------------------------------------------------
 
-function modular_reduction(x::R, field) where {R<:FracElem}
+function modular_reduction(x::FracElem, field)
     n, d = field(numerator(x)), field(denominator(x))
     if iszero(d)
         throw(DomainError(a//m, "rational reconstruction of $a (mod $m) does not exist"))
     end
     n // d
+end
+
+function modular_reduction(x::gfp_fmpz_elem, field)
+    return field(convert(BigInt, x))
 end
 
 #------------------------------------------------------------------------------
@@ -128,7 +132,7 @@ end
 # NOT GUARANTEED FOR RETURNED VECTOR TO BE ORTHOGONAL
 function find_orthogonal!(vectors::AbstractDict)
     first_vector = first(values(vectors))
-    field = ground(first_vector)
+    field = base_ring(first_vector)
     n = dim(first_vector)
 
     i = 1

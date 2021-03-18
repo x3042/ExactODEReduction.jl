@@ -2,7 +2,7 @@
 using Test
 using TestSetExtensions
 
-
+using SparseAlgebra
 
 @info "Testing started"
 

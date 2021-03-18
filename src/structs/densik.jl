@@ -26,7 +26,7 @@ end
 density(v::Densik) = error("O(n)")
 nnz(v::Densik) = error("O(n)")
 
-ground(v::Densik) = v.field
+base_ring(v::Densik) = v.field
 
 #------------------------------------------------------------------------------
 
@@ -71,7 +71,7 @@ end
 # if vector `u` has k nonzeroes
 # O(k)
 function inner(v::Densik{T}, u) where {T}
-    ans = zero(ground(v))
+    ans = zero(base_ring(v))
 
     for (idx, val) in u
         ans += val * v[idx]
@@ -92,7 +92,7 @@ Base.empty!(v::Densik) = error("O(n)")
 #------------------------------------------------------------------------------
 
 Base.zero(v::Densik) = error("O(n)")
-Base.iszero(v::Densik) = error("O(n)")
+Base.iszero(v::Densik{T}) where {T} = error("O(n)")
 
 Base.get(v::Densik, i::Int) = v.data[i]
 Base.getindex(v::Densik, i::Int) = v.data[i]
@@ -130,7 +130,7 @@ end
 
 # -----------------------------------------------------------------------------
 
-Base.valtype(v::Densik) = elem_type(ground(v))
+Base.valtype(v::Densik) = elem_type(base_ring(v))
 Base.eltype(v::Densik) = (Int, valtype(v))
 
 #-----------------------------------------------------------------------------
@@ -162,7 +162,7 @@ function rational_reconstruction(v::Densik)
     ans = Densik(zeros(dim(v)), QQ)
 
     tmp_type = BigInt
-    if isa(ground(v), GaloisField)
+    if isa(base_ring(v), GaloisField)
         tmp_type = Int
     end
     ch = convert(tmp_type, characteristic(v.field))
@@ -205,4 +205,25 @@ end
 function reduce!(v::Densik{T}, idx::Int, c) where {T}
     v[idx] += c
     return v
+end
+
+#-----------------------------------------------------------------------------
+
+# returns a new Densik object consisting of elements
+# from the `v` each reconstructed from v.field to QQ
+#
+# O(n)
+function rational_reconstruction(v::Densik)
+    ans = Densik(QQ, zeros(QQ, size(v)...))
+    tmp_type = BigInt
+    if isa(base_ring(v), GaloisField)
+        tmp_type = Int
+    end
+    ch = convert(tmp_type, characteristic(base_ring(v)))
+
+    ans.data = [
+        rational_reconstruction(convert(tmp_type, x), ch)
+        for x in v.data
+    ]
+    return ans
 end

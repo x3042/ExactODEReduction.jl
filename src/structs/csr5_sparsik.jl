@@ -77,7 +77,7 @@ issquare(A::CSR5_Sparsik) = A.n == A.m
 
 order(A::CSR5_Sparsik) = A.n
 
-ground(v::CSR5_Sparsik) = v.field
+base_ring(v::CSR5_Sparsik) = v.field
 
 #------------------------------------------------------------------------------
 
@@ -99,7 +99,7 @@ norm(x::Int) = (x == typemax(x) ? 0 : x)
 function CSR_to_CSR5(A::CSR_Sparsik)
 
     m, n = size(A)
-    field = ground(A)
+    field = base_ring(A)
     row_ptr = OffsetVector(A.row_ptr, Origin(0))
     col_idx = OffsetVector(A.col_idx, Origin(0))
     val = OffsetVector(A.val, Origin(0))
@@ -187,7 +187,7 @@ end
 function apply_vector(A::CSR5_Sparsik, x)
     m, n = size(A)
     ω, σ = A.ω, A.σ
-    field = ground(A)
+    field = base_ring(A)
 
     val = A.val
     col_idx = A.col_idx

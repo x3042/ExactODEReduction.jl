@@ -13,7 +13,8 @@ if !isdefined(Main, :testset)
     using Test
     using TestSetExtensions
 end
-import Nemo: QQ, GF, FlintRationalField, characteristic
+
+import Nemo: QQ, GF, FlintRationalField, characteristic, MatrixSpace
 
 #------------------------------------------------------------------------------
 
@@ -98,6 +99,51 @@ end
     A = from_dense([1 2 3; 4 5 6; 7 8 9;], QQ)
     v = from_dense([1, 2, 3], QQ)
     @test apply_vector(A, v) == from_dense([14, 32, 50], QQ)
+
+end
+
+@testset "DOK_Sparsik - Advanced functionality" begin
+
+    sz = [1, 2, 5, 10]
+    densities = [0.2, 0.5, 1.0]
+    ZZ = GF(2^31 - 1)
+
+    # to_dense tests
+    for n in sz
+        for λ in densities
+            A = random_sparsik((n, n), ZZ, density=λ)
+            @test A == from_dense(to_dense(A), ZZ)
+        end
+    end
+
+    # trace tests
+    for n in sz
+        for λ in densities
+            A = random_sparsik((n, n), ZZ, density=λ)
+            B = to_dense(A)
+            @test tr(A) == sum(B[i, i] for i in 1:n)
+        end
+    end
+
+    # transpose tests
+    for n in sz
+        for λ in densities
+            A = random_sparsik((n, n), ZZ, density=λ)
+            empty!(A.cols); empty!(A.nnz_cols)
+            B = transpose!(deepcopy(A))
+            empty!(B.cols); empty!(B.nnz_cols)
+            @test A == transpose!(B)
+        end
+    end
+
+    # vec tests
+    for n in sz
+        for λ in densities
+            A = random_sparsik((n, n), ZZ, density=λ)
+            v = vec(A)
+            @test v == from_dense(reshape(to_dense(transpose!(A)), n^2), ZZ)
+        end
+    end
 
 end
 

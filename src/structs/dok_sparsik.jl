@@ -16,6 +16,7 @@ import DataStructures: BinaryMinHeap
 import AbstractAlgebra: elem_type, Field, FieldElem, FracField,
                         characteristic
 import Distributions: Bernoulli
+import Nemo
 
 #------------------------------------------------------------------------------
 
@@ -36,7 +37,7 @@ end
 
 #------------------------------------------------------------------------------
 
-# Ground field!
+# base_ring field!
 # Gleb: to be coherent with the AbstractAlgebra naming, I would suggest call this base_ring
 # E.g.:
 # > using Nemo
@@ -44,7 +45,7 @@ end
 # > M = one(S)
 # > base_ring(M)
 # prints rational fiels
-ground(v::DOK_Sparsik) = v.field
+base_ring(v::DOK_Sparsik) = v.field
 
 #------------------------------------------------------------------------------
 
@@ -118,38 +119,6 @@ end
 # O(k) where k is the number of nonzeroes in `A`
 function density(A::DOK_Sparsik)
     return length(A) / dim(A)
-end
-
-#------------------------------------------------------------------------------
-
-# returns the ith column of `A` or `zero(Sparsik)` if not present
-# note that NO data validity checks are implied
-# O(1)
-function get_col(A::DOK_Sparsik, i)
-    return get(A.cols, i, zero_sparsik(size(A, 1), A.field))
-end
-
-# returns the ith row of `A` or `zero(Sparsik)` if not present
-# O(1)
-function get_row(A::DOK_Sparsik, i)
-    return get(A.rows, i, zero_sparsik(size(A, 2), A.field))
-end
-
-#------------------------------------------------------------------------------
-
-# returns the list of nonzero columns of `A`
-# essentially `get_nnz_cols(A) == sort(keys(A.cols))`
-# note that NO data validity checks are implied
-# O(1)
-function get_nnz_cols(A::DOK_Sparsik)
-    return A.nnz_cols
-end
-
-# returns the list of nonzero rows of `A`
-# essentially `get_nnz_rows(A) == sort(keys(A.rows))`
-# O(1)
-function get_nnz_rows(A::DOK_Sparsik)
-    return A.nnz_rows
 end
 
 #------------------------------------------------------------------------------
@@ -328,15 +297,15 @@ end
 # let k = length(A), r = length(B)
 # O(k + r)
 function reduce!(A::DOK_Sparsik{T}, B::DOK_Sparsik{T}, c) where {T}
-    FF = ground(A)
+    FF = base_ring(A)
     nnz_rows = Int[]
     # equality of field types ensures that
     # valtype(A) == valtype(B)
     rows = Dict{Int, valtype(A)}()
 
     i, j = 1, 1
-    A_nnz_rows = deepcopy(get_nnz_rows(A))
-    B_nnz_rows = get_nnz_rows(B)
+    A_nnz_rows = deepcopy(A.nnz_rows)
+    B_nnz_rows = deepcopy(B.nnz_rows)
     empty!(A.nnz_rows)
 
     while i <= length(A_nnz_rows) || j <= length(B_nnz_rows)
@@ -399,12 +368,18 @@ function Base.prod(A::DOK_Sparsik{T}, B::DOK_Sparsik{T}) where {T}
         reconstruct!(B)
     end
 
-    FF = ground(A)
+    FF = base_ring(A)
 
     nnz_rows = Int[]
+
+    # we can create it only when needed
+    # TODO: fix
     rows = Dict{Int, Sparsik{T}}()
 
     for i in A.nnz_rows
+
+        # we can create it only when needed
+        # TODO: fix
         row_vals = Dict{Int, valtype(A)}()
         row_indices = Int[]
 
@@ -423,6 +398,8 @@ function Base.prod(A::DOK_Sparsik{T}, B::DOK_Sparsik{T}) where {T}
         end
     end
 
+    # we can return 0 instead of instantiating new object
+    # as long as this method is not a part of interface
     return from_rows(
         size(A, 1), size(B, 2), A.field,
         nnz_rows, rows
@@ -440,7 +417,7 @@ end
 # O(k)
 function apply_vector(A::DOK_Sparsik, v::Sparsik; policy=seq)
     nonzero = Int[]
-    field = ground(A)
+    field = base_ring(A)
     data = Dict{Int, elem_type(field)}()
 
     if isa(policy, SequencedPolicy)
@@ -501,7 +478,7 @@ function scale!(A::DOK_Sparsik, c)
         return empty!(A)
     end
 
-    for i in get_nnz_rows(A)
+    for i in A.nnz_rows
         scale!(A.rows[i], c)
     end
 
@@ -528,6 +505,14 @@ function Base.get(A::DOK_Sparsik, i::Int, j::Int)
         return zero(A.field)
     end
     return A.rows[i][j]
+end
+
+function Base.haskey(A::DOK_Sparsik, i::Int, j::Int)
+    return haskey(A.rows, i) && haskey(A.rows[i].data, j)
+end
+
+function Base.haskey(A::DOK_Sparsik, i::Int)
+    return haskey(A, to_cartesian(A, i)...)
 end
 
 #------------------------------------------------------------------------------
@@ -559,7 +544,7 @@ zero_sparsik(sz::Tuple{Int, Int}, field) = zero_sparsik(sz..., field)
 # returns zero matrix of the dimensions of `A`
 Base.zero(A::DOK_Sparsik) = zero_sparsik(size(A)..., A.field)
 
-Base.iszero(A::DOK_Sparsik) = length(A.nnz_rows) == 0
+Base.iszero(A::DOK_Sparsik{T}) where {T} = length(A.nnz_rows) == 0
 
 #------------------------------------------------------------------------------
 
@@ -736,7 +721,7 @@ inner(c::FieldElem, A::DOK_Sparsik{T}) where {T} = inner(A, c)
 # returns the Id matrix
 # this one can be pretty slow
 function Base.one(A::DOK_Sparsik{T}) where {T}
-    field = ground(A)
+    field = base_ring(A)
     from_rows(
         size(A)...,
         field,
@@ -768,6 +753,25 @@ end
 
 #-----------------------------------------------------------------------------
 
+# vectorizes the matrix
+# O(k) if k is nnz count
+function Base.vec(A::DOK_Sparsik)
+    m, n = size(A)
+    field = base_ring(A)
+    nonzero = Int[]
+    data = Dict{Int, elem_type(field)}()
+    for idx in A.nnz_rows
+        for (i, x) in A.rows[idx]
+            data[i + (idx - 1) * n] = x
+            push!(nonzero, i + (idx - 1) * n)
+        end
+    end
+
+    return Sparsik(m*n, field, nonzero, data)
+end
+
+#-----------------------------------------------------------------------------
+
 # restricts the given DOK_Sparsik object to the given `coords`
 # if the sparsik is treated as a vector
 # `coords` - a collection-like object of Ints
@@ -775,7 +779,7 @@ end
 # O(length(coords))
 function restrict(A::DOK_Sparsik, coords)
     nonzero = Int[]
-    field = ground(A)
+    field = base_ring(A)
     data = Dict{Int, elem_type(field)}()
     for (i, idx) in enumerate(coords)
         if !iszero(A[idx])
@@ -791,7 +795,7 @@ end
 # O(length(coords))
 function restrict(A::DOK_Sparsik, coords, first_value)
     nonzero = Int[]
-    field = ground(A)
+    field = base_ring(A)
     data = Dict{Int, elem_type(field)}()
 
     if ! iszero(first_value)
@@ -814,7 +818,7 @@ end
 # O(R)
 # where R is the reconstruction cost
 function transpose!(A::DOK_Sparsik)
-    reconstruct_2!(A)
+    reconstruct!(A)
     A.m, A.n = A.n, A.m
     A.nnz_rows, A.nnz_cols = A.nnz_cols, A.nnz_rows
     A.rows, A.cols = A.cols, A.rows
@@ -824,9 +828,9 @@ end
 # -----------------------------------------------------------------------------
 
 function to_dense(A::DOK_Sparsik)
-    ans = fill(zero(ground(A)), size(A))
+    ans = fill(zero(base_ring(A)), size(A))
     for (i, x) in A
-        ans[i] = x
+        ans[to_cartesian(A, i)...] = x
     end
     return ans
 end
@@ -849,7 +853,7 @@ end
 
 function tr(A::DOK_Sparsik)
     if iszero(A)
-        return zero(ground(A))
+        return zero(base_ring(A))
     end
     sum(A[i, i] for i in A.nnz_rows)
 end
