@@ -89,7 +89,6 @@ end
 
 @enum EatCode begin
     reduced = -1
-    # Gleb: I would call discarded skipped
     skipped = -2
 end
 

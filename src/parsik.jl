@@ -228,6 +228,7 @@ function load_ODEs(filename; pathabs=false)
 
     # symbol :x to x from QQ[x]
     mapping = Dict{Symbol, fmpq_mpoly}(
+        # Gleb: Meta.parse is a bit overshoot here, you can do Symbol(x)
         Meta.parse(x) => gen(S, i)
         for (i, x) in enumerate(strings)
     )
