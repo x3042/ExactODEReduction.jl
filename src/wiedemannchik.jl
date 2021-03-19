@@ -217,7 +217,7 @@ function wiedemann_solve(
 end
 
 
-# Returns minimal annihilating polynomial of matrix A, that is,
+# Returns the minimal annihilating polynomial of matrix A, that is,
 # f ∈ F[x], such that
 #   f(A)  = 0
 #   f     = argmin(degree(f))
@@ -253,6 +253,8 @@ end
 # and L(n) is the cost of multiplying two matrices of n×n
 #
 # Throws if the given matrix is zero
+#
+# Gleb: Who is polyspace? A univariate polynomial ring to put the polynomial to?
 function __deterministic_simple_minpoly(A, PolySpace)
     # the function implements the algorithm presented in paper
     #   An algorithm for the calculation of the minimal polynomial,
@@ -268,6 +270,7 @@ function __deterministic_simple_minpoly(A, PolySpace)
     field = base_ring(A)
     n = order(A)
 
+    # Computing the linear span of the powers of A
     columns = [ one(A) ]
     for i in 1 : n
         push!(columns, A * last(columns))
@@ -284,6 +287,7 @@ function __deterministic_simple_minpoly(A, PolySpace)
     C = from_rows(length(rows), n + 1, field, Array(1:length(rows)), rows)
     C = transpose!(C)
 
+    # Computing the degree of the minimal polynomial
     V = Subspacik(field)
     power = 0
     for i in 1:size(C, 1)
@@ -294,6 +298,7 @@ function __deterministic_simple_minpoly(A, PolySpace)
         end
     end
 
+    # Computing the minimal polynomial
     x = gen(PolySpace)
     f = x^(power-1)
     last_row = haskey(C.rows, power) ? C.rows[power] : zero_sparsik(n + 1, field)

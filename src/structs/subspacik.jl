@@ -62,8 +62,6 @@ end
 #------------------------------------------------------------------------------
 
 # base_ring field!
-# Gleb: also suggest base_ring
-# Alex: to be changed soon..
 base_ring(v::Union{Subspacik, HashedSubspacik}) = v.field
 
 #------------------------------------------------------------------------------

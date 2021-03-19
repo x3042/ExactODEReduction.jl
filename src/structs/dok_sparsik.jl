@@ -37,14 +37,6 @@ end
 
 #------------------------------------------------------------------------------
 
-# base_ring field!
-# Gleb: to be coherent with the AbstractAlgebra naming, I would suggest call this base_ring
-# E.g.:
-# > using Nemo
-# > S = MatrixSpace(QQ, 5, 5)
-# > M = one(S)
-# > base_ring(M)
-# prints rational fiels
 base_ring(v::DOK_Sparsik) = v.field
 
 #------------------------------------------------------------------------------

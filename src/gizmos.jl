@@ -114,10 +114,6 @@ end
 
 #------------------------------------------------------------------------------
 
-# Gleb: I think it would be more natural to place this function
-# to wiedemannchik.jl
-# Alex: We want wiedemannchik.jl not to contain any derived functions
-
 # Returns such vector, that it is orthogonal to the given vector set
 # The given `vectors` set must be linearly independent
 # and for any vect from `vectors` the following must hold
@@ -142,20 +138,6 @@ function find_orthogonal!(vectors::AbstractDict)
 
     # some complexity estimations should be done
     while ! found
-        # We need a strategy for choosing a random vector
-        # probably, parameters like density or components distribution
-        # of the vector could be adjusted
-        # Gleb: an idea too funny to be true:
-        #       let the hash coordinate be the first one;
-        #       then I think we can guarantee that the vector
-        #       1, 0, 0, ...
-        #       is *not* in the linear span of others so we can take it
-        #       instead of a random one.
-        # Alex: it works
-        #
-
-        # u = random_sparsik(n, field, density=0.5)
-
         # taking the i-th unit vector
         u = unit_sparsik(n, i, field)
 
