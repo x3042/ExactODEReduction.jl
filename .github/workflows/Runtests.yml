@@ -18,3 +18,7 @@ jobs:
           && pip3 install sympy
       - uses: julia-actions/julia-buildpkg@latest
       - uses: julia-actions/julia-runtest@latest
+      - uses: codecov/codecov-action@v1
+        with:
+          file: lcov.info
+          fail_ci_if_error: true
