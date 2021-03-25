@@ -1,5 +1,5 @@
 include("basis.jl")
-include("subspacik.jl")
+include("structs/subspacik.jl")
 
 #------------------------------------------------------------------------------
 
@@ -7,15 +7,11 @@ import Nemo: base_ring, terms, monomial, derivative, gens, kernel, MatrixSpace
 
 #------------------------------------------------------------------------------
 
-# Gleb: global variables?
-# And who is HIT?
-HIT = 0
-Algebra = 1
-
 function find_radical_1(Algebra::Subspacik)
     As = basis(Algebra)
     # Gleb: wouldn't just the `field` attribut of the Subspacik work for this?
-    F = base_ring(first(As))
+    #Liza: fixed
+    F = base_ring(Algebra)
     n = dim(Algebra)
 
     traces = Dict{Tuple{Int, Int}, elem_type(F)}(
@@ -36,25 +32,19 @@ function find_radical_1(Algebra::Subspacik)
     A = modular_reduction(A, ZZ)
 
     # Gleb: how do you type all these cool characters? I want also...
+    #'\' + "Sigma" + Tab = Σ
     @info "$n×$n-dim algebra matrix of density $(density(A))"
 
     # wiedemannchik.jl
     char_poly = minimal_polynomial(A, subspace_minpoly=__deterministic_simple_minpoly)
     @info "minimal poly of degree $(degree(char_poly))"
-    ok = iszero(evaluate(char_poly, A))
-    # Gleb: who is AAAAAAA?
-    println("m(AAAAAAA) = $(ok)")
-    global HIT
-    HIT += ok
-
-    println("f = ", char_poly)
 
     radical_basis = []
-    
+
     if (!iszero(coeff(char_poly, 0)))
         return radical_basis
     end
-        
+
     while iszero(coeff(char_poly, 0)) #?
         char_poly = shift_right_x(char_poly)
     end
@@ -65,17 +55,13 @@ function find_radical_1(Algebra::Subspacik)
 
     Image = rational_reconstruction(Image)
 
-    println(Image)
+    transpose!(Image)
 
-    transpose!(Image)
-    
-    basis_cols = find_basis(Image.rows)
-    # Gleb: why transpose here?
-    transpose!(Image)
-    # Gleb: who is V??
-    for (piv, vect) in V.echelon_form
+    basis_cols = linear_span!(collect(values(Image.rows)))
+
+    for (piv, vect) in basis_cols.echelon_form
         vectors = []
-        for j in 1 : size(Image, 1)
+        for j in 1 : size(Image, 2)
             if !iszero(vect[j])
                 push!(vectors, scale(As[j], vect[j]))
             end
@@ -90,4 +76,9 @@ end
 
 #------------------------------------------------------------------------------
 
-
+function general_kernel(rad_basis)
+    stacked = vcat(rad_basis...)
+    println(size(stacked))
+    Space = MatrixSpace(QQ, size(stacked)...)
+    return Array(kernel(Space(stacked))[2])
+end
