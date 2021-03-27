@@ -9,8 +9,6 @@ import Nemo: base_ring, terms, monomial, derivative, gens, kernel, MatrixSpace
 
 function find_radical_1(Algebra::Subspacik)
     As = basis(Algebra)
-    # Gleb: wouldn't just the `field` attribut of the Subspacik work for this?
-    #Liza: fixed
     F = base_ring(Algebra)
     n = dim(Algebra)
 
@@ -33,6 +31,7 @@ function find_radical_1(Algebra::Subspacik)
 
     # Gleb: how do you type all these cool characters? I want also...
     #'\' + "Sigma" + Tab = Σ
+    # Σπαξιβo!
     @info "$n×$n-dim algebra matrix of density $(density(A))"
 
     # wiedemannchik.jl
