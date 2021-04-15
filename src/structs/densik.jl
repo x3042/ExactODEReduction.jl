@@ -26,7 +26,7 @@ end
 density(v::Densik) = error("O(n)")
 nnz(v::Densik) = error("O(n)")
 
-base_ring(v::Densik) = v.field
+Nemo.base_ring(v::Densik) = v.field
 
 #------------------------------------------------------------------------------
 

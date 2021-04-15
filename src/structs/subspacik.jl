@@ -62,13 +62,14 @@ end
 #------------------------------------------------------------------------------
 
 # base_ring field!
-base_ring(v::Union{Subspacik, HashedSubspacik}) = v.field
+Nemo.base_ring(v::Union{Subspacik, HashedSubspacik}) = v.field
 
 #------------------------------------------------------------------------------
 
-# returns basis vectors of V sorted by pivot indices
+# returns basis vectors of V, i.e
+# an array of vectors sorted by pivot
 function basis(V::Union{Subspacik, HashedSubspacik})
-    return sort(collect(deepcopy(values(V.echelon_form))), by=first_nonzero)
+    return sort(collect(values(V.echelon_form)), by=first_nonzero)
 end
 
 #------------------------------------------------------------------------------
@@ -385,4 +386,14 @@ function rational_reconstruction(V::HashedSubspacik)
         for (i, x) in V.hashes
     )
     return ans
+end
+
+#------------------------------------------------------------------------------
+
+# returns a random element from the given space,
+# constructed as a linear combination of `count` basis vectors
+function random_element(A::Union{Subspacik, HashedSubspacik}; count=3)
+    count = min(dim(A), count)
+    indices = rand(1:dim(A), count)
+    sum(map(prod, zip(rand(base_ring(A), count), basis(A)[indices])))
 end

@@ -16,7 +16,6 @@ import DataStructures: BinaryMinHeap
 import AbstractAlgebra: elem_type, Field, FieldElem, FracField,
                         characteristic
 import Distributions: Bernoulli
-import Nemo
 
 #------------------------------------------------------------------------------
 
@@ -37,7 +36,7 @@ end
 
 #------------------------------------------------------------------------------
 
-base_ring(v::DOK_Sparsik) = v.field
+Nemo.base_ring(v::DOK_Sparsik) = v.field
 
 #------------------------------------------------------------------------------
 

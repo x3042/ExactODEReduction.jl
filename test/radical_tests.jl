@@ -1,6 +1,6 @@
 
 #=
-    The File contains tests for find_radical_1 Algorithms
+    The File contains tests for find_radical
 =#
 
 #------------------------------------------------------------------------------
@@ -97,6 +97,13 @@ function test_find_radical(algorithm)
 
     for (set, ans) in zip([set0, set1, set2, set3, set4, set5, set6, set7],
         [ans0, ans1, ans2, ans3, ans4, ans5, ans6, ans7])
+<<<<<<< HEAD
+
+        set = linear_span!(set)
+        V = algorithm(set)
+        @test (isempty(ans) && isempty(V)) || check_inclusion!(linear_span!(deepcopy(ans)), linear_span!(deepcopy(V))) && check_inclusion!(linear_span!(V), linear_span!(ans))
+    end
+=======
         set = linear_span!(set)
         V = algorithm(deepcopy(set))
         @test (isempty(ans) && isempty(V)) || check_inclusion!(linear_span!(deepcopy(ans)), linear_span!(deepcopy(V))) && check_inclusion!(linear_span!(V), linear_span!(ans))
@@ -105,6 +112,7 @@ function test_find_radical(algorithm)
     # --------
 
 
+>>>>>>> 1aabf2c40547af3714e395979adb6a4d89adc772
 end
 
 

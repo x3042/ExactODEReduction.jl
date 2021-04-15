@@ -39,8 +39,8 @@ density(v::Sparsik) = length(v.nonzero) / v.dim
 # returns the number of nonzero-valued elements in `v`
 nnz(v::Sparsik) = length(v.nonzero)
 
-# base_ring field!
-base_ring(v::Sparsik) = v.field
+# ground field!
+Nemo.base_ring(v::Sparsik) = v.field
 
 #------------------------------------------------------------------------------
 

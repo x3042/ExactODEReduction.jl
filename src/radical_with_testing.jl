@@ -3,7 +3,10 @@ include("structs/subspacik.jl")
 
 #------------------------------------------------------------------------------
 
-import Nemo: base_ring, terms, monomial, derivative, gens, kernel, MatrixSpace
+import Nemo: base_ring, terms, monomial, derivative, gens, kernel, MatrixSpace,
+            isirreducible
+
+import AbstractAlgebra: minpoly, factor, charpoly
 
 #------------------------------------------------------------------------------
 
@@ -31,20 +34,20 @@ function find_radical(Algebra::Subspacik)
 
     ZZ = GF(2^31 - 1)
     A = from_COO(n, n, nnz_coords, F)
+
+    # todo: do we really need it?
     A = modular_reduction(A, ZZ)
 
     # Gleb: how do you type all these cool characters? I want also...
     #'\' + "Sigma" + Tab = Σ
     # Σπαξιβo!
-    @info "$n×$n-dim algebra matrix of density $(density(A))"
 
     # wiedemannchik.jl
     char_poly = minimal_polynomial(A, subspace_minpoly=__deterministic_simple_minpoly)
-    @info "minimal poly of degree $(degree(char_poly))"
-
 
     radical_basis = []
 
+    # hm??
     if (!iszero(coeff(char_poly, 0)))
         return radical_basis
     end
@@ -61,6 +64,7 @@ function find_radical(Algebra::Subspacik)
 
     basis_cols = linear_span!(collect(values(Image.rows)))
 
+    summator(x, y) = reduce(x, y, 1)
     for (piv, vect) in basis_cols.echelon_form
         vectors = []
         for j in 1 : size(Image, 2)
@@ -68,80 +72,64 @@ function find_radical(Algebra::Subspacik)
                 push!(vectors, scale(As[j], vect[j]))
             end
         end
-        summator(x, y) = reduce(x, y, 1)
         push!(radical_basis, reduce(summator, vectors))
     end
-
     return radical_basis
-
 end
-
 #------------------------------------------------------------------------------
 
-function general_kernel(rad_basis)
-    stacked = vcat(rad_basis...)
-    println(size(stacked))
-    Space = MatrixSpace(QQ, size(stacked)...)
-    return Array(kernel(Space(stacked))[2])
-end
+# returns an invariant subspace of the given Algebra, randomized
+function invariant_subspace_randomized(Algebra::Subspacik)
+    es = basis(Algebra)
+    n = size(first(es), 1)
+    ground = base_ring(Algebra)
 
-#=
-function construct_jacobians(system)
-    nnz = [
-        (i, var_index(v), derivative(f, v))
-        for (i, f) in enumerate(system)
-            for v in vars(f)
-    ]
-    m, n = length(system), length(degrees(first(system)))
-    ring = parent(first(system))
-    return from_COO(m, n, nnz, ring)
-end
-=#
-
-function construct_jacobians(system)
-    domain = base_ring(first(system))
-    poly_ring = parent(first(system))
-
-    jacobians = Dict()
-
-    for (p_idx, poly) in enumerate(system)
-        for (v_idx, var) in enumerate(vars(poly))
-            # term is of form α*monomial
-            for term in terms(derivative(poly, var))
-                monom = monomial(term, 1)
-                cf = coeff(term, 1)
-
-                # how can we do it in a normal way..
-                !haskey(jacobians, monom) && (jacobians[monom] = Dict())
-                if !haskey(jacobians[monom], (p_idx, v_idx))
-                    jacobians[monom][(p_idx, v_idx)] = zero(domain)
-                end
-                jacobians[monom][(p_idx, v_idx)] += cf
-            end
-        end
+    if n == dim(Algebra)
+        return []
     end
 
-    m, n = length(system), length(gens(poly_ring))
-    factors = [
-        from_COO(m, n, jac, domain)
-        for jac in values(jacobians)
-    ]
+    MSpace = MatrixSpace(ground, n, n)
+    S, x = ground["x"]
+    i, iters = 0, 10
+    M = random_element(Algebra)
+    while i < iters
+        chpoly = charpoly(S, MSpace(to_dense(M)))
 
-    @info "constructed a set of $(length(factors)) matrices $m×$n from the system Jacobian"
+        if isirreducible(chpoly)
+            break
+        end
 
-    return factors
+        factors = factor(chpoly)
+        # factors is of type Fac and Fac.fac is of form
+        #   factor → degree
+        #
+        # we can mb use other factors to output more subspaces
+        f = first(keys(factors.fac))
+
+        V = last(kernel(MSpace(to_dense(evaluate(f, M)))))
+
+        if check_invariance!(Algebra, deepcopy(V))
+            return V
+        end
+
+        M = random_element(Algebra)
+
+        i += 1
+    end
+
+    v = unit_vector(n, 1, ground)
+    V = [ M*v for _ in 1:n ]
+    return V
+
+    error("invariant subspaces exist but are not defined over Q, not implemented, sorry")
 end
 
 #------------------------------------------------------------------------------
 
-#=
-S, (x, y) = QQ["x", "y"]
-f1 = x*y + 1
-f2 = 2x
-s = [f1, f2]
+function general_kernel(radical::AbstractArray)
+    stacked = vcat(radical...)
+    Space = MatrixSpace(QQ, size(stacked)...)
+    return Array(last(kernel(Space(stacked))))
+end
 
-Js = construct_jacobians(s)
-=#
-
-#  2-th model : BIOMD0000000050.json of dim : 14 !
-#  29-th model : MODEL1112150000.json of
+#------------------------------------------------------------------------------

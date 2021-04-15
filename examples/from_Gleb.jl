@@ -1,4 +1,13 @@
-include("../src/radical_without_testing.jl")
+
+#=
+    Examples file
+=#
+
+include("../src/api.jl")
+
+
+import Nemo: QQ
+
 
 gen_matrices = [
     from_dense([
@@ -27,13 +36,5 @@ gen_matrices = [
     ], QQ)
 ]
 
-alg = find_basis(gen_matrices)
-
-rad_basis = find_radical_1(alg)
-
-println(length(rad_basis))
-
-ker = general_kernel(rad_basis)
-
-# we want get y1 = x1 + x2, y2 = x3 + x4
-# what means that general kernel = {[1,1,0,0], [0,0,1,1]}
+invariant = invariant_subspaces(gen_matrices)
+println(invariant)

@@ -263,8 +263,8 @@ function find_basis(vectors; used_algorithm=find_basis_1)
 
         V = rational_reconstruction(V)
 
-        if check_inclusion!(V, vectors)
-            if check_invariance!(V, vectors)
+        if check_inclusion!(V, deepcopy(vectors))
+            if check_invariance!(V, deepcopy(vectors))
                 break
             end
             @warn "invariance check failed.."
@@ -331,7 +331,7 @@ A2 = from_dense([1 0 0 0; 0 1 0 0; 0 0 0 0; 0 0 0 0], QQ)
 A3 = from_dense([0 0 0 1; 0 0 1 0; 0 1 0 1; 0 1 1 0], QQ)
 
 
-# A = find_basis([A1, A2, A3],  used_algorithm=find_basis_1_γβ)
+# A = find_basis([A1, A2, A3],  used_algorithm=find_basis_1_beta)
 
 
 # datas = load_COO_if(from_dim=110, to_dim=140)

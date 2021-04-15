@@ -10,6 +10,7 @@ import Nemo: QQ, GF, PolynomialRing, PolyElem, gfp_elem,
              degree, trail, coeff, gen, divexact, lead
 
 import LinearAlgebra: SingularException
+import Nemo: evaluate
 
 # hmmm
 # using ADCME
@@ -21,7 +22,7 @@ import LinearAlgebra: SingularException
 # returns f(x₀)
 # O(d) multiplications/additions of x₀ if d = degree(f)
 function evaluate(f::PolyElem, x₀)
-    accum = lead(f) * one(x₀)
+    accum = lead(f)
     d = degree(f)
 
     for i in 1 : d
@@ -254,14 +255,13 @@ end
 #
 # Throws if the given matrix is zero
 #
-# Gleb: Who is polyspace? A univariate polynomial ring to put the polynomial to?
+# `PolySpace` - a univariate polynomial ring to put the resulting polynomial to
 function __deterministic_simple_minpoly(A, PolySpace)
     # the function implements the algorithm presented in paper
     #   An algorithm for the calculation of the minimal polynomial,
     #   S. BIAŁAS and M. BIAŁAS
     # the paper is available at
     #   http://bulletin.pan.pl/(56-4)391.pdf
-    # и должен ли прочесть я эти сотни книг //
 
     if iszero(A)
         throw(DomainError(A, "It is really zero"))

@@ -5,7 +5,7 @@ include("typics.jl")
 
 import Nemo: QQ, GF, PolynomialRing, PolyElem, gfp_elem,
             degree, trail, gfp_fmpz_elem, FracElem,
-            fmpq_poly, fmpz_poly, gfp_poly
+            fmpq_poly, fmpz_poly, gfp_poly, gens
 
 import AbstractAlgebra: PolynomialRing, MPolyElem, derivative, PolyElem,
                     vars
@@ -184,3 +184,71 @@ function find_orthogonal!(vectors::AbstractVector)
 end
 
 #------------------------------------------------------------------------------
+
+#=
+function construct_jacobians(system)
+    nnz = [
+        (i, var_index(v), derivative(f, v))
+        for (i, f) in enumerate(system)
+            for v in vars(f)
+    ]
+    m, n = length(system), length(degrees(first(system)))
+    ring = parent(first(system))
+    return from_COO(m, n, nnz, ring)
+end
+=#
+
+function construct_jacobians(system)
+    domain = base_ring(first(system))
+    poly_ring = parent(first(system))
+    gen2idx = Dict(x=>i for (i, x) in enumerate(gens(poly_ring)))
+
+    jacobians = Dict()
+
+    for (p_idx, poly) in enumerate(system)
+        for var in vars(poly)
+            v_idx = gen2idx[var]
+            # term is of form α*monomial
+            for term in terms(derivative(poly, var))
+                monom = monomial(term, 1)
+                cf = coeff(term, 1)
+
+                # how can we do it in a normal way..
+                !haskey(jacobians, monom) && (jacobians[monom] = Dict())
+                idx = (v_idx, p_idx)
+                if !haskey(jacobians[monom], idx)
+                    jacobians[monom][idx] = zero(domain)
+                end
+                jacobians[monom][idx] += cf
+            end
+        end
+    end
+
+    m, n = length(system), length(gens(poly_ring))
+    factors = [
+        from_COO(m, n, jac, domain)
+        for jac in values(jacobians)
+    ]
+
+    @info "constructed a set of $(length(factors)) matrices $m×$n from the system Jacobian"
+
+    return factors
+end
+
+#------------------------------------------------------------------------------
+
+# vectors - an array of 1D iterable vectors
+# domain - an MPoly domain
+#
+# converts the given vectors into the polynomial form
+# with respect to the generators of the given domain
+function polynormalize(vectors, domain::MPolyRing{T}) where {T}
+    polynômes = []
+    gens = Nemo.gens(domain)
+
+    for v in vectors
+        push!(polynômes, sum(map(prod, zip(gens, v))))
+    end
+
+    polynômes
+end

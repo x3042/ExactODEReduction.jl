@@ -10,11 +10,14 @@
 #------------------------------------------------------------------------------
 
 include("policiks.jl")
+include("utils.jl")
+
 
 #------------------------------------------------------------------------------
 
+import Nemo
 import Base: ==, !=, +, -, *
-import Nemo: gfp_elem, gfp_fmpz_elem
+import Nemo: gfp_elem, gfp_fmpz_elem, base_ring
 import AbstractAlgebra: Field
 
 #------------------------------------------------------------------------------
@@ -58,7 +61,7 @@ abstract type AbstractSparseMatrix{T} <: AbstractSparseObject{T} end
 
 #------------------------------------------------------------------------------
 
-function base_ring(::AbstractSparseMatrix) end
+function Nemo.base_ring(::AbstractSparseMatrix) end
 
 function first_nonzero(::T) where {T<:AbstractSparseMatrix} end
 function getindex(::AbstractSparseMatrix, i::Int) end
@@ -105,15 +108,5 @@ function Base.iterate(::AbstractSparseMatrix, state) end
 function unit_vector(::Int, ::Int, ::T) where {T} end
 
 function random_sparsik(::Tuple{Int}, ::T) where {T} end
-
-#------------------------------------------------------------------------------
-
-function Base.convert(::Type{Int}, x::gfp_elem)
-    return Int(x.data)
-end
-
-function Base.convert(::Type{BigInt}, x::gfp_fmpz_elem)
-    return BigInt(x.data)
-end
 
 #------------------------------------------------------------------------------

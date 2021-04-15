@@ -1,34 +1,41 @@
-include("../src/radical_without_testing.jl")
+
+#=
+    Examples file
+=#
 
 
-A1 = from_dense([
-    1 0 0 0; 
-    1 0 0 0; 
-    0 0 0 0; 
-    0 0 0 0
-], QQ)
-A2 = from_dense([
-    1 0 0 0; 
-    0 1 0 0; 
-    0 0 0 0; 
-    0 0 0 0
-], QQ)
-A3 = from_dense([
-    0 0 0 1; 
-    0 0 1 0; 
-    0 1 0 1; 
-    0 1 1 0
-], QQ)
+include("../src/api.jl")
 
-Alg = find_basis([A1, A2, A3])
+import Nemo: QQ
 
-rad_basis = find_radical_1(Alg)
+#------------------------------------------------------------------------------
 
-println(length(rad_basis))
+# Example 1
 
-ker = general_kernel(rad_basis)
+R, (x₁, x₂, x₃, x₄) = QQ["x₁", "x₂", "x₃", "x₄"]
 
-@assert ker == [QQ(1) QQ(0); QQ(1) QQ(0); QQ(0) QQ(1); QQ(0) QQ(1)]
+system = [
+    x₁^2 + 2x₁*x₂,  # derivative of x1
+    x₂^2 + x₃ + x₄, # derivative of x2
+    x₂ + x₄,        # derivative of x3
+    x₁ + x₃         # derivative of x4
+]
 
-# we want get y1 = x1 + x2, y2 = x3 + x4
-# what means that general kernel = {[1,1,0,0], [0,0,1,1]}
+invariants = invariant_subspaces(system)
+@assert invariants == [x₁ + x₂, x₃ + x₄]
+
+#------------------------------------------------------------------------------
+
+# Example 2
+R, (x₁, x₂, x₃) = QQ["x₁", "x₂", "x₃"]
+
+system = [
+    x₂^2 + 4x₂*x₃ + 4x₃^2,  # derivative of x1
+    4x₃ - 2x₁,              # derivative of x2
+    x₁ + x₂                 # derivative of x3
+]
+
+invariants = invariant_subspaces(system)
+@assert invariants == [1//2*x₂ + x₃]
+
+#------------------------------------------------------------------------------
