@@ -246,13 +246,13 @@ function find_basis(vectors; used_algorithm=find_basis_1)
     primes = BigInt[ 2^31 - 1 ]
     i = 0
 
-    @info "generating Algebra with $used_algorithm"
+    @info "generating a basis for Algebra using $used_algorithm"
 
     while true
         prime = last(primes)
         field = GF(fmpz(prime))
 
-        @info "new modulo = $prime"
+        @info "new reduction modulo, $prime"
 
         xs = [ modular_reduction(x, field)
                for x in vectors ]
@@ -279,7 +279,7 @@ function find_basis(vectors; used_algorithm=find_basis_1)
         i % 10 == 0 && error("something is wrong")
     end
 
-    @info "constructed a basis for algebra of dim $(dim(V))"
+    @info "generated a basis for Algebra of dimension $(dim(V))"
 
     return V
 end

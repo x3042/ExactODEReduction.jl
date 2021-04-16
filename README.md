@@ -10,9 +10,9 @@ This repository contains a Julia implementation of the algorithms from the paper
 
 ## What is exact reduction?
 
-Exact reduction of the system of differential equation is intrinsically a variable substitution which preserves the invariants of the system. In this project we mainly consider reductions obtained with **linear transformations**. We will explain it using a toy example. Consider the system
+Exact reduction of the system of differential equations is intrinsically a variable substitution which preserves the invariants of the system. In this project we mainly consider reductions obtained with **linear transformations**. We will explain it using a toy example. Consider the system
 
-<img src="https://render.githubusercontent.com/render/math?math=\begin{cases} \dot{x}_1 = x_1^2 - 2x_1x_2,\\ \dot{x}_2  =  x_2^2 - x_3 - x_4,\\ \dot{x}_3  = x_2 - x_4, \\\dot{x}_4 = x_1 - x_3 \end{cases}\\">
+<img src="https://render.githubusercontent.com/render/math?math=\begin{cases} \dot{x}_1 = x_1^2 + 2x_1x_2,\\ \dot{x}_2  =  x_2^2 - x_3 - x_4,\\ \dot{x}_3  = x_2 - x_4, \\\dot{x}_4 = x_1 - x_3 \end{cases}\\">
 
 An example of an exact reduction in this case would be the following set of new variables
 

@@ -73,7 +73,7 @@ function test_find_basis(algorithm)
 
     for (set, ans) in zip([set0, set1, set2, set3], [ans0, ans1, ans2, ans3])
         V = algorithm(deepcopy(set))
-        @test check_inclusion!(deepcopy(ans), V) && check_inclusion!(V, ans)
+        @test check_inclusion!(deepcopy(ans), deepcopy(V)) && check_inclusion!(V, deepcopy(ans))
     end
 
     # --------
@@ -94,7 +94,7 @@ function test_find_basis(algorithm)
                 ]
                 ans = find_basis_1(deepcopy(As))
                 V   = algorithm(deepcopy(As))
-                @test check_inclusion!(ans, V) && check_inclusion!(V, ans)
+                @test check_inclusion!(ans, deepcopy(V)) && check_inclusion!(V, deepcopy(ans))
             end
         end
     end

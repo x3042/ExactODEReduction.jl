@@ -36,14 +36,19 @@ function find_radical(Algebra::Subspacik)
     A = from_COO(n, n, nnz_coords, F)
 
     # todo: do we really need it?
-    A = modular_reduction(A, ZZ)
+    @info "reduction"
+    @time A = modular_reduction(A, ZZ)
 
     # Gleb: how do you type all these cool characters? I want also...
     #'\' + "Sigma" + Tab = Σ
     # Σπαξιβo!
 
     # wiedemannchik.jl
-    char_poly = minimal_polynomial(A, subspace_minpoly=__deterministic_simple_minpoly)
+    PolySpace, _ = ZZ["x"]
+    MSpace = MatrixSpace(ZZ, n, n)
+    @info "char poly"
+    @time char_poly = minimal_polynomial(A)
+    # char_poly = charpoly(PolySpace, MSpace(to_dense(A)))
 
     radical_basis = []
 
@@ -56,9 +61,11 @@ function find_radical(Algebra::Subspacik)
         char_poly = shift_right_x(char_poly)
     end
 
-    Image = evaluate(char_poly, A)
+    @info "evaluate"
+    @time Image = evaluate(char_poly, A)
 
-    Image = rational_reconstruction(Image)
+    @info "reconstruct"
+    @time Image = rational_reconstruction(Image)
 
     transpose!(Image)
 
@@ -74,12 +81,16 @@ function find_radical(Algebra::Subspacik)
         end
         push!(radical_basis, reduce(summator, vectors))
     end
+
+    @info "computed the radical of the Algebra of dimension $(length(radical_basis))"
+
     return radical_basis
 end
 #------------------------------------------------------------------------------
 
-# returns an invariant subspace of the given Algebra, randomized
-function invariant_subspace_randomized(Algebra::Subspacik)
+# returns an invariant subspace of the given Algebra
+# in case the latter is semisimple
+function invariant_subspace_semisimple(Algebra::Subspacik)
     es = basis(Algebra)
     n = size(first(es), 1)
     ground = base_ring(Algebra)
@@ -89,38 +100,47 @@ function invariant_subspace_randomized(Algebra::Subspacik)
     end
 
     MSpace = MatrixSpace(ground, n, n)
-    S, x = ground["x"]
+    PSpace, x = ground["x"]
     i, iters = 0, 10
-    M = random_element(Algebra)
+    M = random_element(Algebra, count = 5)
     while i < iters
-        chpoly = charpoly(S, MSpace(to_dense(M)))
+        chpoly = charpoly(PSpace, MSpace(to_dense(M)))
 
         if isirreducible(chpoly)
             break
         end
 
         factors = factor(chpoly)
-        # factors is of type Fac and Fac.fac is of form
-        #   factor → degree
+        # factors is of type Fac, and Fac.fac is of form
+        #   factor → degree  ,  (x-a)(x-b)..
         #
-        # we can mb use other factors to output more subspaces
+        # mb we can use other factors to output more subspaces
         f = first(keys(factors.fac))
 
+        # computing the kernel of f(M), guaranteed to be proper
         V = last(kernel(MSpace(to_dense(evaluate(f, M)))))
 
-        if check_invariance!(Algebra, deepcopy(V))
+        isempty(V) && continue; # and how did it end up being empty..
+        println("V = \n", V)
+
+        Vsparse = [from_dense(v, QQ) for v in [[V[:, j]...] for j in 1:size(V, 2)]]
+        if check_invariance!(deepcopy(Vsparse), Algebra)
+            println("!!!")
+            println(V)
             return V
         end
 
-        M = random_element(Algebra)
-
+        M = random_element(Algebra, count = 5)
         i += 1
     end
 
-    v = unit_vector(n, 1, ground)
-    V = [ M*v for _ in 1:n ]
+    v = unit_sparsik(n, 1, ground)
+    V = [ apply_vector(M, v) for _ in 1:n ]
+
+    # check V != Algebra && V != 0
     return V
 
+    # unreachable
     error("invariant subspaces exist but are not defined over Q, not implemented, sorry")
 end
 

@@ -1,7 +1,7 @@
 
 module SparseAlgebra
 
-include("basis.jl")
+include("api.jl")
 
 export *
 

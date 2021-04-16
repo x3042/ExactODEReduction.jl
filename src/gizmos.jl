@@ -5,7 +5,7 @@ include("typics.jl")
 
 import Nemo: QQ, GF, PolynomialRing, PolyElem, gfp_elem,
             degree, trail, gfp_fmpz_elem, FracElem,
-            fmpq_poly, fmpz_poly, gfp_poly, gens
+            fmpq_poly, fmpz_poly, gfp_poly, gens, MPolyRing
 
 import AbstractAlgebra: PolynomialRing, MPolyElem, derivative, PolyElem,
                     vars
@@ -198,6 +198,10 @@ function construct_jacobians(system)
 end
 =#
 
+# for the given system of polynomials in variables xi
+# consturucts a set of matrices Ai over number field
+# such that the Jacobian J of the provided system can represented as the sum
+# J = Aᵢxⁱ
 function construct_jacobians(system)
     domain = base_ring(first(system))
     poly_ring = parent(first(system))
@@ -237,7 +241,7 @@ end
 
 #------------------------------------------------------------------------------
 
-# vectors - an array of 1D iterable vectors
+# vectors - an array of 1D iterables
 # domain - an MPoly domain
 #
 # converts the given vectors into the polynomial form

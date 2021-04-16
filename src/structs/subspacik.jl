@@ -227,6 +227,20 @@ function check_invariance!(V::Union{Subspacik, HashedSubspacik}, matrices)
     return true
 end
 
+# checks whether the given vectors are invariant under the subspace V generators
+function check_invariance!(vectors::AbstractVector{T}, V::Union{Subspacik, HashedSubspacik}) where {T<:AbstractSparseVector}
+    isempty(vectors) && return true
+    isubspace = linear_span!(deepcopy(vectors))
+    for e in basis(V)
+        for v in vectors
+            if !check_inclusion!(isubspace, apply_vector(e, v))
+                return false
+            end
+        end
+    end
+    return true
+end
+
 #------------------------------------------------------------------------------
 
 # checks whether U ⊆ V using the provived algorithm for vector-wise check
@@ -392,7 +406,7 @@ end
 
 # returns a random element from the given space,
 # constructed as a linear combination of `count` basis vectors
-function random_element(A::Union{Subspacik, HashedSubspacik}; count=3)
+function random_element(A::Union{Subspacik, HashedSubspacik}; count=5)
     count = min(dim(A), count)
     indices = rand(1:dim(A), count)
     sum(map(prod, zip(rand(base_ring(A), count), basis(A)[indices])))

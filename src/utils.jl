@@ -15,5 +15,5 @@ end
 
 #------------------------------------------------------------------------------
 
-Base.rand(::FlintRationalField) = QQ(rand(-2^31:2^30))
+Base.rand(::FlintRationalField) = QQ(rand(-2^30:2^30))
 Base.rand(::FlintRationalField, n::Int) = [rand(QQ) for _ in 1:n]

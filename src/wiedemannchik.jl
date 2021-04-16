@@ -233,7 +233,7 @@ function minimal_polynomial(
     S, _ = PolynomialRing(base_ring(A), "x")
     f = S(1)
 
-    iterations = 10
+    iterations = 3
     for _ in 1 : iterations
         f = lcm(f, subspace_minpoly(A, S))
     end

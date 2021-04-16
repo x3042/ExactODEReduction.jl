@@ -32,7 +32,8 @@ function invariant_subspaces(matrices::AbstractArray{T}) where {T<:AbstractSpars
     algebra = find_basis(deepcopy(matrices))
 
     # find the radical of the Algebra
-    radical = find_radical(algebra)
+    @info "computing the radical.."
+    @time radical = find_radical(algebra)
 
     # find an invariant subspace
     if length(radical) != 0
@@ -43,9 +44,33 @@ function invariant_subspaces(matrices::AbstractArray{T}) where {T<:AbstractSpars
         invariant = invariant_subspace_randomized(algebra)
     end
 
-    invariant = [invariant[:, i] for i in 1:size(invariant, 2)]
+    # looks horrible
+    invariant = [[invariant[:, i]...] for i in 1:size(invariant, 2)]
 
     isempty(invariant) && @warn "no invariant subspaces"
 
     invariant
 end
+
+#------------------------------------------------------------------------------
+
+
+function uwu()
+
+    for (filename, dim, size, data) in load_COO_if(from_dim=20, to_dim=30)
+
+        println()
+        @info "loaded $filename of dimension $dim×$dim"
+
+        # matrices
+        As = [from_COO(x..., QQ) for x in data]
+
+        V = invariant_subspaces(As)
+
+        println(length(V))
+
+    end
+
+end
+
+# uwu()

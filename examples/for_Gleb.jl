@@ -3,7 +3,6 @@
     Examples file
 =#
 
-
 include("../src/api.jl")
 
 import Nemo: QQ
@@ -36,6 +35,8 @@ system = [
 ]
 
 invariants = invariant_subspaces(system)
+# maybe it will be good to normalize, say,
+# by the coef of the first variable
 @assert invariants == [1//2*x₂ + x₃]
 
 #------------------------------------------------------------------------------

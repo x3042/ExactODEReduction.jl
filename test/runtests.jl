@@ -2,16 +2,16 @@
 using Test
 using TestSetExtensions
 
-using SparseAlgebra
+include("../src/api.jl")
 
 @info "Testing started"
 
 @testset "All the tests" begin
 
-    @includetests [:sparsik_tests,
-                    :dok_sparsik_tests, :wiedemannchik_tests,
-                    :find_basis_tests]
+    @includetests [:sparsik_tests, :gizmos_tests, :minimal_polynomial_tests,
+                    :dok_sparsik_tests, :wiedemannchik_tests, :parsik_tests,
+                    :find_basis_tests, :radical_tests]
 
 end
 
-@info "All (the) tests OK"
+@info "All tests OK"
