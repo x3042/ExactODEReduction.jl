@@ -19,10 +19,7 @@ function invariant_subspaces(system::AbstractArray{T}) where {T<:MPolyElem}
     # construct jacobians for each variable
     matrices = construct_jacobians(system)
 
-    invariant = invariant_subspaces(matrices)
-
-    # return the polyform to perform the substitution
-    polynormalize(invariant, parent(first(system)))
+    invariant_subspaces(matrices)
 end
 
 function invariant_subspaces(matrices::AbstractArray{T}) where {T<:AbstractSparseMatrix}
@@ -39,13 +36,14 @@ function invariant_subspaces(matrices::AbstractArray{T}) where {T<:AbstractSpars
     if length(radical) != 0
         @info "radical is nontrivial, computing the general kernel"
         invariant = general_kernel(map(to_dense, radical))
+        invariant = [
+            from_dense([invariant[:, i]...], QQ)
+            for i in 1:size(invariant, 2)
+        ]
     else
         @info "radical is trivial, using randomized algorithm"
-        invariant = invariant_subspace_randomized(algebra)
+        invariant = invariant_subspace_semisimple(algebra)
     end
-
-    # looks horrible
-    invariant = [[invariant[:, i]...] for i in 1:size(invariant, 2)]
 
     isempty(invariant) && @warn "no invariant subspaces"
 
@@ -54,10 +52,17 @@ end
 
 #------------------------------------------------------------------------------
 
+#=
+extreme = []
+small = []
+average = []
+big = []
+standard = []
+=#
 
 function uwu()
 
-    for (filename, dim, size, data) in load_COO_if(from_dim=20, to_dim=30)
+    for (filename, dim, size, data) in load_COO_if(from_dim=2, to_dim=10)
 
         println()
         @info "loaded $filename of dimension $dim×$dim"
@@ -65,7 +70,10 @@ function uwu()
         # matrices
         As = [from_COO(x..., QQ) for x in data]
 
+
         V = invariant_subspaces(As)
+
+        @assert check_invariance!(As, V)
 
         println(length(V))
 
@@ -73,4 +81,26 @@ function uwu()
 
 end
 
+function owo()
+
+    for (filename, system) in load_ODEs_if(from_size=1, to_size=70)
+
+        println()
+        @info "loaded a system $filename of size $(length(system))"
+
+        equations = collect(values(system))
+
+        V = invariant_subspaces(equations)
+
+        @assert check_invariance!(construct_jacobians(equations), deepcopy(V))
+
+        polyform = polynormalize(V, parent(first(equations)))
+
+        println(length(polyform))
+        println(polyform)
+    end
+
+end
+
 # uwu()
+owo()

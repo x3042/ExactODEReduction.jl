@@ -24,12 +24,13 @@ import Nemo: evaluate
 function evaluate(f::PolyElem, x₀)
     accum = lead(f)
     d = degree(f)
+    reconstruct!(x₀)
 
     for i in 1 : d
         accum = accum * x₀ + coeff(f, d - i) * one(x₀)
     end
 
-    return accum
+    return reconstruct!(accum)
 end
 
 # returns f(x₀) * b

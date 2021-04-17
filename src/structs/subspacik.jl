@@ -149,9 +149,6 @@ end
  # transformes V to the smallest subspace invariant under
  # the given matrices and containing the original one
  function apply_matrices_inplace!(V::Union{Subspacik, HashedSubspacik}, matrices; ω=1.)
-     global CNT
-     global NONZERO
-
      fat_vectors = [ ]
      new_pivots = collect(keys(V.echelon_form))
      i = 0
@@ -163,7 +160,6 @@ end
          for pivot in pivots_to_process
              for vect in matrices
                  product = apply_vector(V.echelon_form[pivot], vect)
-                 CNT += 1
 
                  i += 1
                  # i % 500 == 0 && print(".")
@@ -214,8 +210,8 @@ end
 
 #------------------------------------------------------------------------------
 
-# checks whether the given subspace is invariant under the matrices
-function check_invariance!(V::Union{Subspacik, HashedSubspacik}, matrices)
+# checks whether the given subspace is invariant under the given matrices
+function check_invariance!(matrices, V::Union{Subspacik, HashedSubspacik})
     for matr in matrices
         for vec in values(V.echelon_form)
             product = matr * vec
@@ -227,11 +223,11 @@ function check_invariance!(V::Union{Subspacik, HashedSubspacik}, matrices)
     return true
 end
 
-# checks whether the given vectors are invariant under the subspace V generators
-function check_invariance!(vectors::AbstractVector{T}, V::Union{Subspacik, HashedSubspacik}) where {T<:AbstractSparseVector}
+# checks whether the given vectors are invariant under the given matrices
+function check_invariance!(matrices, vectors::AbstractArray)
     isempty(vectors) && return true
     isubspace = linear_span!(deepcopy(vectors))
-    for e in basis(V)
+    for e in matrices
         for v in vectors
             if !check_inclusion!(isubspace, apply_vector(e, v))
                 return false
@@ -409,5 +405,12 @@ end
 function random_element(A::Union{Subspacik, HashedSubspacik}; count=5)
     count = min(dim(A), count)
     indices = rand(1:dim(A), count)
-    sum(map(prod, zip(rand(base_ring(A), count), basis(A)[indices])))
+    𝔽 = base_ring(A)
+
+    # a₁e₁ + … + aₖeₖ
+    # sum(map(prod, zip(rand(𝔽, count), basis(A)[indices])))
+
+    # ± e₁ ± … ± eₖ
+    sum(map(prod, zip(rand((𝔽(-1), 𝔽(1)), count), basis(A)[indices])))
+
 end

@@ -21,7 +21,9 @@ system = [
 ]
 
 invariants = invariant_subspaces(system)
-@assert invariants == [x₁ + x₂, x₃ + x₄]
+transformation = polynormalize(invariants, R)
+
+@assert transformation == [x₁ + x₂, x₃ + x₄]
 
 #------------------------------------------------------------------------------
 
@@ -35,8 +37,10 @@ system = [
 ]
 
 invariants = invariant_subspaces(system)
+transformation = polynormalize(invariants, R)
+
 # maybe it will be good to normalize, say,
 # by the coef of the first variable
-@assert invariants == [1//2*x₂ + x₃]
+@assert transformation == [1//2*x₂ + x₃]
 
 #------------------------------------------------------------------------------

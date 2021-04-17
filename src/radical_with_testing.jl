@@ -86,6 +86,7 @@ function find_radical(Algebra::Subspacik)
 
     return radical_basis
 end
+
 #------------------------------------------------------------------------------
 
 # returns an invariant subspace of the given Algebra
@@ -93,55 +94,55 @@ end
 function invariant_subspace_semisimple(Algebra::Subspacik)
     es = basis(Algebra)
     n = size(first(es), 1)
-    ground = base_ring(Algebra)
+    F = base_ring(Algebra)
 
     if n == dim(Algebra)
         return []
     end
 
-    MSpace = MatrixSpace(ground, n, n)
-    PSpace, x = ground["x"]
-    i, iters = 0, 10
-    M = random_element(Algebra, count = 5)
+    # we want to do dense LA here
+    MSpace = MatrixSpace(F, n, n)
+    PSpace, x = F["x"]
+
+    i, iters = 0, 100
     while i < iters
+        M = random_element(Algebra, count = dim(Algebra))
+        reconstruct!(M)
+
         chpoly = charpoly(PSpace, MSpace(to_dense(M)))
 
-        if isirreducible(chpoly)
-            break
-        end
-
-        factors = factor(chpoly)
-        # factors is of type Fac, and Fac.fac is of form
+        factors = factor(chpoly).fac
+        # factors is of type Fac
+        # Fac.fac of form
         #   factor → degree  ,  (x-a)(x-b)..
-        #
+
         # mb we can use other factors to output more subspaces
-        f = first(keys(factors.fac))
+        f = first(keys(factors))
+        # f = irreducible^k
+        f = f^factors[f]
 
-        # computing the kernel of f(M), guaranteed to be proper
-        V = last(kernel(MSpace(to_dense(evaluate(f, M)))))
+        # computing the kernel of f(M)
+        factored = evaluate(f, M)
+        V = last(kernel(MSpace(to_dense(factored))))
 
-        isempty(V) && continue; # and how did it end up being empty..
-        println("V = \n", V)
+        # convert to sparse repr
+        V = [
+            from_dense(v, QQ)
+            for v in [[V[:, j]...]
+                for j in 1:size(V, 2)]
+        ]
 
-        Vsparse = [from_dense(v, QQ) for v in [[V[:, j]...] for j in 1:size(V, 2)]]
-        if check_invariance!(deepcopy(Vsparse), Algebra)
-            println("!!!")
-            println(V)
+        # if is proper and invaiant
+        if 0 < length(V) < n && check_invariance!(es, deepcopy(V))
             return V
         end
 
-        M = random_element(Algebra, count = 5)
         i += 1
     end
 
-    v = unit_sparsik(n, 1, ground)
-    V = [ apply_vector(M, v) for _ in 1:n ]
-
-    # check V != Algebra && V != 0
-    return V
-
-    # unreachable
-    error("invariant subspaces exist but are not defined over Q, not implemented, sorry")
+    @warn "invariant subspaces exist but are not defined over Q, not implemented, sorry"
+    # should we return hmm..
+    return []
 end
 
 #------------------------------------------------------------------------------

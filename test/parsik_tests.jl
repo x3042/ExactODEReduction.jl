@@ -84,7 +84,7 @@ end
 
         test_output = collect(sort(map(
                         strip ∘ repr,
-                        values(load_ODEs(test_path, pathabs=true))
+                        values(load_ODEs(test_path))
         )))
 
         # Browse all equations and find similar ones in true_output <--> test_output

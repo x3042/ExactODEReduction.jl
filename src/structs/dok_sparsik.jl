@@ -119,9 +119,9 @@ end
 # let n = size(A, 2), k = length(A)
 # O(n + k)
 function reconstruct!(A::DOK_Sparsik)
-    if is_thorough(A)
-        return A
-    end
+    #if is_thorough(A)
+    #    return A
+    #end
 
     cols_data = [Int[] => Dict{Int, valtype(A)}()
                 for _ in 1 : size(A, 2)]
@@ -713,7 +713,7 @@ inner(c::FieldElem, A::DOK_Sparsik{T}) where {T} = inner(A, c)
 # this one can be pretty slow
 function Base.one(A::DOK_Sparsik{T}) where {T}
     field = base_ring(A)
-    from_rows(
+    reconstruct!(from_rows(
         size(A)...,
         field,
         Array(1:order(A)),
@@ -721,7 +721,7 @@ function Base.one(A::DOK_Sparsik{T}) where {T}
             i => unit_sparsik(order(A), i, field)
             for i in 1:order(A)
         )
-    )
+    ))
 end
 
 #-----------------------------------------------------------------------------

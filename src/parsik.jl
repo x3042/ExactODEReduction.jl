@@ -1,8 +1,17 @@
 
 import JSON
 import Nemo: gen, terms, monomials
+import Base.showerror
 
 include("myeval.jl")
+
+#------------------------------------------------------------------------------
+
+struct ParseException <: Exception
+    msg::String
+end
+
+Base.showerror(io::IO, e::ParseException) = print(io, e.msg)
 
 
 #------------------------------------------------------------------------------
@@ -193,80 +202,135 @@ end
 
 #------------------------------------------------------------------------------
 
-function load_ODEs(filename; pathabs=false)
-    # *.ode --> polynomial form of ode system
+function load_ODEs_if(;from_size=-Inf, to_size=Inf)
+    testspath = "src/data/ODEs/testing"
+    ext = ".ode"
 
-    filepath = filename
-    if !pathabs
-        filepath = replace(
-            "$(normpath(joinpath(@__FILE__, "..", "..")))src/data/ODEs/$filename",
-            "\\" => "/"
-        )
+    models = []
+
+    for modeltype in readdir(testspath)
+        for filename in readdir("$testspath/$modeltype")
+            if endswith(filename, ext)
+                try
+                    model = load_ODEs("$testspath/$modeltype/$filename")
+                    if from_size <= length(model) <= to_size
+                        push!(models, [filename, model])
+                    end
+                catch ex
+                    !isa(ex, ParseException) && rethrow(ex)
+                    @info ex.msg
+                end
+            end
+        end
     end
+
+    @info "loaded models: $(length(models))"
+
+    models
+end
+
+
+# filepath - absolute model file path
+#
+function load_ODEs(filepath)
+    # *.ode --> polynomial form of ode system
 
     lines = []
     open(filepath, "r") do inputs
         lines = map(strip, readlines(inputs))
     end
 
-    # drop init out
-    reactions = filter(!isempty, map(strip, lines[
-        (findfirst(startswith("begin reactions"), lines) + 1
+    lines = filter(!isempty, map(strip, lines[
+        (findfirst(startswith("begin"), lines) + 1
         :
-        findlast(startswith("end reactions"), lines) - 1)
+        findlast(startswith("end"), lines) - 1)
+    ]))
+    # by default we consider the last begin/end block to yield reactions.
+    # If this conjecture is false, we do not work
+    reactions = filter(!isempty, map(strip, lines[
+        (findlast(startswith("begin"), lines) + 1
+        :
+        findlast(startswith("end"), lines) - 1)
     ]))
 
+    #=
+        Parsing for the two ODE formats is implemented:
+            - ERODE "arrows" format for biological processes
+            - Ordinary "equations" format
+
+        These are mainly distinct by the presence of the '->' token,
+        and we will try to dispatch on it
+    =#
+
+    sep = occursin("->", prod(lines)) ? "->" : "="
+
     # scan reactions to discover all variables
-    sep1 = r"(->)|(,)|([+-/ \t\*])"
+
+    sep1 = Regex("($sep)|(,)|([+-/ \t\\*])")
     # assuming there is at least one utf letter in any variable
     strings = map(String, unique(filter!(
         x -> !isempty(findall(isletter, x)),
         split(join(reactions, ' '), sep1)
     )))
 
+    if length(strings) > 1000
+        throw(ParseException("too long system encountered at $filepath, skipping it"))
+    end
+
     S, xs = QQ[strings...]
 
     # symbol :x to x from QQ[x]
     mapping = Dict{Symbol, fmpq_mpoly}(
         # Gleb: Meta.parse is a bit overshoot here, you can do Symbol(x)
-        Meta.parse(x) => gen(S, i)
+        Symbol(x) => gen(S, i)
         for (i, x) in enumerate(strings)
     )
 
     ODEs = Dict(x => S(0) for x in xs)
 
-    sep2 = r"(->)|(,)"
-    for reaction in reactions
-        # divide each line into parts,
-        # expected to be three of them
-        lhs, rhs, speed = map(
-            Meta.parse ∘ String ∘ strip,
-            split(reaction, sep2)
-        )
+    if sep === "->"
+        sep2 = r"(->)|(,)"
+        for reaction in reactions
+            # divide each line into parts,
+            # expected to be three of them
+            lhs, rhs, speed = map(
+                Meta.parse ∘ String ∘ strip,
+                split(reaction, sep2)
+            )
 
-        reagents, products, speed = map(
-            x -> myeval(x, mapping),
-            (lhs, rhs, speed)
-        )
+            reagents, products, speed = map(
+                x -> myeval(x, mapping),
+                (lhs, rhs, speed)
+            )
 
-        concentration = prod(terms(reagents))
+            concentration = prod(terms(reagents))
 
-        for reagent in monomials(reagents)
-            ODEs[reagent] -= concentration * speed
+            for reagent in monomials(reagents)
+                ODEs[reagent] -= concentration * speed
+            end
+            for product in monomials(products)
+                ODEs[product] += concentration * speed
+            end
         end
-        for product in monomials(products)
-            ODEs[product] += concentration * speed
-        end
+    else
+        sep2 = r"(=)|(,)"
+        for reaction in reactions
+            # divide each line into lhs, rhs
+            lhs, rhs = map(
+                Meta.parse ∘ String ∘ strip,
+                split(reaction, sep2)
+            )
 
+            ẋ, rhs = map(
+                x -> myeval(x, mapping),
+                (lhs, rhs)
+            )
+
+            ODEs[ẋ] = rhs
+        end
     end
 
-    for key in collect(keys(ODEs))
-        if iszero(ODEs[key])
-            delete!(ODEs, key)
-        end
-    end
-
-    @info "loaded a system of $(length(ODEs)) ODEs from $filename"
+    @info "loaded a system of $(length(ODEs)) ODEs from $filepath"
 
     return ODEs
 end

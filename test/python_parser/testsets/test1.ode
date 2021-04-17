@@ -12,3 +12,4 @@ begin model e2
   Ap + B -> ApB, r3
   ApB -> Ap + B, r4
  end reactions
+end model e2

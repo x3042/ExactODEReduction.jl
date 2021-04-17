@@ -121,7 +121,7 @@ end
 
 @testset "basis, Beta algorithm" begin
 
-    test_find_basis(find_basis_1_beta)
+    test_find_basis(find_basis_1_β)
 
 end
 

@@ -49,22 +49,12 @@ end
 
 #------------------------------------------------------------------------------
 
-function find_basis_1_beta(vectors)
-    global CNT
-    global NONZERO
-
+function find_basis_1_β(vectors)
     # eat all input vectors
     alg = linear_span!(deepcopy(vectors))
 
     # apply them with the threshold of ω
     fat_vectors = apply_matrices_inplace!(alg, deepcopy(vectors), ω=0.05)
-
-    push!(count_β_before, CNT)
-    push!(count_β_skipped, length(fat_vectors))
-    CNT = 0
-
-    push!(nonzero_β_before, NONZERO)
-    NONZERO = 0
 
     # eat discarded veced vectors
     for vect in fat_vectors
@@ -72,12 +62,8 @@ function find_basis_1_beta(vectors)
     end
 
     # apply again, but not no vectors would be discarded
-
     # CONTROVERSIAL at the best
     apply_matrices_inplace!(alg, deepcopy(vectors), ω=1.0)
-
-    push!(count_β_after, CNT)
-    CNT = 0
 
     return alg
 end
@@ -238,12 +224,12 @@ end
 # output:
 #       V - a Subspacik consisting of basis vectors
 # O(∞)
-function find_basis(vectors; used_algorithm=find_basis_1)
+function find_basis(vectors; used_algorithm=find_basis_1_β, initialprime=2^31-1)
     # used_algorithm is assumed not to throw normally
     # and to handle errors by thyself
 
     V = Subspacik(QQ)
-    primes = BigInt[ 2^31 - 1 ]
+    primes = BigInt[ initialprime ]
     i = 0
 
     @info "generating a basis for Algebra using $used_algorithm"
@@ -263,8 +249,8 @@ function find_basis(vectors; used_algorithm=find_basis_1)
 
         V = rational_reconstruction(V)
 
-        if check_inclusion!(V, deepcopy(vectors))
-            if check_invariance!(V, deepcopy(vectors))
+        if check_inclusion!(deepcopy(V), deepcopy(vectors))
+            if check_invariance!(deepcopy(vectors), deepcopy(V))
                 break
             end
             @warn "invariance check failed.."
@@ -310,7 +296,7 @@ function owo()
 
 
         start = time_ns()
-        @time V = find_basis(deepcopy(As), used_algorithm=find_basis_1_beta)
+        @time V = find_basis(deepcopy(As), used_algorithm=find_basis_1_β)
         push!(times_γβ, timeit(start))
 
 
@@ -342,7 +328,7 @@ function test_γβ(idx)
     1
 end
 function test_β(idx)
-    V = find_basis(deepcopy(As[idx]), used_algorithm=find_basis_1_beta)
+    V = find_basis(deepcopy(As[idx]), used_algorithm=find_basis_1_β)
     1
 end
 

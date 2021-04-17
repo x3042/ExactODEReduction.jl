@@ -5,17 +5,19 @@ include("typics.jl")
 
 import Nemo: QQ, GF, PolynomialRing, PolyElem, gfp_elem,
             degree, trail, gfp_fmpz_elem, FracElem,
-            fmpq_poly, fmpz_poly, gfp_poly, gens, MPolyRing
+            fmpq_poly, fmpz_poly, gfp_poly, gens, MPolyRing, GaloisField
 
 import AbstractAlgebra: PolynomialRing, MPolyElem, derivative, PolyElem,
                     vars
+
+import Base.Iterators: Stateful
 
 #------------------------------------------------------------------------------
 
 # rational number reconstruction implementation borrowed from CLUE
 # and modified a bit to suit the 'Modern Computer Algebra' definitions
-# returns a rational r // h in a canonical form such that
-# r // h ≡ a (mod m)
+# returns a rational r // h of QQ field in a canonical form such that
+#   r // h ≡ a (mod m)
 #
 # let n = max( λ(a), λ(m) ) , where λ(x) is a number of bits for x
 # O(n^2)
@@ -52,7 +54,7 @@ function rational_reconstruction(a::I, m::I) where {I<:Union{Int, BigInt}}
     end
 
     throw(DomainError(
-        a//m, "rational reconstruction of $a (mod $m) does not exist"
+        :($a//$m), "rational reconstruction of $a (mod $m) does not exist"
     ))
 end
 
@@ -70,7 +72,12 @@ function modular_reduction(x::gfp_fmpz_elem, field)
     return field(convert(BigInt, x))
 end
 
+function modular_reduction(x::gfp_elem, field)
+    return field(x)
+end
+
 #------------------------------------------------------------------------------
+
 
 # Returns the minimal polynomial of the sequence `h` modulo `m`,
 # the sequence `h` is formed as the given polynomial coefficients
@@ -109,7 +116,6 @@ function minimal_polynomial(h::PolyElem, m::PolyElem)
     throw(DomainError(
         h, "minimal polynomial of $h (mod $m) does not exist"
     ))
-
 end
 
 #------------------------------------------------------------------------------
@@ -202,7 +208,7 @@ end
 # consturucts a set of matrices Ai over number field
 # such that the Jacobian J of the provided system can represented as the sum
 # J = Aᵢxⁱ
-function construct_jacobians(system)
+function construct_jacobians(system::AbstractArray{T}) where {T<:MPolyElem}
     domain = base_ring(first(system))
     poly_ring = parent(first(system))
     gen2idx = Dict(x=>i for (i, x) in enumerate(gens(poly_ring)))
@@ -239,6 +245,11 @@ function construct_jacobians(system)
     return factors
 end
 
+function construct_jacobians(system)
+    construct_jacobians(collect(values(system)))
+end
+
+
 #------------------------------------------------------------------------------
 
 # vectors - an array of 1D iterables
@@ -246,12 +257,15 @@ end
 #
 # converts the given vectors into the polynomial form
 # with respect to the generators of the given domain
-function polynormalize(vectors, domain::MPolyRing{T}) where {T}
+function polynormalize(vectors, domain) where {T}
     polynômes = []
     gens = Nemo.gens(domain)
 
     for v in vectors
-        push!(polynômes, sum(map(prod, zip(gens, v))))
+        push!(
+            polynômes,
+            sum(map(prod, zip(gens, to_dense(v))))
+        )
     end
 
     polynômes

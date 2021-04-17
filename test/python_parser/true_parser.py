@@ -281,5 +281,5 @@ def read_system(filename, read_ic=False):
 # ------------------------------------------------------------------------------
 
 
-a = sorted(list(filter(lambda e : e.__str__() is not '0', read_system(sys.argv[1])["equations"])), key=lambda x: x.__str__())
+a = sorted(list(read_system(sys.argv[1])["equations"]), key=lambda x: x.__str__())
 print(*a, sep='\n')

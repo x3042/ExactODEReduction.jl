@@ -25,6 +25,12 @@ function _myeval(x::Number, map::Dict{Symbol,fmpq_mpoly})
     return fmpq(x)
 end
 
+# a helper definition for floats
+function _myeval(x::Float64, map::Dict{Symbol,fmpq_mpoly})
+    @warn "a possibility of inexact float conversion"
+    return fmpq(Rational(x))
+end
+
 # To parse an expression, convert the head to a singleton
 # type, so that Julia can dispatch on that type.
 function _myeval(e::Expr, map::Dict{Symbol,fmpq_mpoly})

@@ -19,7 +19,7 @@ include("csr_sparsik.jl")
 
 LI = LinearIndices
 
-using Base
+#using Base
 
 #------------------------------------------------------------------------------
 

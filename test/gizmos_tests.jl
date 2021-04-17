@@ -87,11 +87,37 @@ import Nemo: QQ, GF, FlintRationalField, characteristic
 end
 
 # TODO
-@testset "Gizmos -- randomness" begin
+@testset "General -- randomness" begin
 
     @test 1 == 1
 
 end
 
+@testset "Subspaces -- check invariance" begin
+
+    A = @sparse [1 0 0; 0 2 0; 0 0 3;]
+
+    @test check_invariance!([], [A])
+
+    v1 = @sparse [1,0,0]
+    v2 = @sparse [0,1,0]
+    v3 = @sparse [0,0,1]
+
+    @test check_invariance!([v1, v2, v3], [A])
+    @test check_invariance!([v1], [A])
+    @test check_invariance!([v2], [A])
+    @test check_invariance!([v3], [A])
+
+
+    A = @sparse [1 2 0; 0 1 0; 0 0 3;]
+    @test check_invariance!([v1, v3], [A])
+    @test check_invariance!([v1 + v2, v2], [A])
+
+    A = @sparse [0 4 0 1; 0 0 1 1; 0 0 0 2; 0 0 0 4]
+    v1 = @sparse [1, 0, 0, 0]
+    v2 = @sparse [0, 3//8, 1//2, 1]
+    @test check_invariance!([v1, v2], [A])
+
+end
 
 @info "OK"
