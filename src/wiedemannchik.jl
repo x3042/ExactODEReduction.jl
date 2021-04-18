@@ -11,6 +11,7 @@ import Nemo: QQ, GF, PolynomialRing, PolyElem, gfp_elem,
 
 import LinearAlgebra: SingularException
 import Nemo: evaluate
+import SparseArrays: sparse
 
 # hmmm
 # using ADCME
@@ -20,14 +21,35 @@ import Nemo: evaluate
 
 
 # returns f(x₀)
+function evaluate_2(f::PolyElem, x₀)
+    accum = convert(Int, lead(f))
+    d = degree(f)
+    @time reconstruct!(x₀)
+
+    rec_x = rational_reconstruction(x₀)
+    csr_x = sparse(to_dense(rec_x))
+
+    I = sparse(to_dense(one(rec_x)))
+    @time for i in 1 : d
+        accum = accum*csr_x + convert(Int, coeff(f, d - i))*I
+    end
+
+    accum = from_dense(Array(accum), QQ)
+
+    return reconstruct!(modular_reduction(accum, base_ring(x₀)))
+end
+
+
+# returns f(x₀)
 # O(d) multiplications/additions of x₀ if d = degree(f)
 function evaluate(f::PolyElem, x₀)
     accum = lead(f)
     d = degree(f)
     reconstruct!(x₀)
 
+    I = one(x₀)
     for i in 1 : d
-        accum = accum * x₀ + coeff(f, d - i) * one(x₀)
+        accum = accum * x₀ + coeff(f, d - i) * I
     end
 
     return reconstruct!(accum)
@@ -39,11 +61,11 @@ end
 # and using the Horner scheme
 function evaluate(f::PolyElem, x₀, b)
     E = one(x₀)
-    accum = apply_vector(lead(f) * E, b)
+    accum = lead(f) * E * b
     d = degree(f)
 
     for i in 1 : d
-        accum = apply_vector(x₀, accum) + coeff(f, d - i) * apply_vector(E, b)
+        accum = x₀ * accum + coeff(f, d - i) * E * b
     end
 
     return accum
@@ -77,7 +99,7 @@ function square_nonsingular_randomized_wiedemann(A::AbstractSparseMatrix, b::Abs
 
     subspace = [ b ]
     for i in 1 : 2n - 1
-        push!(subspace, apply_vector(A, last(subspace)))
+        push!(subspace, A * last(subspace))
     end
 
     # 2
@@ -108,7 +130,7 @@ function square_nonsingular_randomized_wiedemann(A::AbstractSparseMatrix, b::Abs
             reduce!(accum, subspace[j + 1], coeff(f⁻, j))
         end
         reduce!(y, accum, 1)
-        b = b₀ + apply_vector(A, y)
+        b = b₀ + A * y
         d += degree(f)
         k += 1
 
@@ -150,7 +172,7 @@ function square_nonsingular_deterministic_wiedemann(A::AbstractSparseMatrix, b::
     # O(nω) if ω is the number of nonzeroes in A
     subspace = [ b ]
     for i in 1 : 2n - 1
-        push!(subspace, apply_vector(A, last(subspace)))
+        push!(subspace, A * last(subspace))
     end
 
     # 2
@@ -227,14 +249,14 @@ end
 # The algorithm is randomized if subspace_minpoly is of W. family
 # We should probably do some probabilistic analysis
 # (or peek it at the W. paper)
-function minimal_polynomial(
+function minimal_polynomial_wiedemann(
         A::AbstractSparseMatrix;
         subspace_minpoly=__deterministic_wiedemann_minpoly)
 
     S, _ = PolynomialRing(base_ring(A), "x")
     f = S(1)
 
-    iterations = 3
+    iterations = 4
     for _ in 1 : iterations
         f = lcm(f, subspace_minpoly(A, S))
     end
@@ -323,7 +345,7 @@ function __deterministic_wiedemann_minpoly(A::AbstractSparseMatrix, PolySpace)
 
     subspace = [ b ]
     for i in 1 : 2n - 1
-        push!(subspace, apply_vector(A, last(subspace)))
+        push!(subspace, A * last(subspace))
     end
 
     k = 0
@@ -360,7 +382,7 @@ function __randomized_wiedemann_minpoly(A::AbstractSparseMatrix, PolySpace)
 
     subspace = [ b ]
     for i in 1 : 2n - 1
-        push!(subspace, apply_vector(A, last(subspace)))
+        push!(subspace, A * last(subspace))
     end
 
     while degree(g) < n
@@ -371,13 +393,14 @@ function __randomized_wiedemann_minpoly(A::AbstractSparseMatrix, PolySpace)
             push!(seq, inner(u, subspace[i]))
         end
 
+        f = PolySpace(0)
         try
             f = minimal_polynomial(
                 PolySpace(seq),
                 gen(PolySpace)^(2 * (n - degree(g)))
             )
         catch SingularException
-            # singular sequence is expected here, so do nothing
+            # singular sequence is expected here, so do not throw
             return g
         end
 

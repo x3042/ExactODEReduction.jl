@@ -235,8 +235,8 @@ Base.isempty(v::Sparsik) = length(v.nonzero) == 0
 -(v::Sparsik{T}, u::Sparsik{T}) where {T} = reduce(v, u, - one(v.field))
 -(v::Sparsik) = scale(v, - one(v.field))
 
-*(v::Sparsik, c) = scale(v, c)
-*(c, v::Sparsik) = v * c
+*(v::Sparsik, c::Number) = scale(v, c)
+*(c::Number, v::Sparsik) = v * c
 
 ==(v::Sparsik{T}, u::Sparsik{T}) where {T} = (v.dim == u.dim &&
             v.field == u.field &&
@@ -333,26 +333,25 @@ end
 #-----------------------------------------------------------------------------
 
 
-#
+# returns a Sparsik object consisting of O(sz * density) nnz entries,
+# each entry is generated uniformly and independently
 function random_sparsik(sz::Int, field::T; density=0.1) where {T<:Field}
-    if T <: FracField
-        # todo!  ??????
-        return unit_sparsik(sz, rand(1:sz), field)
-    elseif T <: Union{GaloisField, GaloisFmpzField}
-        dense_repr = map(field, rand(Bernoulli(density), sz))
+    λ = density * sz
 
-        for idx in findall(!iszero, dense_repr)
-            x = zero(field)
-            while iszero(x)
-                x = rand(field)
-            end
-            dense_repr[idx] = x
+    nnz = Int[]
+    data = Dict{Int, elem_type(field)}()
+    for _ in 1:λ
+        while (idx = rand(1:sz)) != nothing
+            !haskey(data, idx) && break
         end
-
-        return from_dense(dense_repr, field)
+        X = rand(field)
+        push!(nnz, idx)
+        data[idx] = X
     end
 
-    error("random sparsik over $field is not implemented!")
+    sort!(nnz)
+
+    return Sparsik(sz, field, nnz, data)
 end
 
 function random_sparsik(sz::Tuple{Int}, field::T; density=0.1) where {T<:Field}

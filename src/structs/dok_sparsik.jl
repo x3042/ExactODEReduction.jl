@@ -133,12 +133,16 @@ function reconstruct!(A::DOK_Sparsik)
         end
     end
 
+    map(x-> unique!(sort!(x[1])), cols_data)
+
     for (j, col) in enumerate(cols_data)
         if !isempty(col[1])
             A.cols[j] = Sparsik(size(A, 1), A.field, col...)
             push!(A.nnz_cols, j)
         end
     end
+
+    unique!(sort!(A.nnz_cols))
 
     return A
 end
@@ -399,62 +403,24 @@ end
 
 #------------------------------------------------------------------------------
 
-# Gleb: wouldn't this just be another method for Base.prod?
-# Alex:
-# Gleb: So?
 #
 # returns A(v) = Av
 # if k = length(A) and r = length(v)
 # O(k)
-function apply_vector(A::DOK_Sparsik, v::Sparsik; policy=seq)
+function Base.prod(A::DOK_Sparsik, v::Sparsik)
     nonzero = Int[]
     field = base_ring(A)
     data = Dict{Int, elem_type(field)}()
 
-    if isa(policy, SequencedPolicy)
-        # constructing the resulting vector inplace
-        for idx in A.nnz_rows
-            product = inner(A.rows[idx], v)
-            if ! iszero(product)
-                push!(nonzero, idx)
-                data[idx] = product
-            end
+    for idx in A.nnz_rows
+        product = inner(A.rows[idx], v)
+        if ! iszero(product)
+            push!(nonzero, idx)
+            data[idx] = product
         end
-    elseif isa(policy, ParallelPolicy)
-        # could it be done in a single pass by the way?
-
-        # as I understand, `acyncmap` actually *does not* work in parallel,
-        # we should use threads
-        futures = asyncmap(
-            i -> inner(A.rows[i], v), A.nnz_rows;
-            ntasks=nthreads()
-        )
-
-        #=
-        # TODO: reduce to a single loop
-        futures = fill(zero(field), length(A.nnz_rows))
-        @threads for i in length(A.nnz_rows)
-            # let's hope Dict is read-concurrent-safe
-            futures[i] = inner(A.rows[A.nnz_rows[i]], v)
-        end
-        =#
-
-        for (i, x) in zip(A.nnz_rows, futures)
-            if !iszero(x)
-                push!(nonzero, i)
-                data[i] = x
-            end
-        end
-    else
-        error("unknown policy")
     end
 
     return Sparsik(size(A, 1), field, nonzero, data)
-end
-
-# redefinition for find_basis in Subspace
-function apply_vector(A::DOK_Sparsik, B::DOK_Sparsik)
-    return prod(A, B)
 end
 
 #------------------------------------------------------------------------------
@@ -555,7 +521,7 @@ Base.iszero(A::DOK_Sparsik{T}) where {T} = length(A.nnz_rows) == 0
 *(c::FieldElem, A::DOK_Sparsik) = scale(A, c)
 *(A::DOK_Sparsik{T}, B::DOK_Sparsik{T}) where {T} = prod(A, B)
 
-*(A::DOK_Sparsik{T}, v::Sparsik{T}) where {T} = apply_vector(A, b)
+*(A::DOK_Sparsik{T}, v::Sparsik{T}) where {T} = prod(A, v)
 
 #------------------------------------------------------------------------------
 
@@ -727,19 +693,24 @@ end
 #-----------------------------------------------------------------------------
 
 function random_sparsik(sz::Tuple{Int, Int}, field; density=0.1)
-    dense_repr = map(field, rand(Bernoulli(density), sz))
-    ch = characteristic(field)
-    ch = ch == 0 ? 2^31 - 1 : ch
+    @assert 0 <= density <= 1
 
-    for idx in findall(!iszero, dense_repr)
-        x = zero(field)
-        while iszero(x)
-            x = rand(1:BigInt(ch))
+    # outer product
+    ×(xs, ys) = (i, j) -> (xs[i], ys[j])
+
+    underlying = (1:sz[1]) × (1:sz[2])
+    n = prod(sz)
+    λ = density * n
+
+    nnz = Dict{Tuple{Int, Int}, elem_type(field)}()
+    for _ in 1:λ
+        while (idx = to_cartesian(sz, rand(1:n))) != nothing
+            !haskey(nnz, idx) && break
         end
-        dense_repr[idx] = field(x)
+        nnz[idx...] = rand(field)
     end
 
-    return from_dense(dense_repr, field)
+    return from_COO(sz..., nnz, field)
 end
 
 #-----------------------------------------------------------------------------

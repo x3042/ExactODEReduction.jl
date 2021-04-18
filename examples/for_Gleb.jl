@@ -7,6 +7,10 @@ include("../src/api.jl")
 
 import Nemo: QQ
 
+
+# we are using __randomized_wiedemann_minpoly to speed up computations, so,
+# an example may fail occasionally
+
 #------------------------------------------------------------------------------
 
 # Example 1

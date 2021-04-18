@@ -1,7 +1,7 @@
 
-import Nemo: gfp_elem, gfp_fmpz_elem, QQ, FlintRationalField
+import Nemo: gfp_elem, gfp_fmpz_elem, QQ, FlintRationalField, FlintIntegerRing
 
-import Base: rand
+import Base: rand, zero
 
 #------------------------------------------------------------------------------
 
@@ -13,11 +13,17 @@ function Base.convert(::Type{BigInt}, x::gfp_fmpz_elem)
     return BigInt(x.data)
 end
 
+# Bad
+# Base.zero(::Type{gfp_elem}) = GF(2)(2)
+
 #------------------------------------------------------------------------------
 
 # extends random generator to Rational field
-Base.rand(::FlintRationalField) = QQ(rand(-2^8:2^8))
+Base.rand(::FlintRationalField) = QQ(rand(-2^16:2^16))
 Base.rand(::FlintRationalField, n::Int) = [rand(QQ) for _ in 1:n]
+
+Base.rand(::FlintIntegerRing) = ZZ(rand(-2^16:2^16))
+Base.rand(::FlintIntegerRing, n::Int) = [rand(ZZ) for _ in 1:n]
 
 #------------------------------------------------------------------------------
 
@@ -44,4 +50,11 @@ macro sparse(ex)
     return quote
         from_dense($(esc(ex)), QQ)
     end
+end
+
+#------------------------------------------------------------------------------
+
+# make the given path absolute w.r.t the project and normalize it
+function normalizepath(path)
+    replace("$(normpath(joinpath(@__FILE__, "..", "..")))$path", "\\" => "/")
 end

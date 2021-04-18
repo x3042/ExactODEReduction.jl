@@ -159,7 +159,7 @@ end
 
          for pivot in pivots_to_process
              for vect in matrices
-                 product = apply_vector(V.echelon_form[pivot], vect)
+                 product = V.echelon_form[pivot] * vect
 
                  i += 1
                  # i % 500 == 0 && print(".")
@@ -229,7 +229,7 @@ function check_invariance!(matrices, vectors::AbstractArray)
     isubspace = linear_span!(deepcopy(vectors))
     for e in matrices
         for v in vectors
-            if !check_inclusion!(isubspace, apply_vector(e, v))
+            if !check_inclusion!(isubspace, e * v)
                 return false
             end
         end

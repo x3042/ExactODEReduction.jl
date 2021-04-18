@@ -281,5 +281,6 @@ def read_system(filename, read_ic=False):
 # ------------------------------------------------------------------------------
 
 
-a = sorted(list(read_system(sys.argv[1])["equations"]), key=lambda x: x.__str__())
-print(*a, sep='\n')
+if __name__ == "__main__":
+    a = sorted(list(read_system(sys.argv[1])["equations"]), key=lambda x: x.__str__())
+    print(*a, sep='\n')

@@ -27,7 +27,7 @@ end
 
 # a helper definition for floats
 function _myeval(x::Float64, map::Dict{Symbol,fmpq_mpoly})
-    @warn "a possibility of inexact float conversion"
+    @warn "a possibility of inexact float conversion" from=x to=Rational(x)
     return fmpq(Rational(x))
 end
 

@@ -184,7 +184,7 @@ end
 
 #------------------------------------------------------------------------------
 
-function apply_vector(A::CSR5_Sparsik, x)
+function Base.prod(A::CSR5_Sparsik, x)
     m, n = size(A)
     ω, σ = A.ω, A.σ
     field = base_ring(A)

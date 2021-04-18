@@ -56,7 +56,7 @@ function find_basis_1_β(vectors)
     # apply them with the threshold of ω
     fat_vectors = apply_matrices_inplace!(alg, deepcopy(vectors), ω=0.05)
 
-    # eat discarded veced vectors
+    # eat discarded vectors
     for vect in fat_vectors
         eat_sparsik!(alg, vect)
     end
@@ -126,7 +126,7 @@ function find_basis_2(vectors)
         for new_vect in buffer
             for vect in vectors
 
-                product = apply_vector(new_vect, vect)
+                product = new_vect * vect
 
                 i += 1
                 i % 10 == 0 && print(".")
@@ -243,9 +243,7 @@ function find_basis(vectors; used_algorithm=find_basis_1_β, initialprime=2^31-1
         xs = [ modular_reduction(x, field)
                for x in vectors ]
 
-        start = time_ns()
         @time V = used_algorithm(xs)
-        push!(time_β, timeit(start))
 
         V = rational_reconstruction(V)
 
@@ -272,20 +270,6 @@ end
 
 #------------------------------------------------------------------------------
 
-timeit(start) = (time_ns() - start) * 1e-9
-
-times_γβ = []
-times_β = []
-
-CNT = 0
-count_β_before = []
-count_β_skipped = []
-count_β_after = []
-time_β = []
-
-NONZERO = 0
-nonzero_β_before = []
-
 # 100 - 150
 function owo()
     for (i, (mfn, mdim, msz, mdata)) in enumerate(load_COO_if(from_dim=45, to_dim=50))
@@ -295,10 +279,7 @@ function owo()
         As = map(matr -> from_COO(matr..., QQ), mdata)
 
 
-        start = time_ns()
         @time V = find_basis(deepcopy(As), used_algorithm=find_basis_1_β)
-        push!(times_γβ, timeit(start))
-
 
         #=
         start = time_ns()
@@ -311,10 +292,6 @@ end
 
 # owo()
 
-
-A1 = from_dense([1 0 0 0; 1 0 0 0; 0 0 0 0; 0 0 0 0], QQ)
-A2 = from_dense([1 0 0 0; 0 1 0 0; 0 0 0 0; 0 0 0 0], QQ)
-A3 = from_dense([0 0 0 1; 0 0 1 0; 0 1 0 1; 0 1 1 0], QQ)
 
 
 # A = find_basis([A1, A2, A3],  used_algorithm=find_basis_1_beta)

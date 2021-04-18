@@ -5,7 +5,8 @@ include("typics.jl")
 
 import Nemo: QQ, GF, PolynomialRing, PolyElem, gfp_elem,
             degree, trail, gfp_fmpz_elem, FracElem,
-            fmpq_poly, fmpz_poly, gfp_poly, gens, MPolyRing, GaloisField
+            fmpq_poly, fmpz_poly, gfp_poly, gens, MPolyRing, GaloisField,
+            terms, monomial, coeff
 
 import AbstractAlgebra: PolynomialRing, MPolyElem, derivative, PolyElem,
                     vars

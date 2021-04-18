@@ -133,10 +133,12 @@ function __apply_vector_par(A::CSR_Sparsik, x)
     return from_dense(y, field)
 end
 
+#------------------------------------------------------------------------------
+
 # The resulting vectors are dense almost surely
 # ...
 # And that is not true
-function apply_vector(A::CSR_Sparsik, x; policy=seq)
+function Base.prod(A::CSR_Sparsik, x)
     field = base_ring(A)
     m, n = size(A)
     y = zeros(field, n)
@@ -148,7 +150,21 @@ function apply_vector(A::CSR_Sparsik, x; policy=seq)
     end
 
     return from_dense(y, field)
-    error("unknown policy..")
+end
+
+# TODO
+function Base.prod(A::CSR_Sparsik, B::CSR_Sparsik)
+    field = base_ring(A)
+    m, n = size(A)
+    y = zeros(field, n)
+
+    for i in 1 : m
+        for j in A.row_ptr[i - 1] : A.row_ptr[i] - 1
+            y[i] += A.val[j] * x[A.col_idx[j] + 1]
+        end
+    end
+
+    return from_dense(y, field)
 end
 
 #------------------------------------------------------------------------------

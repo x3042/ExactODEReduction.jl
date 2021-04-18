@@ -86,19 +86,19 @@ end
     @test scale(A, 3) - scale(B, 4) + A * B == C
 
     v = from_dense([1, 2, 3], QQ)
-    @test apply_vector(E, v) == v
+    @test E * v == v
 
     v = from_dense([1, 2, 3, 4, 5], QQ)
-    @test apply_vector(zero_sparsik(3, 5, QQ), v) == zero_sparsik(3, QQ)
+    @test zero_sparsik(3, 5, QQ) * v == zero_sparsik(3, QQ)
 
-    @test apply_vector(A, zero_sparsik(4, QQ)) == zero_sparsik(4, QQ)
+    @test A * zero_sparsik(4, QQ) == zero_sparsik(4, QQ)
 
     v = from_dense([1, 0, 0, 4], QQ)
-    @test apply_vector(A, v) == from_dense([21, 10, 3, 16], QQ)
+    @test A * v == from_dense([21, 10, 3, 16], QQ)
 
     A = from_dense([1 2 3; 4 5 6; 7 8 9;], QQ)
     v = from_dense([1, 2, 3], QQ)
-    @test apply_vector(A, v) == from_dense([14, 32, 50], QQ)
+    @test A * v == from_dense([14, 32, 50], QQ)
 
 end
 

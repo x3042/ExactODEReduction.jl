@@ -38,5 +38,5 @@ gen_matrices = [
 
 invs = invariant_subspaces(gen_matrices)
 println(invs)
-# [e1, e2]  or  [e3, e4]
+# [e1, e2]  or  [e3, e4], differs from run to run
 #

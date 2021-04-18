@@ -47,7 +47,10 @@ function find_radical(Algebra::Subspacik)
     PolySpace, _ = ZZ["x"]
     MSpace = MatrixSpace(ZZ, n, n)
     @info "char poly"
-    @time char_poly = minimal_polynomial(A)
+    @time char_poly = minimal_polynomial_wiedemann(
+        A,
+        subspace_minpoly=__randomized_wiedemann_minpoly
+    )
     # char_poly = charpoly(PolySpace, MSpace(to_dense(A)))
 
     radical_basis = []
@@ -140,7 +143,8 @@ function invariant_subspace_semisimple(Algebra::Subspacik)
         i += 1
     end
 
-    @warn "invariant subspaces exist but are not defined over Q, not implemented, sorry"
+    @warn "invariant subspaces exist but are not defined over Q
+    (or our randomized algorithm failed), not implemented, sorry"
     # should we return hmm..
     return []
 end

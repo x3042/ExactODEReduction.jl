@@ -63,7 +63,7 @@ import Nemo: det
             #error("W. did't notice singularity")
         #end
 
-        @test apply_vector(A, y) == b
+        @test A * y == b
     end
 
     A = from_dense([1 1; 1 1;], QQ)

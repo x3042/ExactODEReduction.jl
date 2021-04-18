@@ -62,14 +62,12 @@ standard = []
 
 function uwu()
 
-    for (filename, dim, size, data) in load_COO_if(from_dim=2, to_dim=10)
+    for (i, (filename, dim, size, data)) in enumerate(load_COO_if(from_dim=10, to_dim=40))
 
-        println()
         @info "loaded $filename of dimension $dim×$dim"
 
         # matrices
         As = [from_COO(x..., QQ) for x in data]
-
 
         V = invariant_subspaces(As)
 
@@ -103,4 +101,4 @@ function owo()
 end
 
 # uwu()
-owo()
+# owo()
