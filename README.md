@@ -1,8 +1,6 @@
-# Exact-reduction-of-ODE-systems
+# [TBD*] Exact-reduction-of-ODE-systems
 
 [![Build](https://github.com/x3042/Exact-reduction-of-ODE-systems/actions/workflows/Build.yml/badge.svg)](https://github.com/x3042/Exact-reduction-of-ODE-systems/actions/workflows/Build.yml) [![Runtests](https://github.com/x3042/Exact-reduction-of-ODE-systems/actions/workflows/Runtests.yml/badge.svg)](https://github.com/x3042/Exact-reduction-of-ODE-systems/actions/workflows/Runtests.yml)
-
-# [TBD*] (Exact reduction of ODE systems)
 
 **any thoughts on a possible acronym?..*
 
@@ -12,23 +10,23 @@ This repository contains a Julia implementation of the algorithms from the paper
 
 Exact reduction of the system of differential equations is intrinsically a variable substitution which preserves the invariants of the system. In this project we mainly consider reductions obtained with **linear transformations**. We will explain it using a toy example. Consider the system
 
-<img src="https://latex.codecogs.com/gif.latex?\begin{cases} \dot{x}_1 = x_1^2 + 2x_1x_2,\\ \dot{x}_2  =  x_2^2 + x_3 + x_4,\\ \dot{x}_3  = x_2 + x_4, \\\dot{x}_4 = x_1 + x_3 \end{cases}\\">
+<img src="https://render.githubusercontent.com/render/math?math=\begin{cases} \dot{x}_1 = x_1^2 %2b 2x_1x_2,\\ \dot{x}_2  =  x_2^2 %2b x_3 %2b x_4,\\ \dot{x}_3  = x_2 %2b x_4, \\\dot{x}_4 = x_1 %2b x_3 \end{cases}\\">
 
 An example of an exact reduction in this case would be the following set of new variables
 
-<img src="https://latex.codecogs.com/gif.latex?y_1 = x_1 + x_2 \quad \text{ and } \quad y_2 = x_3 + x_4\\">
+<img src="https://render.githubusercontent.com/render/math?math=y_1 = x_1 %2b x_2 \quad \text{ and } \quad y_2 = x_3 %2b x_4\\">
 
-The crucial feature of these variables is their derivatives can be written in terms of <img src="https://latex.codecogs.com/gif.latex?y_1"> and <img src="https://latex.codecogs.com/gif.latex?y_2"> only:
+The crucial feature of these variables is their derivatives can be written in terms of ![$y_1$](https://render.githubusercontent.com/render/math?math=%24y_1%24) and ![$y_2$](https://render.githubusercontent.com/render/math?math=%24y_2%24) only:
 
-<img src="https://latex.codecogs.com/gif.latex?\dot{y_1} = \dot{x_1} + \dot{x_2} = x_1^2 + 2x_1x_2 + x_2^2 + x_3 + x_4 = y_1^2 + y_2\\">
+<img src="https://render.githubusercontent.com/render/math?math=\dot{y_1} = \dot{x_1} %2b \dot{x_2} = x_1^2 %2b 2x_1x_2 %2b x_2^2 %2b x_3 %2b x_4 = y_1^2 %2b y_2\\">
 
-and
+and 
 
-<img src="https://latex.codecogs.com/gif.latex?\dot{y_2} = \dot{x_3} + \dot{x_4} = x_1 + x_2 + x_3 + x_4 = y_1 + y_2">
+<img src="https://render.githubusercontent.com/render/math?math=\dot{y_2} = \dot{x_3} %2b \dot{x_4} = x_1 %2b x_2 %2b x_3 %2b x_4 = y_1 %2b y_2">
 
 Therefore, the original system can be **reduced exactly** to the following system while keeping the variable of interest:
 
-<img src="https://latex.codecogs.com/gif.latex?\begin{cases} \dot{y}_1 = y_1^2 + y_2,\\ \dot{y}_2  =   y_1 + y_2\end{cases}\\">
+<img src="https://render.githubusercontent.com/render/math?math=\begin{cases} \dot{y}_1 = y_1^2 %2b y_2,\\ \dot{y}_2  =   y_1 %2b y_2\end{cases}\\">
 
 ## What does [TBD] do and how to use it?
 
