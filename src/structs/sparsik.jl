@@ -12,8 +12,8 @@ include("../gizmos.jl")
 
 #------------------------------------------------------------------------------
 
-import Base: ==, !=, +, -, *
-import Nemo: GaloisField, GaloisFmpzField, fmpq
+import Base: ==, !=, +, -, *, lcm
+import Nemo: GaloisField, GaloisFmpzField, fmpq, ZZ
 import Distributions: Bernoulli
 import AbstractAlgebra: elem_type, Field, FieldElem,
                         characteristic, FracField
@@ -85,6 +85,12 @@ end
 # returns v * c
 function scale(v::Sparsik, c)
     return scale!(deepcopy(v), c)
+end
+
+#------------------------------------------------------------------------------
+
+function Base.lcm(v::Sparsik)
+    lcm(denominator.(values(v.data)))
 end
 
 #------------------------------------------------------------------------------
@@ -281,9 +287,9 @@ function modular_reduction(v::Sparsik, field)
     new_nonzero = Int[]
     new_data = Dict{Int, elem_type(field)}()
 
-    for (i, x) in v
+    for i in v.nonzero
         # wrapped into a function
-        y = modular_reduction(x, field)
+        y = modular_reduction(v.data[i], field)
         if !iszero(y)
             push!(new_nonzero, i)
             new_data[i] = y
@@ -303,12 +309,13 @@ end
 function rational_reconstruction(v::Sparsik)
     new_nonzero = Int[]
     new_data = Dict{Int, fmpq}()
+    ground = base_ring(v)
 
     tmp_type = BigInt
-    if isa(base_ring(v), GaloisField)
+    if isa(ground, GaloisField)
         tmp_type = Int
     end
-    ch = convert(tmp_type, characteristic(v.field))
+    ch = convert(tmp_type, characteristic(ground))
 
     for (i, x) in v
         y = rational_reconstruction(convert(tmp_type, x), ch)

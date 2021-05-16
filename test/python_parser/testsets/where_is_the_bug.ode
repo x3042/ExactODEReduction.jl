@@ -1,0 +1,10 @@
+begin model bug catcher
+ begin init
+  S0 = 300.0
+  S3
+ end init
+ begin reactions
+  S0 + S2 + kOnE -> S3 + kOnE , 1
+ end reactions
+
+end model

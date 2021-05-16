@@ -132,6 +132,51 @@ function eat_sparsik!(V::Subspacik, new_vector::AbstractSparseObject; ω=1.0)
     return pivot
 end
 
+# adds `new_vector` to the set of spanning vectors of V
+# while modifying both
+# returns -1 if `new_vector` lies in V, new pivot index otherwise
+
+# O(kR)  if k = nnz(new_vector) and R = Σnnz(v) for v in echelon_form
+function eat_sparsik_bloom!(V::Subspacik, new_vector::AbstractSparseObject, blooms, powersof2; ω=1.0)
+    # PRobably, we need eat_sparsik( ;verbose) which will return
+    # coordinates of new_vector if V basis in case of linear dependency
+
+    # O(kr) if k = nnz(new_vector) and r = len(echelon_form)
+    for (piv, vect) in V.echelon_form
+        if haskey(new_vector, piv)
+            reduce!(new_vector, vect, -new_vector[piv])
+        end
+    end
+
+    if iszero(new_vector)
+        return reduced
+    end
+
+    # it should(must) be optimized somehow
+    # O(k)
+    if density(new_vector) > ω
+        return skipped
+    end
+
+    # O(k)
+    pivot = first_nonzero(new_vector)
+    scale!(new_vector, inv(new_vector[pivot]))
+
+    # O(kR)  if k = nnz(new_vector) and R = Σnnz(v) for v in echelon_form
+    for (piv, vect) in V.echelon_form
+        if haskey(vect, pivot)
+            reduce!(V.echelon_form[piv], new_vector, -vect[pivot])
+            blooms[piv] = fill_bloom(
+                reconstruct!(V.echelon_form[piv]),
+                powersof2
+            )
+        end
+    end
+
+    V.echelon_form[pivot] = new_vector
+    return pivot
+end
+
 #------------------------------------------------------------------------------
 
 # returns a new Subspacik formed as a linear span
@@ -143,6 +188,87 @@ function linear_span!(vectors)
     end
     return V
 end
+
+#------------------------------------------------------------------------------
+
+function fill_bloom(A::DOK_Sparsik, powersof2::Array{UInt64})
+    matrixbloom = Dict{Int, UInt64}[
+        Dict{Int, UInt64}(),
+        Dict{Int, UInt64}()
+    ]
+
+    for idx in A.nnz_rows
+        bloom = UInt64(0)
+        for i in A.rows[idx].nonzero
+            bloom |= powersof2[max(1, i % 64)]
+        end
+        matrixbloom[1][idx] = bloom
+    end
+
+    for idx in A.nnz_cols
+        bloom = UInt64(0)
+        for i in A.cols[idx].nonzero
+            bloom |= powersof2[max(1, i % 64)]
+        end
+        matrixbloom[2][idx] = bloom
+    end
+    matrixbloom
+end
+
+# transformes V to the smallest subspace invariant under
+# the given matrices and containing the original one
+function apply_matrices_inplace_bloom!(V::Union{Subspacik, HashedSubspacik}, matrices; ω=1.)
+    fat_vectors = [ ]
+    new_pivots = collect(keys(V.echelon_form))
+    i = 0
+
+    powersof2 = [UInt64(2)^i for i in 0:63]
+
+    matrices_blooms = [
+        fill_bloom(reconstruct!(m), powersof2)
+        for m in matrices
+    ]
+    subspaces_blooms = Dict(
+        k => fill_bloom(reconstruct!(V.echelon_form[k]), powersof2)
+        for k in keys(V.echelon_form)
+    )
+
+    while !isempty(new_pivots)
+        pivots_to_process = sort(deepcopy(new_pivots))
+        empty!(new_pivots)
+
+
+        for pivot in pivots_to_process
+            for (vectidx, vect) in enumerate(matrices)
+                product = prod_bloom(
+                    V.echelon_form[pivot], vect,
+                    subspaces_blooms[pivot][1], matrices_blooms[vectidx][2]
+                )
+
+                i += 1
+
+                if !iszero(product)
+                    new_pivot = eat_sparsik_bloom!(V, product, subspaces_blooms, powersof2, ω=ω)
+                    if new_pivot == skipped
+                        push!(fat_vectors, product)
+                    elseif new_pivot != reduced
+                        push!(new_pivots, new_pivot)
+                        subspaces_blooms[new_pivot] = fill_bloom(
+                            reconstruct!(product),
+                            powersof2
+                        )
+                    end
+                end
+
+            end
+        end
+
+    end
+
+    return fat_vectors
+
+ end
+
 
 #------------------------------------------------------------------------------
 
@@ -158,7 +284,8 @@ end
          empty!(new_pivots)
 
          for pivot in pivots_to_process
-             for vect in matrices
+             for (vectidx, vect) in enumerate(matrices)
+
                  product = V.echelon_form[pivot] * vect
 
                  i += 1
@@ -166,6 +293,7 @@ end
 
                  if !iszero(product)
                      new_pivot = eat_sparsik!(V, product, ω=ω)
+
                      if new_pivot == skipped
                          push!(fat_vectors, product)
                      elseif new_pivot != reduced
@@ -181,8 +309,6 @@ end
      return fat_vectors
 
   end
-
-
 
 #------------------------------------------------------------------------------
 

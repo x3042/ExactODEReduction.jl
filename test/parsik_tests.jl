@@ -67,7 +67,9 @@ end
         (true_parser_path, testsets_path)
     )
 
-    for test_filename in readdir(testsets_path)
+    # for test_filename in readdir(testsets_path)
+    # for test_filename in ["e2.ode", "simple.ode", "test1.ode", "test2.ode"]
+    for test_filename in ["where_is_the_bug.ode"]
         test_path = testsets_path * "/" * test_filename
         true_parser_cmd = `python $true_parser_path $test_path`
 

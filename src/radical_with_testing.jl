@@ -36,11 +36,10 @@ function find_radical(Algebra::Subspacik)
     A = from_COO(n, n, nnz_coords, F)
 
     # todo: do we really need it?
+    # yes
     @info "reduction"
     @time A = modular_reduction(A, ZZ)
 
-    # Gleb: how do you type all these cool characters? I want also...
-    #'\' + "Sigma" + Tab = Σ
     # Σπαξιβo!
 
     # wiedemannchik.jl
@@ -89,6 +88,66 @@ function find_radical(Algebra::Subspacik)
 
     return radical_basis
 end
+
+
+function find_radical_2(Algebra::Subspacik)
+    As = basis(Algebra)
+    F = base_ring(Algebra)
+    n = dim(Algebra)
+
+    traces = Dict{Tuple{Int, Int}, elem_type(F)}(
+        (i, j) => tr(As[i] * As[j])
+        for i in 1 : n
+            for j in i : n
+    )
+
+    nnz_coords = [
+        (i, j, traces[min(i, j), max(i, j)])
+        for i in 1 : n
+            for j in 1 : n
+                if ! iszero(traces[min(i, j), max(i, j)])
+    ]
+
+    if isempty(nnz_coords)
+        return As
+    end
+
+    ZZ = GF(2^31 - 1)
+    A = zeros(ZZ, n, n)
+    for (i, j, x) in nnz_coords
+        A[i, j] = modular_reduction(x, ZZ)
+    end
+
+    MSpace = MatrixSpace(ZZ, n, n)
+    sz, vectors = kernel(MSpace(A))
+
+    sz == 0 && return As
+
+    basis_cols = linear_span!([
+                rational_reconstruction(
+                    from_dense([vectors[:, i]...], ZZ)
+                )
+                for i in 1:sz
+    ])
+
+    radical_basis = []
+
+    summator(x, y) = reduce(x, y, 1)
+    for (piv, vect) in basis_cols.echelon_form
+        vectors = []
+        for j in 1:length(As)
+            if !iszero(vect[j])
+                push!(vectors, scale(As[j], vect[j]))
+            end
+        end
+        push!(radical_basis, reduce(summator, vectors))
+    end
+
+    @info "computed the radical of dimension $(length(radical_basis))"
+
+    return radical_basis
+end
+
 
 #------------------------------------------------------------------------------
 

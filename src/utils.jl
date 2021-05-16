@@ -13,6 +13,15 @@ function Base.convert(::Type{BigInt}, x::gfp_fmpz_elem)
     return BigInt(x.data)
 end
 
+function Base.convert(::Type{FlintIntegerRing}, x::gfp_fmpz_elem)
+    return ZZ(x.data)
+end
+
+function Base.convert(::Type{FlintIntegerRing}, x::gfp_elem)
+    return ZZ(x.data)
+end
+
+
 # Bad
 # Base.zero(::Type{gfp_elem}) = GF(2)(2)
 

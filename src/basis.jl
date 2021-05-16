@@ -54,6 +54,7 @@ function find_basis_1_β(vectors)
     alg = linear_span!(deepcopy(vectors))
 
     # apply them with the threshold of ω
+    @info "β"
     fat_vectors = apply_matrices_inplace!(alg, deepcopy(vectors), ω=0.05)
 
     # eat discarded vectors
@@ -64,6 +65,29 @@ function find_basis_1_β(vectors)
     # apply again, but not no vectors would be discarded
     # CONTROVERSIAL at the best
     apply_matrices_inplace!(alg, deepcopy(vectors), ω=1.0)
+
+    return alg
+end
+
+#------------------------------------------------------------------------------
+
+function find_basis_1_μ(vectors)
+    # eat all input vectors
+    alg = linear_span!(deepcopy(vectors))
+
+    # apply them with the threshold of ω
+    @info "μ"
+    global μ
+    @savetime fat_vectors = apply_matrices_inplace_bloom!(alg, deepcopy(vectors), ω=0.05) μs
+
+    # eat discarded vectors
+    for vect in fat_vectors
+        eat_sparsik!(alg, vect)
+    end
+
+    # apply again, but not no vectors would be discarded
+    # CONTROVERSIAL at the best
+    apply_matrices_inplace_bloom!(alg, deepcopy(vectors), ω=1.0)
 
     return alg
 end
@@ -227,12 +251,11 @@ end
 function find_basis(vectors; used_algorithm=find_basis_1_β, initialprime=2^31-1)
     # used_algorithm is assumed not to throw normally
     # and to handle errors by thyself
+    @info "generating a basis for Algebra using $used_algorithm"
 
     V = Subspacik(QQ)
     primes = BigInt[ initialprime ]
     i = 0
-
-    @info "generating a basis for Algebra using $used_algorithm"
 
     while true
         prime = last(primes)
@@ -243,9 +266,11 @@ function find_basis(vectors; used_algorithm=find_basis_1_β, initialprime=2^31-1
         xs = [ modular_reduction(x, field)
                for x in vectors ]
 
-        @time V = used_algorithm(xs)
+        V = used_algorithm(xs)
 
         V = rational_reconstruction(V)
+
+        break
 
         if check_inclusion!(deepcopy(V), deepcopy(vectors))
             if check_invariance!(deepcopy(vectors), deepcopy(V))

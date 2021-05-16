@@ -277,6 +277,8 @@ function load_ODEs(filepath)
         throw(ParseException("too long system encountered at $filepath, skipping it"))
     end
 
+    # we want to agree with CLUE in variable order
+    strings = sort(strings)
     S, xs = QQ[strings...]
 
     # symbol :x to x from QQ[x]

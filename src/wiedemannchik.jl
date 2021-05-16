@@ -24,13 +24,13 @@ import SparseArrays: sparse
 function evaluate_2(f::PolyElem, x₀)
     accum = convert(Int, lead(f))
     d = degree(f)
-    @time reconstruct!(x₀)
+    reconstruct!(x₀)
 
     rec_x = rational_reconstruction(x₀)
     csr_x = sparse(to_dense(rec_x))
 
     I = sparse(to_dense(one(rec_x)))
-    @time for i in 1 : d
+    for i in 1 : d
         accum = accum*csr_x + convert(Int, coeff(f, d - i))*I
     end
 

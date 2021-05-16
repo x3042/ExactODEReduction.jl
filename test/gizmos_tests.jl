@@ -96,17 +96,28 @@ import JSON
     true_matrices_path = normalizepath("test/python_parser/clue.py")
     # path to testsets *.ode files
 
-    for test_name in ["e2.ode", "simple.ode", "test1.ode", "test2.ode"]
+    # for test_name in ["simple.ode", "test1.ode", "test2.ode", "e2.ode"]
+    for test_name in ["where_is_the_bug.ode"]
+    # for test_name in [ "e2.ode"]
         testset_path = "python_parser/testsets/$test_name"
 
         testset_path = normalizepath("test/$testset_path")
-        
+
         true_matrices_cmd = `python $true_matrices_path $testset_path`
 
         true_output = @capture_out run(true_matrices_cmd)
-        true_output = JSON.Parser.parse(true_output)
 
+
+        true_output = JSON.Parser.parse(true_output)
+        true_output = sort(true_output, by=length)
+
+
+        println(join(map(string, true_output[1:3]), "\n"))
+        println(sort([length(x) for x in true_output]))
+
+        println(load_ODEs(testset_path))
         my_output = construct_jacobians(collect(values(load_ODEs(testset_path))))
+
         my_output = [
             [
                 [to_cartesian(size(matrix), coord)..., val]
@@ -114,6 +125,12 @@ import JSON
             ]
             for matrix in my_output
         ]
+        my_output = sort(my_output, by=length)
+
+        println(join(map(string, my_output[1:3]), "\n"))
+        println(sort([length(x) for x in my_output]))
+
+        println("######################")
 
         my_to_true = Dict{Int, Int}()
 

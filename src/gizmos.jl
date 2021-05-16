@@ -38,8 +38,8 @@ function rational_reconstruction(a::I, m::I) where {I<:Union{Int, BigInt}}
     end
     bnd = sqrt(float(m) / 2)
 
-    U = (1, 0, m)
-    V = (0, 1, a)
+    U = I[1, 0, m]
+    V = I[0, 1, a]
     while abs(V[3]) >= bnd
         q = div(U[3], V[3])
         T = U .- q .* V
@@ -64,7 +64,9 @@ end
 function modular_reduction(x::FracElem, field)
     n, d = field(numerator(x)), field(denominator(x))
     if iszero(d)
-        throw(DomainError(a//m, "rational reconstruction of $a (mod $m) does not exist"))
+        throw(DomainError(
+            :($x), "modular reduction of $x (to $field) does not exist"
+        ))
     end
     n // d
 end

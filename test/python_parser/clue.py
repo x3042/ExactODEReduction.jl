@@ -290,6 +290,19 @@ class SparseRowMatrix(object):
     def nonzero_count(self):
         return sum([v.nonzero_count() for v in self._data.values()])
 
+    def export_as_triples(self, one_based=False):
+        """
+        Export the matrix as a list of tripes [row_idx, col_idx, entry]
+        for the nonzero entries
+
+        In case `one_based` is set, add 1 to every index
+        """
+        result = []
+        for i in self._nonzero:
+            for j in self._data[i]._nonzero:
+                result.append([i+one_based, j+one_based, self[i, j]])
+        return result
+
     #--------------------------------------------------------------------------
 
     def __setitem__(self, cell, value):
@@ -759,28 +772,17 @@ def do_lumping(
 #------------------------------------------------------------------------------
 
 if __name__ == "__main__":
+    
     internal_repr = construct_matrices(
         list(read_system(sys.argv[1])["equations"])
     )
 
-    dicts = list(map(
-        lambda x: x._data,
-        internal_repr
-    ))
+    matrices = internal_repr
 
     from functools import reduce
     dicts = [
-        sorted(
-            reduce(lambda x, y: [*x, *y], [
-                [
-                    [x_coord+1, y_coord+1, matrix[x_coord]._data[y_coord]]
-                    for y_coord in list(matrix[x_coord]._data.keys())
-                ]
-                for x_coord in list(matrix.keys())
-            ]),
-            key = lambda x: (x[0], x[1])
-        )
-        for matrix in dicts
+        matrix.export_as_triples(one_based=True)
+        for matrix in matrices
     ]
 
     print(dicts)

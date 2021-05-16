@@ -69,6 +69,7 @@ function test_minimal_polynomial(minpoly)
         i, j, k, r = rand(1:n^2, 4)
         # sum of four random unit matrices
         A = sum(unit_sparsik((n, n), pos, QQ) for pos in (i, j, k, r))
+        reconstruct!(A)
         f = minpoly(A, S)
         @test !iszero(f) && iszero(evaluate(f, A))
     end

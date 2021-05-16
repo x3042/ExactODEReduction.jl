@@ -45,60 +45,73 @@ function invariant_subspaces(matrices::AbstractArray{T}) where {T<:AbstractSpars
         invariant = invariant_subspace_semisimple(algebra)
     end
 
-    isempty(invariant) && @warn "no invariant subspaces"
+    if isempty(invariant)
+        @warn "no invariant subspaces"
+    else
+        @info "$(length(invariant)) dimensional subspace found"
+    end
+
+    for v in invariant
+        scale!(v, lcm(v))
+    end
 
     invariant
 end
 
 #------------------------------------------------------------------------------
 
-#=
-extreme = []
-small = []
-average = []
-big = []
-standard = []
-=#
 
 function uwu()
 
-    for (i, (filename, dim, size, data)) in enumerate(load_COO_if(from_dim=10, to_dim=40))
+    for (i, (filename, dim, size, data)) in enumerate(load_COO_if(from_dim=20, to_dim=25))
 
         @info "loaded $filename of dimension $dim×$dim"
+
+        #=if filename != "BIOMD0000000072.json"
+            continue
+        end=#
 
         # matrices
         As = [from_COO(x..., QQ) for x in data]
 
-        V = invariant_subspaces(As)
+        if length(As) > 2
+            A1 = pop!(As)
+            A2 = pop!(As)
+            push!(As, A1 * A2)
+        end
 
-        @assert check_invariance!(As, V)
+        V1 = find_basis(deepcopy(As))
 
-        println(length(V))
+        ### invariant_subspaces(As)
+
+        @assert check_invariance!(As, basis(V1))
 
     end
 
 end
 
+
 function owo()
 
-    for (filename, system) in load_ODEs_if(from_size=1, to_size=70)
+    for (i, (filename, system)) in enumerate(load_ODEs_if(from_size=1, to_size=30))
 
-        println()
-        @info "loaded a system $filename of size $(length(system))"
+        @info "$i-th, loaded a system $filename of size $(length(system))"
 
-        equations = collect(values(system))
+        equations = [system[x] for x in sort(collect(keys(system)), by=string)]
 
         V = invariant_subspaces(equations)
+
+        R = parent(equations[1])
 
         @assert check_invariance!(construct_jacobians(equations), deepcopy(V))
 
         polyform = polynormalize(V, parent(first(equations)))
 
         println(length(polyform))
-        println(polyform)
+        println(join(string.(polyform), "\n"))
     end
 
 end
 
-# uwu()
+uwu()
 # owo()

@@ -114,6 +114,23 @@ end
 
 #------------------------------------------------------------------------------
 
+
+# Export the matrix as a list of tripes [row_idx, col_idx, entry]
+# for the nonzero entries
+# In case `one_based` is set, add 1 to every index
+function export_as_triples(A::DOK_Sparsik)
+    result = []
+    for i in A.nnz_rows
+        for (j, x) in A.rows[i]
+            push!(result, [i, j, x])
+        end
+    end
+    return result
+end
+
+
+#------------------------------------------------------------------------------
+
 # reconstructs fields `A.cols` and `A.nnz_cols` from rows data
 # so that the resulting object is considered to be thorough
 # let n = size(A, 2), k = length(A)
@@ -380,6 +397,11 @@ function Base.prod(A::DOK_Sparsik{T}, B::DOK_Sparsik{T}) where {T}
 
         for j in B.nnz_cols
             product = inner(A.rows[i], B.cols[j])
+            # TODO
+            # global ZEROS
+            # global TOTALS
+            # TOTALS += 1
+            # iszero(product) && (ZEROS += 1)
 
             if !iszero(product)
                 push!(row_indices, j)
@@ -396,7 +418,44 @@ function Base.prod(A::DOK_Sparsik{T}, B::DOK_Sparsik{T}) where {T}
     # we can return 0 instead of instantiating new object
     # as long as this method is not a part of interface
     return from_rows(
-        size(A, 1), size(B, 2), A.field,
+        size(A, 1), size(B, 2), FF,
+        nnz_rows, rows
+    )
+end
+
+function do_overlap(bv::UInt64, bu::UInt64)
+    return (bv & bu) != 0
+end
+
+function prod_bloom(
+    A::DOK_Sparsik{T}, B::DOK_Sparsik{T},
+    bloomA::Dict{Int, UInt64}, bloomB::Dict{Int, UInt64}) where {T}
+
+    FF = base_ring(A)
+    nnz_rows = Int[]
+    rows = Dict{Int, Sparsik{T}}()
+
+    for i in A.nnz_rows
+        row_vals = Dict{Int, valtype(A)}()
+        row_indices = Int[]
+        for j in B.nnz_cols
+            if do_overlap(bloomA[i], bloomB[j])
+                product = inner(A.rows[i], B.cols[j])
+                if !iszero(product)
+                    push!(row_indices, j)
+                    row_vals[j] = product
+                end
+            end
+        end
+
+        if !isempty(row_indices)
+            push!(nnz_rows, i)
+            rows[i] = Sparsik(size(A, 2), A.field, row_indices, row_vals)
+        end
+    end
+
+    return from_rows(
+        size(A, 1), size(B, 2), FF,
         nnz_rows, rows
     )
 end
@@ -509,7 +568,7 @@ Base.iszero(A::DOK_Sparsik{T}) where {T} = length(A.nnz_rows) == 0
             A.field == B.field;
             A.rows == B.rows;
             A.nnz_rows == B.nnz_rows)
-!=(A::DOK_Sparsik{T}, u::DOK_Sparsik{T}) where {T} = !(A == B)
+!=(A::DOK_Sparsik{T}, u::DOK_Sparsik{T}) where {T} = !(A == u)
 
 +(A::DOK_Sparsik{T}, B::DOK_Sparsik{T}) where {T} = reduce(A, B, one(A.field))
 -(A::DOK_Sparsik{T}, B::DOK_Sparsik{T}) where {T} = reduce(A, B, - one(A.field))
