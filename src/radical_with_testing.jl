@@ -85,7 +85,102 @@ function find_radical(Algebra::Subspacik)
     return radical_basis
 end
 
+function find_radical_sad(Algebra::Subspacik)
+    As = basis(Algebra)
+    F = base_ring(Algebra)
+    n = dim(Algebra)
 
+    traces = Dict{Tuple{Int, Int}, elem_type(F)}(
+        (i, j) => tr(As[i] * As[j])
+        for i in 1 : n
+            for j in i : n
+    )
+
+    nnz_coords = [
+        (i, j, traces[min(i, j), max(i, j)])
+        for i in 1 : n
+            for j in 1 : n
+                if ! iszero(traces[min(i, j), max(i, j)])
+    ]
+
+    if isempty(nnz_coords)
+        return As
+    end
+
+    ZZ = GF(2^31 - 1)
+    A = from_COO(n, n, nnz_coords, F)
+
+    #@info "reduction"
+    #@time A = modular_reduction(A, ZZ)
+
+    # wiedemannchik.jl
+    pivs = zeros(Int64, n)
+    V = Subspacik(F)
+    for (piv, vec) in A.rows
+        eat_sparsik!(V, vec)
+    end
+
+    orig_pivs = collect(keys(V.echelon_form))
+
+    if length(orig_pivs) == n
+        return []
+    end
+
+    b = Sparsik(n, F, Int[], Dict{Int, elem_type(F)}())
+
+    for i in orig_pivs
+        pivs[i] = 1
+    end
+
+    for i in range(1, length=n)
+        if pivs[i] == 0
+            reduce!(b, i, rand(F))
+        end
+    end
+
+    radical_basis = Subspacik(F)
+    i = 0
+    while true
+        W = V
+        rows = W.echelon_form
+        rows = Dict{ Int64, Sparsik{typeof(F)} }(rows)
+        nnz_rows = [i for i in 1:n]
+
+        for i in range(1, length=n)
+            if pivs[i] == 0
+                rows[i] = Sparsik(n, F, [i], Dict(i => rand(F)))
+            end
+        end
+
+        i += 1
+        print("\n", i, "\n")
+        G = from_rows(n, n, F, nnz_rows, rows)
+        @info "wiedemann"
+        @time y = wiedemann_solve(G, b)
+
+        if eat_sparsik!(radical_basis, y) == reduced
+            break
+        end
+
+    end
+
+    rad = []
+
+    summator(x, y) = reduce(x, y, 1)
+    for (piv, vect) in radical_basis.echelon_form
+        vectors = []
+        for j in 1:length(As)
+            if !iszero(vect[j])
+                push!(vectors, scale(As[j], vect[j]))
+            end
+        end
+        push!(rad, reduce(summator, vectors))
+    end
+
+    @info "computed the radical of dimension $(length(rad))"
+
+    return rad
+            
 function find_radical_2(Algebra::Subspacik)
     As = basis(Algebra)
     F = base_ring(Algebra)

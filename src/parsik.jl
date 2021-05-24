@@ -203,21 +203,22 @@ end
 #------------------------------------------------------------------------------
 
 function load_ODEs_if(;from_size=-Inf, to_size=Inf)
-    testspath = "src/data/ODEs/testing"
+    testspath = "src/data/ODEs/"
     ext = ".ode"
 
     models = []
 
-    for modeltype in readdir(testspath)
-        for filename in readdir("$testspath/$modeltype")
-            if endswith(filename, ext)
+    for (path, dirs, files) in walkdir(testspath)
+        for fname in files
+            if endswith(fname, ext)
                 try
-                    model = load_ODEs("$testspath/$modeltype/$filename")
+                    model = load_ODEs("$path/$fname")
                     if from_size <= length(model) <= to_size
-                        push!(models, [filename, model])
+                        push!(models, [fname, model])
                     end
                 catch ex
-                    !isa(ex, ParseException) && rethrow(ex)
+                    #!isa(ex, ParseException) && rethrow(ex)
+                    @info ex
                     @info ex.msg
                 end
             end
@@ -229,7 +230,6 @@ function load_ODEs_if(;from_size=-Inf, to_size=Inf)
     models
 end
 
-
 # filepath - absolute model file path
 #
 function load_ODEs(filepath)
@@ -239,6 +239,8 @@ function load_ODEs(filepath)
     open(filepath, "r") do inputs
         lines = map(strip, readlines(inputs))
     end
+
+    @info "Loading $filepath"
 
     lines = filter(!isempty, map(strip, lines[
         (findfirst(startswith("begin"), lines) + 1
@@ -253,6 +255,9 @@ function load_ODEs(filepath)
         findlast(startswith("end"), lines) - 1)
     ]))
 
+    # removing comments at the end of reactions
+    reactions = map(s -> replace(s, r"\[.*\]" => ""), reactions)
+
     #=
         Parsing for the two ODE formats is implemented:
             - ERODE "arrows" format for biological processes
@@ -262,14 +267,14 @@ function load_ODEs(filepath)
         and we will try to dispatch on it
     =#
 
-    sep = occursin("->", prod(lines)) ? "->" : "="
+    sep = occursin("->", prod(reactions)) ? "->" : "="
 
     # scan reactions to discover all variables
 
-    sep1 = Regex("($sep)|(,)|([+-/ \t\\*])")
+    sep1 = Regex("($sep)|(,)|([+-/ \t\\*\\(\\)\\[\\]])")
     # assuming there is at least one utf letter in any variable
     strings = map(String, unique(filter!(
-        x -> !isempty(findall(isletter, x)),
+        x -> length(x) > 0 && isletter(x[1]),
         split(join(reactions, ' '), sep1)
     )))
 
@@ -279,11 +284,11 @@ function load_ODEs(filepath)
 
     # we want to agree with CLUE in variable order
     strings = sort(strings)
+    @info "Variables parsed " * join(strings, ", ")
     S, xs = QQ[strings...]
 
     # symbol :x to x from QQ[x]
     mapping = Dict{Symbol, fmpq_mpoly}(
-        # Gleb: Meta.parse is a bit overshoot here, you can do Symbol(x)
         Symbol(x) => gen(S, i)
         for (i, x) in enumerate(strings)
     )
