@@ -550,13 +550,13 @@ end
 function augment_subspace(V::Subspacik)
     each = [i for i in 1:ambient_dim(V)]
     present = collect(keys(V.echelon_form))
-    println(each, present)
     [
         unit_sparsik(ambient_dim(V), i, base_ring(V))
         for i in setdiff(each, present)
     ]
 end
 
+# maby `universum(dim, field)` ?
 function fullspace(dim, field)
     [
         unit_sparsik(dim, i, field)

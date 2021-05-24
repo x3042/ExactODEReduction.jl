@@ -284,7 +284,8 @@ function load_ODEs(filepath)
 
     # we want to agree with CLUE in variable order
     strings = sort(strings)
-    @info "Variables parsed " * join(strings, ", ")
+    #
+    @debug "Variables parsed " * join(strings, ", ")
     S, xs = QQ[strings...]
 
     # symbol :x to x from QQ[x]

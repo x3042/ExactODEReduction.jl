@@ -10,6 +10,9 @@ import AbstractAlgebra: minpoly, factor, charpoly
 
 #------------------------------------------------------------------------------
 
+# Finds the radical of the given matrix Algebra by
+# computing the center of the Algebra using
+# the characteristic polynomial of the Gramian matrix
 function find_radical(Algebra::Subspacik)
     As = basis(Algebra)
     F = base_ring(Algebra)
@@ -85,6 +88,9 @@ function find_radical(Algebra::Subspacik)
     return radical_basis
 end
 
+
+# Finds the radical of the given matrix Algebra by
+# computing the center of the Algebra *directly*
 function find_radical_sad(Algebra::Subspacik)
     As = basis(Algebra)
     F = base_ring(Algebra)
@@ -155,6 +161,7 @@ function find_radical_sad(Algebra::Subspacik)
         i += 1
         print("\n", i, "\n")
         G = from_rows(n, n, F, nnz_rows, rows)
+
         @info "wiedemann"
         @time y = wiedemann_solve(G, b)
 
@@ -180,7 +187,12 @@ function find_radical_sad(Algebra::Subspacik)
     @info "computed the radical of dimension $(length(rad))"
 
     return rad
-            
+end
+
+
+# Finds the radical of the given matrix Algebra by
+# computing the center of the Algebra *directly*
+# with the means of Nemo.jl functions
 function find_radical_2(Algebra::Subspacik)
     As = basis(Algebra)
     F = base_ring(Algebra)
@@ -293,16 +305,16 @@ function invariant_subspace_semisimple(Algebra::Subspacik)
         i += 1
     end
 
-    @warn "invariant subspaces exist but are not defined over Q
-    (or our randomized algorithm failed), not implemented, sorry"
+    @warn "invariant subspaces exist but are not defined over Q, not implemented, sorry"
     # should we return hmm..
     return []
 end
 
 #------------------------------------------------------------------------------
 
-function general_kernel(radical::AbstractArray)
-    stacked = vcat(radical...)
+# finds the general kernel of the given matrices
+function general_kernel(matrices::AbstractArray)
+    stacked = vcat(matrices...)
     Space = MatrixSpace(QQ, size(stacked)...)
     return Array(last(kernel(Space(stacked))))
 end

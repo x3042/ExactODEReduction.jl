@@ -24,7 +24,13 @@ system = [
     x₁ + x₃         # derivative of x4
 ]
 
-invariants = invariant_subspace(system)
+# construct jacobians of the system to obtain matrices
+matrices = construct_jacobians(system)
+
+# find an invariant subspaces of the matrices
+invariants = invariant_subspace(matrices)
+
+# transform it back ti polynomial form
 transformation = polynormalize(invariants, R)
 
 @assert transformation == [x₁ + x₂, x₃ + x₄]
@@ -40,11 +46,17 @@ system = [
     x₁ + x₂                 # derivative of x3
 ]
 
-invariants = invariant_subspace(system)
+# construct jacobians of the system to obtain matrices
+matrices = construct_jacobians(system)
+
+# find an invariant subspaces of the matrices
+invariants = invariant_subspace(matrices)
+
+# transform it back ti polynomial form
 transformation = polynormalize(invariants, R)
 
 # maybe it will be good to normalize, say,
 # by the coef of the first variable
-@assert transformation == [1//2*x₂ + x₃]
+@assert transformation == [x₂ + 2x₃]
 
 #------------------------------------------------------------------------------

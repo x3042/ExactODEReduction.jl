@@ -5,19 +5,10 @@ using AbstractAlgebra
 
 #------------------------------------------------------------------------------
 
-# computes the invariant subspaces of the given system
+# computes the invariant subspaces of the given matrices
 #
-# returns a common invariant subspace represented by basis equations
-function invariant_subspace(system::AbstractArray{T}) where {T<:MPolyElem}
-    isempty(system) && error("empty system invariants are ill-defined")
-
-    # construct jacobians for each variable
-    matrices = construct_jacobians(system)
-
-    invariant_subspace(matrices)
-end
-
-function invariant_subspace(matrices::AbstractArray{T}) where {T<:AbstractSparseMatrix}
+# returns a common invariant subspace represented by basis vectors
+function invariant_subspace_1(matrices::AbstractArray{T}) where {T<:AbstractSparseMatrix}
     isempty(matrices) && error("empty system invariants are ill-defined")
 
     # generate a basis for the Algebra
@@ -25,10 +16,10 @@ function invariant_subspace(matrices::AbstractArray{T}) where {T<:AbstractSparse
 
     # find the radical of the Algebra
     @info "computing the radical.."
-    @time radical = find_radical(algebra)
+    @time radical = find_radical_2(algebra)
 
     # find an invariant subspace
-    if length(radical) != 0
+    if length(radical) != 0 && length(radical) < dim(algebra)
         @info "radical is nontrivial, computing the general kernel"
         invariant = general_kernel(map(to_dense, radical))
         invariant = [
@@ -59,6 +50,9 @@ end
 
 #------------------------------------------------------------------------------
 
+
+# computes invariant subspaces using the given hint,
+# , i.e, an array of vectors generating a subspace
 function __invariant_subspace_2(matrices::AbstractArray{T}, hint) where {T<:AbstractSparseMatrix}
     isempty(matrices) && error("empty system invariants are ill-defined")
 
@@ -77,7 +71,6 @@ function __invariant_subspace_2(matrices::AbstractArray{T}, hint) where {T<:Abst
                 product = vect * V.echelon_form[pivot]
 
                 i += 1
-                # i % 500 == 0 && print(".")
 
                 if !iszero(product)
                     new_pivot = eat_sparsik!(V, product)
@@ -135,54 +128,21 @@ function __many_invariant_subspaces(
         append!(toreturn, map(vs -> lift(vs, V), subspaces))
     end
 
+    # factorize
     if length(V) + 1 < n # < n
         As_V = factorize(As, V)
         if !isempty(As_V)
             As_V_sparse = map(x-> from_dense(x, ground), map(Array, As_V))
             subspaces = __many_invariant_subspaces(As_V_sparse, find_invariant)
             lifted = map(
-                vs -> [
-                    lift(vs, augment_subspace(linear_span!(V)))...,
-                    V...
-                ],
+                vs -> lift(vs, augment_subspace(linear_span!(V))),
                 subspaces)
+            lifted = map(
+                vs -> append!(vs, V),
+                lifted)
             append!(toreturn, lifted)
         end
     end
-
-    #=
-    @info "" toreturn
-    for (i, U) in enumerate(collect(toreturn))
-        for (j, W) in enumerate(collect(toreturn))
-            if j <= i
-                continue
-            end
-            UW  = basis(linear_span!([U..., W...]))
-            @info "U + W" U W
-            @info "merging.." UW
-
-            if length(UW) > 1
-                @info "restricting.."
-                As_V = restrict(As, UW)
-                As_V_sparse = map(x-> from_dense(x, ground), map(Array, As_V))
-                subspaces = __many_invariant_subspaces(As_V_sparse, find_invariant)
-                append!(toreturn, map(vs -> lift(vs, UW), subspaces))
-                @info "lifted to " toreturn[end]
-            end
-
-            if length(UW) + 1 < n
-                @info "factoring.."
-                As_V = factorize(As, UW)
-                if !isempty(As_V)
-                    As_V_sparse = map(x-> from_dense(x, ground), map(Array, As_V))
-                    subspaces = __many_invariant_subspaces(As_V_sparse, find_invariant)
-                    append!(toreturn, map(vs -> lift(vs, augment_subspace(linear_span!(UW))), subspaces))
-                    @info "lifted to " toreturn[end]
-                end
-            end
-        end
-    end
-    =#
 
     for vs in toreturn
         if !check_invariance!(deepcopy(As), deepcopy(vs))
@@ -193,38 +153,42 @@ function __many_invariant_subspaces(
     return toreturn
 end
 
-# finds some common invariant subspaces of the given matrices
-# using the given default method for finding invaiant subspaces
-function many_invariant_subspaces(
-    As::AbstractArray{T};
-    find_invariant=invariant_subspace)  where {T<:AbstractSparseMatrix}
-
-    n = dim(first(As))
-    ground = field(first(As))
-
-    __many_invariant_subspaces(As, find_invariant)
-end
-
 #------------------------------------------------------------------------------
 
+# Because matrices arising here are small,
+# we mostly use dense Nemo algebra
+
+# restricts the given matrices `As` to the subspace
+# generated by vectors from `vs`
+# Returns new, restriced representations of the matrices
 function restrict(As::AbstractArray, vs)
     n = size(first(As), 1)
     ground = base_ring(first(As))
 
     MSpace = AbstractAlgebra.Generic.MatrixSpace(ground, n, length(vs))
 
+    # Asvs = [A*f1 A*f2 .. Afd]
+    # for fi in vs
     Asvs = [
         MSpace(hcat([ to_dense(A * v) for v in vs ]...))
         for A in As
     ]
+
+    # matrix = [v1 v2 .. vn]
+    # for vi in vs
     matrix = MSpace(hcat([ to_dense(v) for v in vs ]...))
 
+    # solve for each A from As
+    #   A*fi = a1*f1 + a2*f2 + ... + ad*fd
     [
         AbstractAlgebra.Generic.solve(matrix, Avs)
         for Avs in Asvs
     ]
 end
 
+# factorized the given matrices `As` by the subspace
+# generated by vectors from `vs`
+# Returns new, factorized representations of the matrices
 function factorize(As::AbstractArray, vs)
     n = size(first(As), 1)
     ground = base_ring(first(As))
@@ -232,20 +196,27 @@ function factorize(As::AbstractArray, vs)
     MSpace = AbstractAlgebra.Generic.MatrixSpace(ground, n, n - length(vs))
     MSpaceplus = AbstractAlgebra.Generic.MatrixSpace(ground, n, n)
 
+    # complement ⊕ vs = Rn
     complement = augment_subspace(linear_span!(vs))
 
+    # Asvs = [A*f1 A*f2 .. Afd]
+    # for fi in complement
     Asvs = [
         MSpace(hcat([to_dense(A * v) for v in complement ]...))
         for A in As
     ]
 
-    #!
+    # matrix = [f1 f2 .. fd e1 .. en]
+    # for fi in complement
+    # for ei in vs
     matrix = MSpaceplus(hcat(
         map(to_dense, complement)...,
         map(to_dense, vs)...)
     )
 
-
+    # solve for each A from As
+    #   A*fi = a1*f1 + a2*f2 + ... + ad*fd + e
+    #   where e ∈ vs
     ans = [
         AbstractAlgebra.Generic.solve(matrix, Avs)[1:end-length(vs), :]
         for Avs in Asvs
@@ -253,7 +224,8 @@ function factorize(As::AbstractArray, vs)
     return ans
 end
 
-
+# lifts vectors `vs` to the subspace generated by vectors `Vs`
+# Returns new, lifted representations of the vectors
 function lift(vs, Vs)
     n = dim(first(Vs))
     ground = base_ring(first(Vs))
@@ -273,37 +245,3 @@ end
 
 
 #------------------------------------------------------------------------------
-
-C2 = @sparse [
-    2 1 0;
-    2 -1 3;
-    0 0 1;
-]
-
-C1 = @sparse [
-    1 0 0;
-    0 2 2;
-    0 2 2;
-]
-
-A1 = @sparse [
-    1 1 0 0;
-    1 1 0 0;
-    0 0 1 2;
-    0 0 0 1;
-]
-A2 = @sparse [
-    0 1 0 0;
-    1 0 0 0;
-    0 0 0 2;
-    0 0 2 0;
-]
-
-
-B1 = @sparse [
-    0 0 0 0 0;
-    0 0 0 0 0;
-    0 0 3 0 0;
-    0 0 3 3 1;
-    0 0 0 0 2;
-]

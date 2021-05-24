@@ -36,7 +36,9 @@ gen_matrices = [
     ], QQ)
 ]
 
-invs = invariant_subspace(gen_matrices)
-println(invs)
-# [e1, e2]  or  [e3, e4], differs from run to run
-#
+invariants = invariant_subspace(gen_matrices)
+
+e1, e2, e3, e4 = fullspace(4, QQ)
+
+# may fail due to randomness of the used algorithm
+@assert invariants in [ [e1, e2], [e3, e4] ]
