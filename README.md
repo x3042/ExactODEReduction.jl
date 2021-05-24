@@ -59,10 +59,10 @@ system = [
 ]
 ```
 
-4. Call `invariant_subspaces` providing the system
+4. Call `invariant_subspace` providing the system
 
 ```julia
-invariant_subspaces(system)
+invariant_subspace(system)
 ```
 
 You will get the following result

@@ -21,7 +21,7 @@ import Nemo: QQ, GF, Field
 mutable struct Subspacik{T<:Field}
     field::T
     # the echelon form of vectors is an invariant!
-    echelon_form::Dict{Int, AbstractSparseObject{T}}
+    echelon_form::Dict{Int, <:AbstractSparseObject{T}}
 end
 
 #------------------------------------------------------------------------------
@@ -539,4 +539,27 @@ function random_element(A::Union{Subspacik, HashedSubspacik}; count=5)
     # ± e₁ ± … ± eₖ
     sum(map(prod, zip(rand((𝔽(-1), 𝔽(1)), count), basis(A)[indices])))
 
+end
+
+#------------------------------------------------------------------------------
+
+# Returns an array of vectors T such that
+#   V ⊕ T = R^n
+#
+# How can we name it btw?
+function augment_subspace(V::Subspacik)
+    each = [i for i in 1:ambient_dim(V)]
+    present = collect(keys(V.echelon_form))
+    println(each, present)
+    [
+        unit_sparsik(ambient_dim(V), i, base_ring(V))
+        for i in setdiff(each, present)
+    ]
+end
+
+function fullspace(dim, field)
+    [
+        unit_sparsik(dim, i, field)
+        for i in 1 : dim
+    ]
 end

@@ -54,7 +54,6 @@ function find_basis_1_β(vectors)
     alg = linear_span!(deepcopy(vectors))
 
     # apply them with the threshold of ω
-    @info "β"
     fat_vectors = apply_matrices_inplace!(alg, deepcopy(vectors), ω=0.05)
 
     # eat discarded vectors

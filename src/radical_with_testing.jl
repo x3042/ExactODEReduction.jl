@@ -37,16 +37,14 @@ function find_radical(Algebra::Subspacik)
 
     # todo: do we really need it?
     # yes
-    @info "reduction"
-    @time A = modular_reduction(A, ZZ)
+    A = modular_reduction(A, ZZ)
 
     # Σπαξιβo!
 
     # wiedemannchik.jl
     PolySpace, _ = ZZ["x"]
     MSpace = MatrixSpace(ZZ, n, n)
-    @info "char poly"
-    @time char_poly = minimal_polynomial_wiedemann(
+    char_poly = minimal_polynomial_wiedemann(
         A,
         subspace_minpoly=__randomized_wiedemann_minpoly
     )
@@ -63,11 +61,9 @@ function find_radical(Algebra::Subspacik)
         char_poly = shift_right_x(char_poly)
     end
 
-    @info "evaluate"
-    @time Image = evaluate(char_poly, A)
+    Image = evaluate_2(char_poly, A)
 
-    @info "reconstruct"
-    @time Image = rational_reconstruction(Image)
+    Image = rational_reconstruction(Image)
 
     transpose!(Image)
 
@@ -84,7 +80,7 @@ function find_radical(Algebra::Subspacik)
         push!(radical_basis, reduce(summator, vectors))
     end
 
-    @info "computed the radical of the Algebra of dimension $(length(radical_basis))"
+    @info "computed the radical of dimension $(length(radical_basis))"
 
     return radical_basis
 end

@@ -24,7 +24,7 @@ system = [
     x₁ + x₃         # derivative of x4
 ]
 
-invariants = invariant_subspaces(system)
+invariants = invariant_subspace(system)
 transformation = polynormalize(invariants, R)
 
 @assert transformation == [x₁ + x₂, x₃ + x₄]
@@ -40,7 +40,7 @@ system = [
     x₁ + x₂                 # derivative of x3
 ]
 
-invariants = invariant_subspaces(system)
+invariants = invariant_subspace(system)
 transformation = polynormalize(invariants, R)
 
 # maybe it will be good to normalize, say,
