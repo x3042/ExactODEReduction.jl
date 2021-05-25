@@ -1,3 +1,5 @@
+# Gleb: change the name of the file! It implicitly implies that the rest of the functionality has not been tested
+
 include("basis.jl")
 include("structs/subspacik.jl")
 
@@ -38,11 +40,7 @@ function find_radical(Algebra::Subspacik)
     ZZ = GF(2^31 - 1)
     A = from_COO(n, n, nnz_coords, F)
 
-    # todo: do we really need it?
-    # yes
     A = modular_reduction(A, ZZ)
-
-    # Σπαξιβo!
 
     # wiedemannchik.jl
     PolySpace, _ = ZZ["x"]
@@ -56,6 +54,7 @@ function find_radical(Algebra::Subspacik)
     radical_basis = []
 
     # hm??
+    # Gleb: why "hm??"
     if (!iszero(coeff(char_poly, 0)))
         return radical_basis
     end
@@ -67,6 +66,8 @@ function find_radical(Algebra::Subspacik)
     Image = evaluate_2(char_poly, A)
 
     Image = rational_reconstruction(Image)
+    # Gleb: technically, there should be some way to check and rerun with larger prime
+    # however, if this is not the winner-radical-algorithm, not needed really
 
     transpose!(Image)
 
@@ -88,7 +89,8 @@ function find_radical(Algebra::Subspacik)
     return radical_basis
 end
 
-
+# Gleb: are you really talking about the center of the algebra?
+# I guess you mean something else
 # Finds the radical of the given matrix Algebra by
 # computing the center of the Algebra *directly*
 function find_radical_sad(Algebra::Subspacik)
@@ -96,6 +98,8 @@ function find_radical_sad(Algebra::Subspacik)
     F = base_ring(Algebra)
     n = dim(Algebra)
 
+    # Gleb: maybe it would be better to separate this into a
+    # function gram_matrix, would be more readable also
     traces = Dict{Tuple{Int, Int}, elem_type(F)}(
         (i, j) => tr(As[i] * As[j])
         for i in 1 : n
@@ -138,12 +142,14 @@ function find_radical_sad(Algebra::Subspacik)
         pivs[i] = 1
     end
 
+    # Gleb: why do you use this range instead of 1:n ?
     for i in range(1, length=n)
         if pivs[i] == 0
             reduce!(b, i, rand(F))
         end
     end
 
+    # Gleb: as I said, no need for Wiedemann here
     radical_basis = Subspacik(F)
     i = 0
     while true
@@ -198,6 +204,7 @@ function find_radical_2(Algebra::Subspacik)
     F = base_ring(Algebra)
     n = dim(Algebra)
 
+    # Gleb: to a function (see above)
     traces = Dict{Tuple{Int, Int}, elem_type(F)}(
         (i, j) => tr(As[i] * As[j])
         for i in 1 : n
@@ -261,6 +268,7 @@ function invariant_subspace_semisimple(Algebra::Subspacik)
     n = size(first(es), 1)
     F = base_ring(Algebra)
 
+    # Gleb: shouldn't it be n^2 ?
     if n == dim(Algebra)
         return []
     end
@@ -282,6 +290,7 @@ function invariant_subspace_semisimple(Algebra::Subspacik)
         #   factor → degree  ,  (x-a)(x-b)..
 
         # mb we can use other factors to output more subspaces
+        # Gleb: yes, this is very true, you can actually simply loop over the factors of the charpoly
         f = first(keys(factors))
         # f = irreducible^k
         f = f^factors[f]
