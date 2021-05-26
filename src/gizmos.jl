@@ -273,3 +273,26 @@ function polynormalize(vectors, domain) where {T}
 
     polynômes
 end
+
+#------------------------------------------------------------------------------
+
+# for As[i] in array As compute dok_sparsik Tr: Tr_ij = trace(A_i, A_j)
+function gram_matrix(As::Array{AbstractSparseObject{FlintRationalField},1})
+    F = base_ring(As[1])
+    n = length(As)
+
+    traces = Dict{Tuple{Int, Int}, elem_type(F)}(
+        (i, j) => tr(As[i] * As[j])
+        for i in 1 : n
+            for j in i : n
+    )
+
+    nnz_coords = [
+        (i, j, traces[min(i, j), max(i, j)])
+        for i in 1 : n
+            for j in 1 : n
+                if ! iszero(traces[min(i, j), max(i, j)])
+    ]
+
+    return from_COO(n, n, nnz_coords, F)
+end

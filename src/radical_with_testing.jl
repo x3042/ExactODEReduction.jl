@@ -1,6 +1,7 @@
 # Gleb: change the name of the file! It implicitly implies that the rest of the functionality has not been tested
 
 include("basis.jl")
+include("gizmos.jl")
 include("structs/subspacik.jl")
 
 #------------------------------------------------------------------------------
@@ -92,95 +93,49 @@ end
 # Gleb: are you really talking about the center of the algebra?
 # I guess you mean something else
 # Finds the radical of the given matrix Algebra by
-# computing the center of the Algebra *directly*
-function find_radical_sad(Algebra::Subspacik)
+# computing the radical of the Algebra *directly*
+function find_radical_sup(Algebra::Subspacik)
     As = basis(Algebra)
     F = base_ring(Algebra)
     n = dim(Algebra)
 
-    # Gleb: maybe it would be better to separate this into a
-    # function gram_matrix, would be more readable also
-    traces = Dict{Tuple{Int, Int}, elem_type(F)}(
-        (i, j) => tr(As[i] * As[j])
-        for i in 1 : n
-            for j in i : n
-    )
-
-    nnz_coords = [
-        (i, j, traces[min(i, j), max(i, j)])
-        for i in 1 : n
-            for j in 1 : n
-                if ! iszero(traces[min(i, j), max(i, j)])
-    ]
-
-    if isempty(nnz_coords)
+    A = gram_matrix(As)
+    if isempty(A.nnz_rows)
         return As
     end
 
-    ZZ = GF(2^31 - 1)
-    A = from_COO(n, n, nnz_coords, F)
-
-    #@info "reduction"
-    #@time A = modular_reduction(A, ZZ)
-
-    # wiedemannchik.jl
     pivs = zeros(Int64, n)
     V = Subspacik(F)
-    for (piv, vec) in A.rows
-        eat_sparsik!(V, vec)
-    end
+   for (piv, vec) in A.rows
+       eat_sparsik!(V, vec)
+   end
 
-    orig_pivs = collect(keys(V.echelon_form))
+   orig_pivs = collect(keys(V.echelon_form))
 
-    if length(orig_pivs) == n
-        return []
-    end
+   if length(orig_pivs) == n
+       return []
+   end
 
-    b = Sparsik(n, F, Int[], Dict{Int, elem_type(F)}())
+   radical_basis = []
 
-    for i in orig_pivs
-        pivs[i] = 1
-    end
+   for i in orig_pivs
+       pivs[i] = 1
+   end
 
-    # Gleb: why do you use this range instead of 1:n ?
-    for i in range(1, length=n)
-        if pivs[i] == 0
-            reduce!(b, i, rand(F))
-        end
-    end
-
-    # Gleb: as I said, no need for Wiedemann here
-    radical_basis = Subspacik(F)
-    i = 0
-    while true
-        W = V
-        rows = W.echelon_form
-        rows = Dict{ Int64, Sparsik{typeof(F)} }(rows)
-        nnz_rows = [i for i in 1:n]
-
-        for i in range(1, length=n)
-            if pivs[i] == 0
-                rows[i] = Sparsik(n, F, [i], Dict(i => rand(F)))
+   for i in 1:n
+       if pivs[i] == 0
+           y = Sparsik(n, F, Int[], Dict{Int, elem_type(F)}())
+           reduce!(y, i, one(F))
+            for j in orig_pivs
+                reduce!(y, j, -V.echelon_form[j][i])
             end
+            push!(radical_basis, y)
         end
-
-        i += 1
-        print("\n", i, "\n")
-        G = from_rows(n, n, F, nnz_rows, rows)
-
-        @info "wiedemann"
-        @time y = wiedemann_solve(G, b)
-
-        if eat_sparsik!(radical_basis, y) == reduced
-            break
-        end
-
     end
 
     rad = []
-
     summator(x, y) = reduce(x, y, 1)
-    for (piv, vect) in radical_basis.echelon_form
+    for vect in radical_basis
         vectors = []
         for j in 1:length(As)
             if !iszero(vect[j])
@@ -194,6 +149,7 @@ function find_radical_sad(Algebra::Subspacik)
 
     return rad
 end
+
 
 
 # Finds the radical of the given matrix Algebra by
