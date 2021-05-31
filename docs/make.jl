@@ -23,5 +23,4 @@ deploydocs(
     branch = "gh-pages",
     repo = "github.com/x3042/Exact-reduction-of-ODE-systems.git",
     devbranch = "main",
-    target = "build"
 )
