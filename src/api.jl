@@ -12,12 +12,24 @@ include("../src/invariants.jl")
 #
 
 #------------------------------------------------------------------------------
+"""
+    func(x)
+
+Indentity function. Returns `x`.
+"""
+function func(x)
+    return x
+end
 
 # finds one common invariant subspace of the given matrices
 # using the provived default method for finding one invaiant subspace
-function invariant_subspace(
-    As::AbstractArray{T};
-    backend_algorithm=invariant_subspace_1)  where {T<:AbstractSparseMatrix}
+"""
+    invariant_subspace(As; backend_algorithm)
+
+Finds one common invariant subspace of the given matrices `As`
+using the provived default method for finding one invaiant subspace `backend_algorithm`.
+"""
+function invariant_subspace(As; backend_algorithm=invariant_subspace_1)
 
     backend_algorithm(As)
 end
@@ -27,8 +39,8 @@ end
 # finds several common invariant subspaces of the given matrices
 # using the provided default method for finding one invaiant subspace
 function many_invariant_subspaces(
-    As::AbstractArray{T};
-    backend_algorithm=invariant_subspace_1)  where {T<:AbstractSparseMatrix}
+    As;
+    backend_algorithm=invariant_subspace_1)
 
     __many_invariant_subspaces(As, backend_algorithm)
 end

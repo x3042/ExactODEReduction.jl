@@ -36,13 +36,17 @@ Base.rand(::FlintIntegerRing, n::Int) = [rand(ZZ) for _ in 1:n]
 
 #------------------------------------------------------------------------------
 
+function normtime(x)
+     x/1e6
+end
+
 # estimates the elapsed time for `ex` and stores the result into the `storage`
 macro savetime(ex, storage)
     return quote
         local t0 = time_ns()
         local val = $(esc(ex))
         local t1 = time_ns()
-        push!($storage, (t1-t0)/1e6)
+        push!($storage, normtime(t1-t0))
         val
     end
 end
@@ -55,6 +59,11 @@ end
 #   1D vector --> Sparsik
 #   2D vector --> DOK_Sparsik
 # over the Rational field of Nemo.QQ instance
+"""
+    @sparse(ex)
+
+Converts an `Array` in `ex` to sparse representation
+"""
 macro sparse(ex)
     return quote
         from_dense($(esc(ex)), QQ)

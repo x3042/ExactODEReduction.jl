@@ -4,20 +4,24 @@ include("../src/api.jl")
 
 function uwu()
 
-    for (i, (filename, dim, size, data)) in enumerate(load_COO_if(from_dim=50, to_dim=60))
+    for (i, (filename, system)) in enumerate(load_ODEs_if(from_size=1, to_size=30))
 
-        @info "loaded $filename of dimension $dim×$dim"
+        @info "$i-th, loaded a system $filename of size $(length(system))"
 
-        #=if filename != "BIOMD0000000072.json"
+        equations = [system[x] for x in sort(collect(keys(system)), by=string)]
+
+        As = construct_jacobians(equations)
+
+        if filename != "e2.ode"
             continue
-        end=#
+        end
 
         # matrices
-        As = [from_COO(x..., QQ) for x in data]
-
         V1 = find_basis(deepcopy(As))
 
-        R = find_radical_2(V1)
+        println("radical... \n----------")
+        @time R = find_radical_2(V1)
+        println("\n----------")
 
     end
 
@@ -50,7 +54,7 @@ end
 Vs = []
 function rororo()
 
-    for (i, (filename, system)) in enumerate(load_ODEs_if(from_size=60, to_size=70))
+    for (i, (filename, system)) in enumerate(load_ODEs_if(from_size=50, to_size=55))
 
         @info "$i-th, loaded a system $filename of size $(length(system))"
 
@@ -76,7 +80,7 @@ function rororo()
 end
 
 
-# rororo()
+rororo()
 # uwu()
 # owo()
 
