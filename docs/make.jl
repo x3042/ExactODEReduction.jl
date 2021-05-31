@@ -20,9 +20,9 @@ makedocs(
 makedocs(sitename="SparseAlgebra.jl")
 
 deploydocs(
-    root =  "github.com/sumiya11/SparseAlgebra.jl.git",
+    root =  "github.com/x3042/Exact-reduction-of-ODE-systems.jl.git",
     branch = "gh-pages",
-    repo = "github.com/sumiya11/SparseAlgebra.jl.git",
-    devbranch = "master",
+    repo = "github.com/x3042/Exact-reduction-of-ODE-systems.git",
+    devbranch = "main",
     target = "build"
 )
