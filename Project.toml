@@ -3,9 +3,6 @@ uuid = "d40ae13d-113f-43f6-b846-1243f63c2c52"
 authors = ["x3042", "sumiya11", "pogudingleb"]
 version = "0.1.0"
 
-[compat]
-julia = "1.4"
-
 [deps]
 AbstractAlgebra = "c3fe647b-3220-5bb0-a1ea-a7954cac585d"
 BloomFilters = "d3d7f49f-8593-5289-ba71-9c4f4848f489"
@@ -23,3 +20,6 @@ SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 Suppressor = "fd094767-a336-5f1f-9728-57cf17d0bbfb"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 TestSetExtensions = "98d24dd4-01ad-11ea-1b02-c9a08f80db04"
+
+[compat]
+julia = "1.4"
