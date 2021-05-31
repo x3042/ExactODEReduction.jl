@@ -18,3 +18,7 @@ makedocs(
 )
 
 makedocs(sitename="SparseAlgebra.jl")
+
+deploydocs(
+    repo = "github.com/sumiya11/SparseAlgebra.jl.git",
+)
