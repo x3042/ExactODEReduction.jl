@@ -20,5 +20,9 @@ makedocs(
 makedocs(sitename="SparseAlgebra.jl")
 
 deploydocs(
+    root =  "github.com/sumiya11/SparseAlgebra.jl.git",
+    branch = "gh-pages",
     repo = "github.com/sumiya11/SparseAlgebra.jl.git",
+    devbranch = "master",
+    target = "build"
 )
