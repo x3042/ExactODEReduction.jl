@@ -40,15 +40,3 @@ from the Julia REPL.
 >julia polynormalize(invariants, R)
 [x₁ + x₂, x₃ + x₄]
 ```
-
-```@docs
-invariant_subspace(As)
-```
-
-```@docs
-SparseAlgebra.@sparse(ex)
-```
-
-```@docs
-func(x)
-```
