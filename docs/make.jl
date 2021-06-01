@@ -15,7 +15,7 @@ makedocs(
         "Home" => "index.md",
         "Examples" => [
             "Subspaces" => "example_subspaces.md",
-            "Reduce ODEs" => "example_full.md"
+            "ODEs reduction" => "example_full.md"
         ],
         "Documentation" => [
             "Types" => "types.md",

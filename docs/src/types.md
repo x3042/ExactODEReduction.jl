@@ -1,11 +1,11 @@
-# Types in SparseAlgebra
+# Types
 
 ```@meta
 CurrentModule = SparseAlgebra
 ```
 
-## Structures
+Type system in this package goes as follows..
 
 ```@docs
-Sparsik
+AbstractSparseObject
 ```

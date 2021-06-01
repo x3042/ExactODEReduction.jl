@@ -27,6 +27,13 @@ import AbstractAlgebra: Field
 # `T` is the type of the base_ring field
 #
 # Base interface for anything Sparse implemented in this project
+"""
+AbstractSparseObject{T}
+
+Base interface for anything Sparse implemented in this project
+
+`T` is the type of the ground field
+"""
 abstract type AbstractSparseObject{T} end
 
 #------------------------------------------------------------------------------
