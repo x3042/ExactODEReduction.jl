@@ -13,6 +13,15 @@ makedocs(
     authors = "Elizaveta Demitraki, Alexander Demin, and Gleb Pogudin",
     pages = [
         "Home" => "index.md",
+        "Examples" => [
+            "Subspaces" => "example_subspaces.md",
+            "Reduce ODEs" => "example_full.md"
+        ]
+        "Documentation" => [
+            "Types" => "types.md",
+            "Functions" => "functions.md",
+            "Structures" => "structures.md",
+        ]
         "types.md"
     ]
 )
