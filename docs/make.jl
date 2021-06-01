@@ -13,14 +13,14 @@ makedocs(
     authors = "Elizaveta Demitraki, Alexander Demin, and Gleb Pogudin",
     pages = [
         "Home" => "index.md",
-        "Examples" => [
-            "Subspaces" => "example_subspaces.md",
-            "ODEs reduction" => "example_full.md"
+        "Examples" => Any[
+            "Subspaces" => "examples/example_subspaces.md",
+            "ODEs reduction" => "examples/example_full.md"
         ],
-        "Documentation" => [
-            "Types" => "types.md",
-            "Functions" => "functions.md",
-            "Structures" => "structures.md",
+        "Documentation" => Any[
+            "Types" => "documentation/types.md",
+            "Functions" => "documentation/functions.md",
+            "Structures" => "documentation/structures.md",
         ]
     ]
 )
