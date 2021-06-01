@@ -8,7 +8,7 @@ using SparseAlgebra
 
 
 makedocs(
-    modules = [SparseAlgebra],
+    modules = [ SparseAlgebra ],
     sitename = "Documenter.jl",
     authors = "Elizaveta Demitraki, Alexander Demin, and Gleb Pogudin",
     pages = [
@@ -22,7 +22,6 @@ makedocs(
             "Functions" => "functions.md",
             "Structures" => "structures.md",
         ]
-        "types.md"
     ]
 )
 
