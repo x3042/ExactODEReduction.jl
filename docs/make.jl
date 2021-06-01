@@ -15,11 +15,11 @@ makedocs(
         "Home" => "index.md",
         "Examples" => Any[
             "Subspaces" => "examples/example_subspaces.md",
-            "examples/example_full.md"
+            hide("examples/example_full.md")
         ],
         "Documentation" => Any[
             "Types" => "documentation/types.md",
-            "documentation/functions.md",
+            hide("documentation/functions.md"),
             "documentation/structures.md",
         ]
     ]
