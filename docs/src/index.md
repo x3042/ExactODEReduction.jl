@@ -14,7 +14,7 @@ To install it, run
 
 ```
 using Pkg
-Pkg.add("Symbolics")
+Pkg.add("SparseAlgebra")
 ```
 
 from the Julia REPL.
