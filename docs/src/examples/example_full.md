@@ -1,4 +1,4 @@
-# Reducing ODEs
+# ODEs Reduction
 
 ```@meta
 CurrentModule = SparseAlgebra

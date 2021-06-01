@@ -1,4 +1,4 @@
-# Matrix Algebra Subspaces
+# Algebra Subspaces
 
 ```@meta
 CurrentModule = SparseAlgebra
