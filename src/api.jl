@@ -12,6 +12,18 @@ include("../src/invariants.jl")
 #
 
 #------------------------------------------------------------------------------
+
+
+"""
+    func_2(x)
+
+Indentity function. Returns `x`.
+"""
+function func_2(x)
+    return x
+end
+
+
 """
     func(x)
 
