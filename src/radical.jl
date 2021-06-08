@@ -223,8 +223,7 @@ function invariant_subspace_semisimple(Algebra::Subspacik)
     n = size(first(es), 1)
     F = base_ring(Algebra)
 
-    # Gleb: shouldn't it be n^2 ?
-    if n == dim(Algebra)
+    if n^2 == dim(Algebra)
         return []
     end
 
