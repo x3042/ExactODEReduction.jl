@@ -1,5 +1,5 @@
 
-include("../src/radical_with_testing.jl")
+include("../src/radical.jl")
 
 using AbstractAlgebra
 
@@ -19,7 +19,7 @@ function invariant_subspace_1(matrices::AbstractArray{T}) where {T<:AbstractSpar
 
     # find the radical of the Algebra
     @info "computing the radical.."
-    @time radical = find_radical_2(algebra)
+    @time radical = find_radical_sup(algebra)
 
     # find an invariant subspace
     if length(radical) != 0 && length(radical) < dim(algebra)

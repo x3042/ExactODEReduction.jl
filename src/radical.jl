@@ -90,8 +90,7 @@ function find_radical(Algebra::Subspacik)
     return radical_basis
 end
 
-# Gleb: are you really talking about the center of the algebra?
-# I guess you mean something else
+
 # Finds the radical of the given matrix Algebra by
 # computing the radical of the Algebra *directly*
 function find_radical_sup(Algebra::Subspacik)

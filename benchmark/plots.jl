@@ -3,9 +3,6 @@
 include("../src/wiedemannchik.jl")
 
 
-# FILE IS NOT COMPLETE AND IS COMPLETELY NOT INTERESTING
-
-
 #------------------------------------------------------------------------------
 
 using Plots

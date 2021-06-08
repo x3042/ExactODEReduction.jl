@@ -37,7 +37,7 @@ Base.rand(::FlintIntegerRing, n::Int) = [rand(ZZ) for _ in 1:n]
 #------------------------------------------------------------------------------
 
 function normtime(x)
-     x/1e6
+     x/1e9
 end
 
 # estimates the elapsed time for `ex` and stores the result into the `storage`

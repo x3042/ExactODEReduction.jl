@@ -4,11 +4,11 @@
 
 **any thoughts on a possible acronym?..*
 
-This repository contains a Julia implementation of the algorithms from the paper [TODO]. The core interface allows to compute invariant subspaces for an exact reduction to be performed.
+This repository contains a Julia implementation of the algorithms for researching the structure of ODEs of system biology models. The core interface allows to compute invariant subspaces for an exact reduction to be performed.
 
 ## What is exact reduction?
 
-Exact reduction of the system of differential equations is intrinsically a variable substitution which preserves the invariants of the system. In this project we mainly consider reductions obtained with **linear transformations**. We will explain it using a toy example. Consider the system
+Exact reduction of the system of differential equations is an exact variable substitution which preserves the invariants of the system. In this project we mainly consider reductions obtained with **linear transformations**. We will explain it using a toy example. Consider the system
 
 <img src="https://render.githubusercontent.com/render/math?math=\begin{cases} \dot{x}_1 = x_1^2 %2b 2x_1x_2,\\ \dot{x}_2  =  x_2^2 %2b x_3 %2b x_4,\\ \dot{x}_3  = x_2 %2b x_4, \\\dot{x}_4 = x_1 %2b x_3 \end{cases}\\">
 
@@ -20,7 +20,7 @@ The crucial feature of these variables is their derivatives can be written in te
 
 <img src="https://render.githubusercontent.com/render/math?math=\dot{y_1} = \dot{x_1} %2b \dot{x_2} = x_1^2 %2b 2x_1x_2 %2b x_2^2 %2b x_3 %2b x_4 = y_1^2 %2b y_2\\">
 
-and 
+and
 
 <img src="https://render.githubusercontent.com/render/math?math=\dot{y_2} = \dot{x_3} %2b \dot{x_4} = x_1 %2b x_2 %2b x_3 %2b x_4 = y_1 %2b y_2">
 
@@ -30,11 +30,9 @@ Therefore, the original system can be **reduced exactly** to the following syste
 
 ## What does [TBD] do and how to use it?
 
-For an interactive version of this minitutorial, see this jupyter notebook [TODO].
+We implement an algorithm that takes as **input** a system of ODEs with polynomial right-hand side and **returns** the set of possible linear transformations.
 
-[TBD] implements an algorithm that takes as **input** a system of ODEs with polynomial right-hand side and **returns** the set [TODO] of possible linear transformations.
-
-We will demonstrate the usage of [TODO] on the example above. For more details on usage including reading models from \*.ode files, see tutorials [TODO]
+We will demonstrate the usage on the example above. For more details on usage including reading models from \*.ode files, see the documentation.
 
 1. import the quotient field from *Nemo*
 
@@ -42,7 +40,7 @@ We will demonstrate the usage of [TODO] on the example above. For more details o
 import Nemo: QQ
 ```
 
-2. Introduce the variables <img src="https://render.githubusercontent.com/render/math?math=x_1, x_2, x_3, x_4"> by defining the ring of polynomials in these variables (QQ refers to the fact that the coefficients are rational numbers, for other optons see the tutorial [TODO])
+2. Introduce the variables <img src="https://render.githubusercontent.com/render/math?math=x_1, x_2, x_3, x_4"> by defining the ring of polynomials in these variables (QQ refers to the fact that the coefficients are rational numbers)
 
 ```julia
 R, (x₁, x₂, x₃, x₄) = QQ["x₁", "x₂", "x₃", "x₄"]
@@ -62,7 +60,13 @@ system = [
 4. Call `invariant_subspace` providing the system
 
 ```julia
-invariant_subspace(system)
+subspace = invariant_subspace(system)
+```
+
+and convert to polynomials in new variables.
+
+```julia
+polynormalize(subspace, R)
 ```
 
 You will get the following result
