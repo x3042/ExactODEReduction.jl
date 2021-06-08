@@ -105,23 +105,23 @@ function find_radical_sup(Algebra::Subspacik)
 
     pivs = zeros(Int64, n)
     V = Subspacik(F)
-   for (piv, vec) in A.rows
-       eat_sparsik!(V, vec)
-   end
+    for (piv, vec) in A.rows
+        eat_sparsik!(V, vec)
+    end
 
-   orig_pivs = collect(keys(V.echelon_form))
+    orig_pivs = collect(keys(V.echelon_form))
 
-   if length(orig_pivs) == n
-       return []
-   end
+    if length(orig_pivs) == n
+        return []
+    end
 
-   radical_basis = []
+    radical_basis = []
 
-   for i in orig_pivs
-       pivs[i] = 1
-   end
+    for i in orig_pivs
+        pivs[i] = 1
+    end
 
-   for i in 1:n
+    for i in 1:n
        if pivs[i] == 0
            y = Sparsik(n, F, Int[], Dict{Int, elem_type(F)}())
            reduce!(y, i, one(F))

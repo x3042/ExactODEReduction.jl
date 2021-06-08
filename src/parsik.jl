@@ -218,8 +218,7 @@ function load_ODEs_if(;from_size=-Inf, to_size=Inf)
                     end
                 catch ex
                     #!isa(ex, ParseException) && rethrow(ex)
-                    @info ex
-                    @info ex.msg
+                    @warn ex.msg
                 end
             end
         end
@@ -240,7 +239,7 @@ function load_ODEs(filepath)
         lines = map(strip, readlines(inputs))
     end
 
-    @info "Loading $filepath"
+    # @info "Loading $filepath"
 
     lines = filter(!isempty, map(strip, lines[
         (findfirst(startswith("begin"), lines) + 1
@@ -338,7 +337,7 @@ function load_ODEs(filepath)
         end
     end
 
-    @info "loaded a system of $(length(ODEs)) ODEs from $filepath"
+    # @info "loaded a system of $(length(ODEs)) ODEs from $filepath"
 
     return ODEs
 end

@@ -90,69 +90,8 @@ import JSON
     @test all(J in true_js for J in js) && length(true_js) == length(js)
 
 
-    # compare with CLUE version #
-
-    # path to CLUE parser
-    true_matrices_path = normalizepath("test/python_parser/clue.py")
-    # path to testsets *.ode files
-
-    # for test_name in ["simple.ode", "test1.ode", "test2.ode", "e2.ode"]
-    for test_name in ["where_is_the_bug.ode"]
-    # for test_name in [ "e2.ode"]
-        testset_path = "python_parser/testsets/$test_name"
-
-        testset_path = normalizepath("test/$testset_path")
-
-        true_matrices_cmd = `python $true_matrices_path $testset_path`
-
-        true_output = @capture_out run(true_matrices_cmd)
-
-
-        true_output = JSON.Parser.parse(true_output)
-        true_output = sort(true_output, by=length)
-
-
-        println(join(map(string, true_output[1:3]), "\n"))
-        println(sort([length(x) for x in true_output]))
-
-        println(load_ODEs(testset_path))
-        my_output = construct_jacobians(collect(values(load_ODEs(testset_path))))
-
-        my_output = [
-            [
-                [to_cartesian(size(matrix), coord)..., val]
-                for (coord, val) in matrix
-            ]
-            for matrix in my_output
-        ]
-        my_output = sort(my_output, by=length)
-
-        println(join(map(string, my_output[1:3]), "\n"))
-        println(sort([length(x) for x in my_output]))
-
-        println("######################")
-
-        my_to_true = Dict{Int, Int}()
-
-        unify = X -> collect(sort(X))
-        for (i, true_matrix) in enumerate(unify.(sort(true_output, by=length)))
-            for (j, my_matrix) in enumerate(unify.(sort(my_output, by=length)))
-
-                if length(my_matrix) == length(true_matrix)
-                    if !haskey(my_to_true, j)
-                        my_to_true[j] = i
-                        break
-                    end
-                end
-            end
-        end
-        @test length(my_to_true) == length(my_output) == length(true_output)
-
-    end
-
 end
 
-# TODO
 @testset "General -- randomness" begin
 
     ε = 0.01

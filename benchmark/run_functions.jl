@@ -34,12 +34,20 @@ function owo()
 
         @info "$i-th, loaded a system $filename of size $(length(system))"
 
+        if !(i in [7])
+            continue
+        end
+
         equations = [system[x] for x in sort(collect(keys(system)), by=string)]
 
-        V = invariant_subspace(equations)
+        As = construct_jacobians(equations)
+        println(equations)
+
+        V = invariant_subspace(As)
 
         R = parent(equations[1])
 
+        println(V)
         @assert check_invariance!(construct_jacobians(equations), deepcopy(V))
 
         polyform = polynormalize(V, parent(first(equations)))
@@ -80,7 +88,7 @@ function rororo()
 end
 
 
-rororo()
+owo()
 # uwu()
 # owo()
 

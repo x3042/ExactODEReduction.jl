@@ -5,7 +5,7 @@
 
 #------------------------------------------------------------------------------
 
-include("../src/wiedemannchik.jl")
+
 
 #------------------------------------------------------------------------------
 
@@ -26,23 +26,23 @@ function test_minimal_polynomial(minpoly)
 
     # hardcoded tests
     A = from_COO(1, 1, [(1, 1, 1)], QQ)
-    f = minpoly(A, S)
+    f = minpoly(A)
     @test !iszero(f) && iszero(evaluate(f, A))
 
     A = from_dense([1 2; 3 4;], QQ)
-    f = minpoly(A, S)
+    f = minpoly(A)
     @test !iszero(f) && iszero(evaluate(f, A))
 
     A = from_dense([1 0 0; 0 1 0; 0 0 0], QQ)
-    f = minpoly(A, S)
+    f = minpoly(A)
     @test !iszero(f) && iszero(evaluate(f, A))
 
     A = from_dense([3 -3 2; -1 5 -2; -1 3 0], QQ)
-    f = minpoly(A, S)
+    f = minpoly(A)
     @test !iszero(f) && iszero(evaluate(f, A))
 
     A = from_dense([0 0; 0 0;], QQ)
-    @test_throws DomainError minpoly(A, S)
+    @test minpoly(A) == gen(parent(minpoly(A)))
 
     # some random tests
     # - dense case
@@ -54,8 +54,8 @@ function test_minimal_polynomial(minpoly)
         for λ in densities
             A = random_sparsik((n, n), ZZ, density=λ)
             try
-                f = minpoly(A, S)
-                @test !iszero(f) && iszero(evaluate(f, A))
+                f = minpoly(A)
+                @test iszero(evaluate(f, A))
             catch DomainError
                 !iszero(A) && rethrow()
             end
@@ -70,7 +70,7 @@ function test_minimal_polynomial(minpoly)
         # sum of four random unit matrices
         A = sum(unit_sparsik((n, n), pos, QQ) for pos in (i, j, k, r))
         reconstruct!(A)
-        f = minpoly(A, S)
+        f = minpoly(A)
         @test !iszero(f) && iszero(evaluate(f, A))
     end
 
@@ -80,7 +80,7 @@ end
 
 @testset "minpolynomial, basic deterministic" begin
 
-    test_minimal_polynomial(__deterministic_simple_minpoly)
+    test_minimal_polynomial(minimal_polynomial_wiedemann)
 
 end
 

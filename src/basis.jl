@@ -269,8 +269,6 @@ function find_basis(vectors; used_algorithm=find_basis_1_β, initialprime=2^31-1
 
         V = rational_reconstruction(V)
 
-        break
-
         if check_inclusion!(deepcopy(V), deepcopy(vectors))
             if check_invariance!(deepcopy(vectors), deepcopy(V))
                 break

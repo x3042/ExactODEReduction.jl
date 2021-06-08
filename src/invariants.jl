@@ -17,6 +17,7 @@ function invariant_subspace_1(matrices::AbstractArray{T}) where {T<:AbstractSpar
     # generate a basis for the Algebra
     algebra = find_basis(deepcopy(matrices))
 
+
     # find the radical of the Algebra
     @info "computing the radical.."
     @time radical = find_radical_sup(algebra)
@@ -24,6 +25,7 @@ function invariant_subspace_1(matrices::AbstractArray{T}) where {T<:AbstractSpar
     # find an invariant subspace
     if length(radical) != 0 && length(radical) < dim(algebra)
         # Gleb: why `length(radical) < dim(algebra)` ?
+        # Alex: we want radical to be nontrivial here
         @info "radical is nontrivial, computing the general kernel"
         invariant = general_kernel(map(to_dense, radical))
         invariant = [
