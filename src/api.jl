@@ -38,10 +38,15 @@ end
 """
     invariant_subspace(As; backend_algorithm)
 
-Finds one common invariant subspace of the given matrices `As`
-using the provived default method for finding one invaiant subspace `backend_algorithm`.
+Finds *one* common invariant subspace of the given matrices `As`
+using the provived default method `backend_algorithm`. By default, `invariant_subspace_1`
+is used.
+
+Each matrix in `As` to be a subtype of `AbstractSparseMatrix`
 """
-function invariant_subspace(As; backend_algorithm=invariant_subspace_1)
+function invariant_subspace(
+    As;
+    backend_algorithm=invariant_subspace_1)
 
     backend_algorithm(As)
 end
@@ -50,6 +55,15 @@ end
 
 # finds several common invariant subspaces of the given matrices
 # using the provided default method for finding one invaiant subspace
+"""
+    many_invariant_subspaces(As; backend_algorithm)
+
+Finds *several* common invariant subspaces of the given matrices `As`
+using the provived default method `backend_algorithm`. By default, `invariant_subspace_1`
+is used.
+
+Each matrix in `As` to be a subtype of `AbstractSparseMatrix`
+"""
 function many_invariant_subspaces(
     As;
     backend_algorithm=invariant_subspace_1)

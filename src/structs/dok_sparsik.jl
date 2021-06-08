@@ -19,6 +19,18 @@ import Distributions: Bernoulli
 
 #------------------------------------------------------------------------------
 
+"""
+    DOK_Sparsik{T<:Field}
+
+Provides basic 2-dimensional sparse vector interface, i.e Sparse Matrix.
+Parametrized with the type of coefficient field `T`.
+
+Supports these *fast* operations:
+
+ `inner`, `scale`, `reduce`, `iterate`, matvec and matmat (`Base.prod`).
+
+One can construct `BidimSparsik` from a dense matrix with the `from_dense` function.
+"""
 mutable struct DOK_Sparsik{T<:Field} <: AbstractSparseMatrix{T}
     # This implementation stores rows data regularly while constructing
     # columns data only when needed

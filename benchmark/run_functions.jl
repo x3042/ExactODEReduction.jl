@@ -88,7 +88,7 @@ function rororo()
 end
 
 
-owo()
+# owo()
 # uwu()
 # owo()
 

@@ -4,14 +4,16 @@
 CurrentModule = SparseAlgebra
 ```
 
-We export some functions..
+Here the main interface of the program is listed.
 
 ```@docs
-func(x)
+invariant_subspace
 ```
 
-..and..
+```@docs
+many_invariant_subspaces
+```
 
 ```@docs
-func_2(x)
+find_basis
 ```

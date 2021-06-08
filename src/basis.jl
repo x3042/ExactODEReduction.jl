@@ -247,6 +247,16 @@ end
 # output:
 #       V - a Subspacik consisting of basis vectors
 # O(∞)
+"""
+    find_basis(vectors; used_algorithm, initialprime)
+
+Finds a basis of the algebra generated with the given `vectors`
+using the provived default method `used_algorithm` while reducing input coefficients
+modulo `initialprime`. By default, `find_basis_1_β` stands for the algorithm and
+`2147483647` for the initial reduction modulo.
+
+Each element in `vector` to be a subtype of `AbstractSparseObject`
+"""
 function find_basis(vectors; used_algorithm=find_basis_1_β, initialprime=2^31-1)
     # used_algorithm is assumed not to throw normally
     # and to handle errors by thyself

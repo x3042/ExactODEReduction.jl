@@ -4,8 +4,17 @@
 CurrentModule = SparseAlgebra
 ```
 
-We operate with..
 
 ```@docs
 Sparsik
+```
+
+
+```@docs
+DOK_Sparsik
+```
+
+
+```@docs
+Subspacik
 ```

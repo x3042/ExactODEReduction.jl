@@ -21,7 +21,15 @@ import AbstractAlgebra: elem_type, Field, FieldElem,
 #------------------------------------------------------------------------------
 
 """
-Sparsik
+    Sparsik{T<:Field}
+
+Provides basic 1-dimensional sparse vector interface. Parametrized with the type of coefficient field `T`.
+
+Supports these *fast* operations:
+
+ `inner`, `scale`, `reduce`, `iterate`.
+
+One can construct `Sparsik` from a dense vector with the `from_dense` function.
 """
 mutable struct Sparsik{T<:Field} <: AbstractSparseVector{T}
     dim::Int

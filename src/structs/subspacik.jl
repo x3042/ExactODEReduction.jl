@@ -17,7 +17,14 @@ import Nemo: QQ, GF, Field
 
 #------------------------------------------------------------------------------
 
-# Subspacik
+"""
+    Subspacik{T<:Field}
+
+Provides basic linear subspace interface. Parametrized with the type of coefficient field `T`.
+
+One can add a vector to the spanning vectors of a `Subspacik` instance via `eat_sparsik!` function
+or create a subspace from scratch with `linear_span!`
+"""
 mutable struct Subspacik{T<:Field}
     field::T
     # the echelon form of vectors is an invariant!

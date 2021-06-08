@@ -46,6 +46,15 @@ abstract type AbstractSparseObject{T} end
 # An object which implements `AbstractSparseVector` can be treated
 # as an element of Rⁿ vectorspace. Thus, some vectorspace operations and
 # left matrix multiplication are supported for such objects
+"""
+AbstractSparseObject{T}
+
+Base interface for 1-dimensional Sparse vector. An object which implements `AbstractSparseVector` can be treated
+as an element of Rⁿ vectorspace. Thus, some vectorspace operations and
+left matvec are supported for such objects.
+
+`T` is the type of the ground field
+"""
 abstract type AbstractSparseVector{T} <: AbstractSparseObject{T} end
 
 #------------------------------------------------------------------------------
@@ -64,6 +73,14 @@ abstract type AbstractSparseVector{T} <: AbstractSparseObject{T} end
 # Implementing some functions for other sparse formats
 # rather than DOK is tricky,
 # probably, this interface it too strong to be applied to every class
+"""
+AbstractSparseObject{T}
+
+Base interface for 2-dimensional Sparse vector, i.e Sparse Matrix. An object which implements `AbstractSparseMatrix` can be treated
+as an element of Rⁿ⃰ⁿ vectorspace or as an element of a matrix algebra. Thus, some vectorspace operations and matrix prodducts are supported for such objects.
+
+`T` is the type of the ground field
+"""
 abstract type AbstractSparseMatrix{T} <: AbstractSparseObject{T} end
 
 #------------------------------------------------------------------------------
