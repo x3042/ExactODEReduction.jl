@@ -22,6 +22,16 @@ import Base.Iterators: Stateful
 #
 # let n = max( λ(a), λ(m) ) , where λ(x) is a number of bits for x
 # O(n^2)
+"""
+    rational_reconstruction(a, m)
+
+Rational number reconstruction implementation borrowed from CLUE
+and modified a bit to suit the 'Modern Computer Algebra' definitions.
+Returns a rational of QQ field in a canonical form that
+is congruent a modulo m
+
+a, m are integers
+"""
 function rational_reconstruction(a::I, m::I) where {I<:Union{Int, BigInt}}
     a = mod(a, m)
     if a == 0 || m == 0
@@ -211,6 +221,14 @@ end
 # consturucts a set of matrices Ai over number field
 # such that the Jacobian J of the provided system can represented as the sum
 # J = Aᵢxⁱ
+"""
+    construct_jacobians(system)
+
+For the given system of polynomials in variables xi
+consturucts a set of matrices Aᵢ over number field
+such that the Jacobian J of the provided system can represented as the sum
+J = Aᵢxⁱ
+"""
 function construct_jacobians(system::AbstractArray{T}) where {T<:MPolyElem}
     domain = base_ring(first(system))
     poly_ring = parent(first(system))

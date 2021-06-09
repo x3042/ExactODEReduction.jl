@@ -93,6 +93,12 @@ end
 
 # Finds the radical of the given matrix Algebra by
 # computing the radical of the Algebra *directly*
+
+"""
+    find_radical_sup(Algebra)
+
+Finds a basis of the radical of given matrix Algebra.
+"""
 function find_radical_sup(Algebra::Subspacik)
     As = basis(Algebra)
     F = base_ring(Algebra)

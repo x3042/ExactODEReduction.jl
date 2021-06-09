@@ -224,6 +224,15 @@ end
 # under an assumtion of A being square and nonsingular
 # using Wiedemann system-solving algorithm as a base
 # Throws if system is singular
+
+"""
+wiedemann_solve(A, b; proved)
+
+Returns a solution x to linear system Ax = b under an assumtion of
+A being square and nonsingular using Wiedemann system-solving algorithm.
+By default, proved = true which calls 'square_nonsingular_deterministic_wiedemann'
+otherwise calls 'square_nonsingular_randomized_wiedemann'.
+"""
 function wiedemann_solve(
         A::AbstractSparseMatrix,
         b::AbstractSparseVector;
