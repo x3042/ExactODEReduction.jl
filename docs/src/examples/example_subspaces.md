@@ -70,10 +70,10 @@ system = [
 ]
 ```
 
-4. Call `many_invariant_subspace` providing the system
+4. Call `many_invariant_subspaces` providing the system
 
 ```julia
-subspaces = many_invariant_subspace(system)
+subspaces = many_invariant_subspaces(system)
 ```
 
 and convert each element in subspaces to polynomials in new variables.
