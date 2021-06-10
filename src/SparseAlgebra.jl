@@ -9,8 +9,6 @@ export many_invariant_subspaces
 export find_basis
 
 export sparse
-export func
-export func_2
 
 export Sparsik
 export DOK_Sparsik

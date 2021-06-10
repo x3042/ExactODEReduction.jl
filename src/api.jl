@@ -14,25 +14,6 @@ include("../src/invariants.jl")
 #------------------------------------------------------------------------------
 
 
-"""
-    func_2(x)
-
-Indentity function. Returns `x`.
-"""
-function func_2(x)
-    return x
-end
-
-
-"""
-    func(x)
-
-Indentity function. Returns `x`.
-"""
-function func(x)
-    return x
-end
-
 # finds one common invariant subspace of the given matrices
 # using the provived default method for finding one invaiant subspace
 """

@@ -10,7 +10,7 @@ include("../src/api.jl")
 
     @includetests [:sparsik_tests, :gizmos_tests,
                     :dok_sparsik_tests, :parsik_tests,
-                    :find_basis_tests, :radical_tests, :minimal_polynomial_tests]
+                    :find_basis_tests, :radical_tests]
 
 end
 
