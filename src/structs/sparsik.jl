@@ -7,19 +7,6 @@
 
 #------------------------------------------------------------------------------
 
-include("../typics.jl")
-include("../gizmos.jl")
-
-#------------------------------------------------------------------------------
-
-import Base: ==, !=, +, -, *, lcm
-import Nemo: GaloisField, GaloisFmpzField, fmpq, ZZ
-import Distributions: Bernoulli
-import AbstractAlgebra: elem_type, Field, FieldElem,
-                        characteristic, FracField
-
-#------------------------------------------------------------------------------
-
 """
     Sparsik{T<:Field}
 
@@ -31,11 +18,11 @@ Supports these *fast* operations:
 
 One can construct `Sparsik` from a dense vector with the `from_dense` function.
 """
-mutable struct Sparsik{T<:Field} <: AbstractSparseVector{T}
+mutable struct Sparsik{T<:AbstractAlgebra.Field} <: AbstractSparseVector{T}
     dim::Int
     field::T
     nonzero::Vector{Int}
-    data::Dict{Int, <:FieldElem}
+    data::Dict{Int, <:AbstractAlgebra.FieldElem}
 end
 
 #------------------------------------------------------------------------------
@@ -174,7 +161,7 @@ function inner(v::Sparsik{T}, u::Sparsik{T}) where {T}
     return ans
 end
 
-function inner(A::Sparsik{T}, c::FieldElem) where {T}
+function inner(A::Sparsik{T}, c::AbstractAlgebra.FieldElem) where {T}
     if iszero(c)
         return zero(c)
     end
@@ -320,7 +307,7 @@ function rational_reconstruction(v::Sparsik)
     ground = base_ring(v)
 
     tmp_type = BigInt
-    if isa(ground, GaloisField)
+    if isa(ground, Nemo.GaloisField)
         tmp_type = Int
     end
     ch = convert(tmp_type, characteristic(ground))
@@ -333,7 +320,7 @@ function rational_reconstruction(v::Sparsik)
         end
     end
 
-    return Sparsik(dim(v), QQ, new_nonzero, new_data)
+    return Sparsik(dim(v), Nemo.QQ, new_nonzero, new_data)
 end
 
 #-----------------------------------------------------------------------------
@@ -350,7 +337,7 @@ end
 
 # returns a Sparsik object consisting of O(sz * density) nnz entries,
 # each entry is generated uniformly and independently
-function random_sparsik(sz::Int, field::T; density=0.1) where {T<:Field}
+function random_sparsik(sz::Int, field::T; density=0.1) where {T <: AbstractAlgebra.Field}
     λ = density * sz
 
     nnz = Int[]
@@ -369,7 +356,7 @@ function random_sparsik(sz::Int, field::T; density=0.1) where {T<:Field}
     return Sparsik(sz, field, nnz, data)
 end
 
-function random_sparsik(sz::Tuple{Int}, field::T; density=0.1) where {T<:Field}
+function random_sparsik(sz::Tuple{Int}, field::T; density=0.1) where {T <: AbstractAlgebra.Field}
     random_sparsik(sz..., field, density=density)
 end
 

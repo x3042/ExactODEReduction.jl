@@ -1,18 +1,3 @@
-# Gleb: change the name of the file! It implicitly implies that the rest of the functionality has not been tested
-
-include("basis.jl")
-include("gizmos.jl")
-include("structs/subspacik.jl")
-
-#------------------------------------------------------------------------------
-
-import Nemo: base_ring, terms, monomial, derivative, gens, kernel, MatrixSpace,
-            isirreducible
-
-import AbstractAlgebra: minpoly, factor, charpoly
-
-#------------------------------------------------------------------------------
-
 # Finds the radical of the given matrix Algebra by
 # computing the center of the Algebra using
 # the characteristic polynomial of the Gramian matrix
@@ -38,7 +23,7 @@ function find_radical(Algebra::Subspacik)
         return As
     end
 
-    ZZ = GF(2^31 - 1)
+    ZZ = Nemo.GF(2^31 - 1)
     A = from_COO(n, n, nnz_coords, F)
 
     A = modular_reduction(A, ZZ)
@@ -183,7 +168,7 @@ function find_radical_2(Algebra::Subspacik)
         return As
     end
 
-    ZZ = GF(2^31 - 1)
+    ZZ = Nemo.GF(2^31 - 1)
     A = zeros(ZZ, n, n)
     for (i, j, x) in nnz_coords
         A[i, j] = modular_reduction(x, ZZ)
@@ -244,7 +229,7 @@ function invariant_subspace_semisimple(Algebra::Subspacik)
 
         chpoly = charpoly(PSpace, MSpace(to_dense(M)))
 
-        factors = factor(chpoly).fac
+        factors = AbstractAlgebra.factor(chpoly).fac
         # factors is of type Fac
         # Fac.fac of form
         #   factor → degree  ,  (x-a)(x-b)..
@@ -261,7 +246,7 @@ function invariant_subspace_semisimple(Algebra::Subspacik)
 
         # convert to sparse repr
         V = [
-            from_dense(v, QQ)
+            from_dense(v, Nemo.QQ)
             for v in [[V[:, j]...]
                 for j in 1:size(V, 2)]
         ]
@@ -284,7 +269,7 @@ end
 # finds the general kernel of the given matrices
 function general_kernel(matrices::AbstractArray)
     stacked = vcat(matrices...)
-    Space = MatrixSpace(QQ, size(stacked)...)
+    Space = MatrixSpace(Nemo.QQ, size(stacked)...)
     return Array(last(kernel(Space(stacked))))
 end
 

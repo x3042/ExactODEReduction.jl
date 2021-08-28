@@ -9,19 +9,6 @@
 
 #------------------------------------------------------------------------------
 
-include("policiks.jl")
-include("utils.jl")
-
-
-#------------------------------------------------------------------------------
-
-import Nemo
-import Base: ==, !=, +, -, *
-import Nemo: gfp_elem, gfp_fmpz_elem, base_ring
-import AbstractAlgebra: Field
-
-#------------------------------------------------------------------------------
-
 # AbstractSparseObject<T>
 #
 # `T` is the type of the base_ring field

@@ -2,19 +2,6 @@
 #=
     The File contains `Subspacik<T>` and related funcs implementation
 =#
-
-# I guess find_basis funcs should be
-
-#------------------------------------------------------------------------------
-
-include("dok_sparsik.jl")
-include("densik.jl")
-
-
-#------------------------------------------------------------------------------
-
-import Nemo: QQ, GF, Field
-
 #------------------------------------------------------------------------------
 
 """
@@ -25,7 +12,7 @@ Provides basic linear subspace interface. Parametrized with the type of coeffici
 One can add a vector to the spanning vectors of a `Subspacik` instance via `eat_sparsik!` function
 or create a subspace from scratch with `linear_span!`
 """
-mutable struct Subspacik{T<:Field}
+mutable struct Subspacik{T <: AbstractAlgebra.Field}
     field::T
     # the echelon form of vectors is an invariant!
     echelon_form::Dict{Int, <:AbstractSparseObject{T}}
@@ -34,7 +21,7 @@ end
 #------------------------------------------------------------------------------
 
 # Subspacik
-mutable struct HashedSubspacik{T<:Field}
+mutable struct HashedSubspacik{T <: AbstractAlgebra.Field}
     # inherited from Subspacik
     field::T
     # pivot --> row
@@ -49,18 +36,18 @@ mutable struct HashedSubspacik{T<:Field}
     reduced_hash_vector::AbstractSparseObject{T}
 
     # pivot --> hash
-    hashes::Dict{Int, FieldElem}
+    hashes::Dict{Int, AbstractAlgebra.FieldElem}
 end
 
 #------------------------------------------------------------------------------
 
 # convenience ctor
-function Subspacik(field::T) where {T<:Field}
+function Subspacik(field::T) where {T <: AbstractAlgebra.Field}
     return Subspacik(field, Dict{Int, AbstractSparseObject{T}}())
 end
 
 # deepcopy redefinition in order to preserve the field
-function Base.deepcopy_internal(x::Subspacik{T}, stackdict::IdDict) where {T<:Field}
+function Base.deepcopy_internal(x::Subspacik{T}, stackdict::IdDict) where {T <: AbstractAlgebra.Field}
     y = Subspacik(base_ring(x), Base.deepcopy_internal(x.echelon_form, stackdict))
     stackdict[x] = y
     return y
@@ -405,18 +392,18 @@ Base.show(io::IO, V::Subspacik) = print(io, repr(MIME("text/plain"), V))
 #------------------------------------------------------------------------------
 
 # convenience ctor
-function HashedSubspacik(hash_vector, field::T) where {T<:Field}
+function HashedSubspacik(hash_vector, field::T) where {T <: AbstractAlgebra.Field}
     return HashedSubspacik(
         field,
         Dict{Int, AbstractSparseObject{T}}(),
         deepcopy(hash_vector),
         deepcopy(hash_vector),
-        Dict{Int, FieldElem}()
+        Dict{Int, AbstractAlgebra.FieldElem}()
     )
 end
 
 # deepcopy redefinition in order to preserve the field
-function Base.deepcopy_internal(x::HashedSubspacik{T}, stackdict::IdDict) where {T<:Field}
+function Base.deepcopy_internal(x::HashedSubspacik{T}, stackdict::IdDict) where {T <: AbstractAlgebra.Field}
     y = HashedSubspacik(
                 base_ring(x),
                 Base.deepcopy_internal(x.echelon_form, stackdict),
@@ -497,7 +484,7 @@ end
 #
 # reconstructs *not* inplace
 function rational_reconstruction(V::Subspacik)
-    ans = Subspacik(QQ)
+    ans = Subspacik(Nemo.QQ)
     for piv in keys(V.echelon_form)
         ans.echelon_form[piv] = rational_reconstruction(V.echelon_form[piv])
     end
@@ -513,7 +500,7 @@ end
 function rational_reconstruction(V::HashedSubspacik)
     hash_vector = rational_reconstruction(V.hash_vector)
     reduced_hash_vector = rational_reconstruction(V.reduced_hash_vector)
-    ans = HashedSubspacik(hash_vector, QQ)
+    ans = HashedSubspacik(hash_vector, Nemo.QQ)
     ans.reduced_hash_vector = reduced_hash_vector
     for piv in keys(V.echelon_form)
         ans.echelon_form[piv] = rational_reconstruction(V.echelon_form[piv])

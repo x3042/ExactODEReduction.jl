@@ -3,9 +3,11 @@
     Examples file
 =#
 
-include("../src/api.jl")
+using Nemo
+using SparseArrays: sparse
 
-import Nemo: QQ
+include("../src/ExactODEReduction.jl")
+using .ExactODEReduction: many_invariant_subspaces, check_invariance!, polynormalize, @sparse
 
 #------------------------------------------------------------------------------
 
@@ -17,7 +19,7 @@ A1 = @sparse [
     0 0 0 2;
     0 0 0 1;
 ]
-A2 = @sparse [
+A2 = @sparse[
     0 1 0 0;
     1 0 0 0;
     0 0 0 2;

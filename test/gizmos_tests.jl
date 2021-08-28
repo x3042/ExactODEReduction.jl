@@ -5,19 +5,7 @@
 
 #------------------------------------------------------------------------------
 
-include("../src/gizmos.jl")
-include("../src/utils.jl")
-
-using Suppressor
-
-#------------------------------------------------------------------------------
-
-if !isdefined(Main, :testset)
-    using Test
-    using TestSetExtensions
-end
-import Nemo: QQ, GF, ZZ, FlintRationalField, characteristic
-import JSON
+#using Suppressor
 
 #------------------------------------------------------------------------------
 
@@ -25,7 +13,7 @@ import JSON
 
     # simple tests #
 
-    R, (x₁, x₂, x₃, x₄) = QQ["x₁", "x₂", "x₃", "x₄"]
+    R, (x₁, x₂, x₃, x₄) = Nemo.QQ["x₁", "x₂", "x₃", "x₄"]
 
     system = [
         x₁^2 + 2*x₁*x₂,
@@ -39,19 +27,19 @@ import JSON
             2 0 0 0;
             0 0 0 0;
             0 0 0 0;
-        ], QQ),
+        ], Nemo.QQ),
         from_dense([
             2 0 0 0;
             0 2 0 0;
             0 0 0 0;
             0 0 0 0;
-        ], QQ),
+        ], Nemo.QQ),
         from_dense([
             0 0 0 1;
             0 0 1 0;
             0 1 0 1;
             0 1 1 0;
-        ], QQ)
+        ], Nemo.QQ)
     ]
 
     js = construct_jacobians(system)
@@ -60,7 +48,7 @@ import JSON
 
 
     # test #2
-    R, (x₁, x₂, x₃) = QQ["x₁", "x₂", "x₃"]
+    R, (x₁, x₂, x₃) = Nemo.QQ["x₁", "x₂", "x₃"]
 
     system = [
         x₂^2 + 4x₂*x₃ + 4x₃^2,  # derivative of x1
@@ -72,17 +60,17 @@ import JSON
             0 0 0;
             2 0 0;
             4 0 0;
-        ], QQ),
+        ], Nemo.QQ),
         from_dense([
             0 0 0;
             4 0 0;
             8 0 0;
-        ], QQ),
+        ], Nemo.QQ),
         from_dense([
             0 -2 1;
             0 0 1;
             0 4 0;
-        ], QQ)
+        ], Nemo.QQ)
     ]
 
     js = construct_jacobians(system)

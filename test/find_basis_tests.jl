@@ -5,16 +5,6 @@
 
 #------------------------------------------------------------------------------
 
-
-#------------------------------------------------------------------------------
-
-if !isdefined(Main, :testset)
-    using Test
-    using TestSetExtensions
-end
-
-#------------------------------------------------------------------------------
-
 # Tests the given algorithm for correctness by comparing
 # it with the output of standard find_basis_1 on random samples
 # The latter is assumed to be correct
@@ -24,50 +14,50 @@ function test_find_basis(algorithm)
 
     # nilpotent space
     set0 = [
-        from_dense([0 1; 0 0;], QQ),
+        from_dense([0 1; 0 0;], Nemo.QQ),
     ]
     ans0 = linear_span!([
-        from_dense([0 1; 0 0;], QQ)
+        from_dense([0 1; 0 0;], Nemo.QQ)
     ])
 
     # almost nilpotent space
     set1 = [
-        from_dense([0 1; 0 0;], QQ),
-        from_dense([0 0; 0 1;], QQ),
+        from_dense([0 1; 0 0;], Nemo.QQ),
+        from_dense([0 0; 0 1;], Nemo.QQ),
     ]
     ans1 = linear_span!([
-        from_dense([0 1; 0 0;], QQ),
-        from_dense([0 0; 0 1;], QQ),
+        from_dense([0 1; 0 0;], Nemo.QQ),
+        from_dense([0 0; 0 1;], Nemo.QQ),
     ])
 
     # some space
     set2 = [
-        from_dense([1 2 3; 0 1 0; 0 0 0;], QQ),
-        from_dense([1 0 0; 0 0 0; 0 2 1;], QQ)
+        from_dense([1 2 3; 0 1 0; 0 0 0;], Nemo.QQ),
+        from_dense([1 0 0; 0 0 0; 0 2 1;], Nemo.QQ)
     ]
     ans2 = linear_span!([
-        from_dense([1 0 0; 0 0 0; 0 0 1;], QQ),
-        from_dense([0 1 0; 0 0 0; 0 0 0;], QQ),
-        from_dense([0 0 1; 0 0 0; 0 0 -1//3;], QQ),
-        from_dense([0 0 0; 0 1 0; 0 0 0;], QQ),
-        from_dense([0 0 0; 0 0 0; 0 1 0;], QQ)
+        from_dense([1 0 0; 0 0 0; 0 0 1;], Nemo.QQ),
+        from_dense([0 1 0; 0 0 0; 0 0 0;], Nemo.QQ),
+        from_dense([0 0 1; 0 0 0; 0 0 -1//3;], Nemo.QQ),
+        from_dense([0 0 0; 0 1 0; 0 0 0;], Nemo.QQ),
+        from_dense([0 0 0; 0 0 0; 0 1 0;], Nemo.QQ)
     ])
 
     # complete space
     set3 = [
-        from_dense([1 0 0; 2 1 3; 1 0 0;], QQ),
-        from_dense([0 1 0; 1 0 0; 0 0 1;], QQ)
+        from_dense([1 0 0; 2 1 3; 1 0 0;], Nemo.QQ),
+        from_dense([0 1 0; 1 0 0; 0 0 1;], Nemo.QQ)
     ]
     ans3 = linear_span!([
-        from_dense([1 0 0; 0 0 0; 0 0 0;], QQ),
-        from_dense([0 1 0; 0 0 0; 0 0 0;], QQ),
-        from_dense([0 0 1; 0 0 0; 0 0 0;], QQ),
-        from_dense([0 0 0; 1 0 0; 0 0 0;], QQ),
-        from_dense([0 0 0; 0 1 0; 0 0 0;], QQ),
-        from_dense([0 0 0; 0 0 1; 0 0 0;], QQ),
-        from_dense([0 0 0; 0 0 0; 1 0 0;], QQ),
-        from_dense([0 0 0; 0 0 0; 0 1 0;], QQ),
-        from_dense([0 0 0; 0 0 0; 0 0 1;], QQ),
+        from_dense([1 0 0; 0 0 0; 0 0 0;], Nemo.QQ),
+        from_dense([0 1 0; 0 0 0; 0 0 0;], Nemo.QQ),
+        from_dense([0 0 1; 0 0 0; 0 0 0;], Nemo.QQ),
+        from_dense([0 0 0; 1 0 0; 0 0 0;], Nemo.QQ),
+        from_dense([0 0 0; 0 1 0; 0 0 0;], Nemo.QQ),
+        from_dense([0 0 0; 0 0 1; 0 0 0;], Nemo.QQ),
+        from_dense([0 0 0; 0 0 0; 1 0 0;], Nemo.QQ),
+        from_dense([0 0 0; 0 0 0; 0 1 0;], Nemo.QQ),
+        from_dense([0 0 0; 0 0 0; 0 0 1;], Nemo.QQ),
     ])
 
     for (set, ans) in zip([set0, set1, set2, set3], [ans0, ans1, ans2, ans3])

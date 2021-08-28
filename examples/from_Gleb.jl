@@ -3,9 +3,10 @@
     Examples file
 =#
 
-include("../src/api.jl")
+using Nemo
 
-import Nemo: QQ
+include("../src/ExactODEReduction.jl")
+using .ExactODEReduction: from_dense, invariant_subspace, fullspace
 
 #------------------------------------------------------------------------------
 

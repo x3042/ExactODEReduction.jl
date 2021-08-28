@@ -4,19 +4,6 @@
 
     `DOK_Sparsik` implements `AbstractSparseMatrix` interface
 =#
-
-#------------------------------------------------------------------------------
-
-include("sparsik.jl")
-
-#------------------------------------------------------------------------------
-
-import Base: ==, !=, +, -, *
-import DataStructures: BinaryMinHeap
-import AbstractAlgebra: elem_type, Field, FieldElem, FracField,
-                        characteristic
-import Distributions: Bernoulli
-
 #------------------------------------------------------------------------------
 
 """
@@ -31,7 +18,7 @@ Supports these *fast* operations:
 
 One can construct `BidimSparsik` from a dense matrix with the `from_dense` function.
 """
-mutable struct DOK_Sparsik{T<:Field} <: AbstractSparseMatrix{T}
+mutable struct DOK_Sparsik{T <: AbstractAlgebra.Field} <: AbstractSparseMatrix{T}
     # This implementation stores rows data regularly while constructing
     # columns data only when needed
     m::Int
@@ -588,8 +575,8 @@ Base.iszero(A::DOK_Sparsik{T}) where {T} = length(A.nnz_rows) == 0
 
 *(A::DOK_Sparsik, c::Number) = scale(A, c)
 *(c::Number, A::DOK_Sparsik) = scale(A, c)
-*(A::DOK_Sparsik, c::FieldElem)= scale(A, c)
-*(c::FieldElem, A::DOK_Sparsik) = scale(A, c)
+*(A::DOK_Sparsik, c::AbstractAlgebra.FieldElem)= scale(A, c)
+*(c::AbstractAlgebra.FieldElem, A::DOK_Sparsik) = scale(A, c)
 *(A::DOK_Sparsik{T}, B::DOK_Sparsik{T}) where {T} = prod(A, B)
 
 *(A::DOK_Sparsik{T}, v::Sparsik{T}) where {T} = prod(A, v)
@@ -699,7 +686,7 @@ end
 # and ch is the field characteristic
 function rational_reconstruction(A::DOK_Sparsik)
     new_nnz_rows = Int[]
-    new_rows = Dict{Int, Sparsik{typeof(QQ)}}()
+    new_rows = Dict{Int, Sparsik{typeof(Nemo.QQ)}}()
 
     for i in A.nnz_rows
         y = rational_reconstruction(A.rows[i])
@@ -709,7 +696,7 @@ function rational_reconstruction(A::DOK_Sparsik)
         end
     end
 
-    return from_rows(size(A)..., QQ, new_nnz_rows, new_rows)
+    return from_rows(size(A)..., Nemo.QQ, new_nnz_rows, new_rows)
 end
 
 #-----------------------------------------------------------------------------
@@ -734,7 +721,7 @@ function inner(A::DOK_Sparsik{T}, B::DOK_Sparsik{T}) where {T}
 end
 
 # ad-hoc inner
-function inner(A::DOK_Sparsik{T}, c::FieldElem) where {T}
+function inner(A::DOK_Sparsik{T}, c::AbstractAlgebra.FieldElem) where {T}
     if iszero(c)
         return zero(c)
     end
@@ -742,7 +729,7 @@ function inner(A::DOK_Sparsik{T}, c::FieldElem) where {T}
     error("not implemented!")
 end
 
-inner(c::FieldElem, A::DOK_Sparsik{T}) where {T} = inner(A, c)
+inner(c::AbstractAlgebra.FieldElem, A::DOK_Sparsik{T}) where {T} = inner(A, c)
 
 #-----------------------------------------------------------------------------
 

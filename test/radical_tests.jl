@@ -5,92 +5,83 @@
 
 #------------------------------------------------------------------------------
 
-#------------------------------------------------------------------------------
-
-if !isdefined(Main, :testset)
-    using Test
-    using TestSetExtensions
-end
-
-#------------------------------------------------------------------------------
-
 function test_find_radical(algorithm)
 
     # nilpotent space
     set0 = [
-        from_dense([0 1; 0 0;], QQ),
-        from_dense([1 0; 0 0;], QQ),
-        from_dense([0 0; 0 1;], QQ),
+        from_dense([0 1; 0 0;], Nemo.QQ),
+        from_dense([1 0; 0 0;], Nemo.QQ),
+        from_dense([0 0; 0 1;], Nemo.QQ),
     ]
     ans0 = [
-        from_dense([0 1; 0 0;], QQ)
+        from_dense([0 1; 0 0;], Nemo.QQ)
     ]
 
     # almost nilpotent space
     set1 = [
-        from_dense([1 0; 0 1;], QQ),
-        from_dense([0 1; -1 0;], QQ),
+        from_dense([1 0; 0 1;], Nemo.QQ),
+        from_dense([0 1; -1 0;], Nemo.QQ),
     ]
     ans1 = []
 
     # some space
     set2 = [
-        from_dense([1 0 0; 0 1 0; 0 0 1;], QQ),
+        from_dense([1 0 0; 0 1 0; 0 0 1;], Nemo.QQ),
     ]
     ans2 = []
 
     set3 = [
-        from_dense([1 0 0; 0 1 0; 0 0 0;], QQ),
+        from_dense([1 0 0; 0 1 0; 0 0 0;], Nemo.QQ),
     ]
     ans3 = []
 
     set4 = [
-        from_dense([1 0 0; 0 1 0; 0 0 1;], QQ)
-        from_dense([0 1 0; 0 0 0; 0 0 0;], QQ)
-        from_dense([0 0 0; 0 0 1; 0 0 0;], QQ)
+        from_dense([1 0 0; 0 1 0; 0 0 1;], Nemo.QQ)
+        from_dense([0 1 0; 0 0 0; 0 0 0;], Nemo.QQ)
+        from_dense([0 0 0; 0 0 1; 0 0 0;], Nemo.QQ)
     ]
     ans4 = [
-        from_dense([0 1 0; 0 0 0; 0 0 0;], QQ)
-        from_dense([0 0 0; 0 0 1; 0 0 0;], QQ)
+        from_dense([0 1 0; 0 0 0; 0 0 0;], Nemo.QQ)
+        from_dense([0 0 0; 0 0 1; 0 0 0;], Nemo.QQ)
     ]
 
     set5 = [
-        from_dense([0 1 0; 0 0 0; 0 0 0;], QQ)
-        from_dense([0 0 0; 0 0 1; 0 0 0;], QQ)
-        from_dense([0 0 1; 0 0 0; 0 0 0;], QQ)
+        from_dense([0 1 0; 0 0 0; 0 0 0;], Nemo.QQ)
+        from_dense([0 0 0; 0 0 1; 0 0 0;], Nemo.QQ)
+        from_dense([0 0 1; 0 0 0; 0 0 0;], Nemo.QQ)
     ]
     ans5 = [
-        from_dense([0 0 1; 0 0 0; 0 0 0;], QQ)
-        from_dense([0 1 0; 0 0 0; 0 0 0;], QQ)
-        from_dense([0 0 0; 0 0 1; 0 0 0;], QQ)
+        from_dense([0 0 1; 0 0 0; 0 0 0;], Nemo.QQ)
+        from_dense([0 1 0; 0 0 0; 0 0 0;], Nemo.QQ)
+        from_dense([0 0 0; 0 0 1; 0 0 0;], Nemo.QQ)
     ]
 
     set6 = [
-        from_dense([0 0 1; 0 0 0; 0 0 0;], QQ)
-        from_dense([0 1 0; 0 0 0; 0 0 0;], QQ)
-        from_dense([0 0 0; 0 0 1; 0 0 0;], QQ)
-        from_dense([1 0 0; 0 0 0; 0 0 0;], QQ)
-        from_dense([0 0 0; 0 1 0; 0 0 0;], QQ)
-        from_dense([0 0 0; 0 0 0; 0 0 1;], QQ)
-        from_dense([0 0 0; 1 0 0; 0 0 0;], QQ)
-        from_dense([0 0 0; 0 0 0; 1 0 0;], QQ)
-        from_dense([0 0 0; 0 0 0; 0 1 0;], QQ)
+        from_dense([0 0 1; 0 0 0; 0 0 0;], Nemo.QQ)
+        from_dense([0 1 0; 0 0 0; 0 0 0;], Nemo.QQ)
+        from_dense([0 0 0; 0 0 1; 0 0 0;], Nemo.QQ)
+        from_dense([1 0 0; 0 0 0; 0 0 0;], Nemo.QQ)
+        from_dense([0 0 0; 0 1 0; 0 0 0;], Nemo.QQ)
+        from_dense([0 0 0; 0 0 0; 0 0 1;], Nemo.QQ)
+        from_dense([0 0 0; 1 0 0; 0 0 0;], Nemo.QQ)
+        from_dense([0 0 0; 0 0 0; 1 0 0;], Nemo.QQ)
+        from_dense([0 0 0; 0 0 0; 0 1 0;], Nemo.QQ)
     ]
     ans6 = [
     ]
 
     set7 = [
-        from_dense([1 0 0; 0 0 0; 0 0 0;], QQ)
-        from_dense([0 0 0; 0 1 0; 0 0 0;], QQ)
-        from_dense([0 0 0; 0 0 0; 0 0 1;], QQ)
-        from_dense([0 0 0; 1 0 0; 0 0 0;], QQ)
-        from_dense([0 0 0; 0 0 0; 1 0 0;], QQ)
-        from_dense([0 0 0; 0 0 0; 0 1 0;], QQ)
+        from_dense([1 0 0; 0 0 0; 0 0 0;], Nemo.QQ)
+        from_dense([0 0 0; 0 1 0; 0 0 0;], Nemo.QQ)
+        from_dense([0 0 0; 0 0 0; 0 0 1;], Nemo.QQ)
+        from_dense([0 0 0; 1 0 0; 0 0 0;], Nemo.QQ)
+        from_dense([0 0 0; 0 0 0; 1 0 0;], Nemo.QQ)
+        from_dense([0 0 0; 0 0 0; 0 1 0;], Nemo.QQ)
     ]
     ans7 = [
-        from_dense([0 0 0; 1 0 0; 0 0 0;], QQ)
-        from_dense([0 0 0; 0 0 0; 1 0 0;], QQ)
-        from_dense([0 0 0; 0 0 0; 0 1 0;], QQ)
+        from_dense([0 0 0; 1 0 0; 0 0 0;], Nemo.QQ)
+        from_dense([0 0 0; 0 0 0; 1 0 0;], Nemo.QQ)
+        from_dense([0 0 0; 0 0 0; 0 1 0;], Nemo.QQ)
     ]
 
     for (set, ans) in zip([set0, set1, set2, set3, set4, set5, set6, set7],

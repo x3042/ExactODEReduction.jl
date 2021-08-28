@@ -1,10 +1,3 @@
-
-import JSON
-import Nemo: gen, terms, monomials
-import Base.showerror
-
-include("myeval.jl")
-
 #------------------------------------------------------------------------------
 
 struct ParseException <: Exception
@@ -22,7 +15,7 @@ Base.showerror(io::IO, e::ParseException) = print(io, e.msg)
 function load_dense_set(filename::String)
     ans = []
 
-    filepath = "$(normpath(joinpath(@__FILE__, "..", "..")))/src/data/matrices/$(filename)"
+    filepath = "$(normpath(joinpath(@__FILE__, "..", "..")))/data/matrices/$(filename)"
 
     open(filepath, "r") do input_stream
         for arr in JSON.Parser.parse(input_stream)
@@ -42,7 +35,7 @@ end
 function load_COO_set(filename::String)
     model = []
 
-    filepath = "$(normpath(joinpath(@__FILE__, "..", "..")))/src/data/matrices/$(filename)"
+    filepath = "$(normpath(joinpath(@__FILE__, "..", "..")))/data/matrices/$(filename)"
 
     str_to_nom = (x -> parse(BigInt, first(split(x, '/'))))
     str_to_den = (x -> (if occursin('/', x) parse(BigInt, last(split(x, '/'))) else 1 end))
@@ -77,7 +70,7 @@ end
 function load_COO_if(;from_dim, to_dim, from_size=0, to_size=Inf)
     models = []
 
-    for filename in readdir("src/data/matrices/")
+    for filename in readdir("data/matrices/")
         model_data = load_COO_set(filename)
         model_dim = first(first(model_data))
         model_size = length(model_data)
@@ -110,7 +103,7 @@ function load_MTX(group, name)
     sep = r"%-+\r?\n"
 
     filepath = replace(
-        "$(normpath(joinpath(@__FILE__, "..", "..")))src/data/sscollection/$group/$name",
+        "$(normpath(joinpath(@__FILE__, "..", "..")))data/sscollection/$group/$name",
         "\\" => "/"
     )
 

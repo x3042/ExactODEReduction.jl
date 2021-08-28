@@ -1,8 +1,3 @@
-
-include("../src/radical.jl")
-
-using AbstractAlgebra
-
 #------------------------------------------------------------------------------
 
 # computes an invariant subspaces of the given matrices
@@ -29,7 +24,7 @@ function invariant_subspace_1(matrices::AbstractArray{T}) where {T<:AbstractSpar
         @info "radical is nontrivial, computing the general kernel"
         invariant = general_kernel(map(to_dense, radical))
         invariant = [
-            from_dense([invariant[:, i]...], QQ)
+            from_dense([invariant[:, i]...], Nemo.QQ)
             for i in 1:size(invariant, 2)
         ]
     else

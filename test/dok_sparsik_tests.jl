@@ -1,26 +1,8 @@
-
-#=
-    The File contains BidimSparsikLazy tests
-=#
-
-#------------------------------------------------------------------------------
-
-include("../src/structs/dok_sparsik.jl")
-
-#------------------------------------------------------------------------------
-
-if !isdefined(Main, :testset)
-    using Test
-    using TestSetExtensions
-end
-
-import Nemo: QQ, GF, FlintRationalField, characteristic, MatrixSpace
-
 #------------------------------------------------------------------------------
 
 @testset "DOK_Sparsik - Base functionality" begin
 
-    R3 = GF(3)
+    R3 = Nemo.GF(3)
 
     A = from_dense([1 0 0; 0 0 0; 0 8 -3;], QQ)
     B = from_COO(3, 3, [(1, 1, 1), (3, 2, 8), (3, 3, -3)], QQ)
@@ -51,7 +33,7 @@ end
 
 @testset "DOK_Sparsik - Arithmetic operations" begin
 
-    R3 = GF(3)
+    R3 = Nemo.GF(3)
 
     A = zero_sparsik(3, 2, R3)
     @test A - A == A + A == A * 5 == A == zero_sparsik(3, 2, R3)
@@ -106,7 +88,7 @@ end
 
     sz = [1, 2, 5, 10]
     densities = [0.2, 0.5, 1.0]
-    ZZ = GF(2^31 - 1)
+    ZZ = Nemo.GF(2^31 - 1)
 
     # to_dense tests
     for n in sz

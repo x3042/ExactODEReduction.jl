@@ -2,22 +2,6 @@
 #=
     The file contains bases searching related code
 =#
-
-#------------------------------------------------------------------------------
-
-include("parsik.jl")
-include("gizmos.jl")
-include("wiedemannchik.jl")
-include("../src/structs/dok_sparsik.jl")
-include("../src/structs/sparsik.jl")
-include("../src/structs/densik.jl")
-include("../src/structs/subspacik.jl")
-
-#------------------------------------------------------------------------------
-
-import Primes: nextprime
-import Nemo: fmpz
-
 #------------------------------------------------------------------------------
 
 function find_basis_1_γβ(vectors)
@@ -262,13 +246,13 @@ function find_basis(vectors; used_algorithm=find_basis_1_β, initialprime=2^31-1
     # and to handle errors by thyself
     @info "generating a basis for Algebra using $used_algorithm"
 
-    V = Subspacik(QQ)
+    V = Subspacik(Nemo.QQ)
     primes = BigInt[ initialprime ]
     i = 0
 
     while true
         prime = last(primes)
-        field = GF(fmpz(prime))
+        field = Nemo.GF(fmpz(prime))
 
         @info "new reduction modulo, $prime"
 
@@ -308,7 +292,7 @@ function owo()
 
         @info "\n$i-th model : $mfn of dim : $mdim"
 
-        As = map(matr -> from_COO(matr..., QQ), mdata)
+        As = map(matr -> from_COO(matr..., Nemo.QQ), mdata)
 
 
         @time V = find_basis(deepcopy(As), used_algorithm=find_basis_1_β)

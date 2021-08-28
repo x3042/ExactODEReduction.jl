@@ -4,20 +4,14 @@
 
     `Densik` implements `AbstractSparseObject` interface
 =#
-
-#------------------------------------------------------------------------------
-
-include("sparsik.jl")
-
-
 #------------------------------------------------------------------------------
 
 """
 Densik
 """
-mutable struct Densik{T<:Field} <: AbstractSparseVector{T}
+mutable struct Densik{T <: AbstractAlgebra.Field} <: AbstractSparseVector{T}
     field::T
-    data::Vector{<:FieldElem}
+    data::Vector{<: AbstractAlgebra.FieldElem}
 end
 
 #------------------------------------------------------------------------------
@@ -180,8 +174,8 @@ end
 
 #-----------------------------------------------------------------------------
 
-function random_densik(sz::Int, field::T) where {T<:Field}
-    if T <: FracField
+function random_densik(sz::Int, field::T) where {T <: AbstractAlgebra.Field}
+    if T <: AbstractAlgebra.FracField
         # todo!  ??????
         dense_repr = broadcast(QQ, rand(1 : 2^31-1, sz))
         return  Densik(field, dense_repr)
@@ -193,7 +187,7 @@ function random_densik(sz::Int, field::T) where {T<:Field}
     error("random sparsik over $field is not implemented!")
 end
 
-function random_densik(sz::Tuple{Int, Int}, field::T) where {T<:Field}
+function random_densik(sz::Tuple{Int, Int}, field::T) where {T <: AbstractAlgebra.Field}
     random_densik(prod(sz), field)
 end
 

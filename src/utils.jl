@@ -1,8 +1,3 @@
-
-import Nemo: gfp_elem, gfp_fmpz_elem, QQ, FlintRationalField, FlintIntegerRing
-
-import Base: rand, zero
-
 #------------------------------------------------------------------------------
 
 function Base.convert(::Type{Int}, x::gfp_elem)
@@ -28,11 +23,11 @@ end
 #------------------------------------------------------------------------------
 
 # extends random generator to Rational field
-Base.rand(::FlintRationalField) = QQ(rand(-2^16:2^16))
-Base.rand(::FlintRationalField, n::Int) = [rand(QQ) for _ in 1:n]
+Base.rand(::FlintRationalField) = Nemo.QQ(rand(-2^16:2^16))
+Base.rand(::FlintRationalField, n::Int) = [rand(Nemo.QQ) for _ in 1:n]
 
-Base.rand(::FlintIntegerRing) = ZZ(rand(-2^16:2^16))
-Base.rand(::FlintIntegerRing, n::Int) = [rand(ZZ) for _ in 1:n]
+Base.rand(::FlintIntegerRing) = Nemo.ZZ(rand(-2^16:2^16))
+Base.rand(::FlintIntegerRing, n::Int) = [rand(Nemo.ZZ) for _ in 1:n]
 
 #------------------------------------------------------------------------------
 
@@ -66,7 +61,7 @@ Converts an `Array` in `ex` to sparse representation
 """
 macro sparse(ex)
     return quote
-        from_dense($(esc(ex)), QQ)
+        from_dense($(esc(ex)), Nemo.QQ)
     end
 end
 

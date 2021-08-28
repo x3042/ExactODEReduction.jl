@@ -1,22 +1,3 @@
-
-
-include("../src/structs/dok_sparsik.jl")
-include("../src/structs/csr_sparsik.jl")
-include("../src/structs/subspacik.jl")
-
-#------------------------------------------------------------------------------
-
-import Nemo: QQ, GF, PolynomialRing, PolyElem, gfp_elem,
-             degree, trail, coeff, gen, divexact, lead
-
-import LinearAlgebra: SingularException
-import Nemo: evaluate
-import SparseArrays: sparse
-
-# hmmm
-# using ADCME
-
-
 #------------------------------------------------------------------------------
 
 
@@ -34,7 +15,7 @@ function evaluate_2(f::PolyElem, x₀)
         accum = accum*csr_x + convert(Int, coeff(f, d - i))*I
     end
 
-    accum = from_dense(Array(accum), QQ)
+    accum = from_dense(Array(accum), Nemo.QQ)
 
     return reconstruct!(modular_reduction(accum, base_ring(x₀)))
 end

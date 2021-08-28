@@ -7,21 +7,6 @@
 
 #------------------------------------------------------------------------------
 
-import Base: ==, !=, +, -, *
-import AbstractAlgebra: elem_type, Field, FieldElem, FracField,
-                        characteristic
-import OffsetArrays: OffsetVector, OffsetArray, OffsetMatrix,
-                     Origin, no_offset_view
-# interesting import technique
-import CustomUnitRanges: filename_for_zerorange
-
-#------------------------------------------------------------------------------
-
-include("dok_sparsik.jl")
-include(filename_for_zerorange)
-
-#------------------------------------------------------------------------------
-
 # It is convenient to have 0-based indexing in this file
 
 ZeroBased(arr::Array) = OffsetArray(arr, Origin(0))
@@ -30,7 +15,7 @@ ZeroBased(T::Type) = OffsetArray(T[], Origin(0))
 #------------------------------------------------------------------------------
 
 # T
-mutable struct CSR_Sparsik{T<:Field} <: AbstractSparseMatrix{T}
+mutable struct CSR_Sparsik{T <: AbstractAlgebra.Field} <: AbstractSparseMatrix{T}
     # The struct implements the `Compressed Sparse Row` storage strategy
     # No amortized algorithms here!
 
@@ -43,7 +28,7 @@ mutable struct CSR_Sparsik{T<:Field} <: AbstractSparseMatrix{T}
     #
     row_ptr::OffsetVector{Int}
     col_idx::OffsetVector{Int}
-    val::OffsetVector{<:FieldElem}
+    val::OffsetVector{<:AbstractAlgebra.FieldElem}
 end
 
 #------------------------------------------------------------------------------

@@ -3,10 +3,10 @@
     Examples file
 =#
 
-include("../src/api.jl")
+using Nemo
 
-import Nemo: QQ
-
+include("../src/ExactODEReduction.jl")
+using .ExactODEReduction: construct_jacobians, invariant_subspace, polynormalize
 
 # we are using __randomized_wiedemann_minpoly to speed up computations, so,
 # an example may fail occasionally
@@ -29,6 +29,8 @@ matrices = construct_jacobians(system)
 
 # find an invariant subspaces of the matrices
 invariants = invariant_subspace(matrices)
+
+println(invariants)
 
 # transform it back ti polynomial form
 transformation = polynormalize(invariants, R)
