@@ -278,7 +278,7 @@ function load_ODEs(filepath)
     strings = sort(strings)
     #
     @debug "Variables parsed " * join(strings, ", ")
-    S, xs = QQ[strings...]
+    S, xs = Nemo.QQ[strings...]
 
     # symbol :x to x from QQ[x]
     mapping = Dict{Symbol, fmpq_mpoly}(

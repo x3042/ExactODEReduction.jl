@@ -252,7 +252,8 @@ function construct_jacobians(system::AbstractArray{T}) where {T<:MPolyElem}
 end
 
 function construct_jacobians(system)
-    construct_jacobians(collect(values(system)))
+    ring = parent(first(keys(system)))
+    construct_jacobians([system[x] for x in gens(ring)])
 end
 
 
@@ -265,12 +266,12 @@ end
 # with respect to the generators of the given domain
 function polynormalize(vectors, domain) where {T}
     polynômes = []
-    gens = Nemo.gens(domain)
+    vars = Nemo.gens(domain)
 
     for v in vectors
         push!(
             polynômes,
-            sum(map(prod, zip(gens, to_dense(v))))
+            sum(map(prod, zip(vars, to_dense(v))))
         )
     end
 

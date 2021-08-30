@@ -89,6 +89,10 @@ function find_radical_sup(Algebra::Subspacik)
     F = base_ring(Algebra)
     n = dim(Algebra)
 
+    if n == 0
+        return []
+    end
+
     A = gram_matrix(As)
     if isempty(A.nnz_rows)
         return As
