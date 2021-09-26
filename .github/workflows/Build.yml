@@ -10,4 +10,4 @@ jobs:
       with:
           version: '1.4'
     - uses: julia-actions/julia-buildpkg@latest
-    - run: julia --project src/SparseAlgebra.jl
+    - run: julia --project src/ExactODEReduction.jl
