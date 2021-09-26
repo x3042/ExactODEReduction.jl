@@ -16,7 +16,7 @@ using Nemo
 import Base: ==, !=, +, -, *, lcm, rand, zero
 import Base.Iterators: Stateful
 import LinearAlgebra: SingularException
-import Nemo.base_ring
+import Nemo: base_ring, gfp_elem, gfp_fmpz_elem
 
 import CustomUnitRanges: filename_for_zerorange
 include(filename_for_zerorange)

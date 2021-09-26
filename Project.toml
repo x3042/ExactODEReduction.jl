@@ -1,4 +1,4 @@
-name = "SparseAlgebra"
+name = "ExactODEReduction"
 uuid = "d40ae13d-113f-43f6-b846-1243f63c2c52"
 authors = ["x3042", "sumiya11", "pogudingleb"]
 version = "0.1.0"

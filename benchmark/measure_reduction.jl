@@ -23,10 +23,6 @@ function uwuwu()
 
         @info "$i-th, loaded a system $filename of size $(length(system))"
 
-        if i in [0]
-            continue
-        end
-
         matrices = [
             from_COO(system[1][1], system[1][2], ms[3:end]..., QQ)
             for ms in system

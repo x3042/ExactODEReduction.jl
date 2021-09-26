@@ -12,6 +12,7 @@ function find_basis_1_γβ(vectors)
     hash_vector = random_densik(sz, domain)
     alg = linear_span!(deepcopy(vectors), hash_vector)
 
+    @info "applying vectors.."
     fat_vectors = apply_matrices_inplace!(alg, deepcopy(vectors), ω=0.08)
 
     for vect in fat_vectors

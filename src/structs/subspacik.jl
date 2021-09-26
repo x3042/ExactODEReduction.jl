@@ -283,7 +283,7 @@ function apply_matrices_inplace_bloom!(V::Union{Subspacik, HashedSubspacik}, mat
                  product = V.echelon_form[pivot] * vect
 
                  i += 1
-                 # i % 500 == 0 && print(".")
+                 i % 500 == 0 && print(".")
 
                  if !iszero(product)
                      new_pivot = eat_sparsik!(V, product, ω=ω)
