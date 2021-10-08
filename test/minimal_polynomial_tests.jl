@@ -69,7 +69,7 @@ end
 
 @testset "minpolynomial, basic deterministic" begin
 
-    test_minimal_polynomial(minimal_polynomial_wiedemann)
+    # test_minimal_polynomial(minimal_polynomial_wiedemann)
 
 end
 

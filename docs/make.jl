@@ -4,7 +4,7 @@ push!(LOAD_PATH,"../src/")
 #####
 
 using Pkg, Documenter
-using SparseAlgebra
+using ExactODEReduction
 
 
 makedocs(
