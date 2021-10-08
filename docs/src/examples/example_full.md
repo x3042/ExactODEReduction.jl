@@ -1,7 +1,7 @@
 # ODEs Reduction
 
 ```@meta
-CurrentModule = SparseAlgebra
+CurrentModule = ExactODEReduction
 ```
 
 Here is an example of the full pipeline for one ODE system.

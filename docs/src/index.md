@@ -1,7 +1,7 @@
 # Home
 
 ```@meta
-CurrentModule = SparseAlgebra
+CurrentModule = ExactODEReduction
 ```
 
 SparseAlgebra is a Julia package for researching the field of Exact Reductions of Ordinary Differential Equations.
@@ -14,7 +14,7 @@ To install it, run
 
 ```
 using Pkg
-Pkg.add("SparseAlgebra")
+Pkg.add("ExactODEReduction")
 ```
 
 from the Julia REPL.
@@ -22,7 +22,7 @@ from the Julia REPL.
 ## "I don't want to read your manual, just show me some cool code"
 
 ```julia
->julia using SparseAlgebra, Nemo
+>julia using ExactODEReduction, Nemo
 
 >julia R, (x₁, x₂, x₃, x₄) = QQ["x₁", "x₂", "x₃", "x₄"]
 

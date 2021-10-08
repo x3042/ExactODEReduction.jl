@@ -1,7 +1,7 @@
 # Algebra Subspaces
 
 ```@meta
-CurrentModule = SparseAlgebra
+CurrentModule = ExactODEReduction
 ```
 
 ## One subspace

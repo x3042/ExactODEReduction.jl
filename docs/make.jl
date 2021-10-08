@@ -8,7 +8,7 @@ using SparseAlgebra
 
 
 makedocs(
-    modules = [ SparseAlgebra ],
+    modules = [ ExactODEReduction ],
     sitename = "Documenter.jl",
     authors = "Elizaveta Demitraki, Alexander Demin, and Gleb Pogudin",
     pages = [
@@ -25,7 +25,7 @@ makedocs(
     ]
 )
 
-makedocs(sitename="SparseAlgebra.jl")
+makedocs(sitename="ExactODEReduction.jl")
 
 deploydocs(
     branch = "gh-pages",
