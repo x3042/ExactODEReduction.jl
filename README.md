@@ -6,6 +6,8 @@
 
 This repository contains a Julia implementation of the algorithms for researching the structure of ODEs of system biology models. The core interface allows to compute invariant subspaces for an exact reduction to be performed.
 
+Online documentation could be found at https://x3042.github.io/Exact-reduction-of-ODE-systems/dev/
+
 ## What is exact reduction?
 
 Exact reduction of the system of differential equations is an exact variable substitution which preserves the invariants of the system. In this project we mainly consider reductions obtained with **linear transformations**. We will explain it using a toy example. Consider the system
