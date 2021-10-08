@@ -1,3 +1,4 @@
+
 #------------------------------------------------------------------------------
 
 struct ParseException <: Exception
@@ -195,6 +196,60 @@ end
 
 #------------------------------------------------------------------------------
 
+"""
+    load_ODEs_recursive_if(path; from_size=-Inf, to_size=Inf)
+
+Finds a basis of the algebra generated with the given `vectors`
+using the provived default method `used_algorithm` while reducing input coefficients
+modulo `initialprime`. By default, `find_basis_1_β` stands for the algorithm and
+`2147483647` for the initial reduction modulo.
+
+Each element in `vector` to be a subtype of `AbstractSparseObject`
+"""
+function load_ODEs_recursive_if(
+                        path;
+                        from_size=-Inf, to_size=Inf,
+                        exclude=[
+                            "curated_erode",
+                            "__MACOSX",
+                            "non_curated_sbml"
+                        ])
+    ext = ".ode"
+
+    models = []
+    dirs_to_process = [path]
+
+    while !isempty(dirs_to_process)
+        path = pop!(dirs_to_process)
+        path = normalizepath(path)
+        for (pathname, dirs, files) in walkdir(path, onerror=print)
+            @info "Walk: " pathname dirs files
+            for fname in files
+                if endswith(fname, ext)
+                    @info "Load: " "$pathname/$fname"
+                    try
+                        model = load_ODEs("$pathname/$fname")
+                        if from_size <= length(model) <= to_size
+                            push!(models, [fname, model])
+                        end
+                    catch ex
+                        !isa(ex, ParseException) && rethrow(ex)
+                        @warn ex.msg
+                    end
+                end
+            end
+            dirs = filter(x -> !(x in exclude), dirs)
+            append!(dirs_to_process, dirs)
+        end
+    end
+
+    @info "loaded models: $(length(models))"
+
+    models
+end
+
+#------------------------------------------------------------------------------
+
 function load_ODEs_if(;from_size=-Inf, to_size=Inf)
     testspath = "src/data/ODEs/"
     ext = ".ode"
@@ -234,11 +289,20 @@ function load_ODEs(filepath)
 
     # @info "Loading $filepath"
 
+    if isnothing(findlast(startswith("begin"), lines))
+        throw(ParseException("bad file encountered at $filepath, skipping it"))
+    end
+
     lines = filter(!isempty, map(strip, lines[
         (findfirst(startswith("begin"), lines) + 1
         :
         findlast(startswith("end"), lines) - 1)
     ]))
+
+    if isnothing(findlast(startswith("begin"), lines))
+        throw(ParseException("bad file encountered at $filepath, skipping it"))
+    end
+
     # by default we consider the last begin/end block to yield reactions.
     # If this conjecture is false, we do not work
     reactions = filter(!isempty, map(strip, lines[
@@ -249,6 +313,7 @@ function load_ODEs(filepath)
 
     # removing comments at the end of reactions
     reactions = map(s -> replace(s, r"\[.*\]" => ""), reactions)
+    reactions = map(s -> replace(s, "arbitrary" => ""), reactions)
 
     #=
         Parsing for the two ODE formats is implemented:
@@ -278,6 +343,9 @@ function load_ODEs(filepath)
     strings = sort(strings)
     #
     @debug "Variables parsed " * join(strings, ", ")
+    if isempty(strings)
+        throw(ParseException("bad file encountered at $filepath, skipping it"))
+    end
     S, xs = Nemo.QQ[strings...]
 
     # symbol :x to x from QQ[x]
@@ -304,6 +372,12 @@ function load_ODEs(filepath)
             )
 
             concentration = prod(terms(reagents))
+
+            if typeof(concentration * speed) <: AbstractAlgebra.Generic.Frac
+                throw(
+                    ParseException("We do not work with rational concentrtions yet =(")
+                )
+            end
 
             for reagent in monomials(reagents)
                 ODEs[reagent] -= concentration * speed

@@ -9,26 +9,32 @@ using Primes
 using SparseArrays
 using Base.Threads
 
+# Alex: Why uuuusing ??
 using AbstractAlgebra
 using Nemo
+
+import Nemo
+import AbstractAlgebra
 
 # These are extended
 import Base: ==, !=, +, -, *, lcm, rand, zero
 import Base.Iterators: Stateful
 import LinearAlgebra: SingularException
-import Nemo: base_ring, gfp_elem, gfp_fmpz_elem
+import Nemo: base_ring, gfp_elem, gfp_fmpz_elem, fmpq_mpoly,
+            fmpq, terms, monomials, fmpz
+
 
 import CustomUnitRanges: filename_for_zerorange
 include(filename_for_zerorange)
-
-# Reading input
-include("myeval.jl")
-include("parsik.jl")
 
 # Utilities
 include("utils.jl")
 include("typics.jl")
 include("gizmos.jl")
+
+# Reading input
+include("myeval.jl")
+include("parsik.jl")
 
 # Structures for sparse linear algebra
 include("structs/sparsik.jl")
@@ -43,7 +49,7 @@ include("basis.jl")
 include("radical.jl")
 include("invariants.jl")
 
-
+#------------------------------------------------------------------------------
 
 # finds one common invariant subspace of the given matrices
 # using the provived default method for finding one invaiant subspace

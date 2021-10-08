@@ -16,7 +16,8 @@ function _myeval(s::Symbol, map::Dict{Symbol,fmpq_mpoly})
     if haskey(map, s)
         return map[s]
     else
-        throw(UndefVarError(s))
+        @info "Can not find $s in $map while parsing.."
+        throw(ParseException("$s"))
     end
 end
 
@@ -45,10 +46,10 @@ function _myeval(x::Float64, map::Dict{Symbol,fmpq_mpoly})
     frac = split(s, ".")
     if length(frac) == 1
         result = fmpq(parse(fmpz, s)) * extra_num // denom
-    else 
+    else
         result = fmpq(parse(fmpz, frac[1] * frac[2])) * extra_num // (denom * 10^(length(frac[2])))
     end
-    
+
     # too verbose for now
     # @warn "a possibility of inexact float conversion" from=x to=result
     return result
@@ -95,5 +96,31 @@ end
 
 # Division
 function _myeval(::Val{:/}, args, map::Dict{Symbol,fmpq_mpoly})
+    if typeof(_myeval(args[2], map)) <: fmpq_mpoly
+        @warn "We can not parse polynomial fractions, sorry"
+        throw(ParseException("Polynomial fractions are not supported"))
+    end
+
     return _myeval(args[1], map) // _myeval(args[2], map)
+end
+
+# Absolute value
+function _myeval(::Val{:abs}, args, map::Dict{Symbol,fmpq_mpoly})
+    @warn "Absolute values of polynomials are ambigous"
+    throw(ParseException("abs($(args[1])) encountered, exiting.."))
+end
+
+# Exponentiation
+function _myeval(::Val{:^}, args, map::Dict{Symbol, fmpq_mpoly})
+    if typeof( _myeval(args[2], map)) <: fmpq_mpoly
+        @warn "We can not parse polynomial fractions, sorry"
+        throw(ParseException("Polynomial fractions are not supported"))
+    end
+
+    if _myeval(args[2], map) < 0
+        @warn "Negative exponent encountered while parsing"
+        throw(ParseException("Negative exponents are not supported"))
+    end
+
+    return _myeval(args[1], map) ^ Int(numerator(_myeval(args[2], map)))
 end
