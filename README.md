@@ -1,4 +1,4 @@
-# [TBD*] Exact-reduction-of-ODE-systems
+# EXODE* -- Exact-reduction-of-ODE-systems
 
 [![Build](https://github.com/x3042/Exact-reduction-of-ODE-systems/actions/workflows/Build.yml/badge.svg)](https://github.com/x3042/Exact-reduction-of-ODE-systems/actions/workflows/Build.yml) [![Runtests](https://github.com/x3042/Exact-reduction-of-ODE-systems/actions/workflows/Runtests.yml/badge.svg)](https://github.com/x3042/Exact-reduction-of-ODE-systems/actions/workflows/Runtests.yml)
 
@@ -30,7 +30,7 @@ Therefore, the original system can be **reduced exactly** to the following syste
 
 <img src="https://render.githubusercontent.com/render/math?math=\begin{cases} \dot{y}_1 = y_1^2 %2b y_2,\\ \dot{y}_2  =   y_1 %2b y_2\end{cases}\\">
 
-## What does [TBD] do and how to use it?
+## What does EXODE do and how to use it?
 
 We implement an algorithm that takes as **input** a system of ODEs with polynomial right-hand side and **returns** the set of possible linear transformations.
 
