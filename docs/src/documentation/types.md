@@ -1,7 +1,7 @@
 # Types
 
 ```@meta
-CurrentModule = SparseAlgebra
+CurrentModule = ExactODEReduction
 ```
 
 Type system in this package goes as follows.

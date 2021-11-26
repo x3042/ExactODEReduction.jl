@@ -1,7 +1,7 @@
 # Functions
 
 ```@meta
-CurrentModule = SparseAlgebra
+CurrentModule = ExactODEReduction
 ```
 
 Here the main interface of the program is listed.

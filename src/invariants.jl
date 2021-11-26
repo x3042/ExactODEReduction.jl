@@ -17,6 +17,7 @@ function invariant_subspace_1(matrices::AbstractArray{T}) where {T<:AbstractSpar
     @info "computing the radical.."
     @time radical = find_radical_sup(algebra)
 
+
     # find an invariant subspace
     if length(radical) != 0 && length(radical) < dim(algebra)
         # Gleb: why `length(radical) < dim(algebra)` ?

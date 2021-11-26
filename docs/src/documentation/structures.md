@@ -1,7 +1,7 @@
 # Structures
 
 ```@meta
-CurrentModule = SparseAlgebra
+CurrentModule = ExactODEReduction
 ```
 
 
