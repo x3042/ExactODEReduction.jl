@@ -48,6 +48,8 @@ include("wiedemannchik.jl")
 include("basis.jl")
 include("radical.jl")
 include("invariants.jl")
+include("parametrization.jl")
+
 
 #------------------------------------------------------------------------------
 
