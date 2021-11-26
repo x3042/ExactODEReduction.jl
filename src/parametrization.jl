@@ -9,8 +9,6 @@
 """
 function perform_change_of_variables(system, invariants; new_vars_name="y")
 
-    # Переменные не миксуются ?
-
     ground = base_ring(first(invariants))
     olddim = length(gens(parent(first(system))))
     oldring = parent(first(system))
@@ -75,6 +73,41 @@ end
 
 
 """
+    Method that checks the consistency of the differential systems
+
+    this method checks if restricted is obtained from the system original
+    after the change of variables provided by varmapping.
+"""
+function check_consistency(restricted, original, varmapping)
+    # what is the probability of this miracle?..
+
+    oldring = parent(first(original))
+    newring = parent(first(restricted))
+    println(oldring)
+    ground = base_ring(oldring)
+
+    xs = gens(oldring)
+    ys = gens(newring)
+
+    x0 = map(_ -> rand(ground), xs)
+
+    original0 = Dict(x => Nemo.evaluate(f, x0) for (x, f) in zip(xs, original))
+    y0 = map(f -> Nemo.evaluate(f, x0), varmapping)
+
+    rhs = map(f -> Nemo.evaluate(f, y0), restricted)
+
+    lhs = [
+        sum([
+            coef * original0[monom]
+            for (coef, monom) in zip(coefficients(f), monomials(f))
+        ])
+        for f in varmapping
+    ]
+
+    rhs == lhs
+end
+
+"""
 using Nemo: QQ
 
 R, (x1, x2, x3, x4) = QQ["x1", "x2", "x3", "x4"]
@@ -90,7 +123,8 @@ matrices = construct_jacobians(system)
 invariants = invariant_subspace_1(matrices)
 transformation = polynormalize(invariants, R)
 
-changed = perform_change_of_variables(system, invariants)
-println( changed )
+restricted = perform_change_of_variables(system, invariants)
+println( restricted )
 
+println( check_consistency(restricted, system, transformation) )
 """
