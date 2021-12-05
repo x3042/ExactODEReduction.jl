@@ -91,4 +91,32 @@ function many_invariant_subspaces(
     __many_invariant_subspaces(As, backend_algorithm)
 end
 
+#------------------------------------------------------------------------------
+"""
+    find_reductions(system; backend_algorithm)
+
+Finds reductions of the system corresponding to a Jordan-Hoelder filtration.
+This means that the reduction form a chain, and there are no extra intermediate reduction in this chain.
+In particular, if there exists at least one reduction, it will be found.
+Arguments:
+ - `system` is a list of the right-hand sides of the system, the i-th element is the derivative of the i-th
+   variable in the corresponding polynomial ring
+ - `backend_algorithm` is the linear algebra algorithm used. By default, `invariant_subspace_1`.
+"""
+function find_reductions(
+    system;
+    backend_algorithm=invariant_subspace_1)
+
+    matrices = construct_jacobians(system)
+    invariant_subspaces = many_invariant_subspaces(matrices; backend_algorithm=backend_algorithm)
+    result = []
+    for V in invariant_subspaces
+        transformation = polynormalize(V, parent(first(system)))
+        new_system = perform_change_of_variables(system, V)
+        push!(result, Dict(:new_vars => transformation, :new_system => new_system))
+    end
+
+    return result
+end
+
 end
