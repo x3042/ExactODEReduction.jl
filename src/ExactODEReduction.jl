@@ -1,19 +1,18 @@
 module ExactODEReduction
 
+import DataStructures
+import Distributions
+import JSON
+import OffsetArrays: OffsetVector
+import Primes
+import SparseArrays
 
-using DataStructures
-using Distributions
-using JSON
-using OffsetArrays
-using Primes
-using SparseArrays
 using Base.Threads
 
-# Alex: Why uuuusing ??
-using AbstractAlgebra
-using Nemo
-
 import Nemo
+import Nemo: FlintIntegerRing,
+                FlintRationalField, FracElem, PolyElem, MPolyElem
+
 import AbstractAlgebra
 
 # These are extended
@@ -92,6 +91,7 @@ function many_invariant_subspaces(
 end
 
 #------------------------------------------------------------------------------
+
 """
     find_reductions(system; backend_algorithm)
 
@@ -118,5 +118,7 @@ function find_reductions(
 
     return result
 end
+
+export find_reductions, invariant_subspace, many_invariant_subspaces
 
 end

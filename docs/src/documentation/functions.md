@@ -7,6 +7,10 @@ CurrentModule = ExactODEReduction
 Here the main interface of the program is listed.
 
 ```@docs
+find_reductions
+```
+
+```@docs
 invariant_subspace
 ```
 
