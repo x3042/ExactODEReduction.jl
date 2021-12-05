@@ -40,6 +40,7 @@ function invariant_subspace_1(matrices::AbstractArray{T}) where {T<:AbstractSpar
     if isempty(invariant)
         @warn "no invariant subspaces"
     else
+        invariant = basis(linear_span!(invariant))
         @info "$(length(invariant)) dimensional subspace found"
     end
 

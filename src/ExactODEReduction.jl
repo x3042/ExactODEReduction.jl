@@ -1,5 +1,6 @@
 module ExactODEReduction
 
+
 import DataStructures
 import Distributions
 import JSON
@@ -10,8 +11,13 @@ import SparseArrays
 using Base.Threads
 
 import Nemo
-import Nemo: FlintIntegerRing,
-                FlintRationalField, FracElem, PolyElem, MPolyElem
+import Nemo: FlintIntegerRing, FlintRationalField, FracElem, PolyElem,
+            MPolyElem, gens, vars, derivative, monomial, coeff, characteristic,
+            MatrixSpace, kernel, PolynomialRing, exponent_vector, MPolyBuildCtx,
+            push_term!, finish
+
+
+
 
 import AbstractAlgebra
 
