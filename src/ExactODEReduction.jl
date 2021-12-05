@@ -20,7 +20,7 @@ import Base: ==, !=, +, -, *, lcm, rand, zero
 import Base.Iterators: Stateful
 import LinearAlgebra: SingularException
 import Nemo: base_ring, gfp_elem, gfp_fmpz_elem, fmpq_mpoly,
-            fmpq, terms, monomials, fmpz
+            fmpq, terms, monomials, fmpz, elem_type
 
 
 import CustomUnitRanges: filename_for_zerorange
@@ -38,7 +38,7 @@ include("parsik.jl")
 # Structures for sparse linear algebra
 include("structs/sparsik.jl")
 include("structs/dok_sparsik.jl")
-include("structs/csr_sparsik.jl")
+# include("structs/csr_sparsik.jl")
 include("structs/densik.jl")
 include("structs/subspacik.jl")
 

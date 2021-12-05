@@ -147,6 +147,7 @@ end
 
 #-----------------------------------------------------------------------------
 
+#=
 # returns a new Sparsik object consisting of elements
 # from the `v` each reconstructed from v.field to QQ
 #
@@ -168,6 +169,7 @@ function rational_reconstruction(v::Densik)
 
     return ans
 end
+=#
 
 #-----------------------------------------------------------------------------
 
