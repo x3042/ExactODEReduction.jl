@@ -117,6 +117,7 @@ function find_reductions(
     invariant_subspaces = many_invariant_subspaces(matrices; backend_algorithm=backend_algorithm)
     result = []
     for V in invariant_subspaces
+        V = basis(linear_span!(V))
         transformation = polynormalize(V, parent(first(system)))
         new_system = perform_change_of_variables(system, V)
         push!(result, Dict(:new_vars => transformation, :new_system => new_system))
