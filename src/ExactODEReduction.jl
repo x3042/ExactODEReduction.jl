@@ -14,7 +14,7 @@ import Nemo
 import Nemo: FlintIntegerRing, FlintRationalField, FracElem, PolyElem,
             MPolyElem, gens, vars, derivative, monomial, coeff, characteristic,
             MatrixSpace, kernel, PolynomialRing, exponent_vector, MPolyBuildCtx,
-            push_term!, finish
+            push_term!, finish, degree
 
 
 
