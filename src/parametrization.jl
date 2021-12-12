@@ -75,15 +75,14 @@ end
 """
     Method that checks the consistency of the differential systems
 
-    this method checks if restricted is obtained from the system original
-    after the change of variables provided by varmapping.
+    this method checks if `restricted` is obtained from the system `original`
+    after the change of variables provided by `varmapping`.
 """
 function check_consistency(restricted, original, varmapping)
     # what is the probability of this miracle?..
 
     oldring = parent(first(original))
     newring = parent(first(restricted))
-    println(oldring)
     ground = base_ring(oldring)
 
     xs = gens(oldring)
@@ -99,7 +98,7 @@ function check_consistency(restricted, original, varmapping)
     lhs = [
         sum([
             coef * original0[monom]
-            for (coef, monom) in zip(coefficients(f), monomials(f))
+            for (coef, monom) in zip(Nemo.coeffs(f), monomials(f))
         ])
         for f in varmapping
     ]
@@ -107,7 +106,7 @@ function check_consistency(restricted, original, varmapping)
     rhs == lhs
 end
 
-"""
+#=
 using Nemo: QQ
 
 R, (x1, x2, x3, x4) = QQ["x1", "x2", "x3", "x4"]
@@ -127,4 +126,4 @@ restricted = perform_change_of_variables(system, invariants)
 println( restricted )
 
 println( check_consistency(restricted, system, transformation) )
-"""
+=#

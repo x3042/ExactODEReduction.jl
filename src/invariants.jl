@@ -6,7 +6,7 @@
 #
 # Gleb: I guess we can say that we guarantee that if there is a proper nonempty over Q,
 #       it will be found
-function invariant_subspace_1(matrices::AbstractArray{T}) where {T<:AbstractSparseMatrix}
+function invariant_subspace_global(matrices::AbstractArray{T}) where {T<:AbstractSparseMatrix}
     isempty(matrices) && error("empty system invariants are ill-defined")
 
     # generate a basis for the Algebra
@@ -15,7 +15,7 @@ function invariant_subspace_1(matrices::AbstractArray{T}) where {T<:AbstractSpar
 
     # find the radical of the Algebra
     @info "computing the radical.."
-    @time radical = find_radical_sup(algebra)
+    radical = find_radical_sup(algebra)
 
 
     # find an invariant subspace
@@ -56,10 +56,21 @@ end
 
 # computes invariant subspaces using the given hint,
 # , i.e, an array of vectors generating a subspace
-function __invariant_subspace_2(matrices::AbstractArray{T}, hint) where {T<:AbstractSparseMatrix}
+function invariant_subspace_local(matrices::AbstractArray{T}, hint) where {T<:AbstractSparseMatrix}
     isempty(matrices) && error("empty system invariants are ill-defined")
+    isempty(hint) && error("empty hint is given")
 
-    V = linear_span!(hint)
+    ground = base_ring(first(hint))
+    variables = gens(parent(first(hint)))
+    vector_hint = [
+        from_dense([
+            coeff(f, v)
+            for v in variables
+        ], ground)
+        for f in hint
+    ]
+
+    V = linear_span!(vector_hint)
 
     new_pivots = collect(keys(V.echelon_form))
     i = 0
@@ -90,6 +101,7 @@ function __invariant_subspace_2(matrices::AbstractArray{T}, hint) where {T<:Abst
     return basis(V)
 end
 
+#=
 function invariant_subspace_2(matrices::AbstractArray{T}) where {T<:AbstractSparseMatrix}
     n = size(first(matrices), 1)
     ground = base_ring(first(matrices))
@@ -99,12 +111,13 @@ function invariant_subspace_2(matrices::AbstractArray{T}) where {T<:AbstractSpar
     vs = [ unit_sparsik(n, i, ground) for i in is ]
 
     @info "hint" vs
-    return __invariant_subspace_2(matrices, vs)
+    return invariant_subspace_local(matrices, vs)
 end
+=#
 
 #------------------------------------------------------------------------------
 
-function __many_invariant_subspaces(
+function many_invariant_subspaces(
         As::AbstractArray{T},
         find_invariant)   where {T<:AbstractSparseMatrix}
 
@@ -127,7 +140,7 @@ function __many_invariant_subspaces(
     if length(V) > 1 && length(V) < n
         As_V = restrict(As, V)
         As_V_sparse = map(x-> from_dense(x, ground), map(Array, As_V))
-        subspaces = __many_invariant_subspaces(As_V_sparse, find_invariant)
+        subspaces = many_invariant_subspaces(As_V_sparse, find_invariant)
         append!(toreturn, map(vs -> lift(vs, V), subspaces))
     end
 
@@ -136,7 +149,7 @@ function __many_invariant_subspaces(
         As_V = factorize(As, V)
         if !isempty(As_V)
             As_V_sparse = map(x-> from_dense(x, ground), map(Array, As_V))
-            subspaces = __many_invariant_subspaces(As_V_sparse, find_invariant)
+            subspaces = many_invariant_subspaces(As_V_sparse, find_invariant)
             lifted = map(
                 vs -> lift(vs, augment_subspace(linear_span!(V))),
                 subspaces)

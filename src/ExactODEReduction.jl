@@ -4,6 +4,7 @@ module ExactODEReduction
 import DataStructures
 import Distributions
 import JSON
+import Logging
 import OffsetArrays: OffsetVector
 import Primes
 import SparseArrays
@@ -14,9 +15,7 @@ import Nemo
 import Nemo: FlintIntegerRing, FlintRationalField, FracElem, PolyElem,
             MPolyElem, gens, vars, derivative, monomial, coeff, characteristic,
             MatrixSpace, kernel, PolynomialRing, exponent_vector, MPolyBuildCtx,
-            push_term!, finish, degree
-
-
+            push_term!, finish, degree, gen, coefficients
 
 
 import AbstractAlgebra
@@ -58,42 +57,43 @@ include("parametrization.jl")
 
 #------------------------------------------------------------------------------
 
-# finds one common invariant subspace of the given matrices
-# using the provived default method for finding one invaiant subspace
 """
-    invariant_subspace(As; backend_algorithm)
+    find_reduction(system; backend_algorithm)
 
-Finds *one* common invariant subspace of the given matrices `As`
-using the provived default method `backend_algorithm`. By default, `invariant_subspace_1`
-is used.
-
-Each matrix in `As` to be a subtype of `AbstractSparseMatrix`
+Finds the best linear reduction of the system.
+If there exists a reduction, it will be found.
+Arguments:
+ - `system` is a list of the right-hand sides of the system, the i-th element is the derivative of the i-th
+   variable in the corresponding polynomial ring
+ - `observabels` is a list of linear functions of initial variables
+   desired to be preserved by reduction.
+   Defaults to an empty list to find the most general reduction.
 """
-function invariant_subspace(
-    As;
-    backend_algorithm=invariant_subspace_1)
+function find_reduction(
+        system;
+        observables=[],
+        loglevel=Logging.Warn)
 
-    backend_algorithm(As)
-end
+    # hmm
+    package_logger = Logging.ConsoleLogger(stderr, loglevel)
+    Logging.global_logger(package_logger)
 
-#------------------------------------------------------------------------------
+    # Jacobian of system,
+    # each subspace invariant under Jacobian corresponds to a reduction
+    matrices = construct_jacobians(system)
 
-# finds several common invariant subspaces of the given matrices
-# using the provided default method for finding one invaiant subspace
-"""
-    many_invariant_subspaces(As; backend_algorithm)
+    # if there are no variables to preserve the state of
+    if isempty(observables)
+        subspace = invariant_subspace_global(matrices)
+    else # if there are
+        subspace = invariant_subspace_local(matrices, observables)
+    end
 
-Finds *several* common invariant subspaces of the given matrices `As`
-using the provived default method `backend_algorithm`. By default, `invariant_subspace_1`
-is used.
+    subspace = basis(linear_span!(subspace))
+    transformation = polynormalize(subspace, parent(first(system)))
+    new_system = perform_change_of_variables(system, subspace)
 
-Each matrix in `As` to be a subtype of `AbstractSparseMatrix`
-"""
-function many_invariant_subspaces(
-    As;
-    backend_algorithm=invariant_subspace_1)
-
-    __many_invariant_subspaces(As, backend_algorithm)
+    return Dict(:new_vars => transformation, :new_system => new_system)
 end
 
 #------------------------------------------------------------------------------
@@ -110,11 +110,14 @@ Arguments:
  - `backend_algorithm` is the linear algebra algorithm used. By default, `invariant_subspace_1`.
 """
 function find_reductions(
-    system;
-    backend_algorithm=invariant_subspace_1)
+        system;
+        loglevel=Logging.Warn)
+
+    package_logger = Logging.ConsoleLogger(stderr, loglevel)
+    Logging.global_logger(package_logger)
 
     matrices = construct_jacobians(system)
-    invariant_subspaces = many_invariant_subspaces(matrices; backend_algorithm=backend_algorithm)
+    invariant_subspaces = many_invariant_subspaces(matrices, invariant_subspace_global)
     result = []
     for V in invariant_subspaces
         V = basis(linear_span!(V))
@@ -123,9 +126,11 @@ function find_reductions(
         push!(result, Dict(:new_vars => transformation, :new_system => new_system))
     end
 
-    return result
+    sort!(result, by=r -> length(r[:new_vars]))
+    result
 end
 
-export find_reductions, invariant_subspace, many_invariant_subspaces
+export find_reduction, find_reductions
+export check_consistency
 
 end

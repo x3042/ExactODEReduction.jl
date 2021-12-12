@@ -265,7 +265,7 @@ end
 # converts the given vectors into the polynomial form
 # with respect to the generators of the given domain
 function polynormalize(vectors, domain) where {T}
-    polynômes = []
+    polynômes = zeros(domain, 0)
     vars = Nemo.gens(domain)
 
     for v in vectors

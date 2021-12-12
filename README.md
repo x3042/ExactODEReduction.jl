@@ -59,24 +59,38 @@ system = [
 ]
 ```
 
-4. Call `invariant_subspace` providing the system
+4. Call `find_reduction` providing the system
 
 ```julia
-subspace = invariant_subspace(system)
-```
-
-and convert to polynomials in new variables.
-
-```julia
-polynormalize(subspace, R)
+reduction = find_reduction(system)
 ```
 
 You will get the following result
 
 ```julia
-2-element Array{Any,1}:
- x₁ + x₂
- x₃ + x₄
+Dict{Symbol, Vector{fmpq_mpoly}} with 2 entries:
+  :new_system => [y1^2 + y2, y1 + y2]
+  :new_vars   => [x₁ + x₂, x₃ + x₄]
 ```
 
-which is the same as we have seen earlier. For more examples we address the `examples` folder.
+which is the same as we have seen earlier.
+
+We may also want to preserve some variables or their linear combinations in the reduced system.
+It is possible to pass such linear forms in the `observables` array as a parameter
+
+```julia
+find_reduction(system, observables=[x₁])
+```
+
+ For example, the above code will search for a reduction where `x₁` is present amongst new variables, resulting into
+
+ ```julia
+ Dict{Symbol, Vector{fmpq_mpoly}} with 2 entries:
+   :new_system => [y1^2 + 2*y1*y2, y2^2 + y3, y1 + y2 + y3]
+   :new_vars   => [x₁, x₂, x₃ + x₄]
+ ```
+
+
+
+
+For more examples we refer to the `examples` folder.
