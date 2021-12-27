@@ -16,6 +16,12 @@ function Base.convert(::Type{FlintIntegerRing}, x::gfp_elem)
     return ZZ(x.data)
 end
 
+#------------------------------------------------------------------------------
+
+function var_to_str(v::MPolyElem)
+    ind = findfirst(vv -> vv == v, gens(parent(v)))
+    return string(symbols(parent(v))[ind])
+end
 
 # Bad
 # Base.zero(::Type{gfp_elem}) = GF(2)(2)
