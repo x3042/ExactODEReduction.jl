@@ -1,5 +1,5 @@
 
-module ExactOdeReduction
+module ExactODEReduction
 
 import DataStructures
 import Distributions
