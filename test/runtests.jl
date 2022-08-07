@@ -7,8 +7,7 @@ using LinearAlgebra: SingularException
 
 using Nemo
 
-include("../src/ExactODEReduction.jl")
-using .ExactODEReduction: from_dense, to_dense, from_COO, zero_sparsik, random_sparsik,
+using ExactODEReduction: from_dense, to_dense, from_COO, zero_sparsik, random_sparsik,
                           construct_jacobians, check_invariance!, @sparse, linear_span!,
                           check_inclusion!, density, is_thorough, transpose!, tr, dim, scale,
                           to_cartesian, to_plain, load_COO_set, load_MTX, find_radical,
