@@ -8,6 +8,7 @@ import Logging
 import OffsetArrays: OffsetVector
 import Primes
 import SparseArrays
+import LinearAlgebra
 
 using Base.Threads
 
@@ -21,6 +22,7 @@ import Nemo: FlintIntegerRing, FlintRationalField, FracElem, PolyElem,
             push_term!, finish, degree, gen, coefficients, MPolyElem, MPolyRing,
             FieldElem, symbols, evaluate, charpoly, lead
 
+import Polymake: polytope
 
 import AbstractAlgebra
 
@@ -59,6 +61,7 @@ include("structs/subspace.jl")
 include("linalg/wiedemann.jl")
 include("linalg/basis.jl")
 include("linalg/radical.jl")
+include("positivizor.jl")
 include("linalg/invariants.jl")
 include("odes/parametrization.jl")
 include("odes/ODE.jl")
@@ -92,6 +95,7 @@ function find_reduction(
     isempty(subspace) && return Dict{Symbol, Vector{fmpq_mpoly}}()
 
     subspace = basis(linear_span!(subspace))
+    subspace = positivize(subspace)
     transformation = polynormalize(subspace, parent(system))
     new_system = perform_change_of_variables(eqs, subspace)
 
