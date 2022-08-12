@@ -1,3 +1,6 @@
+# The code in this file has been adapted from https://github.com/xjzhaang/LumpingPostiviser
+# commit 1fec31a493a7884ea8b202a8fe8943bb2d66b853
+
 """
     rational_to_int(m)
 
