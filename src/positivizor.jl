@@ -1,16 +1,32 @@
-function rational_to_int(matrix::Array{<: Union{<: Rational, fmpq}, 2})
-    for row in eachrow(matrix)
+"""
+    rational_to_int(m)
+
+Converts a matrix `m`  with rational entries (Rational or fmpq) into a 
+BigInt matrix my bringing the rows to the common denominator
+"""
+function rational_to_int(m::Array{<: Union{<: Rational, fmpq}, 2})
+    for row in eachrow(m)
         lcm_ = 1
         for x in row
             lcm_ = lcm(lcm_, denominator(x))
         end 
         row .= (row .* lcm_)
     end
-    matrix = Array{BigInt, 2}(numerator.(matrix))
-    return matrix
+    return Array{BigInt, 2}(numerator.(m))
 end
 
+#------------------------------------------------------------------------------
 
+"""
+    positivize(subspace)
+
+For a list `subspace` of linear indepenent sparsiks, tries to find
+a list of vectors (also sparsiks) generating the same subspace but having
+all the coordinates >= 0. If this is possible, returns such a list, otherwise
+returns the original subspace.
+Arguments
+  - `subspace`: a list of linearly independent Sparsik's
+"""
 function positivize(subspace)
     stacked_basis = Matrix(transpose(reduce(hcat, map(v -> to_dense(v), subspace))))
     integerized = rational_to_int(stacked_basis)
@@ -30,6 +46,8 @@ function positivize(subspace)
     (nr, nc) = size(positivized)
     return [from_dense([positivized[i, j] for j in 1:nc], Nemo.QQ) for i in 1:nr] 
 end
+
+#------------------------------------------------------------------------------
 
 function intersection_calc(m::Array{BigInt, 2})
     row, col = size(m)

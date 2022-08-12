@@ -8,11 +8,11 @@ function evaluate_2(f::PolyElem, x₀)
     reconstruct!(x₀)
 
     rec_x = rational_reconstruction(x₀)
-    csr_x = sparse(to_dense(rec_x))
+    csr_x = SparseArrays.sparse(to_dense(rec_x))
 
-    I = sparse(to_dense(one(rec_x)))
+    Id = SparseArrays.sparse(to_dense(one(rec_x)))
     for i in 1 : d
-        accum = accum*csr_x + convert(Int, coeff(f, d - i))*I
+        accum = accum * csr_x + convert(Int, coeff(f, d - i)) * Id
     end
 
     accum = from_dense(Array(accum), Nemo.QQ)
