@@ -86,8 +86,8 @@ macro ODEsystem(ex::Expr...)
     vars_list = :([$(all_symb...)])
     R = gensym()
     vars_aux = gensym()
-    exp_ring = :(($R, $vars_aux) = ExactOdeReduction.Nemo.PolynomialRing(
-        ExactOdeReduction.Nemo.QQ,
+    exp_ring = :(($R, $vars_aux) = ExactODEReduction.Nemo.PolynomialRing(
+        ExactODEReduction.Nemo.QQ,
         map(string, $all_symb)
     ))
     assignments = [:($(all_symb[i]) = $vars_aux[$i]) for i in 1:length(all_symb)]
@@ -98,12 +98,12 @@ macro ODEsystem(ex::Expr...)
     y_dict = gensym()
     y_vars = Set()
     x_dict_create_expr = :($x_dict = Dict{
-        ExactOdeReduction.Nemo.fmpq_mpoly,
-        ExactOdeReduction.Nemo.fmpq_mpoly
+        ExactODEReduction.Nemo.fmpq_mpoly,
+        ExactODEReduction.Nemo.fmpq_mpoly
     }())
     y_dict_create_expr = :($y_dict = Dict{
-        ExactOdeReduction.Nemo.fmpq_mpoly,
-        ExactOdeReduction.Nemo.fmpq_mpoly
+        ExactODEReduction.Nemo.fmpq_mpoly,
+        ExactODEReduction.Nemo.fmpq_mpoly
     }())
     eqs_expr = []
     for eq in equations
@@ -142,7 +142,7 @@ macro ODEsystem(ex::Expr...)
     @info "Parameters: " * join(map(string, collect(params)), ", ")
 
     # creating the ode object
-    ode_expr = :(ExactOdeReduction.ODE{ExactOdeReduction.Nemo.fmpq_mpoly}($x_dict))
+    ode_expr = :(ExactODEReduction.ODE{ExactODEReduction.Nemo.fmpq_mpoly}($x_dict))
 
     result = Expr(
         :block,

@@ -36,12 +36,10 @@ end
 function load_COO_set(filename::String)
     model = []
 
-    filepath = "$(normpath(joinpath(@__FILE__, "..", "..")))/data/matrices/$(filename)"
-
     str_to_nom = (x -> parse(BigInt, first(split(x, '/'))))
     str_to_den = (x -> (if occursin('/', x) parse(BigInt, last(split(x, '/'))) else 1 end))
 
-    open(filepath, "r") do input_stream
+    open(filename, "r") do input_stream
         for arr in JSON.Parser.parse(input_stream)
             normal_repr = [
                 arr[1], arr[2],
@@ -104,7 +102,7 @@ function load_MTX(group, name)
     sep = r"%-+\r?\n"
 
     filepath = replace(
-        "$(normpath(joinpath(@__FILE__, "..", "..")))data/sscollection/$group/$name",
+        "$(normpath(joinpath(@__FILE__, "..", "..")))../data/sscollection/$group/$name",
         "\\" => "/"
     )
 

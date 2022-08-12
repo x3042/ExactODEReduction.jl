@@ -8,6 +8,7 @@ import Logging
 import OffsetArrays: OffsetVector
 import Primes
 import SparseArrays
+import LinearAlgebra
 
 using Base.Threads
 
@@ -19,8 +20,9 @@ import Nemo: FlintIntegerRing, FlintRationalField, FracElem, PolyElem,
             MPolyElem, gens, vars, derivative, monomial, coeff, characteristic,
             MatrixSpace, kernel, PolynomialRing, exponent_vector, MPolyBuildCtx,
             push_term!, finish, degree, gen, coefficients, MPolyElem, MPolyRing,
-            FieldElem, symbols, evaluate, charpoly, lead
+            FieldElem, symbols, evaluate, charpoly, lead, divexact
 
+import Polymake: polytope
 
 import AbstractAlgebra
 
@@ -59,6 +61,7 @@ include("structs/subspace.jl")
 include("linalg/wiedemann.jl")
 include("linalg/basis.jl")
 include("linalg/radical.jl")
+include("positivizor.jl")
 include("linalg/invariants.jl")
 include("odes/parametrization.jl")
 include("odes/ODE.jl")
@@ -67,15 +70,15 @@ include("odes/ODE.jl")
 #------------------------------------------------------------------------------
 
 """
-    find_reduction(system; backend_algorithm)
+    find_some_reduction(system; backend_algorithm)
 
-Finds the best linear reduction of the system.
+Finds a nontrivial linear reduction of the system.
 If there exists a reduction, it will be found.
 Arguments:
  - `system` is a list of the right-hand sides of the system, the i-th element is the derivative of the i-th
    variable in the corresponding polynomial ring
 """
-function find_reduction(
+function find_some_reduction(
         system::ODE{P};
         loglevel=Logging.Info) where {P}
 
@@ -92,6 +95,7 @@ function find_reduction(
     isempty(subspace) && return Dict{Symbol, Vector{fmpq_mpoly}}()
 
     subspace = basis(linear_span!(subspace))
+    subspace = positivize(subspace)
     transformation = polynormalize(subspace, parent(system))
     new_system = perform_change_of_variables(eqs, subspace)
 
@@ -101,7 +105,7 @@ end
 #------------------------------------------------------------------------------
 
 """
-    find_reduction(system, observables; backend_algorithm)
+    find_smallest_constrained_reduction(system, observables; backend_algorithm)
 
 Finds the best linear reduction of the system.
 If there exists a reduction, it will be found.
@@ -112,7 +116,7 @@ Arguments:
    desired to be preserved by reduction.
    Defaults to an empty list to find the most general reduction.
 """
-function find_reduction(
+function find_smallest_constrained_reduction(
         system::ODE{P},
         observables::Vector{P};
         loglevel=Logging.Info) where {P}
@@ -130,6 +134,7 @@ function find_reduction(
     isempty(subspace) && return Dict{Symbol, Vector{fmpq_mpoly}}()
 
     subspace = basis(linear_span!(subspace))
+    subspave = positivize(subspace)
     transformation = polynormalize(subspace, parent(system))
     new_system = perform_change_of_variables(eqs, subspace)
 
@@ -163,6 +168,7 @@ function find_reductions(
     result = Vector{Dict{Symbol, Vector{fmpq_mpoly}}}()
     for V in invariant_subspaces
         V = basis(linear_span!(V))
+	V = positivize(V)
         transformation = polynormalize(V, parent(system))
         new_system = perform_change_of_variables(eqs, V)
         push!(result, Dict(:new_vars => transformation, :new_system => new_system))
@@ -173,7 +179,7 @@ end
 
 #------------------------------------------------------------------------------
 
-export find_reduction, find_reductions
+export find_smallest_constrained_reduction, find_reductions, find_some_reduction
 export check_consistency
 export ODE, @ODEsystem, equations
 
