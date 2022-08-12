@@ -7,6 +7,7 @@ using LinearAlgebra: SingularException
 
 using Nemo
 
+using ExactODEReduction
 using ExactODEReduction: from_dense, to_dense, from_COO, zero_sparsik, random_sparsik,
                           construct_jacobians, check_invariance!, @sparse, linear_span!,
                           check_inclusion!, density, is_thorough, transpose!, tr, dim, scale,

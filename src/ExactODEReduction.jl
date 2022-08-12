@@ -70,15 +70,15 @@ include("odes/ODE.jl")
 #------------------------------------------------------------------------------
 
 """
-    find_smallest_reduction(system; backend_algorithm)
+    find_some_reduction(system; backend_algorithm)
 
-Finds the best linear reduction of the system.
+Finds a nontrivial linear reduction of the system.
 If there exists a reduction, it will be found.
 Arguments:
  - `system` is a list of the right-hand sides of the system, the i-th element is the derivative of the i-th
    variable in the corresponding polynomial ring
 """
-function find_smallest_reduction(
+function find_some_reduction(
         system::ODE{P};
         loglevel=Logging.Info) where {P}
 
@@ -105,7 +105,7 @@ end
 #------------------------------------------------------------------------------
 
 """
-    find_smallest_reduction(system, observables; backend_algorithm)
+    find_smallest_constrained_reduction(system, observables; backend_algorithm)
 
 Finds the best linear reduction of the system.
 If there exists a reduction, it will be found.
@@ -116,7 +116,7 @@ Arguments:
    desired to be preserved by reduction.
    Defaults to an empty list to find the most general reduction.
 """
-function find_smallest_reduction(
+function find_smallest_constrained_reduction(
         system::ODE{P},
         observables::Vector{P};
         loglevel=Logging.Info) where {P}
@@ -179,7 +179,7 @@ end
 
 #------------------------------------------------------------------------------
 
-export find_smallest_reduction, find_reductions
+export find_smallest_constrained_reduction, find_reductions, find_some_reduction
 export check_consistency
 export ODE, @ODEsystem, equations
 
