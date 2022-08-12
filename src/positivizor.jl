@@ -20,7 +20,11 @@ function positivize(subspace)
         positivized = intersection_calc(integerized)
     catch e
         @debug "$e"
-        return subspace
+        if typeof(e) == DimensionMismatch
+            return subspace
+        else
+            throw(e)
+        end
     end
     @debug "After positivization: $positivized"
     (nr, nc) = size(positivized)
@@ -71,35 +75,33 @@ end
 
 function find_best_basis(m::Array{BigInt, 2})
     # first we construct a list of edges where each edge is a tuple (weight, row1)
-    col = size(m)[2]
-
+    (nrows, ncols) = size(m)
     rows_list = []
-    for i in 1:size(m)[1]
-        weight = find_nonzero(m[i, :])
+    for i in 1:nrows
+        weight = sum([1 for x in m[i, :] if x != 0])
         push!(rows_list, (weight, i))
     end
-
     # the rows are sorted in increasing order of weight
     sort!(rows_list, by = x -> x[1])
 
     # we pop the first row and construct the return matrix to be [row]
-    return_matrix = reshape(m[rows_list[1][2], :], 1, col)
+    return_matrix = reshape(m[rows_list[1][2], :], 1, ncols)
     popfirst!(rows_list)
-
+    
     # for every edge in list of edges, we add to the return_matrix and see if it is linearly independent, if not, we remove it
     # after everyloop, we check if the rank of return_matrix is the same as the input matrix
     for row in rows_list
         old_rank = size(return_matrix)[1]
-        return_matrix = vcat(return_matrix, vcat(reshape(matrix[row[2], :], 1, col)))
+        return_matrix = vcat(return_matrix, vcat(reshape(m[row[2], :], 1, ncols)))
         S = MatrixSpace(Nemo.QQ, size(return_matrix)...)
-        new_rank = rank(S(return_matrix))
+        new_rank = LinearAlgebra.rank(S(return_matrix))
         if old_rank != new_rank - 1
             return_matrix = return_matrix[1:size(return_matrix)[1] - 1, :]
         end
-
         S = MatrixSpace(Nemo.QQ, size(return_matrix)...)
-        S1 = MatrixSpace(Nemo.QQ, size(m)...)
-        if rank(S(return_matrix)) == rank(S1(m))
+        S1 = MatrixSpace(Nemo.QQ, nrows, ncols)
+        if LinearAlgebra.rank(S(return_matrix)) == LinearAlgebra.rank(S1(m))
+            println(8)
             break
         end
     end
