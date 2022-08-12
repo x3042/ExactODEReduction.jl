@@ -33,7 +33,7 @@ function positivize(subspace)
     @debug "Before positivization: $integerized"
     positivized = undef
     try
-        positivized = intersection_calc(integerized)
+        positivized = positivize_int(integerized)
     catch e
         @debug "$e"
         if typeof(e) == DimensionMismatch
@@ -49,84 +49,87 @@ end
 
 #------------------------------------------------------------------------------
 
-function intersection_calc(m::Array{BigInt, 2})
-    row, col = size(m)
-    
-    # we create the canonical matrix of col dimension
-    canon_matrix = Matrix(1LinearAlgebra.I, col, col)
+"""
+    positivize_int(m)
 
-    #we create a zeros matrix that has twice the rows of the input matrix to add negation matrix.
-    input_matrix = zeros(BigInt, row * 2, col)
+Given an integer matrix with linearly independent rows, searches
+for a matrix with the same row space but all emtries being >= 0.
+If this is not possible, throws `DimensionMismatch`
+Arguments
+    - `m`: integer matrix
+"""
+function positivize_int(m::Array{BigInt, 2})
+    (nrows, ncols) = size(m)
     
-    #now we fill the matrix with the parsed matrix and its negation matrix
-    for i in 1:row
-        for j in 1:col
-            input_matrix[i, j] = m[i, j]
-            input_matrix[i + row, j] = -m[i, j]
+    orthant_rays = Matrix(1LinearAlgebra.I, ncols, ncols)
+    rowspace_rays = zeros(BigInt, 2 * nrows, ncols)
+    
+    for i in 1:nrows
+        for j in 1:ncols
+            rowspace_rays[i, j] = m[i, j]
+            rowspace_rays[i + nrows, j] = -m[i, j]
         end
     end
 
-    #compute the cones
-    matrix_cone = polytope.Cone(INPUT_RAYS=input_matrix)
-    orthant_cone = polytope.Cone(INPUT_RAYS=canon_matrix)
+    orthant_cone = polytope.Cone(INPUT_RAYS=orthant_rays)
+    rowspace_cone = polytope.Cone(INPUT_RAYS=rowspace_rays)
 
-    intersect_cone = polytope.intersection(matrix_cone, orthant_cone)
+    intersect_cone = polytope.intersection(rowspace_cone, orthant_cone)
     intersect_matrix = intersect_cone.RAYS
 
-    #Now turn all rational elements into integers
     intersect_matrix = Array{Rational{Int}}(intersect_matrix)
     intersect_matrix = rational_to_int(intersect_matrix)
-
-    #We now modify the matrix into upper triangular form using merge sort
     intersect_matrix = sort_matrix(intersect_matrix)
 
-    if size(intersect_matrix)[1] < size(m)[1]
+    if size(intersect_matrix)[1] < nrows
         throw(DimensionMismatch("No suitable matrix found"))
-    elseif size(intersect_matrix)[1] > size(m)[1]
-        intersect_matrix = find_best_basis(intersect_matrix)
+    elseif size(intersect_matrix)[1] > nrows
+        intersect_matrix = find_sparsiest_basis(intersect_matrix)
         intersect_matrix = sort_matrix(intersect_matrix)
     end
 
-    S = MatrixSpace(Nemo.QQ, size(m)...)
+    S = MatrixSpace(Nemo.QQ, nrows, ncols)
     return S(intersect_matrix)
 end
 
-function find_best_basis(m::Array{BigInt, 2})
-    # first we construct a list of edges where each edge is a tuple (weight, row1)
+#------------------------------------------------------------------------------
+
+"""
+    find_sparsiest_basis(m)
+
+For an integer matrix `m` with nonegative entries finds a subset of rows
+being a basis for the whole row space and having as few nonzero elements
+in total as possible
+"""
+function find_sparsiest_basis(m::Array{BigInt, 2})
     (nrows, ncols) = size(m)
     rows_list = []
     for i in 1:nrows
         weight = sum([1 for x in m[i, :] if x != 0])
         push!(rows_list, (weight, i))
     end
-    # the rows are sorted in increasing order of weight
     sort!(rows_list, by = x -> x[1])
 
-    # we pop the first row and construct the return matrix to be [row]
-    return_matrix = reshape(m[rows_list[1][2], :], 1, ncols)
-    popfirst!(rows_list)
-    
-    # for every edge in list of edges, we add to the return_matrix and see if it is linearly independent, if not, we remove it
-    # after everyloop, we check if the rank of return_matrix is the same as the input matrix
-    for row in rows_list
-        old_rank = size(return_matrix)[1]
-        return_matrix = vcat(return_matrix, vcat(reshape(m[row[2], :], 1, ncols)))
-        S = MatrixSpace(Nemo.QQ, size(return_matrix)...)
-        new_rank = LinearAlgebra.rank(S(return_matrix))
-        if old_rank != new_rank - 1
-            return_matrix = return_matrix[1:size(return_matrix)[1] - 1, :]
-        end
-        S = MatrixSpace(Nemo.QQ, size(return_matrix)...)
-        S1 = MatrixSpace(Nemo.QQ, nrows, ncols)
-        if LinearAlgebra.rank(S(return_matrix)) == LinearAlgebra.rank(S1(m))
-            println(8)
-            break
-        end
+    cur_matrix = Array{BigInt, 2}(undef, 0, ncols)
+
+    for (weight, i) in rows_list
+        next_matrix = [cur_matrix; reshape(m[i, :], 1, ncols)]
+	S_cur = MatrixSpace(Nemo.QQ, size(next_matrix)...)
+        if LinearAlgebra.rank(S_cur(next_matrix)) > size(cur_matrix)[1]
+	    cur_matrix = next_matrix
+	end
     end
-    return return_matrix
+
+    return cur_matrix
 end
 
+#------------------------------------------------------------------------------
 
+"""
+    sort_matrix(m)
+
+Sorts the rows of matrix `m` by the index of the leftmost nonzero element
+"""
 function sort_matrix(m::Array{BigInt})
     new_matrix = zeros(BigInt, size(m)...)
     tuples = [(row_index, findfirst(x -> x != 0, m[row_index, :])) for row_index in 1:size(m)[1]]
@@ -136,3 +139,7 @@ function sort_matrix(m::Array{BigInt})
     end
     return new_matrix
 end
+
+#------------------------------------------------------------------------------
+
+
