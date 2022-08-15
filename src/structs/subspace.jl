@@ -325,7 +325,40 @@ function apply_matrices_inplace_bloom!(V::Union{Subspacik, HashedSubspacik}, mat
 
                  i += 1
                  i % 500 == 0 && print(".")
-
+                
+                 # Alex: 90% or more of products are zero,
+                 # need to detect zero products during matmul:
+                 #  S × D
+                 # 
+                 # <Si, Dj^T> = 0 ?
+                 # For each row in S and each column in D 
+                 # additionaly store a UInt8 (or larger type) 
+                 # for the sparsity pattern (spattern) :
+                 # Example: 
+                 #  row1 = { vals={1, 2, 3}, cols={1, 3, 7} }
+                 #  spattern1 = 10100010 (as UInt8)
+                 #
+                 #  row2 = { vals={4, 5},    cols={2, 4} }
+                 #  spattern2 = 01010010 (as UInt8)
+                 #
+                 # (!) spattern1 & spattern2 == 0
+                 #      =>
+                 #  <row1, row2^T> == 0   (hopefully the most frequent case)
+                 #
+                 # (!) spattern1 & spattern2 == power of two
+                 #      =>
+                 #  <row1, row2^T> != 0
+                 #
+                 #  spattern1 & spattern2 == anything else
+                 #  no info  
+                 #
+                 # 
+                 # thoughts on implementation:
+                 # UInt64 for an spattern object;
+                 # n - number of columns (say, 200);
+                 # split n into blocks of div(n+64, 64) 
+                 # (say, div(200+64, 64) = 5)
+                 # then div(200, 5) = 40 bits of UInt64 will be used.
                  if !iszero(product)
                     # Alex: Low-Rank Sparse Gaussian Elimination
                     # 
