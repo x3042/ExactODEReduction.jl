@@ -91,7 +91,12 @@ function find_some_reduction(
     eqs = equations(system)
     matrices = construct_jacobians(eqs)
 
+    @debug "Matrices:" matrices
+
     subspace = invariant_subspace_global(matrices)
+    
+    @debug "Subspace global" subspace
+    
     isempty(subspace) && return Dict{Symbol, Vector{fmpq_mpoly}}()
 
     subspace = basis(linear_span!(subspace))
@@ -129,6 +134,8 @@ function find_smallest_constrained_reduction(
     # each subspace invariant under Jacobian corresponds to a reduction
     eqs = equations(system)
     matrices = construct_jacobians(eqs)
+
+    @debug "Matrices:" matrices
 
     subspace = invariant_subspace_local(matrices, observables)
     isempty(subspace) && return Dict{Symbol, Vector{fmpq_mpoly}}()
