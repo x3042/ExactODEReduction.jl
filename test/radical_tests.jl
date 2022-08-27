@@ -5,93 +5,107 @@
 
 #------------------------------------------------------------------------------
 
+
+cases = [
+    Dict(
+         :basis => [
+             from_dense([0 1; 0 0], Nemo.QQ),
+             from_dense([1 0; 0 0], Nemo.QQ),
+             from_dense([0 0; 0 1], Nemo.QQ)
+         ],
+         :correct => [
+             from_dense([0 1; 0 0], Nemo.QQ)
+         ]
+    ),
+    Dict(
+        :basis => [
+            from_dense([1 0; 0 1], Nemo.QQ),
+            from_dense([0 1; -1 0], Nemo.QQ)
+        ],
+        :correct => []
+    ),
+    Dict(
+        :basis => [
+            from_dense([1 0 0; 0 1 0; 0 0 1], Nemo.QQ)
+        ],
+        :correct => []
+    ),
+    Dict(
+        :basis => [
+            from_dense([1 0 0; 0 1 0; 0 0 0], Nemo.QQ)
+        ],
+        :correct => []
+    ),
+    Dict(
+        :basis => [
+            from_dense([1 0 0; 0 1 0; 0 0 1], Nemo.QQ),
+            from_dense([0 1 0; 0 0 0; 0 0 0], Nemo.QQ),
+            from_dense([0 0 0; 0 0 1; 0 0 0], Nemo.QQ)
+        ],
+        :correct => [
+            from_dense([0 1 0; 0 0 0; 0 0 0], Nemo.QQ),
+            from_dense([0 0 0; 0 0 1; 0 0 0], Nemo.QQ)
+        ]
+    ),
+    Dict(
+        :basis => [
+            from_dense([0 1 0; 0 0 0; 0 0 0], Nemo.QQ),
+            from_dense([0 0 0; 0 0 1; 0 0 0], Nemo.QQ),
+            from_dense([0 0 1; 0 0 0; 0 0 0], Nemo.QQ)
+        ],
+        :correct => [
+            from_dense([0 0 1; 0 0 0; 0 0 0], Nemo.QQ),
+            from_dense([0 1 0; 0 0 0; 0 0 0], Nemo.QQ),
+            from_dense([0 0 0; 0 0 1; 0 0 0], Nemo.QQ)
+        ]
+    ),
+    Dict(
+        :basis => [
+            from_dense([0 0 1; 0 0 0; 0 0 0], Nemo.QQ),
+            from_dense([0 1 0; 0 0 0; 0 0 0], Nemo.QQ),
+            from_dense([0 0 0; 0 0 1; 0 0 0], Nemo.QQ),
+            from_dense([1 0 0; 0 0 0; 0 0 0], Nemo.QQ),
+            from_dense([0 0 0; 0 1 0; 0 0 0], Nemo.QQ),
+            from_dense([0 0 0; 0 0 0; 0 0 1], Nemo.QQ),
+            from_dense([0 0 0; 1 0 0; 0 0 0], Nemo.QQ),
+            from_dense([0 0 0; 0 0 0; 1 0 0], Nemo.QQ),
+            from_dense([0 0 0; 0 0 0; 0 1 0], Nemo.QQ)
+        ],
+        :correct => []
+    ),
+    Dict(
+        :basis => [
+            from_dense([1 0 0; 0 0 0; 0 0 0], Nemo.QQ),
+            from_dense([0 0 0; 0 1 0; 0 0 0], Nemo.QQ),
+            from_dense([0 0 0; 0 0 0; 0 0 1], Nemo.QQ),
+            from_dense([0 0 0; 1 0 0; 0 0 0], Nemo.QQ),
+            from_dense([0 0 0; 0 0 0; 1 0 0], Nemo.QQ),
+            from_dense([0 0 0; 0 0 0; 0 1 0], Nemo.QQ)
+        ],
+        :correct => [
+            from_dense([0 0 0; 1 0 0; 0 0 0], Nemo.QQ),
+            from_dense([0 0 0; 0 0 0; 1 0 0], Nemo.QQ),
+            from_dense([0 0 0; 0 0 0; 0 1 0], Nemo.QQ)
+        ]
+    ),
+    Dict(
+        :basis => [
+	    from_dense([0 1; 0 0], Nemo.QQ)
+	],
+	:correct => [
+	    from_dense([0 1; 0 0], Nemo.QQ)	     
+        ]
+    )
+]
+
 function test_find_radical(algorithm)
 
-    # nilpotent space
-    set0 = [
-        from_dense([0 1; 0 0;], Nemo.QQ),
-        from_dense([1 0; 0 0;], Nemo.QQ),
-        from_dense([0 0; 0 1;], Nemo.QQ),
-    ]
-    ans0 = [
-        from_dense([0 1; 0 0;], Nemo.QQ)
-    ]
-
-    # almost nilpotent space
-    set1 = [
-        from_dense([1 0; 0 1;], Nemo.QQ),
-        from_dense([0 1; -1 0;], Nemo.QQ),
-    ]
-    ans1 = []
-
-    # some space
-    set2 = [
-        from_dense([1 0 0; 0 1 0; 0 0 1;], Nemo.QQ),
-    ]
-    ans2 = []
-
-    set3 = [
-        from_dense([1 0 0; 0 1 0; 0 0 0;], Nemo.QQ),
-    ]
-    ans3 = []
-
-    set4 = [
-        from_dense([1 0 0; 0 1 0; 0 0 1;], Nemo.QQ)
-        from_dense([0 1 0; 0 0 0; 0 0 0;], Nemo.QQ)
-        from_dense([0 0 0; 0 0 1; 0 0 0;], Nemo.QQ)
-    ]
-    ans4 = [
-        from_dense([0 1 0; 0 0 0; 0 0 0;], Nemo.QQ)
-        from_dense([0 0 0; 0 0 1; 0 0 0;], Nemo.QQ)
-    ]
-
-    set5 = [
-        from_dense([0 1 0; 0 0 0; 0 0 0;], Nemo.QQ)
-        from_dense([0 0 0; 0 0 1; 0 0 0;], Nemo.QQ)
-        from_dense([0 0 1; 0 0 0; 0 0 0;], Nemo.QQ)
-    ]
-    ans5 = [
-        from_dense([0 0 1; 0 0 0; 0 0 0;], Nemo.QQ)
-        from_dense([0 1 0; 0 0 0; 0 0 0;], Nemo.QQ)
-        from_dense([0 0 0; 0 0 1; 0 0 0;], Nemo.QQ)
-    ]
-
-    set6 = [
-        from_dense([0 0 1; 0 0 0; 0 0 0;], Nemo.QQ)
-        from_dense([0 1 0; 0 0 0; 0 0 0;], Nemo.QQ)
-        from_dense([0 0 0; 0 0 1; 0 0 0;], Nemo.QQ)
-        from_dense([1 0 0; 0 0 0; 0 0 0;], Nemo.QQ)
-        from_dense([0 0 0; 0 1 0; 0 0 0;], Nemo.QQ)
-        from_dense([0 0 0; 0 0 0; 0 0 1;], Nemo.QQ)
-        from_dense([0 0 0; 1 0 0; 0 0 0;], Nemo.QQ)
-        from_dense([0 0 0; 0 0 0; 1 0 0;], Nemo.QQ)
-        from_dense([0 0 0; 0 0 0; 0 1 0;], Nemo.QQ)
-    ]
-    ans6 = [
-    ]
-
-    set7 = [
-        from_dense([1 0 0; 0 0 0; 0 0 0;], Nemo.QQ)
-        from_dense([0 0 0; 0 1 0; 0 0 0;], Nemo.QQ)
-        from_dense([0 0 0; 0 0 0; 0 0 1;], Nemo.QQ)
-        from_dense([0 0 0; 1 0 0; 0 0 0;], Nemo.QQ)
-        from_dense([0 0 0; 0 0 0; 1 0 0;], Nemo.QQ)
-        from_dense([0 0 0; 0 0 0; 0 1 0;], Nemo.QQ)
-    ]
-    ans7 = [
-        from_dense([0 0 0; 1 0 0; 0 0 0;], Nemo.QQ)
-        from_dense([0 0 0; 0 0 0; 1 0 0;], Nemo.QQ)
-        from_dense([0 0 0; 0 0 0; 0 1 0;], Nemo.QQ)
-    ]
-
-    for (set, ans) in zip([set0, set1, set2, set3, set4, set5, set6, set7],
-        [ans0, ans1, ans2, ans3, ans4, ans5, ans6, ans7])
-        set = linear_span!(set)
-        V = algorithm(deepcopy(set))
-        @test (isempty(ans) && isempty(V)) || check_inclusion!(linear_span!(deepcopy(ans)), linear_span!(deepcopy(V))) && check_inclusion!(linear_span!(V), linear_span!(ans))
+    for c in cases
+        basis = c[:basis]
+        basis = linear_span!(basis)
+        V = algorithm(deepcopy(basis))
+        @test (isempty(c[:correct]) && isempty(V)) || check_inclusion!(linear_span!(deepcopy(c[:correct])), linear_span!(deepcopy(V))) && check_inclusion!(linear_span!(V), linear_span!(c[:correct]))
     end
-
-    # --------
 
 end
 
