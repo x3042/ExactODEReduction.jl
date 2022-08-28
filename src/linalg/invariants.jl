@@ -19,9 +19,7 @@ function invariant_subspace_global(matrices::AbstractArray{T}) where {T<:Abstrac
 
 
     # find an invariant subspace
-    if length(radical) != 0 && length(radical) < dim(algebra)
-        # Gleb: why `length(radical) < dim(algebra)` ?
-        # Alex: we want radical to be nontrivial here
+    if length(radical) != 0
         @info "radical is nontrivial, computing the general kernel"
         invariant = general_kernel(map(to_dense, radical))
         invariant = [

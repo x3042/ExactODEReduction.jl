@@ -21,11 +21,16 @@ cases = [
 	    x2'(t) = x1(t)^3 + x1(t) + x2(t),
 	    x3'(t) = x1(t) * x2(t) - 10 * x2(t)^2 + x3(t),
 	    x4'(t) = x1(t)^3 + x2(t)^6 - 7 * x3(t) * x1(t) - x4(t)
-	    # But this one fails !	   
-	    # x1'(t) = 2,
-	    # x2'(t) = x1(t)^3 + x1(t),
-	    # x3'(t) = x1(t) * x2(t) - 10 * x2(t)^2,
-	    # x4'(t) = x1(t)^3 + x2(t)^6 - 7 * x3(t) * x1(t)
+	),
+	:dims => Set([1, 2, 3]),
+	:constrained => [([x1], 1), ([x2], 2), ([x2, x3], 3)]
+    ),
+    Dict(
+        :sys => @ODEsystem(
+	    x1'(t) = 2,
+	    x2'(t) = x1(t)^3 + x1(t),
+	    x3'(t) = x1(t) * x2(t) - 10 * x2(t)^2,
+	    x4'(t) = x1(t)^3 + x2(t)^6 - 7 * x3(t) * x1(t)
 	),
 	:dims => Set([1, 2, 3]),
 	:constrained => [([x1], 1), ([x2], 2), ([x2, x3], 3)]
