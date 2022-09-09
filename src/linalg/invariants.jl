@@ -2,7 +2,9 @@
 
 # computes an invariant subspaces of the given matrices
 #
-# returns a common invariant subspace represented by basis vectors
+# returns a pair of
+#   - a boolean value corresponding to the existence of the common invariant subspace
+#   - a common invariant subspace represented by basis vectors if it could be computed
 function invariant_subspace_global(matrices::AbstractArray{T}) where {T<:AbstractSparseMatrix}
     isempty(matrices) && error("empty system invariants are ill-defined")
 
@@ -10,11 +12,15 @@ function invariant_subspace_global(matrices::AbstractArray{T}) where {T<:Abstrac
     constrained = invariant_subspace_local(matrices, [unit_vect])
     if length(constrained) < size(first(matrices), 1)
         @debug "Found an invariant subspace by saturating the first unit vector"
-        return constrained
+        return (true, constrained)
     end
 
     # generate a basis for the Algebra
     algebra = find_basis(deepcopy(matrices))
+
+    if dim(algebra) == size(first(matrices), 1)^2
+        return (false, [])
+    end
 
     # find the radical of the Algebra
     @info "computing the radical.."
@@ -30,26 +36,23 @@ function invariant_subspace_global(matrices::AbstractArray{T}) where {T<:Abstrac
             for i in 1:size(invariant, 2)
         ]
     else
-        @info "radical is trivial, using randomized algorithm"
-        if dim(algebra) != 0
-            invariant = invariant_subspace_semisimple(algebra)
-        else
-            invariant = fullspace(size(first(matrices), 1), base_ring(first(matrices)))
-        end
+        @info "Radical is trivial, passins to a semisimple casei"
+        invariant = invariant_subspace_semisimple(algebra)
     end
 
     if isempty(invariant)
-        @warn "no invariant subspaces"
-    else
-        invariant = basis(linear_span!(invariant))
-        @info "$(length(invariant)) dimensional subspace found"
+        @warn "There is invariant subspace but it is either not defined over Q or could not be computed"
+        return (true, [])
     end
+    
+    invariant = basis(linear_span!(invariant))
+    @info "$(length(invariant)) dimensional subspace found"
 
     for v in invariant
         scale!(v, lcm(v))
     end
 
-    invariant
+    return (true, invariant)
 end
 
 #------------------------------------------------------------------------------
@@ -92,20 +95,6 @@ function invariant_subspace_local(matrices::AbstractArray{T}, hint) where {T<:Ab
     return basis(V)
 end
 
-#=
-function invariant_subspace_2(matrices::AbstractArray{T}) where {T<:AbstractSparseMatrix}
-    n = size(first(matrices), 1)
-    ground = base_ring(first(matrices))
-
-    is = rand(1:n, 2)
-
-    vs = [ unit_sparsik(n, i, ground) for i in is ]
-
-    @info "hint" vs
-    return invariant_subspace_local(matrices, vs)
-end
-=#
-
 #------------------------------------------------------------------------------
 
 function many_invariant_subspaces(
@@ -116,7 +105,7 @@ function many_invariant_subspaces(
     ground = base_ring(first(As))
 
     # search for a subspace
-    V = find_invariant(As)
+    (exists, V) = find_invariant(As)
 
     # no subspaces found
     if length(V) == 0

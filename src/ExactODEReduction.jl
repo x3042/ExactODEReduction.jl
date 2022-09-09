@@ -93,7 +93,7 @@ function find_some_reduction(
 
     subspace = undef
     if length(matrices) > 0
-        subspace =  invariant_subspace_global(matrices)
+        (exists, subspace) =  invariant_subspace_global(matrices)
     else
         subspace = [unit_sparsik(length(eqs), 1, Nemo.QQ)]
     end
