@@ -130,7 +130,15 @@ function find_smallest_constrained_reduction(
     eqs = equations(system)
     matrices = construct_jacobians(eqs)
 
-    subspace = invariant_subspace_local(matrices, observables)
+    # constructing vectors from the observables
+    ground = base_ring(first(observables))
+    variables = gens(parent(first(observables)))
+    vector_obs = [
+        from_dense([coeff(f, v) for v in variables], ground) 
+	for f in observables
+    ]
+
+    subspace = invariant_subspace_local(matrices, vector_obs)
     isempty(subspace) && return Dict{Symbol, Vector{fmpq_mpoly}}()
 
     subspace = basis(linear_span!(subspace))

@@ -215,6 +215,7 @@ end
 # in case the latter is semisimple
 function invariant_subspace_semisimple(Algebra::Subspacik)
     es = basis(Algebra)
+    @debug Algebra
     n = size(first(es), 1)
     F = base_ring(Algebra)
 
@@ -229,6 +230,7 @@ function invariant_subspace_semisimple(Algebra::Subspacik)
     i, iters = 0, 100
     while i < iters
         M = random_element(Algebra, count = dim(Algebra))
+        @debug M
         reconstruct!(M)
 
         chpoly = charpoly(PSpace, MSpace(to_dense(M)))

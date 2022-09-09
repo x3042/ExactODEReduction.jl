@@ -541,7 +541,7 @@ end
 #   V ⊕ T = R^n
 #
 # How can we name it btw?
-function augment_subspace(V::Subspacik)
+function complement_subspace(V::Subspacik)
     each = [i for i in 1:ambient_dim(V)]
     present = collect(keys(V.echelon_form))
     [

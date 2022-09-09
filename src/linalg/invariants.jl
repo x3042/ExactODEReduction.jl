@@ -3,15 +3,18 @@
 # computes an invariant subspaces of the given matrices
 #
 # returns a common invariant subspace represented by basis vectors
-#
-# Gleb: I guess we can say that we guarantee that if there is a proper nonempty over Q,
-#       it will be found
 function invariant_subspace_global(matrices::AbstractArray{T}) where {T<:AbstractSparseMatrix}
     isempty(matrices) && error("empty system invariants are ill-defined")
 
+    unit_vect = unit_sparsik(size(first(matrices), 1), 1, Nemo.QQ)
+    constrained = invariant_subspace_local(matrices, [unit_vect])
+    if length(constrained) < size(first(matrices), 1)
+        @debug "Found an invariant subspace by saturating the first unit vector"
+        return constrained
+    end
+
     # generate a basis for the Algebra
     algebra = find_basis(deepcopy(matrices))
-
 
     # find the radical of the Algebra
     @info "computing the radical.."
@@ -58,17 +61,7 @@ function invariant_subspace_local(matrices::AbstractArray{T}, hint) where {T<:Ab
     isempty(matrices) && error("empty system invariants are ill-defined")
     isempty(hint) && error("empty hint is given")
 
-    ground = base_ring(first(hint))
-    variables = gens(parent(first(hint)))
-    vector_hint = [
-        from_dense([
-            coeff(f, v)
-            for v in variables
-        ], ground)
-        for f in hint
-    ]
-
-    V = linear_span!(vector_hint)
+    V = linear_span!(hint)
 
     new_pivots = collect(keys(V.echelon_form))
     i = 0
@@ -143,13 +136,13 @@ function many_invariant_subspaces(
     end
 
     # factorize
-    if length(V) + 1 < n # < n
+    if length(V) < n - 1 
         As_V = factorize(As, V)
         if !isempty(As_V)
             As_V_sparse = map(x-> from_dense(x, ground), map(Array, As_V))
             subspaces = many_invariant_subspaces(As_V_sparse, find_invariant)
             lifted = map(
-                vs -> lift(vs, augment_subspace(linear_span!(V))),
+                vs -> lift(vs, complement_subspace(linear_span!(V))),
                 subspaces)
             lifted = map(
                 vs -> append!(vs, V),
@@ -213,9 +206,9 @@ function factorize(As::AbstractArray, vs)
     MSpaceplus = AbstractAlgebra.Generic.MatrixSpace(ground, n, n)
 
     # complement ⊕ vs = Rn
-    complement = augment_subspace(linear_span!(vs))
+    complement = complement_subspace(linear_span!(vs))
 
-    # Asvs = [A*f1 A*f2 .. Afd]
+    # Asvs = [A*f1 A*f2 .. A*fd]
     # for fi in complement
     Asvs = [
         MSpace(hcat([to_dense(A * v) for v in complement ]...))

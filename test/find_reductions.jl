@@ -34,13 +34,17 @@ cases = [
 	),
 	:dims => Set([1, 2, 3]),
 	:constrained => [([x1], 1), ([x2], 2), ([x2, x3], 3)]
+    ),
+    Dict(
+        :sys => @ODEsystem(
+	    x1'(t) = x1(t),
+	    x2'(t) = x2(t),
+	    x3'(t) = x3(t)
+	),
+	:dims => Set([1, 2]),
+	:constrained => [([x1 + x2], 1), ([x1 + x3, x2 + x3], 2)]
     )
 ]
-
-# This one does not pass (yet)
-# x1' = x1
-# x2' = x2
-# x3' = x3
 
 #------------------------------------------------------------------------------
 
@@ -61,6 +65,7 @@ end
 
     for c in cases
         sys = c[:sys]
+        @info "Testing the system $sys"
         red = find_some_reduction(sys)
         @test check_reduction(sys, red[:new_vars], red[:new_system])
 
