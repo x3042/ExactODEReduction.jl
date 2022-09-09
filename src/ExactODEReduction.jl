@@ -91,7 +91,13 @@ function find_some_reduction(
     eqs = equations(system)
     matrices = construct_jacobians(eqs)
 
-    subspace = invariant_subspace_global(matrices)
+    subspace = undef
+    if length(matrices) > 0
+        subspace =  invariant_subspace_global(matrices)
+    else
+        subspace = [unit_sparsik(length(eqs), 1, Nemo.QQ)]
+    end
+
     isempty(subspace) && return Dict{Symbol, Vector{fmpq_mpoly}}()
 
     subspace = basis(linear_span!(subspace))
@@ -138,7 +144,12 @@ function find_smallest_constrained_reduction(
 	for f in observables
     ]
 
-    subspace = invariant_subspace_local(matrices, vector_obs)
+    subspace = undef
+    if length(matrices) > 0
+        subspace =  invariant_subspace_local(matrices, vector_obs)
+    else
+        subspace = vector_obs
+    end
     isempty(subspace) && return Dict{Symbol, Vector{fmpq_mpoly}}()
 
     subspace = basis(linear_span!(subspace))
@@ -172,7 +183,15 @@ function find_reductions(
     eqs = equations(system)
     matrices = construct_jacobians(eqs)
 
-    invariant_subspaces = many_invariant_subspaces(matrices, invariant_subspace_global)
+    invariant_subspaces = undef
+    if length(matrices) > 0
+        invariant_subspaces = many_invariant_subspaces(matrices, invariant_subspace_global)
+    else
+        invariant_subspaces = [
+	    [unit_sparsik(length(eqs), j, Nemo.QQ) for j in 1:i]
+	    for i in 1:(length(eqs) - 1)
+	]
+    end
     result = Vector{Dict{Symbol, Vector{fmpq_mpoly}}}()
     for V in invariant_subspaces
         V = basis(linear_span!(V))

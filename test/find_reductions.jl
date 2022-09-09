@@ -43,6 +43,15 @@ cases = [
 	),
 	:dims => Set([1, 2]),
 	:constrained => [([x1 + x2], 1), ([x1 + x3, x2 + x3], 2)]
+    ),
+    Dict(
+        :sys => @ODEsystem(
+	    x1'(t) = 0,
+	    x2'(t) = 0,
+	    x3'(t) = 0
+	),
+	:dims => Set([1, 2]),
+	:constrained => [([x1 + x2], 1), ([x1 + x3, x2 + x3], 2)]
     )
 ]
 
