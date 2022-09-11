@@ -98,7 +98,7 @@ function write_md(sizes)
 
     md *= "\n$(sprint(versioninfo, context=:compact => false))\n"
 
-    fnname = "experiment_1_$(sizes[1])-$(sizes[2]).md"
+    fnname = "experiment_1/experiment_1_$(sizes[1])-$(sizes[2]).md"
     f = open("/home/sumiya11/exactreduction/Exact-reduction-of-ODE-systems/benchmark/$fnname", "w")
     # f = open("$fnname", "w")
     write(f, md)
@@ -108,7 +108,7 @@ end
 #------------------------------------------------------------------------------
 
 # for sz in [(20, 50), (50, 80), ]#(80, 110)]
-for sz in [(80, 110)]
+for sz in [(110, 200)]
     uwuwu(sz...)
     write_md(sz)
 end
