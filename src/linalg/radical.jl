@@ -226,12 +226,14 @@ function invariant_subspace_semisimple(Algebra::Subspacik)
     MSpace = MatrixSpace(F, n, n)
     PSpace, x = F["x"]
 
-    i, iters = 0, 100
+    i, iters = 0, 10
     while i < iters
         M = random_element(Algebra, count = dim(Algebra))
         reconstruct!(M)
 
         chpoly = charpoly(PSpace, MSpace(to_dense(M)))
+
+        @debug "Charpoly in invariant_subspace_semisimple" charpoly
 
         factors = AbstractAlgebra.factor(chpoly).fac
         # factors is of type Fac
@@ -244,9 +246,13 @@ function invariant_subspace_semisimple(Algebra::Subspacik)
         # f = irreducible^k
         f = f^factors[f]
 
+        @debug "Factor in invariant_subspace_semisimple" f
+
         # computing the kernel of f(M)
         factored = evaluate(f, M)
         V = last(kernel(MSpace(to_dense(factored))))
+        
+        @debug "Eval in invariant_subspace_semisimple" factored
 
         # convert to sparse repr
         V = [
@@ -254,6 +260,8 @@ function invariant_subspace_semisimple(Algebra::Subspacik)
             for v in [[V[:, j]...]
                 for j in 1:size(V, 2)]
         ]
+        
+        @debug "V in invariant_subspace_semisimple" V
 
         # if is proper and invaiant
         if 0 < length(V) < n && check_invariance!(es, deepcopy(V))
