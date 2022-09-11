@@ -53,7 +53,7 @@ function write_md(sizes)
         md *= "| $(length(reductions)) "
 
         reduced_dims = Tuple([length(r[:new_system]) for r in reductions])
-        link = "https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_2/$(system[1])"
+        link = "https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_2/data/$(system[1])"
         md *= "| [$reduced_dims]($link) "
         
         md *= "|"
