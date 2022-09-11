@@ -10,10 +10,10 @@ translocate => 141//1000*bound - 13//1000*translocate
 
 Reductions:
 
-new_vars = fmpq_mpoly[bound + 58//77937*bulk - 58//83*free]
+new_vars = fmpq_mpoly[bulk]
 new_system = 
 [
--141//1000*y1
+-3//20000*y1
 ]
 
 new_vars = fmpq_mpoly[bound - 58//83*free, bulk]
