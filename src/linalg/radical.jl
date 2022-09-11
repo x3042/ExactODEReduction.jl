@@ -215,39 +215,42 @@ end
 # in case the latter is semisimple
 function invariant_subspace_semisimple(Algebra::Subspacik)
     es = basis(Algebra)
+    @debug Algebra
     n = size(first(es), 1)
     F = base_ring(Algebra)
-
-    if n^2 == dim(Algebra)
-        return []
-    end
 
     # we want to do dense LA here
     MSpace = MatrixSpace(F, n, n)
     PSpace, x = F["x"]
 
-    i, iters = 0, 10
-    while i < iters
+    while true
         M = random_element(Algebra, count = dim(Algebra))
         reconstruct!(M)
 
         chpoly = charpoly(PSpace, MSpace(to_dense(M)))
 
-        @debug "Charpoly in invariant_subspace_semisimple" charpoly
+        factors = collect(AbstractAlgebra.factor(chpoly))
 
-        factors = AbstractAlgebra.factor(chpoly).fac
-        # factors is of type Fac
-        # Fac.fac of form
-        #   factor → degree  ,  (x-a)(x-b)..
+        if length(factors) == 1
+            if first(factors)[2] == 1 # multiplicity of the only factor
+                @warn "No invariant subspaces defined over Q"
+                return []
+            end
+            # a more thorough check
+            p = 0.99
+            sampling = Int(ceil(n^2 / (1 - p)))
+            M_dense = sum([rand(1:sampling) * m for m in Algebra])
+            reconstruct!(M_dense)
+            chpoly_dense = charpoly(PSpace, MSpace(to_dense(M_dense)))
+            factors_dense = collect(AbstractAlgebra.factor(chpoly_dense))
+            if length(factors_dense) == 1 && (first(factors_dense)[2] == first(factors)[2])
+                @warn "Exceptional case with several equal blocks"
+                return []
+            end
+            continue
+        end
 
-        # mb we can use other factors to output more subspaces
-        # Gleb: yes, this is very true, you can actually simply loop over the factors of the charpoly
-        f = first(keys(factors))
-        # f = irreducible^k
-        f = f^factors[f]
-
-        @debug "Factor in invariant_subspace_semisimple" f
-
+        f = first(factors)
         # computing the kernel of f(M)
         factored = evaluate(f, M)
         V = last(kernel(MSpace(to_dense(factored))))
@@ -267,13 +270,7 @@ function invariant_subspace_semisimple(Algebra::Subspacik)
         if 0 < length(V) < n && check_invariance!(es, deepcopy(V))
             return V
         end
-
-        i += 1
     end
-
-    @warn "invariant subspaces exist but are not defined over Q, not implemented, sorry"
-    # should we return hmm..
-    return []
 end
 
 #------------------------------------------------------------------------------
