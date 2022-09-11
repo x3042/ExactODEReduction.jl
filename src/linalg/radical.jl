@@ -254,6 +254,8 @@ function invariant_subspace_semisimple(Algebra::Subspacik)
         # computing the kernel of f(M)
         factored = evaluate(f, M)
         V = last(kernel(MSpace(to_dense(factored))))
+        
+        @debug "Eval in invariant_subspace_semisimple" factored
 
         # convert to sparse repr
         V = [
@@ -261,6 +263,8 @@ function invariant_subspace_semisimple(Algebra::Subspacik)
             for v in [[V[:, j]...]
                 for j in 1:size(V, 2)]
         ]
+        
+        @debug "V in invariant_subspace_semisimple" V
 
         # if is proper and invaiant
         if 0 < length(V) < n && check_invariance!(es, deepcopy(V))

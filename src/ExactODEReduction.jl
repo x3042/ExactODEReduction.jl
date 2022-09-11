@@ -90,13 +90,15 @@ function find_some_reduction(
     # each subspace invariant under Jacobian corresponds to a reduction
     eqs = equations(system)
     matrices = construct_jacobians(eqs)
-
+    
     subspace = undef
     if length(matrices) > 0
         (exists, subspace) =  invariant_subspace_global(matrices)
     else
         subspace = [unit_sparsik(length(eqs), 1, Nemo.QQ)]
     end
+
+    @debug "Subspace global" subspace
 
     isempty(subspace) && return Dict{Symbol, Vector{fmpq_mpoly}}()
 
@@ -150,6 +152,7 @@ function find_smallest_constrained_reduction(
     else
         subspace = vector_obs
     end
+
     isempty(subspace) && return Dict{Symbol, Vector{fmpq_mpoly}}()
 
     subspace = basis(linear_span!(subspace))

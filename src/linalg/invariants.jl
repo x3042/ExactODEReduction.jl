@@ -18,6 +18,7 @@ function invariant_subspace_global(matrices::AbstractArray{T}) where {T<:Abstrac
     # generate a basis for the Algebra
     algebra = find_basis(deepcopy(matrices))
 
+    @debug "Dimension of the algebra is $(dim(algebra))"
     if dim(algebra) == size(first(matrices), 1)^2
         return (false, [])
     end
@@ -26,6 +27,7 @@ function invariant_subspace_global(matrices::AbstractArray{T}) where {T<:Abstrac
     @info "computing the radical.."
     radical = find_radical_sup(algebra)
 
+    @debug "Algebra radical:" radical 
 
     # find an invariant subspace
     if length(radical) != 0
