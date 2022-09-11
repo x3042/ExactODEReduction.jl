@@ -1,5 +1,5 @@
 
-include("../src/ExactODEReduction.jl")
+include("../../src/ExactODEReduction.jl")
 
 #------------------------------------------------------------------------------
 

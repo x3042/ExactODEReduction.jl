@@ -252,7 +252,7 @@ function invariant_subspace_semisimple(Algebra::Subspacik)
 
         f = first(factors)
         # computing the kernel of f(M)
-        factored = evaluate(f, M)
+        factored = evaluate(first(f), M)
         V = last(kernel(MSpace(to_dense(factored))))
         
         @debug "Eval in invariant_subspace_semisimple" factored
