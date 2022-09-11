@@ -37,6 +37,27 @@ import Nemo: base_ring, gfp_elem, gfp_fmpz_elem, fmpq_mpoly,
 import CustomUnitRanges: filename_for_zerorange
 include(filename_for_zerorange)
 
+const find_basis_times = []
+const find_radical_sup_times = []
+const general_kernel_times = []
+const invariant_subspace_semisimple_times = []
+const total_times = []
+
+function dump_times()
+    data = (find_basis=deepcopy(ExactODEReduction.find_basis_times),
+    find_radical_sup=deepcopy(ExactODEReduction.find_radical_sup_times),
+    general_kernel=deepcopy(ExactODEReduction.general_kernel_times),
+    invariant_subspace_semisimple=deepcopy(ExactODEReduction.invariant_subspace_semisimple_times),
+    total_times=deepcopy(ExactODEReduction.total_times))
+    
+    empty!(ExactODEReduction.find_basis_times)
+    empty!(ExactODEReduction.find_radical_sup_times)
+    empty!(ExactODEReduction.general_kernel_times)
+    empty!(ExactODEReduction.invariant_subspace_semisimple_times)
+    empty!(ExactODEReduction.total_times)
+    return data
+end
+
 #------------------------------------------------------------------------------
 
 # Utilities
@@ -93,7 +114,7 @@ function find_some_reduction(
 
     @debug "Matrices:" matrices
 
-    subspace = invariant_subspace_global(matrices)
+    @savetime subspace = invariant_subspace_global(matrices) total_times
     
     @debug "Subspace global" subspace
     

@@ -66,10 +66,10 @@ end
 #   [filename, dim, size, matrices-data]
 # each returned matrix is represented with an array of
 # items (i, j, x) of nonzeroes where typeof(x) is Rational
-function load_COO_if(;from_dim, to_dim, from_size=0, to_size=Inf)
+function load_COO_if(;from_dim, to_dim, from_size=0, to_size=Inf, path="data/matrices/")
     models = []
 
-    for filename in readdir("data/matrices/")
+    for filename in readdir(path)
         model_data = load_COO_set(filename)
         model_dim = first(first(model_data))
         model_size = length(model_data)

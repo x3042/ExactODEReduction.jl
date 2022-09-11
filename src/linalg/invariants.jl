@@ -10,20 +10,21 @@ function invariant_subspace_global(matrices::AbstractArray{T}) where {T<:Abstrac
     isempty(matrices) && error("empty system invariants are ill-defined")
 
     # generate a basis for the Algebra
-    algebra = find_basis(deepcopy(matrices))
+    @savetime algebra = find_basis(deepcopy(matrices)) find_basis_times 
 
     @debug "Algebra basis:" algebra
 
     # find the radical of the Algebra
     @info "computing the radical.."
-    radical = find_radical_sup(algebra)
+    @savetime radical = find_radical_sup(algebra) find_radical_sup_times
 
     @debug "Algebra radical:" radical 
 
     # find an invariant subspace
     if length(radical) != 0
         @info "radical is nontrivial, computing the general kernel"
-        invariant = general_kernel(map(to_dense, radical))
+        @savetime invariant = general_kernel(map(to_dense, radical)) general_kernel_times
+        push!(invariant_subspace_semisimple_times, 0.0)
         invariant = [
             from_dense([invariant[:, i]...], Nemo.QQ)
             for i in 1:size(invariant, 2)
@@ -31,7 +32,8 @@ function invariant_subspace_global(matrices::AbstractArray{T}) where {T<:Abstrac
     else
         @info "radical is trivial, using randomized algorithm"
         if dim(algebra) != 0
-            invariant = invariant_subspace_semisimple(algebra)
+            @savetime invariant = invariant_subspace_semisimple(algebra) invariant_subspace_semisimple_times
+            push!(general_kernel_times, 0.0)
         else
             invariant = fullspace(size(first(matrices), 1), base_ring(first(matrices)))
         end

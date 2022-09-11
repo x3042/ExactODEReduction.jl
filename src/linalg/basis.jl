@@ -274,7 +274,7 @@ function find_basis(vectors; used_algorithm=find_basis_1_β, initialprime=2^31-1
         end
 
         # how to choose the next better?
-        push!(primes, nextprime(prime ^ 2 + 1))
+        push!(primes, Primes.nextprime(prime ^ 2 + 1))
 
         i += 1
         i % 10 == 0 && error("something is wrong")

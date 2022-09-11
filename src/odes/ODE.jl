@@ -74,7 +74,7 @@ end
     ```julia
     ode = @ODEsystem(
         x1'(t) = -k1 * x1(t),
-        x2(t) = -k2 * x2(t)
+        x2'(t) = -k2 * x2(t)
     )
     ```
 """
