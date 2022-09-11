@@ -236,17 +236,7 @@ function invariant_subspace_semisimple(Algebra::Subspacik)
                 @warn "No invariant subspaces defined over Q"
                 return []
             end
-            # a more thorough check
-            p = 0.99
-            sampling = Int(ceil(n^2 / (1 - p)))
-            M_dense = sum([rand(1:sampling) * m for m in Algebra])
-            reconstruct!(M_dense)
-            chpoly_dense = charpoly(PSpace, MSpace(to_dense(M_dense)))
-            factors_dense = collect(AbstractAlgebra.factor(chpoly_dense))
-            if length(factors_dense) == 1 && (first(factors_dense)[2] == first(factors)[2])
-                @warn "Exceptional case with several equal blocks"
-                return []
-            end
+            @warn "Getting a random element $M with a charpoly being a power of irreducible. May be the case impossible for Jacobian algebras"
             continue
         end
 
