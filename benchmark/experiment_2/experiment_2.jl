@@ -60,7 +60,7 @@ function write_md(sizes)
 
         md *= "\n"
 
-        fnname = "experiment_2/$(system[1])"
+        fnname = "experiment_2/data/$(system[1])"
         open("/home/sumiya11/exactreduction/Exact-reduction-of-ODE-systems/benchmark/$fnname", "w") do f
             println(f, "Original system:\n")
             println(f, "[\n"*join(system[2], ",\n")*"\n]")
