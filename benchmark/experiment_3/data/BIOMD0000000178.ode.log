@@ -31,15 +31,15 @@
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/radical.jl:220
 ┌ Debug: Eval in invariant_subspace_semisimple
 │   factored =
-│    |90365669	0	0|
-│    |163386	90038897	233463|
-│    |-63147094	0	0|
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/radical.jl:262
+│    |-2	0	0|
+│    |2	0	77995//27231|
+│    |-2170526//2817	0	-90240215//81693|
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/radical.jl:267
 ┌ Debug: V in invariant_subspace_semisimple
 │   V =
 │    1-element Vector{Main.ExactODEReduction.Sparsik{FlintRationalField}}:
-│     (0, -3//1157, 1)
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/radical.jl:271
+│     (0, 1, 0)
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/radical.jl:276
 [ Info: 1 dimensional subspace found
 [ Info: found 1-dim subspace in ambient 3-dim
 [ Info: Factorizing matrices from size (3, 3) to size (2, 2)
@@ -58,14 +58,14 @@
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/radical.jl:220
 ┌ Debug: Eval in invariant_subspace_semisimple
 │   factored =
-│    |0	0|
-│    |-1	-2817//1160|
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/radical.jl:262
+│    |-166	0|
+│    |116	0|
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/radical.jl:267
 ┌ Debug: V in invariant_subspace_semisimple
 │   V =
 │    1-element Vector{Main.ExactODEReduction.Sparsik{FlintRationalField}}:
-│     (-2817//1160, 1)
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/radical.jl:271
+│     (0, 1)
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/radical.jl:276
 [ Info: 1 dimensional subspace found
 [ Info: found 1-dim subspace in ambient 2-dim
 [ Info: Factorizing matrices from size (5, 5) to size (2, 2)
@@ -84,37 +84,37 @@
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/radical.jl:220
 ┌ Debug: Eval in invariant_subspace_semisimple
 │   factored =
-│    |-1	0|
-│    |-1	0|
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/radical.jl:262
+│    |0	0|
+│    |1	-1|
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/radical.jl:267
 ┌ Debug: V in invariant_subspace_semisimple
 │   V =
 │    1-element Vector{Main.ExactODEReduction.Sparsik{FlintRationalField}}:
-│     (0, 1)
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/radical.jl:271
+│     (1, 1)
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/radical.jl:276
 [ Info: 1 dimensional subspace found
 [ Info: found 1-dim subspace in ambient 2-dim
 ┌ Debug: Before positivization: BigInt[1 0 0 0 0; 0 1 0 0 0; 0 0 1 0 0]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [1 0 0 0 0; 0 1 0 0 0; 0 0 1 0 0]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
-┌ Debug: Before positivization: BigInt[0 3 -1157 0 0]
+┌ Debug: Before positivization: BigInt[0 1 0 0 0]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
-┌ Debug: DimensionMismatch("No suitable matrix found")
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:41
-┌ Debug: Before positivization: BigInt[2817 0 -1160 0 0; 0 3 -1157 0 0]
+┌ Debug: After positivization: [0 1 0 0 0]
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
+┌ Debug: Before positivization: BigInt[0 1 0 0 0; 0 0 1 0 0]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
-┌ Debug: DimensionMismatch("No suitable matrix found")
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:41
-┌ Debug: Before positivization: BigInt[1 0 0 0 0; 0 1 0 0 0; 0 0 1 0 0; 0 0 0 0 1]
+┌ Debug: After positivization: [0 1 0 0 0; 0 0 1 0 0]
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
+┌ Debug: Before positivization: BigInt[1 0 0 0 0; 0 1 0 0 0; 0 0 1 0 0; 0 0 0 1 1]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
-┌ Debug: After positivization: [1 0 0 0 0; 0 1 0 0 0; 0 0 1 0 0; 0 0 0 0 1]
+┌ Debug: After positivization: [1 0 0 0 0; 0 1 0 0 0; 0 0 1 0 0; 0 0 0 1 1]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
 ┌ Debug: Found reductions 
 │   result =
 │    4-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
-│     Dict(:new_system => [-29//500*y1], :new_vars => [bulk - 1157//3*free])
-│     Dict(:new_system => [-141//1000*y1 - 29//469500*y2, -29//500*y2], :new_vars => [bound - 1160//2817*free, bulk - 1157//3*free])
+│     Dict(:new_system => [-3//20000*y1], :new_vars => [bulk])
+│     Dict(:new_system => [-3//20000*y1, 3//20000*y1 - 29//500*y2], :new_vars => [bulk, free])
 │     Dict(:new_system => [-141//1000*y1 + 29//500*y3, -3//20000*y2, 3//20000*y2 - 29//500*y3], :new_vars => [bound, bulk, free])
-│     Dict(:new_system => [-141//1000*y1 + 29//500*y3, -3//20000*y2, 3//20000*y2 - 29//500*y3, 141//1000*y1 - 13//1000*y4], :new_vars => [bound, bulk, free, translocate])
+│     Dict(:new_system => [-141//1000*y1 + 29//500*y3, -3//20000*y2, 3//20000*y2 - 29//500*y3, 141//1000*y1], :new_vars => [bound, bulk, free, lytic + translocate])
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236

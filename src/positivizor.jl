@@ -80,7 +80,7 @@ function positivize_int(m::Array{BigInt, 2})
     intersect_cone = polytope.intersection(rowspace_cone, orthant_cone)
     intersect_matrix = intersect_cone.RAYS
 
-    intersect_matrix = Array{Rational{Int}}(intersect_matrix)
+    intersect_matrix = Array{Rational{BigInt}}(intersect_matrix)
     intersect_matrix = rational_to_int(intersect_matrix)
     intersect_matrix = sort_matrix(intersect_matrix)
 
