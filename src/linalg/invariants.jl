@@ -8,6 +8,8 @@
 function invariant_subspace_global(matrices::AbstractArray{T}) where {T<:AbstractSparseMatrix}
     isempty(matrices) && error("empty system invariants are ill-defined")
 
+    @info "Called invariant_subspace_global on $(length(matrices)) matrices of shape $(size(matrices[1]))"
+
     unit_vect = unit_sparsik(size(first(matrices), 1), 1, Nemo.QQ)
     constrained = invariant_subspace_local(matrices, [unit_vect])
     if length(constrained) < size(first(matrices), 1)
@@ -24,14 +26,15 @@ function invariant_subspace_global(matrices::AbstractArray{T}) where {T<:Abstrac
     end
 
     # find the radical of the Algebra
-    @info "computing the radical.."
+    @info "Computing the radical.."
     @savetime radical = find_radical_sup(algebra) find_radical_sup_times
 
-    @debug "Algebra radical:" radical 
+    # @debug "Algebra radical:" radical 
+    @info "Found radical of size $(length(radical))"
 
     # find an invariant subspace
     if length(radical) != 0
-        @info "radical is nontrivial, computing the general kernel"
+        @info "Radical is nontrivial, computing the general kernel of radical"
         @savetime invariant = general_kernel(map(to_dense, radical)) general_kernel_times
         push!(invariant_subspace_semisimple_times, 0.0)
         invariant = [
@@ -39,7 +42,7 @@ function invariant_subspace_global(matrices::AbstractArray{T}) where {T<:Abstrac
             for i in 1:size(invariant, 2)
         ]
     else
-        @info "radical is trivial, using randomized algorithm"
+        @info "Radical is trivial, using randomized algorithm"
         if dim(algebra) != 0
             @savetime invariant = invariant_subspace_semisimple(algebra) invariant_subspace_semisimple_times
             push!(general_kernel_times, 0.0)
@@ -128,6 +131,10 @@ function many_invariant_subspaces(
     if length(V) > 1 && length(V) < n
         As_V = restrict(As, V)
         As_V_sparse = map(x-> from_dense(x, ground), map(Array, As_V))
+        
+        @info "Restricting matrices from size $(size(As[1])) to size $(size(As_V[1]))"
+        @warn "Calling myself recursively in restricted subspace"
+
         subspaces = many_invariant_subspaces(As_V_sparse, find_invariant)
         append!(toreturn, map(vs -> lift(vs, V), subspaces))
     end
@@ -137,6 +144,10 @@ function many_invariant_subspaces(
         As_V = factorize(As, V)
         if !isempty(As_V)
             As_V_sparse = map(x-> from_dense(x, ground), map(Array, As_V))
+            
+            @info "Factorizing matrices from size $(size(As[1])) to size $(size(As_V[1]))" 
+            @warn "Calling myself recursively in complemented subspace"
+            
             subspaces = many_invariant_subspaces(As_V_sparse, find_invariant)
             lifted = map(
                 vs -> lift(vs, complement_subspace(linear_span!(V))),

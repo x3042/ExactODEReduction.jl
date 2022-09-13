@@ -248,8 +248,7 @@ end
 
 #------------------------------------------------------------------------------
 
-function load_ODEs_if(;from_size=-Inf, to_size=Inf)
-    testspath = "data/ODEs/"
+function load_ODEs_if(;testspath = "data/ODEs/", from_size=-Inf, to_size=Inf)
     ext = ".ode"
 
     models = []

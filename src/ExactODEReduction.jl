@@ -107,18 +107,18 @@ function find_some_reduction(
     package_logger = Logging.ConsoleLogger(stderr, loglevel)
     Logging.global_logger(package_logger)
 
+    @debug "find_some_reduction of " system
+
     # Jacobian of system,
     # each subspace invariant under Jacobian corresponds to a reduction
     eqs = equations(system)
     matrices = construct_jacobians(eqs)
 
-    @debug "Matrices:" matrices
-
-    @savetime subspace = invariant_subspace_global(matrices) total_times
+    # @debug "Matrices:" matrices
     
     subspace = undef
     if length(matrices) > 0
-        (exists, subspace) =  invariant_subspace_global(matrices)
+        @savetime (exists, subspace) =  invariant_subspace_global(matrices) total_times
     else
         subspace = [unit_sparsik(length(eqs), 1, Nemo.QQ)]
     end
@@ -207,6 +207,8 @@ function find_reductions(
 
     package_logger = Logging.ConsoleLogger(stderr, loglevel)
     Logging.global_logger(package_logger)
+
+    @debug "find_reductions of " system
 
     eqs = equations(system)
     matrices = construct_jacobians(eqs)
