@@ -233,7 +233,7 @@ function find_reductions(
 
     sort!(result, by=r -> length(r[:new_vars]))
 
-    @debug "Found reductions " result
+    @debug "Found reductions $result"
 
     return result
 end

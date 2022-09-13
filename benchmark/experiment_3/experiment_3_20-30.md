@@ -1,0 +1,68 @@
+#2022-09-13T17:16:06.625
+
+## Reductions for `find_reductions`.
+Systems of sizes from 20 to 30.
+
+### Resulting reductions
+| System | Dimension | Interesting reductions? | Logs |
+| ------ | --------- | ----------------------- | ---- |
+| BIOMD0000000009.ode | 22| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000009.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000009.ode.log) |
+| BIOMD0000000011.ode | 22| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000011.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000011.ode.log) |
+| BIOMD0000000026.ode | 27| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000026.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000026.ode.log) |
+| BIOMD0000000186.ode | 24| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000186.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000186.ode.log) |
+| BIOMD0000000187.ode | 24| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000187.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000187.ode.log) |
+| BIOMD0000000198.ode | 22| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000198.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000198.ode.log) |
+| BIOMD0000000200.ode | 21| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000200.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000200.ode.log) |
+| BIOMD0000000357.ode | 21| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000357.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000357.ode.log) |
+| BIOMD0000000069.ode | 27| [No](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000069.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000069.ode.log) |
+| BIOMD0000000099.ode | 23| [No](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000099.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000099.ode.log) |
+| BIOMD0000000108.ode | 28| [No](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000108.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000108.ode.log) |
+| BIOMD0000000147.ode | 26| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000147.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000147.ode.log) |
+| BIOMD0000000229.ode | 23| [No](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000229.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000229.ode.log) |
+| BIOMD0000000257.ode | 29| [No](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000257.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000257.ode.log) |
+| BIOMD0000000314.ode | 24| [No](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000314.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000314.ode.log) |
+| BIOMD0000000389.ode | 26| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000389.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000389.ode.log) |
+| BIOMD0000000430.ode | 23| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000430.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000430.ode.log) |
+| BIOMD0000000431.ode | 27| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000431.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000431.ode.log) |
+| BIOMD0000000439.ode | 21| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000439.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000439.ode.log) |
+| BIOMD0000000475.ode | 23| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000475.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000475.ode.log) |
+| BIOMD0000000479.ode | 29| [No](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000479.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000479.ode.log) |
+| BIOMD0000000500.ode | 20| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000500.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000500.ode.log) |
+| BIOMD0000000581.ode | 28| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000581.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/BIOMD0000000581.ode.log) |
+| PP_n_2.ode | 30| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/PP_n_2.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/PP_n_2.ode.log) |
+| e2.ode | 24| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/e2.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/e2.ode.log) |
+| MODEL6185511733.ode | 21| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL6185511733.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL6185511733.ode.log) |
+| MODEL1112260000.ode | 27| [No](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1112260000.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1112260000.ode.log) |
+| MODEL1204060000.ode | 23| [No](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204060000.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204060000.ode.log) |
+| MODEL1204280017.ode | 22| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204280017.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204280017.ode.log) |
+| MODEL1204280018.ode | 21| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204280018.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204280018.ode.log) |
+| MODEL1204280019.ode | 21| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204280019.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204280019.ode.log) |
+| MODEL1204280021.ode | 25| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204280021.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204280021.ode.log) |
+| MODEL1204280022.ode | 24| [No](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204280022.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204280022.ode.log) |
+| MODEL1204280023.ode | 24| [No](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204280023.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204280023.ode.log) |
+| MODEL1204280025.ode | 22| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204280025.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204280025.ode.log) |
+| MODEL1204280026.ode | 21| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204280026.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204280026.ode.log) |
+| MODEL1204280027.ode | 21| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204280027.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204280027.ode.log) |
+| MODEL1204280028.ode | 23| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204280028.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204280028.ode.log) |
+| MODEL1204280029.ode | 25| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204280029.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204280029.ode.log) |
+| MODEL1204280030.ode | 24| [No](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204280030.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204280030.ode.log) |
+| MODEL1204280031.ode | 24| [No](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204280031.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204280031.ode.log) |
+| MODEL1204280032.ode | 27| [Yes](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204280032.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1204280032.ode.log) |
+| MODEL1510230001.ode | 29| [No](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1510230001.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1510230001.ode.log) |
+| MODEL1510230002.ode | 29| [No](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1510230002.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1510230002.ode.log) |
+| MODEL1510230003.ode | 29| [No](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1510230003.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL1510230003.ode.log) |
+| MODEL2937159804.ode | 22| [No](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL2937159804.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL2937159804.ode.log) |
+| MODEL4816599063.ode | 28| [No](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL4816599063.ode.jl)| [тык](https://github.com/x3042/Exact-reduction-of-ODE-systems/tree/main/benchmark/experiment_3/data/MODEL4816599063.ode.log) |
+
+Julia Version 1.7.3
+Commit 742b9abb4d (2022-05-06 12:58 UTC)
+Platform Info:
+  OS: Linux (x86_64-pc-linux-gnu)
+  CPU: Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz
+  WORD_SIZE: 64
+  LIBM: libopenlibm
+  LLVM: libLLVM-12.0.1 (ORCJIT, skylake)
+Environment:
+  JULIA_EDITOR = code
+  JULIA_NUM_THREADS = 
+

@@ -1,0 +1,51 @@
+┌ Debug: find_reductions of 
+│   system =
+│    species_10'(t) = species_11(t) + 23//250*species_12(t) + species_14(t) + 23//250*species_24(t) + species_25(t) + 1//100*species_9(t)
+│    species_26'(t) = 1//200*species_20(t)*species_7(t) + 1//2*species_25(t)
+│    species_13'(t) = 273//250*species_12(t) + species_14(t) + 43//500*species_15(t) + 273//250*species_21(t) + species_22(t) + 43//500*species_23(t)
+│    species_17'(t) = 1//50*species_16(t)*species_18(t)
+│    species_18'(t) = 2*species_17(t)
+│    species_23'(t) = 1//200*species_1(t)*species_13(t) + 1//2*species_22(t)
+│    species_14'(t) = 1//100*species_10(t)*species_13(t)
+│    species_7'(t) = 43//500*species_15(t) + 43//500*species_26(t) + species_9(t)
+│    species_1'(t) = 43//500*species_23(t) + species_3(t)
+│    species_12'(t) = 9//200*species_13(t)*species_2(t)
+│    species_20'(t) = species_19(t) + 273//250*species_24(t) + species_25(t) + 43//500*species_26(t) + 43//500*species_27(t)
+│    species_3'(t) = 1//50*species_1(t)*species_2(t)
+│    species_27'(t) = 1//200*species_16(t)*species_20(t) + 1//2*species_19(t)
+│    species_2'(t) = 15*species_11(t) + species_12(t) + species_24(t) + 101//100*species_3(t) + 16*species_5(t)
+│    species_8'(t) = 16*species_11(t) + species_17(t) + species_19(t) + 101//100*species_9(t)
+│    species_25'(t) = 1//100*species_10(t)*species_20(t)
+│    species_24'(t) = 9//200*species_2(t)*species_20(t)
+│    species_9'(t) = 1//50*species_7(t)*species_8(t)
+│    species_15'(t) = 1//200*species_13(t)*species_7(t) + 1//2*species_14(t)
+│    species_16'(t) = species_17(t) + 43//500*species_27(t)
+│    species_21'(t) = 9//200*species_13(t)*species_6(t)
+│    species_22'(t) = 1//100*species_13(t)*species_4(t)
+│    species_4'(t) = 23//250*species_21(t) + species_22(t) + 1//100*species_3(t) + species_5(t)
+│    species_6'(t) = species_21(t) + 15*species_5(t)
+│    species_11'(t) = 4//125*species_10(t)*species_8(t)
+│    species_5'(t) = 4//125*species_2(t)*species_4(t)
+│    species_19'(t) = 1//50*species_20(t)*species_8(t)
+│    
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:211
+[ Info: constructed a set of 12 matrices 27×27 from the system Jacobian
+[ Info: Called invariant_subspace_global on 12 matrices of shape (27, 27)
+┌ Debug: Found an invariant subspace by saturating the first unit vector
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
+[ Info: found 26-dim subspace in ambient 27-dim
+[ Info: Restricting matrices from size (27, 27) to size (26, 26)
+┌ Warning: Calling myself recursively in restricted subspace
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:136
+[ Info: Called invariant_subspace_global on 12 matrices of shape (26, 26)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+...............................[ Info: generated a basis for Algebra of dimension 676
+┌ Debug: Dimension of the algebra is 676
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+┌ Debug: Before positivization: BigInt[1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 546 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -43 0 0 0 0 0 0 0 0; 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 546 0 43 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1]
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
+┌ Debug: After positivization: [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 546 0 0 43 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1]
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
+┌ Debug: Found reductions Dict{Symbol, Vector{fmpq_mpoly}}[Dict(:new_system => [43//500*y17 + y20, y3 + 23//250*y5 + y7 + y18 + 1//100*y26, 4//125*y2*y25, 2457//100*y6*y13 + 43//200*y6*y24 + 43//2*y7, 9//200*y6*y13 + 9//200*y13*y14, 1//500*y4 + y7 + 273//250*y15 + y16 + 43//500*y17, 1//100*y2*y6, 1//200*y6*y24 + 1//2*y7 + 1//200*y14*y24 + 1//2*y18, y10 + 43//500*y19, 1//50*y9*y11, 2*y10, 1//50*y14*y25, 15*y3 + y5 + 101//100*y20 + 16*y22, -1//500*y4 + 273//250*y5 + 43//500*y8 + y12 + y18 + 43//500*y19, 9//200*y6*y23, 1//100*y6*y21, 1//200*y1*y6 + 1//2*y16, 1//100*y2*y14, 1//200*y9*y14 + 1//2*y12, 1//50*y1*y13, 23//250*y15 + y16 + 1//100*y20 + y22, 4//125*y13*y21, y15 + 15*y22, 43//500*y8 + y26, 16*y3 + y10 + y12 + 101//100*y26, 1//50*y24*y25], :new_vars => [species_1, species_10, species_11, 546*species_12 + 43*species_15, species_12 + species_24, species_13, species_14, species_15 + species_26, species_16, species_17, species_18, species_19, species_2, species_20, species_21, species_22, species_23, species_25, species_27, species_3, species_4, species_5, species_6, species_7, species_8, species_9])]
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236

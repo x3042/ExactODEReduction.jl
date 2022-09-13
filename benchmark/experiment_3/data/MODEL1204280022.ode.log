@@ -1,0 +1,37 @@
+┌ Debug: find_reductions of 
+│   system =
+│    species_19'(t) = 9//200*species_17(t)*species_2(t)
+│    species_16'(t) = 1//50*species_17(t)*species_8(t)
+│    species_21'(t) = 9//200*species_12(t)*species_6(t)
+│    species_8'(t) = 16*species_11(t) + species_14(t) + species_16(t) + 101//100*species_9(t)
+│    species_2'(t) = 15*species_11(t) + species_19(t) + 101//100*species_3(t) + 16*species_5(t)
+│    species_4'(t) = 23//250*species_21(t) + species_22(t) + 1//100*species_3(t) + species_5(t)
+│    species_24'(t) = 1//200*species_13(t)*species_17(t) + 1//2*species_16(t)
+│    species_12'(t) = 273//250*species_21(t) + species_22(t) + 43//500*species_23(t)
+│    species_17'(t) = species_16(t) + species_18(t) + 273//250*species_19(t) + 43//500*species_20(t) + 43//500*species_24(t)
+│    species_10'(t) = species_11(t) + species_18(t) + 23//250*species_19(t) + 1//100*species_9(t)
+│    species_9'(t) = 1//50*species_7(t)*species_8(t)
+│    species_7'(t) = 43//500*species_20(t) + species_9(t)
+│    species_23'(t) = 1//200*species_1(t)*species_12(t) + 1//2*species_22(t)
+│    species_15'(t) = 2*species_14(t)
+│    species_5'(t) = 4//125*species_2(t)*species_4(t)
+│    species_3'(t) = 1//50*species_1(t)*species_2(t)
+│    species_18'(t) = 1//100*species_10(t)*species_17(t)
+│    species_14'(t) = 1//50*species_13(t)*species_15(t)
+│    species_11'(t) = 4//125*species_10(t)*species_8(t)
+│    species_20'(t) = 1//200*species_17(t)*species_7(t) + 1//2*species_18(t)
+│    species_22'(t) = 1//100*species_12(t)*species_4(t)
+│    species_1'(t) = 43//500*species_23(t) + species_3(t)
+│    species_13'(t) = species_14(t) + 43//500*species_24(t)
+│    species_6'(t) = species_21(t) + 15*species_5(t)
+│    
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:211
+[ Info: constructed a set of 12 matrices 24×24 from the system Jacobian
+[ Info: Called invariant_subspace_global on 12 matrices of shape (24, 24)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+..........................[ Info: generated a basis for Algebra of dimension 576
+┌ Debug: Dimension of the algebra is 576
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+┌ Debug: Found reductions Dict{Symbol, Vector{fmpq_mpoly}}[]
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236
