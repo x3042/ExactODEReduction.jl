@@ -69,7 +69,7 @@ function hasinterestingreductions(reductions)
             return (flag, msg)
         end
     end
-    return (flag, msg)
+    return (false, "No")
 end
 
 function write_md(sizes)
@@ -125,7 +125,7 @@ end
 #------------------------------------------------------------------------------
 
 # for sz in [(20, 50), (50, 80), ]#(80, 110)]
-for sz in [(5, 5)]
+for sz in [(5, 5), (10, 15)]
     uwuwu(sz...)
     write_md(sz)
 end

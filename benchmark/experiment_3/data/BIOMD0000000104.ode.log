@@ -63,3 +63,11 @@
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [1 0 0 0 0; 0 1 0 0 0; 0 0 1 0 0; 0 0 0 0 1]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
+┌ Debug: Found reductions 
+│   result =
+│    4-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
+│     Dict(:new_system => [0], :new_vars => [species_0])
+│     Dict(:new_system => [0, 0], :new_vars => [species_0, species_2])
+│     Dict(:new_system => [0, y1*y3, 0], :new_vars => [species_0, species_1, species_2])
+│     Dict(:new_system => [0, y1*y3, 0, 0], :new_vars => [species_0, species_1, species_2, species_5])
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236

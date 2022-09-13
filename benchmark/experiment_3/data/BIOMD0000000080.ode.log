@@ -1,0 +1,81 @@
+┌ Debug: find_reductions of 
+│   system =
+│    sD'(t) = 10*DR(t) - 5000000*R(t)*sD(t)
+│    DRG_GTP'(t) = 5000000*DRG(t)*GTP(t) - 56*DRG_GTP(t)
+│    G_GDP'(t) = -100000000*DR(t)*G_GDP(t) + 1//10*DRG_GDP(t) + 2*G_GTP(t)
+│    DRG'(t) = -100000*DRG(t)*GDP(t) - 5000000*DRG(t)*GTP(t) + 5*DRG_GDP(t) + 55*DRG_GTP(t)
+│    DRG_GDP'(t) = 100000000*DR(t)*G_GDP(t) + 100000*DRG(t)*GDP(t) - 51//10*DRG_GDP(t)
+│    R'(t) = 10*DR(t) - 5000000*R(t)*sD(t)
+│    GDP'(t) = -100000*DRG(t)*GDP(t) + 5*DRG_GDP(t)
+│    GTP'(t) = -5000000*DRG(t)*GTP(t) + 55*DRG_GTP(t)
+│    DR'(t) = -100000000*DR(t)*G_GDP(t) - 10*DR(t) + 1//10*DRG_GDP(t) + DRG_GTP(t) + 5000000*R(t)*sD(t)
+│    G_GTP'(t) = DRG_GTP(t) - 2*G_GTP(t)
+│    
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:211
+[ Info: constructed a set of 8 matrices 10×10 from the system Jacobian
+[ Info: Called invariant_subspace_global on 8 matrices of shape (10, 10)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+[ Info: generated a basis for Algebra of dimension 60
+┌ Debug: Dimension of the algebra is 60
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+[ Info: Computing the radical..
+[ Info: computed the radical of dimension 24
+[ Info: Found radical of size 24
+[ Info: Radical is nontrivial, computing the general kernel of radical
+[ Info: 4 dimensional subspace found
+[ Info: found 4-dim subspace in ambient 10-dim
+[ Info: Restricting matrices from size (10, 10) to size (4, 4)
+┌ Warning: Calling myself recursively in restricted subspace
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:136
+[ Info: Called invariant_subspace_global on 8 matrices of shape (4, 4)
+┌ Debug: Found an invariant subspace by saturating the first unit vector
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
+[ Info: found 1-dim subspace in ambient 4-dim
+[ Info: Factorizing matrices from size (4, 4) to size (3, 3)
+┌ Warning: Calling myself recursively in complemented subspace
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Called invariant_subspace_global on 8 matrices of shape (3, 3)
+┌ Debug: Found an invariant subspace by saturating the first unit vector
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
+[ Info: found 1-dim subspace in ambient 3-dim
+[ Info: Factorizing matrices from size (3, 3) to size (2, 2)
+┌ Warning: Calling myself recursively in complemented subspace
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Called invariant_subspace_global on 8 matrices of shape (2, 2)
+┌ Debug: Found an invariant subspace by saturating the first unit vector
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
+[ Info: found 1-dim subspace in ambient 2-dim
+[ Info: Factorizing matrices from size (10, 10) to size (6, 6)
+┌ Warning: Calling myself recursively in complemented subspace
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Called invariant_subspace_global on 8 matrices of shape (6, 6)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+[ Info: generated a basis for Algebra of dimension 36
+┌ Debug: Dimension of the algebra is 36
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+┌ Debug: Before positivization: BigInt[1 0 0 0 0 0 -1 -1 0 1; 0 1 0 0 -1 -1 0 0 0 0; 0 0 1 1 1 1 1 1 0 0; 0 0 0 0 0 0 0 0 1 -1]
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
+┌ Debug: After positivization: [1 1 1 1 0 0 0 0 0 1; 1 1 1 1 0 0 0 0 1 0; 1 0 1 1 1 1 0 0 0 1; 0 1 1 1 0 0 1 1 0 0]
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
+┌ Debug: Before positivization: BigInt[1 0 0 0 0 0 -1 -1 0 1]
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
+┌ Debug: DimensionMismatch("No suitable matrix found")
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:41
+┌ Debug: Before positivization: BigInt[1 0 0 0 0 0 -1 -1 0 1; 0 1 0 0 -1 -1 0 0 0 0]
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
+┌ Debug: DimensionMismatch("No suitable matrix found")
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:41
+┌ Debug: Before positivization: BigInt[1 0 0 0 0 0 -1 -1 0 1; 0 1 0 0 -1 -1 0 0 0 0; 0 0 1 1 1 1 1 1 0 0]
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
+┌ Debug: After positivization: [1 1 1 1 0 0 0 0 0 1; 1 0 1 1 1 1 0 0 0 1; 0 1 1 1 0 0 1 1 0 0]
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
+┌ Debug: Found reductions 
+│   result =
+│    4-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
+│     Dict(:new_system => [0], :new_vars => [DR - G_GDP - G_GTP + sD])
+│     Dict(:new_system => [0, 0], :new_vars => [DR - G_GDP - G_GTP + sD, DRG - GDP - GTP])
+│     Dict(:new_system => [0, 0, 0], :new_vars => [DR + DRG + DRG_GDP + DRG_GTP + sD, DR + DRG_GDP + DRG_GTP + GDP + GTP + sD, DRG + DRG_GDP + DRG_GTP + G_GDP + G_GTP])
+│     Dict(:new_system => [0, 0, 0, 0], :new_vars => [DR + DRG + DRG_GDP + DRG_GTP + sD, DR + DRG + DRG_GDP + DRG_GTP + R, DR + DRG_GDP + DRG_GTP + GDP + GTP + sD, DRG + DRG_GDP + DRG_GTP + G_GDP + G_GTP])
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236

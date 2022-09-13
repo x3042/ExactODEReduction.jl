@@ -10,12 +10,14 @@ nNOS_minus_Homoarginine => 7//100000000000000000*Im_minus_nNOS_minus_Homoarginin
 
 Reductions:
 
+Interesting
 new_vars = fmpq_mpoly[Homoarginine + Im_minus_nNOS_minus_Homoarginine + nNOS_minus_Homoarginine]
 new_system = 
 [
 0
 ]
 
+Interesting
 new_vars = fmpq_mpoly[Homoarginine + Im_minus_nNOS_minus_Homoarginine + nNOS_minus_Homoarginine, Im_minus_nNOS + Im_minus_nNOS_minus_Homoarginine + nNOS_minus_Homoarginine]
 new_system = 
 [
@@ -23,6 +25,7 @@ new_system =
 0
 ]
 
+Interesting
 new_vars = fmpq_mpoly[Homoarginine + Im_minus_nNOS_minus_Homoarginine + Imidazole, Homoarginine + Im_minus_nNOS_minus_Homoarginine + nNOS_minus_Homoarginine, Im_minus_nNOS + Im_minus_nNOS_minus_Homoarginine + nNOS_minus_Homoarginine]
 new_system = 
 [

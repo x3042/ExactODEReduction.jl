@@ -215,7 +215,10 @@ end
 # in case the latter is semisimple
 function invariant_subspace_semisimple(Algebra::Subspacik)
     es = basis(Algebra)
-    @debug Algebra
+    # @debug Algebra
+    
+    @debug "!!Inside invariant_subspace_semisimple"
+    
     n = size(first(es), 1)
     F = base_ring(Algebra)
 
@@ -239,7 +242,8 @@ function invariant_subspace_semisimple(Algebra::Subspacik)
             # a more thorough check
             p = 0.99
             sampling = Int(ceil(n^2 / (1 - p)))
-            M_dense = sum([rand(1:sampling) * m for m in Algebra])
+            # Alex: changed just now by me
+            M_dense = sum([rand(1:sampling) * m for m in es])
             reconstruct!(M_dense)
             chpoly_dense = charpoly(PSpace, MSpace(to_dense(M_dense)))
             factors_dense = collect(AbstractAlgebra.factor(chpoly_dense))

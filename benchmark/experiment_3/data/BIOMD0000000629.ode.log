@@ -55,3 +55,10 @@
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: DimensionMismatch("No suitable matrix found")
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:41
+┌ Debug: Found reductions 
+│   result =
+│    3-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
+│     Dict(:new_system => [0], :new_vars => [CA + LRCA])
+│     Dict(:new_system => [0, 0], :new_vars => [CA + LRCA, L - R])
+│     Dict(:new_system => [0, 0, 0], :new_vars => [CA + LRCA, L + LR + LRCA, LR + LRCA + R])
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236

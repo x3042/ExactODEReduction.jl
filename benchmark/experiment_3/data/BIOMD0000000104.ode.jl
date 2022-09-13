@@ -10,11 +10,13 @@ species_5 => 0
 
 Reductions:
 
+
 new_vars = fmpq_mpoly[species_0]
 new_system = 
 [
 0
 ]
+
 
 new_vars = fmpq_mpoly[species_0, species_2]
 new_system = 
@@ -23,6 +25,7 @@ new_system =
 0
 ]
 
+
 new_vars = fmpq_mpoly[species_0, species_1, species_2]
 new_system = 
 [
@@ -30,6 +33,7 @@ new_system =
 y1*y3,
 0
 ]
+
 
 new_vars = fmpq_mpoly[species_0, species_1, species_2, species_5]
 new_system = 

@@ -10,12 +10,14 @@ nNOS_minus_L_minus_Arginine => 27//200000000000000000*Im_minus_nNOS_minus_L_minu
 
 Reductions:
 
+Interesting
 new_vars = fmpq_mpoly[Im_minus_nNOS - L_minus_Arginine]
 new_system = 
 [
 0
 ]
 
+Interesting
 new_vars = fmpq_mpoly[Im_minus_nNOS + Im_minus_nNOS_minus_L_minus_Arginine + nNOS_minus_L_minus_Arginine, Im_minus_nNOS_minus_L_minus_Arginine + L_minus_Arginine + nNOS_minus_L_minus_Arginine]
 new_system = 
 [
@@ -23,6 +25,7 @@ new_system =
 0
 ]
 
+Interesting
 new_vars = fmpq_mpoly[Im_minus_nNOS + Im_minus_nNOS_minus_L_minus_Arginine + Imidazole, Im_minus_nNOS + Im_minus_nNOS_minus_L_minus_Arginine + nNOS_minus_L_minus_Arginine, Im_minus_nNOS_minus_L_minus_Arginine + L_minus_Arginine + nNOS_minus_L_minus_Arginine]
 new_system = 
 [

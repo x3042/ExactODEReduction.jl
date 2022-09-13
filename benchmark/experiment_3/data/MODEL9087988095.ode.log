@@ -55,3 +55,10 @@
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [1 0 1 0 1; 0 1 1 0 1]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
+┌ Debug: Found reductions 
+│   result =
+│    3-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
+│     Dict(:new_system => [0], :new_vars => [Homoarginine + Im_minus_nNOS_minus_Homoarginine + nNOS_minus_Homoarginine])
+│     Dict(:new_system => [0, 0], :new_vars => [Homoarginine + Im_minus_nNOS_minus_Homoarginine + nNOS_minus_Homoarginine, Im_minus_nNOS + Im_minus_nNOS_minus_Homoarginine + nNOS_minus_Homoarginine])
+│     Dict(:new_system => [0, 0, 0], :new_vars => [Homoarginine + Im_minus_nNOS_minus_Homoarginine + Imidazole, Homoarginine + Im_minus_nNOS_minus_Homoarginine + nNOS_minus_Homoarginine, Im_minus_nNOS + Im_minus_nNOS_minus_Homoarginine + nNOS_minus_Homoarginine])
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236

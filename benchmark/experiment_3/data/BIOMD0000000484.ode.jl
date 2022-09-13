@@ -10,11 +10,13 @@ k2 => 0
 
 Reductions:
 
+
 new_vars = fmpq_mpoly[I]
 new_system = 
 [
 0
 ]
+
 
 new_vars = fmpq_mpoly[I, k1]
 new_system = 
@@ -23,6 +25,7 @@ new_system =
 0
 ]
 
+
 new_vars = fmpq_mpoly[I, k1, k2]
 new_system = 
 [
@@ -30,6 +33,7 @@ new_system =
 0,
 0
 ]
+
 
 new_vars = fmpq_mpoly[I, SS, k1, k2]
 new_system = 

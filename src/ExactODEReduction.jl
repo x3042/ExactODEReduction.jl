@@ -232,6 +232,10 @@ function find_reductions(
     end
 
     sort!(result, by=r -> length(r[:new_vars]))
+
+    @debug "Found reductions " result
+
+    return result
 end
 
 #------------------------------------------------------------------------------
