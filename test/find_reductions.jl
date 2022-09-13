@@ -10,6 +10,14 @@ cases = [
         :sys => @ODEsystem(
 	    x1'(t) = x1(t),
 	    x2'(t) = 2 * x2(t),
+	),
+	:dims => [Set([1])],
+	:constrained => [([x1], 1), ([x1 + x2], 2)]
+    ),
+    Dict(
+        :sys => @ODEsystem(
+	    x1'(t) = x1(t),
+	    x2'(t) = 2 * x2(t),
 	    x3'(t) = 3 * x3(t)
 	),
 	:dims => [Set([1, 2])],
@@ -79,12 +87,17 @@ cases = [
 function random_linear_change(sys)
     n = length(gens(parent(sys)))
     S = Nemo.MatrixSpace(Nemo.QQ, n, n)
-    M = S([rand(-7:7) for i in 1:n, j in 1:n])
-    Minv = M^(-1)
-    eval_point = [sum([Minv[i, j] * gens(parent(sys))[i] for i in 1:n]) for j in 1:n]
-    new_eqs = [sum([M[i, j] * equations(sys)[i] for i in 1:n]) for j in 1:n]
-    new_eqs = [Nemo.evaluate(e, eval_point) for e in new_eqs]
-    return ODE{fmpq_mpoly}(Dict(gens(parent(sys))[i] => new_eqs[i] for i in 1:n))
+    while true
+        M = S([rand(-10:10) for i in 1:n, j in 1:n])
+        if iszero(det(M))
+            continue
+        end
+        Minv = M^(-1)
+        eval_point = [sum([Minv[i, j] * gens(parent(sys))[i] for i in 1:n]) for j in 1:n]
+        new_eqs = [sum([M[i, j] * equations(sys)[i] for i in 1:n]) for j in 1:n]
+        new_eqs = [Nemo.evaluate(e, eval_point) for e in new_eqs]
+        return ODE{fmpq_mpoly}(Dict(gens(parent(sys))[i] => new_eqs[i] for i in 1:n))
+    end
 end
 
 function check_reduction(sys, new_vars, new_eqs)
@@ -124,7 +137,6 @@ end
         end
 
         sys_change = random_linear_change(sys)
-        @info "And now make a random linear transformation to get $sys_change"
         reds_change = find_reductions(sys_change)
         for r in reds_change
             (f1, f2) = check_reduction(sys_change, r[:new_vars], r[:new_system])

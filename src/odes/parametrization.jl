@@ -17,58 +17,33 @@ function perform_change_of_variables(system, invariants; new_vars_name="y")
     newvars = ["$new_vars_name$i" for i in 1:newdim]
     newring, newgens = PolynomialRing(ground, newvars)
 
-    pivots = map(first_nonzero, invariants)
-    lpivots = sort(pivots)
-    lbasis = basis(linear_span!(deepcopy(invariants)))
+    S = MatrixSpace(Nemo.QQ, newdim, olddim)
+    transform_matrix = zero(S)
+    for i in 1:newdim
+        transform_matrix[i, :] = to_dense(invariants[i])
+    end
+
+    (rank, echelon) = Nemo.rref(transform_matrix)
+    pivots = [findfirst(x ->  x != 0, [echelon[i, j] for j in 1:olddim]) for i in 1:newdim]
+    transform_cut = transform_matrix[:, pivots]
+    inv_trans = transform_cut^(-1)
+
+    substitutions = [zero(newring) for i in 1:olddim]
+    for (i, pind) in enumerate(pivots)
+        substitutions[pind] = sum([newgens[j] * inv_trans[i, j] for j in 1:newdim])
+    end
 
     newsystem = zeros(oldring, newdim)
 
-    for (i, vec) in enumerate(lbasis)
+    for (i, vec) in enumerate(invariants)
         for (idx, val) in vec
             newsystem[i] += system[idx] * val
         end
     end
 
-    shrinked_polys = []
-    for p in newsystem
-        filtered = Dict()
-        for (monom, coef) in zip(Nemo.monomials(p), Nemo.coeffs(p))
-            newmonom = []
-            skip = false
-            for (varidx, expow) in zip(1:olddim, exponent_vector(monom, 1))
-                if expow == 0
-                    continue
-                end
+    newsystem = [Nemo.evaluate(p, substitutions) for p in newsystem]
 
-                if !(varidx in pivots)
-                    skip = true
-                    break
-                else
-                    pos = findfirst(==(varidx), lpivots)
-                    push!(newmonom, (pos, expow))
-                end
-            end
-            if !skip
-                filtered[newmonom] = coef
-            end
-        end
-        push!(shrinked_polys, filtered)
-    end
-
-    polynormalized = zeros(newring, length(shrinked_polys))
-    for (i, polyinternals) in enumerate(shrinked_polys)
-        builder = MPolyBuildCtx(newring)
-        for (poses, coef) in polyinternals
-            newexponent = zeros(Int, newdim)
-            indices = [pos[1] for pos in poses]
-            es = [pos[2] for pos in poses]
-            newexponent[indices] .= es
-            push_term!(builder, coef, newexponent)
-        end
-        polynormalized[i] = finish(builder)
-    end
-
-    polynormalized
+    return newsystem
 end
 
 
@@ -103,7 +78,7 @@ function check_consistency(restricted, original, varmapping)
         for f in varmapping
     ]
 
-    rhs == lhs
+    return rhs == lhs
 end
 
 #=
