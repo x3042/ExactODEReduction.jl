@@ -3,7 +3,7 @@ using Test
 using TestSetExtensions
 
 using JSON
-using LinearAlgebra: SingularException
+using LinearAlgebra: SingularException, det
 
 using Nemo
 

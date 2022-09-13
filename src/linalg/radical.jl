@@ -226,8 +226,13 @@ function invariant_subspace_semisimple(Algebra::Subspacik)
     MSpace = MatrixSpace(F, n, n)
     PSpace, x = F["x"]
 
+    # randomization parameter
+    count = 5
+
     while true
-        M = random_element(Algebra, count = dim(Algebra))
+        M = random_element(Algebra, count=count)
+        count = 2 * count
+
         reconstruct!(M)
 
         chpoly = charpoly(PSpace, MSpace(to_dense(M)))
@@ -254,7 +259,7 @@ function invariant_subspace_semisimple(Algebra::Subspacik)
             continue
         end
 
-        f = first(factors)
+        f = first(factors)[1]
         # computing the kernel of f(M)
         factored = evaluate(first(f), M)
         V = last(kernel(MSpace(to_dense(factored))))
