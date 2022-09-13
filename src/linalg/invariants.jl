@@ -52,7 +52,7 @@ function invariant_subspace_global(matrices::AbstractArray{T}) where {T<:Abstrac
     end
 
     if isempty(invariant)
-        @warn "There is invariant subspace but it is either not defined over Q or could not be computed"
+        @warn "There is invariant subspace but it is either not defined over Q"
         return (true, [])
     end
     

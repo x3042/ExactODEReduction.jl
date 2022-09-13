@@ -609,14 +609,9 @@ end
 function random_element(A::Union{Subspacik, HashedSubspacik}; count=5)
     count = min(dim(A), count)
     indices = rand(1:dim(A), count)
-    𝔽 = base_ring(A)
 
     # a₁e₁ + … + aₖeₖ
-    # sum(map(prod, zip(rand(𝔽, count), basis(A)[indices])))
-
-    # ± e₁ ± … ± eₖ
-    sum(map(prod, zip(rand((𝔽(-1), 𝔽(1)), count), basis(A)[indices])))
-
+    return sum(map(prod, zip(rand(1:count, count), basis(A)[indices])))
 end
 
 #------------------------------------------------------------------------------
