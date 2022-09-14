@@ -41,6 +41,9 @@ function invariant_subspace_global(matrices::AbstractArray{T}) where {T<:Abstrac
             from_dense([invariant[:, i]...], Nemo.QQ)
             for i in 1:size(invariant, 2)
         ]
+        if !check_invariance!(deepcopy(matrices), deepcopy(invariant))
+            error("Kernel of the radical turned out not to be invariant, math is wrong"
+        end
     else
         @info "Radical is trivial, using randomized algorithm"
         if dim(algebra) != 0
@@ -132,28 +135,26 @@ function many_invariant_subspaces(
         As_V = restrict(As, V)
         As_V_sparse = map(x-> from_dense(x, ground), map(Array, As_V))
         
-        @info "Restricting matrices from size $(size(As[1])) to size $(size(As_V[1]))"
-        @warn "Calling myself recursively in restricted subspace"
+        @info "Calling myself recursively in restricted subspace"
 
         subspaces = many_invariant_subspaces(As_V_sparse, find_invariant)
         append!(toreturn, map(vs -> lift(vs, V), subspaces))
     end
 
     # factorize
-    if length(V) < n - 1 
+    if length(V) < n - 1
         As_V = factorize(As, V)
         if !isempty(As_V)
             As_V_sparse = map(x-> from_dense(x, ground), map(Array, As_V))
             
-            @info "Factorizing matrices from size $(size(As[1])) to size $(size(As_V[1]))" 
-            @warn "Calling myself recursively in complemented subspace"
+            @info "Calling myself recursively in complemented subspace"
             
             subspaces = many_invariant_subspaces(As_V_sparse, find_invariant)
             lifted = map(
                 vs -> lift(vs, complement_subspace(linear_span!(V))),
                 subspaces)
             lifted = map(
-                vs -> append!(vs, V),
+                vs -> append!(vs, deepcopy(V)),
                 lifted)
             append!(toreturn, lifted)
         end
@@ -197,7 +198,7 @@ function restrict(As::AbstractArray, vs)
 
     # solve for each A from As
     #   A*fi = a1*f1 + a2*f2 + ... + ad*fd
-    [
+    return [
         AbstractAlgebra.Generic.solve(matrix, Avs)
         for Avs in Asvs
     ]
@@ -257,7 +258,7 @@ function lift(vs, Vs)
         push!(lifted, lifted_vector)
     end
 
-    lifted
+    return lifted
 end
 
 

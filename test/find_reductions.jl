@@ -88,7 +88,7 @@ function random_linear_change(sys)
     n = length(gens(parent(sys)))
     S = Nemo.MatrixSpace(Nemo.QQ, n, n)
     while true
-        M = S([rand(-10:10) for i in 1:n, j in 1:n])
+        M = S([rand(-20:20) for i in 1:n, j in 1:n])
         if iszero(det(M))
             continue
         end
@@ -136,13 +136,15 @@ end
             @test f1 == f2
         end
 
-        sys_change = random_linear_change(sys)
-        reds_change = find_reductions(sys_change)
-        for r in reds_change
-            (f1, f2) = check_reduction(sys_change, r[:new_vars], r[:new_system])
-            @test f1 == f2
+        for i in 1:50
+            sys_change = random_linear_change(sys)
+            reds_change = find_reductions(sys_change)
+            for r in reds_change
+                (f1, f2) = check_reduction(sys_change, r[:new_vars], r[:new_system])
+                @test f1 == f2
+            end
+            @test Set([length(r[:new_vars]) for r in reds_change]) in c[:dims]
         end
-        @test Set([length(r[:new_vars]) for r in reds_change]) in c[:dims]
     end
 
 end
