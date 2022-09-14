@@ -115,13 +115,11 @@ function find_some_reduction(
     matrices = construct_jacobians(eqs)
 
     # @debug "Matrices:" matrices
-    
-    subspace = undef
-    if length(matrices) > 0
-        @savetime (exists, subspace) =  invariant_subspace_global(matrices) total_times
-    else
-        subspace = [unit_sparsik(length(eqs), 1, Nemo.QQ)]
+
+    if length(matrices) == 0
+        matrices = [from_COO(length(eqs), length(eqs), [], Nemo.QQ)]
     end
+    @savetime (exists, subspace) =  invariant_subspace_global(matrices) total_times
 
     @debug "Subspace global" subspace
 
@@ -213,15 +211,10 @@ function find_reductions(
     eqs = equations(system)
     matrices = construct_jacobians(eqs)
 
-    invariant_subspaces = undef
-    if length(matrices) > 0
-        invariant_subspaces = many_invariant_subspaces(matrices, invariant_subspace_global)
-    else
-        invariant_subspaces = [
-	    [unit_sparsik(length(eqs), j, Nemo.QQ) for j in 1:i]
-	    for i in 1:(length(eqs) - 1)
-	]
+    if length(matrices) == 0
+        matrices = [from_COO(length(eqs), length(eqs), [], Nemo.QQ)]
     end
+    invariant_subspaces = many_invariant_subspaces(matrices, invariant_subspace_global)
     result = Vector{Dict{Symbol, Vector{fmpq_mpoly}}}()
     for V in invariant_subspaces
         V = basis(linear_span!(V))
