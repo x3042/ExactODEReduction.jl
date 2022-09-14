@@ -42,7 +42,7 @@ function invariant_subspace_global(matrices::AbstractArray{T}) where {T<:Abstrac
             for i in 1:size(invariant, 2)
         ]
         if !check_invariance!(deepcopy(matrices), deepcopy(invariant))
-            error("Kernel of the radical turned out not to be invariant, math is wrong"
+            error("Kernel of the radical turned out not to be invariant, math is wrong")
         end
     else
         @info "Radical is trivial, using randomized algorithm"
