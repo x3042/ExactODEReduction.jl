@@ -270,21 +270,18 @@ y1*y3*y11*y17 - y5*y7*y13 - y5*y9*y15,
 ]
 
 Interesting
-new_vars = fmpq_mpoly[S0, S1, S10 + S3 + S6, S12 + S3 + S8, S13, S15 + S6 + S9, S17, S2, S3 + S4, S5, S6 + S7, S8 + S9, kCatE, kCatF, kOffE, kOffF, kOnE, kOnF, pkCatE, pkCatF, pkOffE, pkOffF, pkOnE, pkOnF]
+new_vars = fmpq_mpoly[S0, S1, S10 + S14 + S16 + S17, S10 + S2 + S3 + S6, S11 + S2 + S4 + S7, S11 + S12 + S15 + S17, S12 + S3 + S5 + S8, S13 + S16 + S7 + S8, S13 + S15 + S6 + S9, kCatE, kCatF, kOffE, kOffF, kOnE, kOnF, pkCatE, pkCatF, pkOffE, pkOffF, pkOnE, pkOnF]
 new_system = 
 [
--y1*y3*y17*y23 - 2*y1*y8*y17*y23 + y4*y13*y19 + y4*y15*y21 + 2*y10*y13*y19 + 2*y10*y15*y21,
--2*y2*y5*y18*y24 - y2*y6*y18*y24 - y2*y12*y18*y24 + y3*y14*y20 + y3*y16*y22 + y4*y14*y20 + y4*y16*y22 + y6*y14*y20 + y6*y16*y22 + 2*y7*y14*y20 + 2*y7*y16*y22 - 2*y9*y14*y20 - 2*y9*y16*y22 - 2*y11*y14*y20 - 2*y11*y16*y22 - y12*y14*y20 - y12*y16*y22,
--y1*y3*y17*y23 + y1*y8*y17*y23 - y3*y14*y20 + y4*y14*y20 + y6*y14*y20 + y7*y14*y20 - y9*y15*y21 + y10*y15*y21 - y12*y14*y20,
-y1*y8*y17*y23 - y1*y9*y17*y23 - y4*y13*y19 - y4*y15*y21 + y10*y13*y19 + y10*y15*y21,
--2*y2*y5*y18*y24 + y6*y16*y22 - y11*y16*y22 + y12*y13*y19,
-y2*y5*y18*y24 - y2*y6*y18*y24 + y3*y16*y22 + y4*y13*y19 - y6*y16*y22 + y7*y16*y22 - y9*y16*y22 + y10*y13*y19 - y12*y13*y19,
-y2*y6*y18*y24 - y2*y11*y18*y24 - 2*y7*y14*y20 - 2*y7*y16*y22,
--2*y1*y8*y17*y23 + y3*y14*y20 - y9*y14*y20 + y9*y15*y21 - y11*y14*y20,
-2*y1*y8*y17*y23 - y1*y9*y17*y23 + y4*y14*y20 - y9*y13*y19 - y9*y14*y20 - y9*y15*y21 + 2*y10*y15*y21 - y12*y14*y20,
-y1*y9*y17*y23 - 2*y10*y13*y19 - 2*y10*y15*y21,
--y1*y11*y17*y23 - y2*y11*y18*y24 + y3*y16*y22 + y6*y14*y20 + y9*y13*y19 - y9*y16*y22 - y11*y14*y20 - y11*y16*y22 + y12*y15*y21,
-y1*y11*y17*y23 - y2*y12*y18*y24 + y4*y16*y22 - y9*y16*y22 + 2*y10*y13*y19 - y12*y13*y19 - y12*y15*y21 - y12*y16*y22,
+-y1*y4*y14*y20 - y1*y5*y14*y20 + y3*y10*y16 + y3*y12*y18 - y4*y10*y16 - y4*y12*y18 + y5*y10*y16 + y5*y12*y18 - y6*y10*y16 - y6*y12*y18 + 2*y7*y10*y16 + 2*y7*y12*y18 - y8*y10*y16 - y8*y12*y18 + y9*y10*y16 + y9*y12*y18,
+-y2*y8*y15*y21 - y2*y9*y15*y21 + y3*y11*y17 + y3*y13*y19 + y6*y11*y17 + y6*y13*y19,
+y2*y9*y15*y21 - y3*y11*y17 - y3*y13*y19,
+-y1*y4*y14*y20 + y3*y12*y18 - y4*y12*y18 + y5*y12*y18 + y6*y11*y17 - y6*y12*y18 + y7*y12*y18 - y8*y12*y18 + y9*y12*y18,
+-y1*y5*y14*y20 + y3*y11*y17 + y7*y12*y18,
+y2*y8*y15*y21 - y6*y11*y17 - y6*y13*y19,
+y1*y5*y14*y20 - y7*y10*y16 - y7*y12*y18,
+-y2*y8*y15*y21 + y3*y10*y16 - y4*y10*y16 + y5*y10*y16 - y6*y10*y16 + y6*y13*y19 + y7*y10*y16 - y8*y10*y16 + y9*y10*y16,
+-y2*y9*y15*y21 + y3*y13*y19 + y7*y10*y16,
 0,
 0,
 0,

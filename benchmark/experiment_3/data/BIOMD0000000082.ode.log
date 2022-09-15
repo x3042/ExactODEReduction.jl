@@ -25,30 +25,22 @@
 [ Info: Radical is nontrivial, computing the general kernel of radical
 [ Info: 4 dimensional subspace found
 [ Info: found 4-dim subspace in ambient 10-dim
-[ Info: Restricting matrices from size (10, 10) to size (4, 4)
-┌ Warning: Calling myself recursively in restricted subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:136
+[ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 8 matrices of shape (4, 4)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 4-dim
-[ Info: Factorizing matrices from size (4, 4) to size (3, 3)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 8 matrices of shape (3, 3)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 3-dim
-[ Info: Factorizing matrices from size (3, 3) to size (2, 2)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 8 matrices of shape (2, 2)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 2-dim
-[ Info: Factorizing matrices from size (10, 10) to size (6, 6)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 8 matrices of shape (6, 6)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
@@ -71,11 +63,5 @@
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [1 1 1 1 0 0 0 0 0 1; 1 0 1 1 1 1 0 0 0 1; 0 1 1 1 0 0 1 1 0 0]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
-┌ Debug: Found reductions 
-│   result =
-│    4-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
-│     Dict(:new_system => [0], :new_vars => [DR - G_GDP - G_GTP + agonist])
-│     Dict(:new_system => [0, 0], :new_vars => [DR - G_GDP - G_GTP + agonist, DRG - GDP - GTP])
-│     Dict(:new_system => [0, 0, 0], :new_vars => [DR + DRG + DRG_GDP + DRG_GTP + agonist, DR + DRG_GDP + DRG_GTP + GDP + GTP + agonist, DRG + DRG_GDP + DRG_GTP + G_GDP + G_GTP])
-│     Dict(:new_system => [0, 0, 0, 0], :new_vars => [DR + DRG + DRG_GDP + DRG_GTP + agonist, DR + DRG + DRG_GDP + DRG_GTP + Recptor, DR + DRG_GDP + DRG_GTP + GDP + GTP + agonist, DRG + DRG_GDP + DRG_GTP + G_GDP + G_GTP])
+┌ Debug: Found reductions Dict{Symbol, Vector{fmpq_mpoly}}[Dict(:new_system => [0], :new_vars => [DR - G_GDP - G_GTP + agonist]), Dict(:new_system => [0, 0], :new_vars => [DR - G_GDP - G_GTP + agonist, DRG - GDP - GTP]), Dict(:new_system => [0, 0, 0], :new_vars => [DR + DRG + DRG_GDP + DRG_GTP + agonist, DR + DRG_GDP + DRG_GTP + GDP + GTP + agonist, DRG + DRG_GDP + DRG_GTP + G_GDP + G_GTP]), Dict(:new_system => [0, 0, 0, 0], :new_vars => [DR + DRG + DRG_GDP + DRG_GTP + agonist, DR + DRG + DRG_GDP + DRG_GTP + Recptor, DR + DRG_GDP + DRG_GTP + GDP + GTP + agonist, DRG + DRG_GDP + DRG_GTP + G_GDP + G_GTP])]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236

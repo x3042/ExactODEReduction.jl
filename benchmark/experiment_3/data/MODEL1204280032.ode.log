@@ -34,9 +34,7 @@
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 26-dim subspace in ambient 27-dim
-[ Info: Restricting matrices from size (27, 27) to size (26, 26)
-┌ Warning: Calling myself recursively in restricted subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:136
+[ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 12 matrices of shape (26, 26)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647

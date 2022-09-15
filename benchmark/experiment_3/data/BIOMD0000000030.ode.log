@@ -65,247 +65,177 @@
 [ Info: Radical is nontrivial, computing the general kernel of radical
 [ Info: 35 dimensional subspace found
 [ Info: found 35-dim subspace in ambient 50-dim
-[ Info: Restricting matrices from size (50, 50) to size (35, 35)
-┌ Warning: Calling myself recursively in restricted subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:136
+[ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (35, 35)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 35-dim
-[ Info: Factorizing matrices from size (35, 35) to size (34, 34)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (34, 34)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 34-dim
-[ Info: Factorizing matrices from size (34, 34) to size (33, 33)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (33, 33)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 33-dim
-[ Info: Factorizing matrices from size (33, 33) to size (32, 32)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (32, 32)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 32-dim
-[ Info: Factorizing matrices from size (32, 32) to size (31, 31)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (31, 31)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 31-dim
-[ Info: Factorizing matrices from size (31, 31) to size (30, 30)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (30, 30)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 30-dim
-[ Info: Factorizing matrices from size (30, 30) to size (29, 29)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (29, 29)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 29-dim
-[ Info: Factorizing matrices from size (29, 29) to size (28, 28)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (28, 28)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 28-dim
-[ Info: Factorizing matrices from size (28, 28) to size (27, 27)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (27, 27)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 27-dim
-[ Info: Factorizing matrices from size (27, 27) to size (26, 26)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (26, 26)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 26-dim
-[ Info: Factorizing matrices from size (26, 26) to size (25, 25)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (25, 25)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 25-dim
-[ Info: Factorizing matrices from size (25, 25) to size (24, 24)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (24, 24)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 24-dim
-[ Info: Factorizing matrices from size (24, 24) to size (23, 23)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (23, 23)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 23-dim
-[ Info: Factorizing matrices from size (23, 23) to size (22, 22)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (22, 22)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 22-dim
-[ Info: Factorizing matrices from size (22, 22) to size (21, 21)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (21, 21)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 21-dim
-[ Info: Factorizing matrices from size (21, 21) to size (20, 20)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (20, 20)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 20-dim
-[ Info: Factorizing matrices from size (20, 20) to size (19, 19)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (19, 19)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 19-dim
-[ Info: Factorizing matrices from size (19, 19) to size (18, 18)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (18, 18)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 18-dim
-[ Info: Factorizing matrices from size (18, 18) to size (17, 17)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (17, 17)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 17-dim
-[ Info: Factorizing matrices from size (17, 17) to size (16, 16)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (16, 16)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 16-dim
-[ Info: Factorizing matrices from size (16, 16) to size (15, 15)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (15, 15)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 15-dim
-[ Info: Factorizing matrices from size (15, 15) to size (14, 14)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (14, 14)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 14-dim
-[ Info: Factorizing matrices from size (14, 14) to size (13, 13)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (13, 13)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 13-dim
-[ Info: Factorizing matrices from size (13, 13) to size (12, 12)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (12, 12)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 12-dim
-[ Info: Factorizing matrices from size (12, 12) to size (11, 11)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (11, 11)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 11-dim
-[ Info: Factorizing matrices from size (11, 11) to size (10, 10)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (10, 10)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 10-dim
-[ Info: Factorizing matrices from size (10, 10) to size (9, 9)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (9, 9)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 9-dim
-[ Info: Factorizing matrices from size (9, 9) to size (8, 8)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (8, 8)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 8-dim
-[ Info: Factorizing matrices from size (8, 8) to size (7, 7)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (7, 7)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 7-dim
-[ Info: Factorizing matrices from size (7, 7) to size (6, 6)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (6, 6)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 6-dim
-[ Info: Factorizing matrices from size (6, 6) to size (5, 5)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (5, 5)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 5-dim
-[ Info: Factorizing matrices from size (5, 5) to size (4, 4)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (4, 4)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 4-dim
-[ Info: Factorizing matrices from size (4, 4) to size (3, 3)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (3, 3)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 3-dim
-[ Info: Factorizing matrices from size (3, 3) to size (2, 2)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (2, 2)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 2-dim
-[ Info: Factorizing matrices from size (50, 50) to size (15, 15)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 63 matrices of shape (15, 15)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
@@ -452,15 +382,5 @@
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [1 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 1 0 1 1 0 0 0 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 1 0 0 1 1 0 0 1 1 0 0 1 1 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
-┌ Debug: Found reductions 
-│   result =
-│    35-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
-│     Dict(:new_system => [0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y])
-│     Dict(:new_system => [0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK])
-│     Dict(:new_system => [0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y])
-│     Dict(:new_system => [0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1])
-│     ⋮
-│     Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0  …  0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4  …  k1, k2, k3, k4, k5, k6, k7, k8, k_1, k_3])
-│     Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0  …  0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4  …  k2, k3, k4, k5, k6, k7, k8, k_1, k_3, k_5])
-│     Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0  …  0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4  …  k3, k4, k5, k6, k7, k8, k_1, k_3, k_5, k_7])
+┌ Debug: Found reductions Dict{Symbol, Vector{fmpq_mpoly}}[Dict(:new_system => [0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y]), Dict(:new_system => [0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK]), Dict(:new_system => [0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y]), Dict(:new_system => [0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1]), Dict(:new_system => [0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10]), Dict(:new_system => [0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4, h5]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4, h5, h6]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4, h5, h6, h7]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4, h5, h6, h7, h8]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4, h5, h6, h7, h8, h9]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4, h5, h6, h7, h8, h9, h_1]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4, h5, h6, h7, h8, h9, h_1, h_10]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4, h5, h6, h7, h8, h9, h_1, h_10, h_12]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4, h5, h6, h7, h8, h9, h_1, h_10, h_12, h_3]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4, h5, h6, h7, h8, h9, h_1, h_10, h_12, h_3, h_4]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4, h5, h6, h7, h8, h9, h_1, h_10, h_12, h_3, h_4, h_6]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4, h5, h6, h7, h8, h9, h_1, h_10, h_12, h_3, h_4, h_6, h_7]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4, h5, h6, h7, h8, h9, h_1, h_10, h_12, h_3, h_4, h_6, h_7, h_9]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4, h5, h6, h7, h8, h9, h_1, h_10, h_12, h_3, h_4, h_6, h_7, h_9, k1]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4, h5, h6, h7, h8, h9, h_1, h_10, h_12, h_3, h_4, h_6, h_7, h_9, k1, k2]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4, h5, h6, h7, h8, h9, h_1, h_10, h_12, h_3, h_4, h_6, h_7, h_9, k1, k2, k3]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4, h5, h6, h7, h8, h9, h_1, h_10, h_12, h_3, h_4, h_6, h_7, h_9, k1, k2, k3, k4]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4, h5, h6, h7, h8, h9, h_1, h_10, h_12, h_3, h_4, h_6, h_7, h_9, k1, k2, k3, k4, k5]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4, h5, h6, h7, h8, h9, h_1, h_10, h_12, h_3, h_4, h_6, h_7, h_9, k1, k2, k3, k4, k5, k6]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4, h5, h6, h7, h8, h9, h_1, h_10, h_12, h_3, h_4, h_6, h_7, h_9, k1, k2, k3, k4, k5, k6, k7]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4, h5, h6, h7, h8, h9, h_1, h_10, h_12, h_3, h_4, h_6, h_7, h_9, k1, k2, k3, k4, k5, k6, k7, k8]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4, h5, h6, h7, h8, h9, h_1, h_10, h_12, h_3, h_4, h_6, h_7, h_9, k1, k2, k3, k4, k5, k6, k7, k8, k_1]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4, h5, h6, h7, h8, h9, h_1, h_10, h_12, h_3, h_4, h_6, h_7, h_9, k1, k2, k3, k4, k5, k6, k7, k8, k_1, k_3]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4, h5, h6, h7, h8, h9, h_1, h_10, h_12, h_3, h_4, h_6, h_7, h_9, k1, k2, k3, k4, k5, k6, k7, k8, k_1, k_3, k_5]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [M + M_MAPKK_T + M_MAPKK_Y + M_MKP_T + M_MKP_Y + MpT + MpT_MAPKK + MpT_MKP_T + MpT_MKP_Y + MpY + MpY_MAPKK + MpY_MKP_T + MpY_MKP_Y + Mpp + Mpp_MKP_T + Mpp_MKP_Y, MAPKK + M_MAPKK_T + M_MAPKK_Y + MpT_MAPKK + MpY_MAPKK, MKP + M_MKP_T + M_MKP_Y + MpT_MKP_T + MpT_MKP_Y + MpY_MKP_T + MpY_MKP_Y + Mpp_MKP_T + Mpp_MKP_Y, h1, h10, h11, h12, h2, h3, h4, h5, h6, h7, h8, h9, h_1, h_10, h_12, h_3, h_4, h_6, h_7, h_9, k1, k2, k3, k4, k5, k6, k7, k8, k_1, k_3, k_5, k_7])]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236

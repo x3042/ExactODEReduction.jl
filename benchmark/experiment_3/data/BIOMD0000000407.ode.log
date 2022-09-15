@@ -57,9 +57,7 @@
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 34-dim subspace in ambient 50-dim
-[ Info: Restricting matrices from size (50, 50) to size (34, 34)
-┌ Warning: Calling myself recursively in restricted subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:136
+[ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 35 matrices of shape (34, 34)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
@@ -78,51 +76,37 @@
 [ Info: Radical is nontrivial, computing the general kernel of radical
 [ Info: 7 dimensional subspace found
 [ Info: found 7-dim subspace in ambient 34-dim
-[ Info: Restricting matrices from size (34, 34) to size (7, 7)
-┌ Warning: Calling myself recursively in restricted subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:136
+[ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 35 matrices of shape (7, 7)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 7-dim
-[ Info: Factorizing matrices from size (7, 7) to size (6, 6)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 35 matrices of shape (6, 6)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 6-dim
-[ Info: Factorizing matrices from size (6, 6) to size (5, 5)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 35 matrices of shape (5, 5)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 5-dim
-[ Info: Factorizing matrices from size (5, 5) to size (4, 4)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 35 matrices of shape (4, 4)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 4-dim
-[ Info: Factorizing matrices from size (4, 4) to size (3, 3)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 35 matrices of shape (3, 3)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 3-dim
-[ Info: Factorizing matrices from size (3, 3) to size (2, 2)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 35 matrices of shape (2, 2)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 2-dim
-[ Info: Factorizing matrices from size (34, 34) to size (27, 27)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 35 matrices of shape (27, 27)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
@@ -138,23 +122,17 @@
 [ Info: Radical is nontrivial, computing the general kernel of radical
 [ Info: 3 dimensional subspace found
 [ Info: found 3-dim subspace in ambient 27-dim
-[ Info: Restricting matrices from size (27, 27) to size (3, 3)
-┌ Warning: Calling myself recursively in restricted subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:136
+[ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 35 matrices of shape (3, 3)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 3-dim
-[ Info: Factorizing matrices from size (3, 3) to size (2, 2)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 35 matrices of shape (2, 2)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 2-dim
-[ Info: Factorizing matrices from size (27, 27) to size (24, 24)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 35 matrices of shape (24, 24)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
@@ -167,9 +145,7 @@
 [ Info: Radical is nontrivial, computing the general kernel of radical
 [ Info: 1 dimensional subspace found
 [ Info: found 1-dim subspace in ambient 24-dim
-[ Info: Factorizing matrices from size (24, 24) to size (23, 23)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 35 matrices of shape (23, 23)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
@@ -182,18 +158,14 @@
 [ Info: Radical is nontrivial, computing the general kernel of radical
 [ Info: 2 dimensional subspace found
 [ Info: found 2-dim subspace in ambient 23-dim
-[ Info: Restricting matrices from size (23, 23) to size (2, 2)
-┌ Warning: Calling myself recursively in restricted subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:136
+[ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 35 matrices of shape (2, 2)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 4
 ┌ Debug: Dimension of the algebra is 4
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
-[ Info: Factorizing matrices from size (23, 23) to size (21, 21)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 35 matrices of shape (21, 21)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
@@ -206,25 +178,19 @@
 [ Info: Radical is nontrivial, computing the general kernel of radical
 [ Info: 1 dimensional subspace found
 [ Info: found 1-dim subspace in ambient 21-dim
-[ Info: Factorizing matrices from size (21, 21) to size (20, 20)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 35 matrices of shape (20, 20)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 ........................................................[ Info: generated a basis for Algebra of dimension 400
 ┌ Debug: Dimension of the algebra is 400
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
-[ Info: Factorizing matrices from size (50, 50) to size (16, 16)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 35 matrices of shape (16, 16)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 11-dim subspace in ambient 16-dim
-[ Info: Restricting matrices from size (16, 16) to size (11, 11)
-┌ Warning: Calling myself recursively in restricted subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:136
+[ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 35 matrices of shape (11, 11)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
@@ -237,60 +203,44 @@
 [ Info: Radical is nontrivial, computing the general kernel of radical
 [ Info: 4 dimensional subspace found
 [ Info: found 4-dim subspace in ambient 11-dim
-[ Info: Restricting matrices from size (11, 11) to size (4, 4)
-┌ Warning: Calling myself recursively in restricted subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:136
+[ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 35 matrices of shape (4, 4)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 4-dim
-[ Info: Factorizing matrices from size (4, 4) to size (3, 3)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 35 matrices of shape (3, 3)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 3-dim
-[ Info: Factorizing matrices from size (3, 3) to size (2, 2)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 35 matrices of shape (2, 2)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 2-dim
-[ Info: Factorizing matrices from size (11, 11) to size (7, 7)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 35 matrices of shape (7, 7)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 ......[ Info: generated a basis for Algebra of dimension 49
 ┌ Debug: Dimension of the algebra is 49
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
-[ Info: Factorizing matrices from size (16, 16) to size (5, 5)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 35 matrices of shape (5, 5)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 5-dim
-[ Info: Factorizing matrices from size (5, 5) to size (4, 4)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 35 matrices of shape (4, 4)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 4-dim
-[ Info: Factorizing matrices from size (4, 4) to size (3, 3)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 35 matrices of shape (3, 3)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 2-dim subspace in ambient 3-dim
-[ Info: Restricting matrices from size (3, 3) to size (2, 2)
-┌ Warning: Calling myself recursively in restricted subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:136
+[ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 35 matrices of shape (2, 2)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
@@ -394,15 +344,5 @@
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 50000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 5167 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
-┌ Debug: Found reductions 
-│   result =
-│    23-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
-│     Dict(:new_system => [0], :new_vars => [A20_mRNA - 189394//151515*IkBa_mRNA])
-│     Dict(:new_system => [0, 0], :new_vars => [A20_mRNA - 189394//151515*IkBa_mRNA, FADD - 30944//197531*pCasp8])
-│     Dict(:new_system => [0, 0, 0], :new_vars => [A20_mRNA - 189394//151515*IkBa_mRNA, FADD - 30944//197531*pCasp8, FLIP_mRNA - 11//10*IkBa_mRNA])
-│     Dict(:new_system => [0, 0, 0, 0], :new_vars => [A20_mRNA - 189394//151515*IkBa_mRNA, FADD - 30944//197531*pCasp8, FLIP_mRNA - 11//10*IkBa_mRNA, I])
-│     ⋮
-│     Dict(:new_system => [30303//2000000*y2 + 3//312500*y11, 94697//2500000000*y20, 1//1000*y4 + 166603//100000000000*y11, 520833//1000000*y3*y7, 1//64*y7*y44 + 1//1000*y42, 3//320*y5*y45, 1//1000*y4 + 1//640*y6*y46 + 3//10*y28 + 9//20*y31, 967//31250000*y11, 687273//100000000*y10 + 112451//50000000000*y11, 333333//10000000000*y20  …  1//160*y1*y25 + 427827//100000000*y37*y39, 917//31250000*y11, 1//160*y1*y25 + 1033//31250000*y11 + 227//200000*y32, 24133//31250000*y11 + 21//20000*y42 + 506061//10000000*y43, 5//8*y5*y41, 333333//10000000000*y20, 493827//10000000000*y11, 197531//50000000000*y11, 197531//1000000000*y11, 0], :new_vars => [A20, A20_mRNA, BAR, BAR_Casp8, Casp3, Casp6, Casp8, FADD, FLIP, FLIP_mRNA  …  TNF_TNFR_TRADD, TRADD, TRAF2, XIAP, XIAP_Casp3, XIAP_mRNA, pCasp3, pCasp6, pCasp8, source])
-│     Dict(:new_system => [30303//2000000*y2 + 3//312500*y11, 94697//2500000000*y20, 1//1000*y4 + 166603//100000000000*y11, 520833//1000000*y3*y7, 1//64*y7*y45 + 1//1000*y43, 3//320*y5*y46, 1//1000*y4 + 1//640*y6*y47 + 3//10*y29 + 9//20*y32, 967//31250000*y11, 687273//100000000*y10 + 112451//50000000000*y11, 333333//10000000000*y20  …  1//160*y1*y25 + 427827//100000000*y38*y40, 917//31250000*y11, 1//160*y1*y25 + 1033//31250000*y11 + 227//200000*y33, 24133//31250000*y11 + 21//20000*y43 + 506061//10000000*y44, 5//8*y5*y42, 333333//10000000000*y20, 493827//10000000000*y11, 197531//50000000000*y11, 197531//1000000000*y11, 0], :new_vars => [A20, A20_mRNA, BAR, BAR_Casp8, Casp3, Casp6, Casp8, FADD, FLIP, FLIP_mRNA  …  TNF_TNFR_TRADD, TRADD, TRAF2, XIAP, XIAP_Casp3, XIAP_mRNA, pCasp3, pCasp6, pCasp8, source])
-│     Dict(:new_system => [30303//2000000*y2 + 3//312500*y11, 94697//2500000000*y20, 1//1000*y4 + 166603//100000000000*y11, 520833//1000000*y3*y7, 1//64*y7*y46 + 1//1000*y44, 3//320*y5*y47, 1//1000*y4 + 1//640*y6*y48 + 3//10*y30 + 9//20*y33, 967//31250000*y11, 687273//100000000*y10 + 112451//50000000000*y11, 333333//10000000000*y20  …  1//160*y1*y26 + 427827//100000000*y39*y41, 917//31250000*y11, 1//160*y1*y26 + 1033//31250000*y11 + 227//200000*y34, 24133//31250000*y11 + 21//20000*y44 + 506061//10000000*y45, 5//8*y5*y43, 333333//10000000000*y20, 493827//10000000000*y11, 197531//50000000000*y11, 197531//1000000000*y11, 0], :new_vars => [A20, A20_mRNA, BAR, BAR_Casp8, Casp3, Casp6, Casp8, FADD, FLIP, FLIP_mRNA  …  TNF_TNFR_TRADD, TRADD, TRAF2, XIAP, XIAP_Casp3, XIAP_mRNA, pCasp3, pCasp6, pCasp8, source])
+┌ Debug: Found reductions Dict{Symbol, Vector{fmpq_mpoly}}[Dict(:new_system => [0], :new_vars => [A20_mRNA - 189394//151515*IkBa_mRNA]), Dict(:new_system => [0, 0], :new_vars => [A20_mRNA - 189394//151515*IkBa_mRNA, FADD - 30944//197531*pCasp8]), Dict(:new_system => [0, 0, 0], :new_vars => [A20_mRNA - 189394//151515*IkBa_mRNA, FADD - 30944//197531*pCasp8, FLIP_mRNA - 11//10*IkBa_mRNA]), Dict(:new_system => [0, 0, 0, 0], :new_vars => [A20_mRNA - 189394//151515*IkBa_mRNA, FADD - 30944//197531*pCasp8, FLIP_mRNA - 11//10*IkBa_mRNA, I]), Dict(:new_system => [0, 0, 0, 0, 0], :new_vars => [A20_mRNA - 189394//151515*IkBa_mRNA, FADD - 30944//197531*pCasp8, FLIP_mRNA - 11//10*IkBa_mRNA, I, RIP - TNFRCint2 - 20256//197531*pCasp8]), Dict(:new_system => [0, 0, 0, 0, 0, 0], :new_vars => [A20_mRNA - 189394//151515*IkBa_mRNA, FADD - 30944//197531*pCasp8, FLIP_mRNA - 11//10*IkBa_mRNA, I, RIP - TNFRCint2 - 20256//197531*pCasp8, TRADD - 29344//197531*pCasp8]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0], :new_vars => [A20_mRNA - 189394//151515*IkBa_mRNA, FADD - 30944//197531*pCasp8, FLIP_mRNA - 11//10*IkBa_mRNA, I, RIP - TNFRCint2 - 20256//197531*pCasp8, TRADD - 29344//197531*pCasp8, source]), Dict(:new_system => [30303//2000000*y2 - 94697//5500000*y4 + 7495234853//1890000750000000*y5, 0, 0, 0, 0, 0, 0, 0], :new_vars => [A20 - 18939400//7560003*FLIP, A20_mRNA - 189394//151515*IkBa_mRNA, FADD - 30944//197531*pCasp8, FLIP_mRNA - 11//10*IkBa_mRNA, I, RIP - TNFRCint2 - 20256//197531*pCasp8, TRADD - 29344//197531*pCasp8, source]), Dict(:new_system => [30303//2000000*y2 - 94697//5500000*y4 + 7495234853//1890000750000000*y5, 0, 0, 0, 0, 0, 7//25000000*y9, 0, 0], :new_vars => [A20 - 18939400//7560003*FLIP, A20_mRNA - 189394//151515*IkBa_mRNA, FADD - 30944//197531*pCasp8, FLIP_mRNA - 11//10*IkBa_mRNA, I, RIP - TNFRCint2 - 20256//197531*pCasp8, TNFR, TRADD - 29344//197531*pCasp8, source]), Dict(:new_system => [30303//2000000*y2 - 94697//5500000*y4 + 7495234853//1890000750000000*y5, 0, 967//31250000*y5, 0, 0, 633//31250000*y5, 7//25000000*y10, 917//31250000*y5, 197531//1000000000*y5, 0], :new_vars => [A20 - 18939400//7560003*FLIP, A20_mRNA - 189394//151515*IkBa_mRNA, FADD, FLIP_mRNA - 11//10*IkBa_mRNA, I, RIP - TNFRCint2, TNFR, TRADD, pCasp8, source]), Dict(:new_system => [30303//2000000*y2 - 94697//5500000*y4 + 7495234853//1890000750000000*y5, 0, 967//31250000*y5, 0, 0, 633//31250000*y5, 7//25000000*y11, 1//1000*y7, 917//31250000*y5, 197531//1000000000*y5, 0], :new_vars => [A20 - 18939400//7560003*FLIP, A20_mRNA - 189394//151515*IkBa_mRNA, FADD, FLIP_mRNA - 11//10*IkBa_mRNA, I, RIP - TNFRCint2, TNFR, TNFR_E - TNF_E, TRADD, pCasp8, source]), Dict(:new_system => [30303//2000000*y2 - 94697//5500000*y4 + 7495234853//1890000750000000*y5, 0, 967//31250000*y5, 0, 0, 633//31250000*y5, 7//25000000*y13, 1//1000*y7 + 660377//10000000000*y10, 660377//10000000000*y10, 953471//100000000*y8*y9, 917//31250000*y5, 197531//1000000000*y5, 0], :new_vars => [A20 - 18939400//7560003*FLIP, A20_mRNA - 189394//151515*IkBa_mRNA, FADD, FLIP_mRNA - 11//10*IkBa_mRNA, I, RIP - TNFRCint2, TNFR, TNFR_E, TNF_E, TNF_TNFR_E, TRADD, pCasp8, source]), Dict(:new_system => [30303//2000000*y2 - 94697//5500000*y4 + 7495234853//1890000750000000*y5, 0, 967//31250000*y5, 0, 0, -1//78125*y5 + 427827//100000000*y11*y12, 7//25000000*y14, -1033//31250000*y5 + 427827//100000000*y11*y12, 1//1000*y7 + 660377//10000000000*y11, 660377//10000000000*y11, 953471//100000000*y9*y10, 917//31250000*y5, 197531//1000000000*y5, 0], :new_vars => [A20 - 18939400//7560003*FLIP, A20_mRNA - 189394//151515*IkBa_mRNA, FADD, FLIP_mRNA - 11//10*IkBa_mRNA, I, RIP + TNF_TNFR_TRADD - TRAF2, TNFR, TNFRCint2 + TNF_TNFR_TRADD - TRAF2, TNFR_E, TNF_E, TNF_TNFR_E, TRADD, pCasp8, source]), Dict(:new_system => [30303//2000000*y2 + 3//312500*y6, 94697//2500000000*y15, 967//31250000*y6, 687273//100000000*y5 + 112451//50000000000*y6, 333333//10000000000*y15, 0, 1//15625*y6 + 1//10*y8, 375//4*y7*y18 + 1//32*y7*y22, 32197//12500000*y10 + 606061//10000000*y13, 1//200*y9, 5//4*y9*y14 + 30303//2000000*y12, 3587//2500*y10*y15, 30303//1000000000*y15, 1//625000*y6 + 104167//1000000*y8*y11, 1//80*y14, 633//31250000*y6 + 227//200000*y25, 7//25000000*y34, 488281//5000000*y16*y30*y32, 3//10*y21 + 1//2000*y24, 5//16*y4*y19, 5//16*y4*y23 + 5//16*y20*y33, 488281//50000000*y16*y21*y32, 1//32*y19*y33, 13453609//2500000*y3*y26 + 225//8*y23*y33, 227//200000*y18, 227//200000*y25, 1//1000*y17 + 660377//10000000000*y29, 660377//10000000000*y29, 953471//100000000*y27*y28, 1//160*y1*y18 + 427827//100000000*y29*y31, 917//31250000*y6, 1//160*y1*y18 + 1033//31250000*y6 + 227//200000*y25, 197531//1000000000*y6, 0], :new_vars => [A20, A20_mRNA, FADD, FLIP, FLIP_mRNA, I, IKK, IKKa, IkBa, IkBa_N, IkBa_NFkB, IkBa_NFkB_N, IkBa_mRNA, NFkB, NFkB_N, RIP, TNFR, TNFRC1, TNFRC2, TNFRC2_FLIP, TNFRC2_FLIP_pCasp8, TNFRC2_FLIP_pCasp8_RIP_TRAF2, TNFRC2_pCasp8, 900*TNFRC2_pCasp8_pCasp8 + 227*TNFRCint3, TNFRCint1, TNFRCint2, TNFR_E, TNF_E, TNF_TNFR_E, TNF_TNFR_TRADD, TRADD, TRAF2, pCasp8, source]), Dict(:new_system => [30303//2000000*y2 + 3//312500*y6, 94697//2500000000*y15, 967//31250000*y6, 687273//100000000*y5 + 112451//50000000000*y6, 333333//10000000000*y15, 0, 1//15625*y6 + 1//10*y8, 375//4*y7*y18 + 1//32*y7*y22, 32197//12500000*y10 + 606061//10000000*y13, 1//200*y9, 5//4*y9*y14 + 30303//2000000*y12, 3587//2500*y10*y15, 30303//1000000000*y15, 1//625000*y6 + 104167//1000000*y8*y11, 1//80*y14, 633//31250000*y6 + 227//200000*y25, 7//25000000*y35, 488281//5000000*y16*y31*y33, 3//10*y21 + 9//20*y24 + 227//2000*y27, 5//16*y4*y19, 5//16*y4*y23 + 5//16*y20*y34, 488281//50000000*y16*y21*y33, 1//32*y19*y34, 1//32*y23*y34, 227//200000*y18, 227//200000*y25, 59267//2500000*y3*y26, 1//1000*y17 + 660377//10000000000*y30, 660377//10000000000*y30, 953471//100000000*y28*y29, 1//160*y1*y18 + 427827//100000000*y30*y32, 917//31250000*y6, 1//160*y1*y18 + 1033//31250000*y6 + 227//200000*y25, 197531//1000000000*y6, 0], :new_vars => [A20, A20_mRNA, FADD, FLIP, FLIP_mRNA, I, IKK, IKKa, IkBa, IkBa_N, IkBa_NFkB, IkBa_NFkB_N, IkBa_mRNA, NFkB, NFkB_N, RIP, TNFR, TNFRC1, TNFRC2, TNFRC2_FLIP, TNFRC2_FLIP_pCasp8, TNFRC2_FLIP_pCasp8_RIP_TRAF2, TNFRC2_pCasp8, TNFRC2_pCasp8_pCasp8, TNFRCint1, TNFRCint2, TNFRCint3, TNFR_E, TNF_E, TNF_TNFR_E, TNF_TNFR_TRADD, TRADD, TRAF2, pCasp8, source]), Dict(:new_system => [30303//2000000*y2 + 3//312500*y6, 94697//2500000000*y15, 967//31250000*y6, 687273//100000000*y5 + 112451//50000000000*y6, 333333//10000000000*y15, 0, 1//15625*y6 + 1//10*y8, 375//4*y7*y18 + 1//32*y7*y22, 32197//12500000*y10 + 606061//10000000*y13, 1//200*y9, 5//4*y9*y14 + 30303//2000000*y12, 3587//2500*y10*y15, 30303//1000000000*y15, 1//625000*y6 + 104167//1000000*y8*y11, 1//80*y14, 633//31250000*y6 + 227//200000*y25, 7//25000000*y36, 488281//5000000*y16*y31*y33, 3//10*y21 + 9//20*y24 + 227//2000*y27, 5//16*y4*y19, 5//16*y4*y23 + 5//16*y20*y35, 488281//50000000*y16*y21*y33, 1//32*y19*y35, 1//32*y23*y35, 227//200000*y18, 227//200000*y25, 59267//2500000*y3*y26, 1//1000*y17 + 660377//10000000000*y30, 660377//10000000000*y30, 953471//100000000*y28*y29, 1//160*y1*y18 + 427827//100000000*y30*y32, 917//31250000*y6, 1//160*y1*y18 + 1033//31250000*y6 + 227//200000*y25, 333333//10000000000*y15, 197531//1000000000*y6, 0], :new_vars => [A20, A20_mRNA, FADD, FLIP, FLIP_mRNA, I, IKK, IKKa, IkBa, IkBa_N, IkBa_NFkB, IkBa_NFkB_N, IkBa_mRNA, NFkB, NFkB_N, RIP, TNFR, TNFRC1, TNFRC2, TNFRC2_FLIP, TNFRC2_FLIP_pCasp8, TNFRC2_FLIP_pCasp8_RIP_TRAF2, TNFRC2_pCasp8, TNFRC2_pCasp8_pCasp8, TNFRCint1, TNFRCint2, TNFRCint3, TNFR_E, TNF_E, TNF_TNFR_E, TNF_TNFR_TRADD, TRADD, TRAF2, XIAP_mRNA, pCasp8, source]), Dict(:new_system => [30303//2000000*y2 + 3//312500*y6, 94697//2500000000*y15, 967//31250000*y6, 687273//100000000*y5 + 112451//50000000000*y6, 333333//10000000000*y15, 0, 1//15625*y6 + 1//10*y8, 375//4*y7*y18 + 1//32*y7*y22, 32197//12500000*y10 + 606061//10000000*y13, 1//200*y9, 5//4*y9*y14 + 30303//2000000*y12, 3587//2500*y10*y15, 30303//1000000000*y15, 1//625000*y6 + 104167//1000000*y8*y11, 1//80*y14, 633//31250000*y6 + 227//200000*y25, 7//25000000*y37, 488281//5000000*y16*y31*y33, 3//10*y21 + 9//20*y24 + 227//2000*y27, 5//16*y4*y19, 5//16*y4*y23 + 5//16*y20*y36, 488281//50000000*y16*y21*y33, 1//32*y19*y36, 1//32*y23*y36, 227//200000*y18, 227//200000*y25, 59267//2500000*y3*y26, 1//1000*y17 + 660377//10000000000*y30, 660377//10000000000*y30, 953471//100000000*y28*y29, 1//160*y1*y18 + 427827//100000000*y30*y32, 917//31250000*y6, 1//160*y1*y18 + 1033//31250000*y6 + 227//200000*y25, 333333//10000000000*y15, 493827//10000000000*y6, 197531//1000000000*y6, 0], :new_vars => [A20, A20_mRNA, FADD, FLIP, FLIP_mRNA, I, IKK, IKKa, IkBa, IkBa_N, IkBa_NFkB, IkBa_NFkB_N, IkBa_mRNA, NFkB, NFkB_N, RIP, TNFR, TNFRC1, TNFRC2, TNFRC2_FLIP, TNFRC2_FLIP_pCasp8, TNFRC2_FLIP_pCasp8_RIP_TRAF2, TNFRC2_pCasp8, TNFRC2_pCasp8_pCasp8, TNFRCint1, TNFRCint2, TNFRCint3, TNFR_E, TNF_E, TNF_TNFR_E, TNF_TNFR_TRADD, TRADD, TRAF2, XIAP_mRNA, pCasp3, pCasp8, source]), Dict(:new_system => [30303//2000000*y2 + 3//312500*y6, 94697//2500000000*y15, 967//31250000*y6, 687273//100000000*y5 + 112451//50000000000*y6, 333333//10000000000*y15, 0, 1//15625*y6 + 1//10*y8, 375//4*y7*y18 + 1//32*y7*y22, 32197//12500000*y10 + 606061//10000000*y13, 1//200*y9, 5//4*y9*y14 + 30303//2000000*y12, 3587//2500*y10*y15, 30303//1000000000*y15, 1//625000*y6 + 104167//1000000*y8*y11, 1//80*y14, 633//31250000*y6 + 227//200000*y25, 7//25000000*y38, 488281//5000000*y16*y31*y33, 3//10*y21 + 9//20*y24 + 227//2000*y27, 5//16*y4*y19, 5//16*y4*y23 + 5//16*y20*y37, 488281//50000000*y16*y21*y33, 1//32*y19*y37, 1//32*y23*y37, 227//200000*y18, 227//200000*y25, 59267//2500000*y3*y26, 1//1000*y17 + 660377//10000000000*y30, 660377//10000000000*y30, 953471//100000000*y28*y29, 1//160*y1*y18 + 427827//100000000*y30*y32, 917//31250000*y6, 1//160*y1*y18 + 1033//31250000*y6 + 227//200000*y25, 333333//10000000000*y15, 493827//10000000000*y6, 197531//50000000000*y6, 197531//1000000000*y6, 0], :new_vars => [A20, A20_mRNA, FADD, FLIP, FLIP_mRNA, I, IKK, IKKa, IkBa, IkBa_N, IkBa_NFkB, IkBa_NFkB_N, IkBa_mRNA, NFkB, NFkB_N, RIP, TNFR, TNFRC1, TNFRC2, TNFRC2_FLIP, TNFRC2_FLIP_pCasp8, TNFRC2_FLIP_pCasp8_RIP_TRAF2, TNFRC2_pCasp8, TNFRC2_pCasp8_pCasp8, TNFRCint1, TNFRCint2, TNFRCint3, TNFR_E, TNF_E, TNF_TNFR_E, TNF_TNFR_TRADD, TRADD, TRAF2, XIAP_mRNA, pCasp3, pCasp6, pCasp8, source]), Dict(:new_system => [30303//2000000*y2 + 3//312500*y11, 94697//2500000000*y20, 1//1000*y4 + 166603//100000000000*y11, 520833//1000000*y3*y7, 1//64*y7*y42 + 1//1000*y40, 3//320*y5*y43, 1//1000*y4 + 1//640*y6*y44 + 3//10*y26 + 9//20*y29, 967//31250000*y11, 687273//100000000*y10 + 112451//50000000000*y11, 333333//10000000000*y20, 0, 1//15625*y11 + 1//10*y13, 375//4*y12*y23 + 1//32*y12*y27, 32197//12500000*y15 + 606061//10000000*y18, 1//200*y14, 5//4*y14*y19 + 30303//2000000*y17, 3587//2500*y15*y20, 30303//1000000000*y20, 1//625000*y11 + 104167//1000000*y13*y16, 1//80*y19, 633//31250000*y11 + 227//200000*y30, 7//25000000*y45, 488281//5000000*y21*y36*y38, 3//10*y26 + 9//20*y29 + 227//2000*y32, 5//16*y9*y24, 5//16*y9*y28 + 5//16*y25*y44, 488281//50000000*y21*y26*y38, 1//32*y24*y44, 1//32*y28*y44, 227//200000*y23, 227//200000*y30, 59267//2500000*y8*y31, 1//1000*y22 + 660377//10000000000*y35, 660377//10000000000*y35, 953471//100000000*y33*y34, 1//160*y1*y23 + 427827//100000000*y35*y37, 917//31250000*y11, 1//160*y1*y23 + 1033//31250000*y11 + 227//200000*y30, 24133//31250000*y11 + 21//20000*y40 + 506061//10000000*y41, 5//8*y5*y39, 333333//10000000000*y20, 493827//10000000000*y11, 197531//50000000000*y11, 197531//1000000000*y11, 0], :new_vars => [A20, A20_mRNA, BAR, BAR_Casp8, Casp3, Casp6, Casp8, FADD, FLIP, FLIP_mRNA, I, IKK, IKKa, IkBa, IkBa_N, IkBa_NFkB, IkBa_NFkB_N, IkBa_mRNA, NFkB, NFkB_N, RIP, TNFR, TNFRC1, TNFRC2, TNFRC2_FLIP, TNFRC2_FLIP_pCasp8, TNFRC2_FLIP_pCasp8_RIP_TRAF2, TNFRC2_pCasp8, TNFRC2_pCasp8_pCasp8, TNFRCint1, TNFRCint2, TNFRCint3, TNFR_E, TNF_E, TNF_TNFR_E, TNF_TNFR_TRADD, TRADD, TRAF2, XIAP, XIAP_Casp3, XIAP_mRNA, pCasp3, pCasp6, pCasp8, source]), Dict(:new_system => [30303//2000000*y2 + 3//312500*y11, 94697//2500000000*y20, 1//1000*y4 + 166603//100000000000*y11, 520833//1000000*y3*y7, 1//64*y7*y43 + 1//1000*y41, 3//320*y5*y44, 1//1000*y4 + 1//640*y6*y45 + 3//10*y27 + 9//20*y30, 967//31250000*y11, 687273//100000000*y10 + 112451//50000000000*y11, 333333//10000000000*y20, 0, 1//15625*y11 + 1//10*y13, 375//4*y12*y24 + 1//32*y12*y28, 32197//12500000*y15 + 606061//10000000*y18, 1//200*y14, 5//4*y14*y19 + 30303//2000000*y17, 3587//2500*y15*y20, 30303//1000000000*y20, 1//625000*y11 + 104167//1000000*y13*y16, 1//80*y19, -482253//50000000000*y11, 633//31250000*y11 + 227//200000*y31, 7//25000000*y46, 488281//5000000*y22*y37*y39, 3//10*y27 + 9//20*y30 + 227//2000*y33, 5//16*y9*y25, 5//16*y9*y29 + 5//16*y26*y45, 488281//50000000*y22*y27*y39, 1//32*y25*y45, 1//32*y29*y45, 227//200000*y24, 227//200000*y31, 59267//2500000*y8*y32, 1//1000*y23 + 660377//10000000000*y36, 660377//10000000000*y36, 953471//100000000*y34*y35, 1//160*y1*y24 + 427827//100000000*y36*y38, 917//31250000*y11, 1//160*y1*y24 + 1033//31250000*y11 + 227//200000*y31, 24133//31250000*y11 + 21//20000*y41 + 506061//10000000*y42, 5//8*y5*y40, 333333//10000000000*y20, 493827//10000000000*y11, 197531//50000000000*y11, 197531//1000000000*y11, 0], :new_vars => [A20, A20_mRNA, BAR, BAR_Casp8, Casp3, Casp6, Casp8, FADD, FLIP, FLIP_mRNA, I, IKK, IKKa, IkBa, IkBa_N, IkBa_NFkB, IkBa_NFkB_N, IkBa_mRNA, NFkB, NFkB_N, PARP, RIP, TNFR, TNFRC1, TNFRC2, TNFRC2_FLIP, TNFRC2_FLIP_pCasp8, TNFRC2_FLIP_pCasp8_RIP_TRAF2, TNFRC2_pCasp8, TNFRC2_pCasp8_pCasp8, TNFRCint1, TNFRCint2, TNFRCint3, TNFR_E, TNF_E, TNF_TNFR_E, TNF_TNFR_TRADD, TRADD, TRAF2, XIAP, XIAP_Casp3, XIAP_mRNA, pCasp3, pCasp6, pCasp8, source]), Dict(:new_system => [30303//2000000*y2 + 3//312500*y11, 94697//2500000000*y20, 1//1000*y4 + 166603//100000000000*y11, 520833//1000000*y3*y7, 1//64*y7*y44 + 1//1000*y42, 3//320*y5*y45, 1//1000*y4 + 1//640*y6*y46 + 3//10*y28 + 9//20*y31, 967//31250000*y11, 687273//100000000*y10 + 112451//50000000000*y11, 333333//10000000000*y20, 0, 1//15625*y11 + 1//10*y13, 375//4*y12*y25 + 1//32*y12*y29, 32197//12500000*y15 + 606061//10000000*y18, 1//200*y14, 5//4*y14*y19 + 30303//2000000*y17, 3587//2500*y15*y20, 30303//1000000000*y20, 1//625000*y11 + 104167//1000000*y13*y16, 1//80*y19, -482253//50000000000*y11, 104167//1000000*y13*y16, 633//31250000*y11 + 227//200000*y32, 7//25000000*y47, 488281//5000000*y23*y38*y40, 3//10*y28 + 9//20*y31 + 227//2000*y34, 5//16*y9*y26, 5//16*y9*y30 + 5//16*y27*y46, 488281//50000000*y23*y28*y40, 1//32*y26*y46, 1//32*y30*y46, 227//200000*y25, 227//200000*y32, 59267//2500000*y8*y33, 1//1000*y24 + 660377//10000000000*y37, 660377//10000000000*y37, 953471//100000000*y35*y36, 1//160*y1*y25 + 427827//100000000*y37*y39, 917//31250000*y11, 1//160*y1*y25 + 1033//31250000*y11 + 227//200000*y32, 24133//31250000*y11 + 21//20000*y42 + 506061//10000000*y43, 5//8*y5*y41, 333333//10000000000*y20, 493827//10000000000*y11, 197531//50000000000*y11, 197531//1000000000*y11, 0], :new_vars => [A20, A20_mRNA, BAR, BAR_Casp8, Casp3, Casp6, Casp8, FADD, FLIP, FLIP_mRNA, I, IKK, IKKa, IkBa, IkBa_N, IkBa_NFkB, IkBa_NFkB_N, IkBa_mRNA, NFkB, NFkB_N, PARP, PIkBa, RIP, TNFR, TNFRC1, TNFRC2, TNFRC2_FLIP, TNFRC2_FLIP_pCasp8, TNFRC2_FLIP_pCasp8_RIP_TRAF2, TNFRC2_pCasp8, TNFRC2_pCasp8_pCasp8, TNFRCint1, TNFRCint2, TNFRCint3, TNFR_E, TNF_E, TNF_TNFR_E, TNF_TNFR_TRADD, TRADD, TRAF2, XIAP, XIAP_Casp3, XIAP_mRNA, pCasp3, pCasp6, pCasp8, source]), Dict(:new_system => [30303//2000000*y2 + 3//312500*y11, 94697//2500000000*y20, 1//1000*y4 + 166603//100000000000*y11, 520833//1000000*y3*y7, 1//64*y7*y45 + 1//1000*y43, 3//320*y5*y46, 1//1000*y4 + 1//640*y6*y47 + 3//10*y29 + 9//20*y32, 967//31250000*y11, 687273//100000000*y10 + 112451//50000000000*y11, 333333//10000000000*y20, 0, 1//15625*y11 + 1//10*y13, 375//4*y12*y25 + 1//32*y12*y30, 32197//12500000*y15 + 606061//10000000*y18, 1//200*y14, 5//4*y14*y19 + 30303//2000000*y17, 3587//2500*y15*y20, 30303//1000000000*y20, 1//625000*y11 + 104167//1000000*y13*y16, 1//80*y19, -482253//50000000000*y11, 104167//1000000*y13*y16, 633//31250000*y11 + 227//200000*y33, 7//25000000*y48, 488281//5000000*y23*y39*y41, 3//10*y29 + 9//20*y32 + 227//2000*y35, 5//16*y9*y26, 15501//16*y5*y21 + 15625*y9*y27, 5//16*y9*y31 + 5//16*y27*y47, 488281//50000000*y23*y29*y41, 1//32*y26*y47, 1//32*y31*y47, 227//200000*y25, 227//200000*y33, 59267//2500000*y8*y34, 1//1000*y24 + 660377//10000000000*y38, 660377//10000000000*y38, 953471//100000000*y36*y37, 1//160*y1*y25 + 427827//100000000*y38*y40, 917//31250000*y11, 1//160*y1*y25 + 1033//31250000*y11 + 227//200000*y33, 24133//31250000*y11 + 21//20000*y43 + 506061//10000000*y44, 5//8*y5*y42, 333333//10000000000*y20, 493827//10000000000*y11, 197531//50000000000*y11, 197531//1000000000*y11, 0], :new_vars => [A20, A20_mRNA, BAR, BAR_Casp8, Casp3, Casp6, Casp8, FADD, FLIP, FLIP_mRNA, I, IKK, IKKa, IkBa, IkBa_N, IkBa_NFkB, IkBa_NFkB_N, IkBa_mRNA, NFkB, NFkB_N, PARP, PIkBa, RIP, TNFR, TNFRC1, TNFRC2, TNFRC2_FLIP, 50000*TNFRC2_FLIP_FLIP + 5167*cPARP, TNFRC2_FLIP_pCasp8, TNFRC2_FLIP_pCasp8_RIP_TRAF2, TNFRC2_pCasp8, TNFRC2_pCasp8_pCasp8, TNFRCint1, TNFRCint2, TNFRCint3, TNFR_E, TNF_E, TNF_TNFR_E, TNF_TNFR_TRADD, TRADD, TRAF2, XIAP, XIAP_Casp3, XIAP_mRNA, pCasp3, pCasp6, pCasp8, source]), Dict(:new_system => [30303//2000000*y2 + 3//312500*y11, 94697//2500000000*y20, 1//1000*y4 + 166603//100000000000*y11, 520833//1000000*y3*y7, 1//64*y7*y46 + 1//1000*y44, 3//320*y5*y47, 1//1000*y4 + 1//640*y6*y48 + 3//10*y30 + 9//20*y33, 967//31250000*y11, 687273//100000000*y10 + 112451//50000000000*y11, 333333//10000000000*y20, 0, 1//15625*y11 + 1//10*y13, 375//4*y12*y26 + 1//32*y12*y31, 32197//12500000*y15 + 606061//10000000*y18, 1//200*y14, 5//4*y14*y19 + 30303//2000000*y17, 3587//2500*y15*y20, 30303//1000000000*y20, 1//625000*y11 + 104167//1000000*y13*y16, 1//80*y19, -482253//50000000000*y11, 104167//1000000*y13*y16, 633//31250000*y11 + 227//200000*y34, -235249//500000000*y2 - 36169//625000000*y4 - 36169//625000000*y5 - 36169//625000000*y6 - 36169//625000000*y7 - 10359//62500000*y10 + 482253//50000000000*y11 - 1//10000*y13 - 77011//50000000*y14 - 1//10000*y15 - 1//10000*y16 - 1//10000*y17 - 394201//1000000000*y18 - 1//10000*y20 - 36169//6250000000*y21 - 115517//10000000*y22 - 7//125000*y26 - 7//125000*y27 - 7//125000*y28 - 7//6250000000*y29 - 7//125000*y30 - 7//125000*y31 - 7//125000*y32 - 7//125000*y33 - 7//125000*y37 - 7//125000*y39 - 147//6250*y40 - 36169//625000000*y44 - 104931//1000000000*y45, 7//25000000*y49, 488281//5000000*y23*y40*y42, 3//10*y30 + 9//20*y33 + 227//2000*y36, 5//16*y9*y27, 15501//16*y5*y21 + 15625*y9*y28, 5//16*y9*y32 + 5//16*y28*y48, 488281//50000000*y23*y30*y42, 1//32*y27*y48, 1//32*y32*y48, 227//200000*y26, 227//200000*y34, 59267//2500000*y8*y35, 1//1000*y25 + 660377//10000000000*y39, 660377//10000000000*y39, 953471//100000000*y37*y38, 1//160*y1*y26 + 427827//100000000*y39*y41, 917//31250000*y11, 1//160*y1*y26 + 1033//31250000*y11 + 227//200000*y34, 24133//31250000*y11 + 21//20000*y44 + 506061//10000000*y45, 5//8*y5*y43, 333333//10000000000*y20, 493827//10000000000*y11, 197531//50000000000*y11, 197531//1000000000*y11, 0], :new_vars => [A20, A20_mRNA, BAR, BAR_Casp8, Casp3, Casp6, Casp8, FADD, FLIP, FLIP_mRNA, I, IKK, IKKa, IkBa, IkBa_N, IkBa_NFkB, IkBa_NFkB_N, IkBa_mRNA, NFkB, NFkB_N, PARP, PIkBa, RIP, SINK, TNFR, TNFRC1, TNFRC2, TNFRC2_FLIP, 50000*TNFRC2_FLIP_FLIP + 5167*cPARP, TNFRC2_FLIP_pCasp8, TNFRC2_FLIP_pCasp8_RIP_TRAF2, TNFRC2_pCasp8, TNFRC2_pCasp8_pCasp8, TNFRCint1, TNFRCint2, TNFRCint3, TNFR_E, TNF_E, TNF_TNFR_E, TNF_TNFR_TRADD, TRADD, TRAF2, XIAP, XIAP_Casp3, XIAP_mRNA, pCasp3, pCasp6, pCasp8, source])]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236

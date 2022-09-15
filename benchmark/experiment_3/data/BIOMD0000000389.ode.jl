@@ -191,7 +191,7 @@ new_system =
 ]
 
 Interesting
-new_vars = fmpq_mpoly[ADP, ATP, CO2, E4P, EE, GG, HeP, HePc, II, PGA, Pi, Pic, Ru5P, RuBP, S7P, Suc - SucV, TP, TPGA, TPc, phi, sD, v_15]
+new_vars = fmpq_mpoly[ADP, ATP, CO2, E4P, EE, GG, HeP, HePc, II, PGA, Pi, Pic, Ru5P, RuBP, S7P, Suc + SucV, TP, TPGA, TPc, phi, sD, v_15]
 new_system = 
 [
 1//500*y2*y7 + 207//10000*y2*y10 + 31//1000*y2*y13,
@@ -209,7 +209,7 @@ new_system =
 31//100*y15 + 31//5*y17*y18,
 31//1000*y2*y13,
 31//10*y4*y17,
-y5*y20 + y9*y22 - y16*y21,
+y5*y20 + y9*y22 + y16*y21,
 207//10000*y2*y10,
 31//1000*y7 + 31//100*y15,
 1//2*y12*y17,

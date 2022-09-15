@@ -18,9 +18,7 @@
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 5-dim subspace in ambient 11-dim
-[ Info: Restricting matrices from size (11, 11) to size (5, 5)
-┌ Warning: Calling myself recursively in restricted subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:136
+[ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 4 matrices of shape (5, 5)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
@@ -33,25 +31,19 @@
 [ Info: Radical is nontrivial, computing the general kernel of radical
 [ Info: 4 dimensional subspace found
 [ Info: found 4-dim subspace in ambient 5-dim
-[ Info: Restricting matrices from size (5, 5) to size (4, 4)
-┌ Warning: Calling myself recursively in restricted subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:136
+[ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 4 matrices of shape (4, 4)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 16
 ┌ Debug: Dimension of the algebra is 16
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
-[ Info: Factorizing matrices from size (11, 11) to size (6, 6)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 4 matrices of shape (6, 6)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 2-dim subspace in ambient 6-dim
-[ Info: Restricting matrices from size (6, 6) to size (2, 2)
-┌ Warning: Calling myself recursively in restricted subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:136
+[ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 4 matrices of shape (2, 2)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
@@ -75,23 +67,17 @@
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/radical.jl:276
 [ Info: 1 dimensional subspace found
 [ Info: found 1-dim subspace in ambient 2-dim
-[ Info: Factorizing matrices from size (6, 6) to size (4, 4)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 4 matrices of shape (4, 4)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 4-dim
-[ Info: Factorizing matrices from size (4, 4) to size (3, 3)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 4 matrices of shape (3, 3)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 3-dim
-[ Info: Factorizing matrices from size (3, 3) to size (2, 2)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 4 matrices of shape (2, 2)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
@@ -124,14 +110,5 @@
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [1 0 0 0 0 0 0 0 0 0 0; 0 1 0 0 0 0 0 0 0 0 0; 0 0 1 0 0 0 0 0 0 0 0; 0 0 0 1 0 0 0 0 0 0 0; 0 0 0 0 1 0 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0 0; 0 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 0 1 0 0 0; 0 0 0 0 0 0 0 0 0 1 0; 0 0 0 0 0 0 0 0 0 0 1]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
-┌ Debug: Found reductions 
-│   result =
-│    7-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
-│     Dict(:new_system => [-25493//100000*y1 + 9//50000*y3*y4, -3//20000*y2*y4 - 1331//100000*y2 + 1//100*y3, 509//100000*y2 - 9//50000*y3*y4 - 1047//100000*y3, 5567//50000*y1 - 3//20000*y2*y4 - 9//50000*y3*y4], :new_vars => [Amadori, Fru, Glu, lys_R])
-│     Dict(:new_system => [-6257//50000*y1 + 14359//100000*y2 + 3//20000*y3*y5, -25493//100000*y2 + 9//50000*y4*y5, -3//20000*y3*y5 - 1331//100000*y3 + 1//100*y4, 509//100000*y3 - 9//50000*y4*y5 - 1047//100000*y4, 5567//50000*y2 - 3//20000*y3*y5 - 9//50000*y4*y5], :new_vars => [AMP, Amadori, Fru, Glu, lys_R])
-│     Dict(:new_system => [-6257//50000*y1 + 14359//100000*y3 + 3//20000*y4*y6, 5567//50000*y3 + 89//12500*y4, -25493//100000*y3 + 9//50000*y5*y6, -3//20000*y4*y6 - 1331//100000*y4 + 1//100*y5, 509//100000*y4 - 9//50000*y5*y6 - 1047//100000*y5, 5567//50000*y3 - 3//20000*y4*y6 - 9//50000*y5*y6], :new_vars => [AMP, Acetic_acid + Triose, Amadori, Fru, Glu, lys_R])
-│     Dict(:new_system => [-6257//50000*y1 + 14359//100000*y3 + 3//20000*y4*y7, 5567//50000*y3 + 439//100000*y6, -25493//100000*y3 + 9//50000*y5*y7, -3//20000*y4*y7 - 1331//100000*y4 + 1//100*y5, 509//100000*y4 - 9//50000*y5*y7 - 1047//100000*y5, 89//12500*y4 - 439//100000*y6, 5567//50000*y3 - 3//20000*y4*y7 - 9//50000*y5*y7], :new_vars => [AMP, Acetic_acid, Amadori, Fru, Glu, Triose, lys_R])
-│     Dict(:new_system => [-6257//50000*y1 + 14359//100000*y3 + 3//20000*y5*y8, 5567//50000*y3 + 439//100000*y7, -25493//100000*y3 + 9//50000*y6*y8, 11//10000*y5 + 47//100000*y6, -3//20000*y5*y8 - 1331//100000*y5 + 1//100*y6, 509//100000*y5 - 9//50000*y6*y8 - 1047//100000*y6, 89//12500*y5 - 439//100000*y7, 5567//50000*y3 - 3//20000*y5*y8 - 9//50000*y6*y8], :new_vars => [AMP, Acetic_acid, Amadori, C5, Fru, Glu, Triose, lys_R])
-│     Dict(:new_system => [-6257//50000*y1 + 14359//100000*y3 + 3//20000*y6*y9, 5567//50000*y3 + 439//100000*y8, -25493//100000*y3 + 9//50000*y7*y9, 11//10000*y6 + 47//100000*y7, 439//100000*y8, -3//20000*y6*y9 - 1331//100000*y6 + 1//100*y7, 509//100000*y6 - 9//50000*y7*y9 - 1047//100000*y7, 89//12500*y6 - 439//100000*y8, 5567//50000*y3 - 3//20000*y6*y9 - 9//50000*y7*y9], :new_vars => [AMP, Acetic_acid, Amadori, C5, Cn, Fru, Glu, Triose, lys_R])
-│     Dict(:new_system => [-6257//50000*y1 + 14359//100000*y3 + 3//20000*y7*y10, 5567//50000*y3 + 439//100000*y9, -25493//100000*y3 + 9//50000*y8*y10, 11//10000*y7 + 47//100000*y8, 439//100000*y9, 11//10000*y7 + 47//100000*y8, -3//20000*y7*y10 - 1331//100000*y7 + 1//100*y8, 509//100000*y7 - 9//50000*y8*y10 - 1047//100000*y8, 89//12500*y7 - 439//100000*y9, 5567//50000*y3 - 3//20000*y7*y10 - 9//50000*y8*y10], :new_vars => [AMP, Acetic_acid, Amadori, C5, Cn, Formic_acid, Fru, Glu, Triose, lys_R])
+┌ Debug: Found reductions Dict{Symbol, Vector{fmpq_mpoly}}[Dict(:new_system => [-25493//100000*y1 + 9//50000*y3*y4, -3//20000*y2*y4 - 1331//100000*y2 + 1//100*y3, 509//100000*y2 - 9//50000*y3*y4 - 1047//100000*y3, 5567//50000*y1 - 3//20000*y2*y4 - 9//50000*y3*y4], :new_vars => [Amadori, Fru, Glu, lys_R]), Dict(:new_system => [-6257//50000*y1 + 14359//100000*y2 + 3//20000*y3*y5, -25493//100000*y2 + 9//50000*y4*y5, -3//20000*y3*y5 - 1331//100000*y3 + 1//100*y4, 509//100000*y3 - 9//50000*y4*y5 - 1047//100000*y4, 5567//50000*y2 - 3//20000*y3*y5 - 9//50000*y4*y5], :new_vars => [AMP, Amadori, Fru, Glu, lys_R]), Dict(:new_system => [-6257//50000*y1 + 14359//100000*y3 + 3//20000*y4*y6, 5567//50000*y3 + 89//12500*y4, -25493//100000*y3 + 9//50000*y5*y6, -3//20000*y4*y6 - 1331//100000*y4 + 1//100*y5, 509//100000*y4 - 9//50000*y5*y6 - 1047//100000*y5, 5567//50000*y3 - 3//20000*y4*y6 - 9//50000*y5*y6], :new_vars => [AMP, Acetic_acid + Triose, Amadori, Fru, Glu, lys_R]), Dict(:new_system => [-6257//50000*y1 + 14359//100000*y3 + 3//20000*y4*y7, 5567//50000*y3 + 439//100000*y6, -25493//100000*y3 + 9//50000*y5*y7, -3//20000*y4*y7 - 1331//100000*y4 + 1//100*y5, 509//100000*y4 - 9//50000*y5*y7 - 1047//100000*y5, 89//12500*y4 - 439//100000*y6, 5567//50000*y3 - 3//20000*y4*y7 - 9//50000*y5*y7], :new_vars => [AMP, Acetic_acid, Amadori, Fru, Glu, Triose, lys_R]), Dict(:new_system => [-6257//50000*y1 + 14359//100000*y3 + 3//20000*y5*y8, 5567//50000*y3 + 439//100000*y7, -25493//100000*y3 + 9//50000*y6*y8, 11//10000*y5 + 47//100000*y6, -3//20000*y5*y8 - 1331//100000*y5 + 1//100*y6, 509//100000*y5 - 9//50000*y6*y8 - 1047//100000*y6, 89//12500*y5 - 439//100000*y7, 5567//50000*y3 - 3//20000*y5*y8 - 9//50000*y6*y8], :new_vars => [AMP, Acetic_acid, Amadori, C5, Fru, Glu, Triose, lys_R]), Dict(:new_system => [-6257//50000*y1 + 14359//100000*y3 + 3//20000*y6*y9, 5567//50000*y3 + 439//100000*y8, -25493//100000*y3 + 9//50000*y7*y9, 11//10000*y6 + 47//100000*y7, 439//100000*y8, -3//20000*y6*y9 - 1331//100000*y6 + 1//100*y7, 509//100000*y6 - 9//50000*y7*y9 - 1047//100000*y7, 89//12500*y6 - 439//100000*y8, 5567//50000*y3 - 3//20000*y6*y9 - 9//50000*y7*y9], :new_vars => [AMP, Acetic_acid, Amadori, C5, Cn, Fru, Glu, Triose, lys_R]), Dict(:new_system => [-6257//50000*y1 + 14359//100000*y3 + 3//20000*y7*y10, 5567//50000*y3 + 439//100000*y9, -25493//100000*y3 + 9//50000*y8*y10, 11//10000*y7 + 47//100000*y8, 439//100000*y9, 11//10000*y7 + 47//100000*y8, -3//20000*y7*y10 - 1331//100000*y7 + 1//100*y8, 509//100000*y7 - 9//50000*y8*y10 - 1047//100000*y8, 89//12500*y7 - 439//100000*y9, 5567//50000*y3 - 3//20000*y7*y10 - 9//50000*y8*y10], :new_vars => [AMP, Acetic_acid, Amadori, C5, Cn, Formic_acid, Fru, Glu, Triose, lys_R])]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236

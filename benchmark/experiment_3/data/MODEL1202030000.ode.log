@@ -23,6 +23,5 @@
 .......[ Info: generated a basis for Algebra of dimension 196
 ┌ Debug: Dimension of the algebra is 196
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
-┌ Debug: Found reductions 
-│   result = Dict{Symbol, Vector{fmpq_mpoly}}[]
+┌ Debug: Found reductions Dict{Symbol, Vector{fmpq_mpoly}}[]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236

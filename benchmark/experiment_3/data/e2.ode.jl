@@ -147,21 +147,21 @@ y1*y3*y11 - y5*y7 - y5*y9,
 ]
 
 Interesting
-new_vars = fmpq_mpoly[S0, S1, S10 + S3 + S6, S12 + S3 + S8, S13, S15 + S6 + S9, S17, S2, S3 + S4, S5, S6 + S7, S8 + S9, kCatE, kCatF, kOffE, kOffF, kOnE, kOnF]
+new_vars = fmpq_mpoly[S0, S1, S10 + S11, S12 + S14, S13, S15 + S16, S17, S2, S3 + S4, S5, S6 + S7, S8 + S9, kCatE, kCatF, kOffE, kOffF, kOnE, kOnF]
 new_system = 
 [
--y1*y3*y17 - 2*y1*y8*y17 + y4*y13 + y4*y15 + 2*y10*y13 + 2*y10*y15,
--2*y2*y5*y18 - y2*y6*y18 - y2*y12*y18 + y3*y14 + y3*y16 + y4*y14 + y4*y16 + y6*y14 + y6*y16 + 2*y7*y14 + 2*y7*y16 - 2*y9*y14 - 2*y9*y16 - 2*y11*y14 - 2*y11*y16 - y12*y14 - y12*y16,
--y1*y3*y17 + y1*y8*y17 - y3*y14 + y4*y14 + y6*y14 + y7*y14 - y9*y15 + y10*y15 - y12*y14,
-y1*y8*y17 - y1*y9*y17 - y4*y13 - y4*y15 + y10*y13 + y10*y15,
--2*y2*y5*y18 + y6*y16 - y11*y16 + y12*y13,
-y2*y5*y18 - y2*y6*y18 + y3*y16 + y4*y13 - y6*y16 + y7*y16 - y9*y16 + y10*y13 - y12*y13,
-y2*y6*y18 - y2*y11*y18 - 2*y7*y14 - 2*y7*y16,
--2*y1*y8*y17 + y3*y14 - y9*y14 + y9*y15 - y11*y14,
-2*y1*y8*y17 - y1*y9*y17 + y4*y14 - y9*y13 - y9*y14 - y9*y15 + 2*y10*y15 - y12*y14,
+-y1*y3*y17 - 2*y1*y8*y17 - y1*y9*y17 - y1*y11*y17 + y4*y13 + y4*y15 + y9*y13 + y9*y15 + 2*y10*y13 + 2*y10*y15 + y12*y13 + y12*y15,
+-2*y2*y5*y18 - y2*y6*y18 - y2*y11*y18 - y2*y12*y18 + y3*y14 + y3*y16 + y4*y14 + y4*y16 + y6*y14 + y6*y16 + 2*y7*y14 + 2*y7*y16,
+-y1*y3*y17 + y2*y11*y18 - y3*y14 - y3*y16 + y4*y15 + 2*y7*y14,
+y1*y3*y17 + y2*y12*y18 - y4*y13 - y4*y14 - y4*y15 - y4*y16,
+-2*y2*y5*y18 + y6*y16 + y12*y13,
+2*y2*y5*y18 - y2*y6*y18 + y4*y13 - y6*y14 - y6*y16 + 2*y7*y16,
+y2*y6*y18 - 2*y7*y14 - 2*y7*y16,
+-2*y1*y8*y17 + y3*y14 + y9*y15,
+2*y1*y8*y17 - y1*y9*y17 + y4*y14 - y9*y13 - y9*y15 + 2*y10*y15,
 y1*y9*y17 - 2*y10*y13 - 2*y10*y15,
--y1*y11*y17 - y2*y11*y18 + y3*y16 + y6*y14 + y9*y13 - y9*y16 - y11*y14 - y11*y16 + y12*y15,
-y1*y11*y17 - y2*y12*y18 + y4*y16 - y9*y16 + 2*y10*y13 - y12*y13 - y12*y15 - y12*y16,
+-y1*y11*y17 - y2*y11*y18 + y3*y16 + y6*y14 + y9*y13 + y12*y15,
+y1*y11*y17 - y2*y12*y18 + y4*y16 + 2*y10*y13 - y12*y13 - y12*y15,
 0,
 0,
 0,

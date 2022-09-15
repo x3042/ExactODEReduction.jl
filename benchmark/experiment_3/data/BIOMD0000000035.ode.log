@@ -17,9 +17,7 @@
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 9-dim subspace in ambient 10-dim
-[ Info: Restricting matrices from size (10, 10) to size (9, 9)
-┌ Warning: Calling myself recursively in restricted subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:136
+[ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 5 matrices of shape (9, 9)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
@@ -32,16 +30,12 @@
 [ Info: Radical is nontrivial, computing the general kernel of radical
 [ Info: 2 dimensional subspace found
 [ Info: found 2-dim subspace in ambient 9-dim
-[ Info: Restricting matrices from size (9, 9) to size (2, 2)
-┌ Warning: Calling myself recursively in restricted subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:136
+[ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 5 matrices of shape (2, 2)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
 [ Info: found 1-dim subspace in ambient 2-dim
-[ Info: Factorizing matrices from size (9, 9) to size (7, 7)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 5 matrices of shape (7, 7)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
@@ -60,10 +54,5 @@
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [0 0 1 1 0 0 0 0 0 0]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
-┌ Debug: Found reductions 
-│   result =
-│    3-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
-│     Dict(:new_system => [0], :new_vars => [DA + DAp])
-│     Dict(:new_system => [0, 0], :new_vars => [DA + DAp, DR + DRp])
-│     Dict(:new_system => [-y1*y3 - y1*y5 - 2*y1*y9 - y1 + 50*y4 + 100*y6 + 50*y7, 2*y1*y9 - y2, -y1*y3 + 50*y4, y1*y3 - 50*y4, -y1*y5 + 100*y6, y1*y5 - 100*y6, 50*y3 + 500*y4 - 10*y7, 1//100*y5 + 50*y6 - 1//2*y8, -2*y1*y9 + y2 + 5*y8 - 1//5*y9], :new_vars => [A, C, DA, DAp, DR, DRp, MA, MR, R])
+┌ Debug: Found reductions Dict{Symbol, Vector{fmpq_mpoly}}[Dict(:new_system => [0], :new_vars => [DA + DAp]), Dict(:new_system => [0, 0], :new_vars => [DA + DAp, DR + DRp]), Dict(:new_system => [-y1*y3 - y1*y5 - 2*y1*y9 - y1 + 50*y4 + 100*y6 + 50*y7, 2*y1*y9 - y2, -y1*y3 + 50*y4, y1*y3 - 50*y4, -y1*y5 + 100*y6, y1*y5 - 100*y6, 50*y3 + 500*y4 - 10*y7, 1//100*y5 + 50*y6 - 1//2*y8, -2*y1*y9 + y2 + 5*y8 - 1//5*y9], :new_vars => [A, C, DA, DAp, DR, DRp, MA, MR, R])]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236
