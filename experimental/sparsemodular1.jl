@@ -64,6 +64,8 @@ bb = sparse(b)
 ####
 ####
 
+# for reference, our Sparsiks spend 1ms in this multiplication
+
 using BenchmarkTools
 
 @benchmark $aa*$bb
