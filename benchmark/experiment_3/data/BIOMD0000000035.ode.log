@@ -1,11 +1,29 @@
+┌ Debug: find_reductions of 
+│   system =
+│    R'(t) = -2*A(t)*R(t) + C(t) + 5*MR(t) - 1//5*R(t)
+│    DAp'(t) = A(t)*DA(t) - 50*DAp(t)
+│    EmptySet'(t) = A(t) + 10*MA(t) + 1//2*MR(t) + 1//5*R(t)
+│    C'(t) = 2*A(t)*R(t) - C(t)
+│    DA'(t) = -A(t)*DA(t) + 50*DAp(t)
+│    MR'(t) = 1//100*DR(t) + 50*DRp(t) - 1//2*MR(t)
+│    DR'(t) = -A(t)*DR(t) + 100*DRp(t)
+│    DRp'(t) = A(t)*DR(t) - 100*DRp(t)
+│    A'(t) = -A(t)*DA(t) - A(t)*DR(t) - 2*A(t)*R(t) - A(t) + 50*DAp(t) + 100*DRp(t) + 50*MA(t)
+│    MA'(t) = 50*DA(t) + 500*DAp(t) - 10*MA(t)
+│    
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/ExactODEReduction.jl:209
 [ Info: constructed a set of 5 matrices 10×10 from the system Jacobian
 [ Info: Called invariant_subspace_global on 5 matrices of shape (10, 10)
+┌ Debug: Found an invariant subspace by saturating the first unit vector
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:18
 [ Info: found 9-dim subspace in ambient 10-dim
 [ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 5 matrices of shape (9, 9)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 63
+┌ Debug: Dimension of the algebra is 63
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 14
 [ Info: Found radical of size 14
@@ -13,8 +31,31 @@
 [ Info: 2 dimensional subspace found
 [ Info: found 2-dim subspace in ambient 9-dim
 [ Info: Calling myself recursively in restricted subspace
+┌ Debug: Get to a 2 -dimensional space with zero action
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:124
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 5 matrices of shape (7, 7)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 49
+┌ Debug: Dimension of the algebra is 49
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:25
+┌ Debug: Before positivization: BigInt[1 0 0 0 0 0 0 0 0 0; 0 1 0 0 0 0 0 0 0 0; 0 0 1 0 0 0 0 0 0 0; 0 0 0 1 0 0 0 0 0 0; 0 0 0 0 1 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 0 1 0; 0 0 0 0 0 0 0 0 0 1]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:36
+┌ Debug: After positivization: [1 0 0 0 0 0 0 0 0 0; 0 1 0 0 0 0 0 0 0 0; 0 0 1 0 0 0 0 0 0 0; 0 0 0 1 0 0 0 0 0 0; 0 0 0 0 1 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 0 1 0; 0 0 0 0 0 0 0 0 0 1]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:48
+┌ Debug: Before positivization: BigInt[0 0 1 1 0 0 0 0 0 0; 0 0 0 0 1 1 0 0 0 0]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:36
+┌ Debug: After positivization: [0 0 1 1 0 0 0 0 0 0; 0 0 0 0 1 1 0 0 0 0]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:48
+┌ Debug: Before positivization: BigInt[0 0 1 1 0 0 0 0 0 0]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:36
+┌ Debug: After positivization: [0 0 1 1 0 0 0 0 0 0]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:48
+┌ Debug: Found reductions
+│   result =
+│    3-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
+│     Dict(:new_system => [0], :new_vars => [DA + DAp])
+│     Dict(:new_system => [0, 0], :new_vars => [DA + DAp, DR + DRp])
+│     Dict(:new_system => [-y1*y3 - y1*y5 - 2*y1*y9 - y1 + 50*y4 + 100*y6 + 50*y7, 2*y1*y9 - y2, -y1*y3 + 50*y4, y1*y3 - 50*y4, -y1*y5 + 100*y6, y1*y5 - 100*y6, 50*y3 + 500*y4 - 10*y7, 1//100*y5 + 50*y6 - 1//2*y8, -2*y1*y9 + y2 + 5*y8 - 1//5*y9], :new_vars => [A, C, DA, DAp, DR, DRp, MA, MR, R])
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/ExactODEReduction.jl:229

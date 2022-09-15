@@ -1,8 +1,22 @@
+┌ Debug: find_reductions of 
+│   system =
+│    Xa_TFPI_VIIa_TF'(t) = 11//25*VIIa_TF(t)*Xa_TFPI(t) - 33//500*Xa_TFPI_VIIa_TF(t)
+│    Xa_TFPI'(t) = 27//500*TFPI(t)*Xa(t) - 11//25*VIIa_TF(t)*Xa_TFPI(t) - 1//50*Xa_TFPI(t) + 33//500*Xa_TFPI_VIIa_TF(t)
+│    TFPI'(t) = -27//500*TFPI(t)*Xa(t) + 1//50*Xa_TFPI(t)
+│    Xa'(t) = -27//500*TFPI(t)*Xa(t) - 5*VIIa_TF(t)*Xa(t) + 770*VIIa_TF_Xa(t) + 1//50*Xa_TFPI(t)
+│    X'(t) = -5*VIIa_TF(t)*X(t) + 770*VIIa_TF_X(t)
+│    VIIa_TF'(t) = -5*VIIa_TF(t)*X(t) - 5*VIIa_TF(t)*Xa(t) - 11//25*VIIa_TF(t)*Xa_TFPI(t) + 770*VIIa_TF_X(t) + 770*VIIa_TF_Xa(t) + 33//500*Xa_TFPI_VIIa_TF(t)
+│    VIIa_TF_X'(t) = 5*VIIa_TF(t)*X(t) - 1190*VIIa_TF_X(t)
+│    VIIa_TF_Xa'(t) = 5*VIIa_TF(t)*Xa(t) + 420*VIIa_TF_X(t) - 770*VIIa_TF_Xa(t)
+│    
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/ExactODEReduction.jl:209
 [ Info: constructed a set of 6 matrices 8×8 from the system Jacobian
 [ Info: Called invariant_subspace_global on 6 matrices of shape (8, 8)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 40
+┌ Debug: Dimension of the algebra is 40
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 15
 [ Info: Found radical of size 15
@@ -10,8 +24,31 @@
 [ Info: 3 dimensional subspace found
 [ Info: found 3-dim subspace in ambient 8-dim
 [ Info: Calling myself recursively in restricted subspace
+┌ Debug: Get to a 3 -dimensional space with zero action
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:124
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 6 matrices of shape (5, 5)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 25
+┌ Debug: Dimension of the algebra is 25
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:25
+┌ Debug: Before positivization: BigInt[1 0 0 0 0 0 1 1; 0 1 0 0 -1 -1 -1 0; 0 0 1 1 1 1 1 1]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:36
+┌ Debug: After positivization: [1 0 0 0 0 0 1 1; 0 1 1 1 0 0 0 1; 0 0 1 1 1 1 1 1]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:48
+┌ Debug: Before positivization: BigInt[1 0 0 0 0 0 1 1]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:36
+┌ Debug: After positivization: [1 0 0 0 0 0 1 1]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:48
+┌ Debug: Before positivization: BigInt[1 0 0 0 0 0 1 1; 0 1 0 0 -1 -1 -1 0]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:36
+┌ Debug: DimensionMismatch("No suitable matrix found")
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:41
+┌ Debug: Found reductions
+│   result =
+│    3-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
+│     Dict(:new_system => [0], :new_vars => [TFPI + Xa_TFPI + Xa_TFPI_VIIa_TF])
+│     Dict(:new_system => [0, 0], :new_vars => [TFPI + Xa_TFPI + Xa_TFPI_VIIa_TF, VIIa_TF - X - Xa - Xa_TFPI])
+│     Dict(:new_system => [0, 0, 0], :new_vars => [TFPI + Xa_TFPI + Xa_TFPI_VIIa_TF, VIIa_TF + VIIa_TF_X + VIIa_TF_Xa + Xa_TFPI_VIIa_TF, VIIa_TF_X + VIIa_TF_Xa + X + Xa + Xa_TFPI + Xa_TFPI_VIIa_TF])
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/ExactODEReduction.jl:229
