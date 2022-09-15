@@ -24,7 +24,7 @@ function perform_change_of_variables(system, invariants; new_vars_name="y")
     end
 
     (rank, echelon) = Nemo.rref(transform_matrix)
-    pivots = [findfirst(x ->  x != 0, [echelon[i, j] for j in 1:olddim]) for i in 1:newdim]
+    pivots = [findfirst(x -> x != 0, [echelon[i, j] for j in 1:olddim]) for i in 1:newdim]
     transform_cut = transform_matrix[:, pivots]
     inv_trans = transform_cut^(-1)
 

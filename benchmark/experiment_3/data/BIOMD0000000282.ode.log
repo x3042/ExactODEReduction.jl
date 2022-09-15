@@ -1,0 +1,24 @@
+[ Info: constructed a set of 9 matrices 9×9 from the system Jacobian
+[ Info: Called invariant_subspace_global on 9 matrices of shape (9, 9)
+[ Info: found 1-dim subspace in ambient 9-dim
+[ Info: Calling myself recursively in complemented subspace
+[ Info: Called invariant_subspace_global on 9 matrices of shape (8, 8)
+[ Info: found 6-dim subspace in ambient 8-dim
+[ Info: Calling myself recursively in restricted subspace
+[ Info: Called invariant_subspace_global on 9 matrices of shape (6, 6)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+[ Info: generated a basis for Algebra of dimension 12
+[ Info: Computing the radical..
+[ Info: computed the radical of dimension 8
+[ Info: Found radical of size 8
+[ Info: Radical is nontrivial, computing the general kernel of radical
+[ Info: 4 dimensional subspace found
+[ Info: found 4-dim subspace in ambient 6-dim
+[ Info: Calling myself recursively in restricted subspace
+[ Info: Calling myself recursively in complemented subspace
+[ Info: Called invariant_subspace_global on 9 matrices of shape (2, 2)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+[ Info: generated a basis for Algebra of dimension 4
+[ Info: Calling myself recursively in complemented subspace

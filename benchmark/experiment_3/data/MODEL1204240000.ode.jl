@@ -131,14 +131,14 @@ new_system =
 ]
 
 Interesting
-new_vars = fmpq_mpoly[I, source, species_1, species_13 - species_14, species_2 - species_8, species_3, species_32, species_40, species_6]
+new_vars = fmpq_mpoly[I, source, species_1, species_13 - species_14, species_2 + species_8, species_3, species_32, species_40, species_6]
 new_system = 
 [
 0,
 0,
 1//10*y2,
 0,
--1//10*y1 + 81//5*y3*y6*y9 - 1//10*y5,
+-1//10*y1 + 81//5*y3*y6*y9 + 1//10*y5,
 -1//10*y1,
 0,
 0,

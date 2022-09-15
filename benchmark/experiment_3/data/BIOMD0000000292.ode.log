@@ -1,24 +1,8 @@
-┌ Debug: find_reductions of 
-│   system =
-│    k4'(t) = 0
-│    NADPH'(t) = -ATP(t)*NADPH(t)*Y(t)*k2(t) + NADP(t)*k4(t)
-│    k1'(t) = 0
-│    ATP'(t) = 2*ADP(t)*NADP(t)*k3(t) - ATP(t)*NADPH(t)*Y(t)*k2(t) - ATP(t)*X(t)*Y(t)*k1(t)
-│    NADP'(t) = ATP(t)*NADPH(t)*Y(t)*k2(t) - NADP(t)*k4(t)
-│    k3'(t) = 0
-│    X'(t) = ATP(t)*NADPH(t)*Y(t)*k2(t) - ATP(t)*X(t)*Y(t)*k1(t)
-│    Y'(t) = 0
-│    ADP'(t) = -2*ADP(t)*NADP(t)*k3(t) + ATP(t)*NADPH(t)*Y(t)*k2(t) + ATP(t)*X(t)*Y(t)*k1(t)
-│    k2'(t) = 0
-│    
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:211
 [ Info: constructed a set of 13 matrices 10×10 from the system Jacobian
 [ Info: Called invariant_subspace_global on 13 matrices of shape (10, 10)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 30
-┌ Debug: Dimension of the algebra is 30
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 21
 [ Info: Found radical of size 21
@@ -26,69 +10,8 @@
 [ Info: 7 dimensional subspace found
 [ Info: found 7-dim subspace in ambient 10-dim
 [ Info: Calling myself recursively in restricted subspace
-[ Info: Called invariant_subspace_global on 13 matrices of shape (7, 7)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 7-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 13 matrices of shape (6, 6)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 6-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 13 matrices of shape (5, 5)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 5-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 13 matrices of shape (4, 4)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 4-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 13 matrices of shape (3, 3)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 3-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 13 matrices of shape (2, 2)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 2-dim
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 13 matrices of shape (3, 3)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 9
-┌ Debug: Dimension of the algebra is 9
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
-┌ Debug: Before positivization: BigInt[1 1 0 0 0 0 0 0 0 0; 0 0 1 1 0 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 1 0 0 0; 0 0 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 0 1 0; 0 0 0 0 0 0 0 0 0 1]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
-┌ Debug: After positivization: [1 1 0 0 0 0 0 0 0 0; 0 0 1 1 0 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 1 0 0 0; 0 0 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 0 1 0; 0 0 0 0 0 0 0 0 0 1]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
-┌ Debug: Before positivization: BigInt[1 1 0 0 0 0 0 0 0 0]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
-┌ Debug: After positivization: [1 1 0 0 0 0 0 0 0 0]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
-┌ Debug: Before positivization: BigInt[1 1 0 0 0 0 0 0 0 0; 0 0 1 1 0 0 0 0 0 0]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
-┌ Debug: After positivization: [1 1 0 0 0 0 0 0 0 0; 0 0 1 1 0 0 0 0 0 0]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
-┌ Debug: Before positivization: BigInt[1 1 0 0 0 0 0 0 0 0; 0 0 1 1 0 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
-┌ Debug: After positivization: [1 1 0 0 0 0 0 0 0 0; 0 0 1 1 0 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
-┌ Debug: Before positivization: BigInt[1 1 0 0 0 0 0 0 0 0; 0 0 1 1 0 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 1 0 0 0]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
-┌ Debug: After positivization: [1 1 0 0 0 0 0 0 0 0; 0 0 1 1 0 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 1 0 0 0]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
-┌ Debug: Before positivization: BigInt[1 1 0 0 0 0 0 0 0 0; 0 0 1 1 0 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 1 0 0 0; 0 0 0 0 0 0 0 1 0 0]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
-┌ Debug: After positivization: [1 1 0 0 0 0 0 0 0 0; 0 0 1 1 0 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 1 0 0 0; 0 0 0 0 0 0 0 1 0 0]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
-┌ Debug: Before positivization: BigInt[1 1 0 0 0 0 0 0 0 0; 0 0 1 1 0 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 1 0 0 0; 0 0 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 0 1 0]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
-┌ Debug: After positivization: [1 1 0 0 0 0 0 0 0 0; 0 0 1 1 0 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 1 0 0 0; 0 0 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 0 1 0]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
-┌ Debug: Found reductions Dict{Symbol, Vector{fmpq_mpoly}}[Dict(:new_system => [0], :new_vars => [ADP + ATP]), Dict(:new_system => [0, 0], :new_vars => [ADP + ATP, NADP + NADPH]), Dict(:new_system => [0, 0, 0], :new_vars => [ADP + ATP, NADP + NADPH, Y]), Dict(:new_system => [0, 0, 0, 0], :new_vars => [ADP + ATP, NADP + NADPH, Y, k1]), Dict(:new_system => [0, 0, 0, 0, 0], :new_vars => [ADP + ATP, NADP + NADPH, Y, k1, k2]), Dict(:new_system => [0, 0, 0, 0, 0, 0], :new_vars => [ADP + ATP, NADP + NADPH, Y, k1, k2, k3]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0], :new_vars => [ADP + ATP, NADP + NADPH, Y, k1, k2, k3, k4])]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236

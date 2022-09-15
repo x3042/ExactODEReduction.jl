@@ -27,11 +27,11 @@
 │    IkBeNFkB_nucleus'(t) = 30*IkBe_nucleus(t)*NFkB_nucleus(t)
 │    NFkB_cytoplasm'(t) = 18003//50000*IkBaIKKNFkB(t) + 3//25000*IkBaNFkB_cytoplasm(t) + 6003//50000*IkBbIKKNFkB(t) + 3//25000*IkBbNFkB_cytoplasm(t) + 9003//50000*IkBeIKKNFkB(t) + 3//25000*IkBeNFkB_cytoplasm(t) + 3//625*NFkB_nucleus(t)
 │    
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:211
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:209
 [ Info: constructed a set of 16 matrices 26×26 from the system Jacobian
 [ Info: Called invariant_subspace_global on 16 matrices of shape (26, 26)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:18
 [ Info: found 25-dim subspace in ambient 26-dim
 [ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 16 matrices of shape (25, 25)
@@ -39,7 +39,7 @@
 [ Info: new reduction modulo, 2147483647
 ..........................[ Info: generated a basis for Algebra of dimension 551
 ┌ Debug: Dimension of the algebra is 551
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 67
 [ Info: Found radical of size 67
@@ -47,17 +47,15 @@
 [ Info: 2 dimensional subspace found
 [ Info: found 2-dim subspace in ambient 25-dim
 [ Info: Calling myself recursively in restricted subspace
-[ Info: Called invariant_subspace_global on 16 matrices of shape (2, 2)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 2-dim
+┌ Debug: Get to a 2 -dimensional space with zero action
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:124
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 16 matrices of shape (23, 23)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 .........................[ Info: generated a basis for Algebra of dimension 506
 ┌ Debug: Dimension of the algebra is 506
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 22
 [ Info: Found radical of size 22
@@ -70,7 +68,7 @@
 [ Info: new reduction modulo, 2147483647
 ........................[ Info: generated a basis for Algebra of dimension 484
 ┌ Debug: Dimension of the algebra is 484
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 ┌ Debug: Before positivization: BigInt[1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1]
@@ -87,5 +85,11 @@
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
-┌ Debug: Found reductions Dict{Symbol, Vector{fmpq_mpoly}}[Dict(:new_system => [0], :new_vars => [IkBb_mRNA - 178//127*IkBe_mRNA]), Dict(:new_system => [0, 0], :new_vars => [IkBb_mRNA - 178//127*IkBe_mRNA, source]), Dict(:new_system => [267//6250000*y3, 381//12500000*y3, 0], :new_vars => [IkBb_mRNA, IkBe_mRNA, source]), Dict(:new_system => [147//1000*y2 + 87//200*y3 + 129//1000*y9 + 9//40*y10 + 141//1000*y16 + 57//200*y17, 27//20*y1*y6 + 3//50000*y3, 111//10*y1*y4 + 30*y2*y23, 3//40*y3 + 207//250*y5 + 30*y6*y23, 30*y8*y24, 3//40*y2 + 3//50000*y4 + 153//625*y7 + 3//250*y8, 99//25*y24 + 231//1250000*y25, 3//50000*y5 + 9//500*y6, 9//25*y1*y13 + 3//50000*y10, 72//25*y1*y11 + 30*y9*y23, 21//200*y10 + 207//500*y12 + 30*y13*y23, 30*y15*y24, 21//200*y9 + 3//50000*y11 + 153//625*y14 + 3//250*y15, 267//6250000*y25, 3//50000*y12 + 9//500*y13, 27//50*y1*y20 + 3//50000*y17, 21//5*y1*y18 + 30*y16*y23, 21//200*y17 + 207//500*y19 + 30*y20*y23, 30*y22*y24, 21//200*y16 + 3//50000*y18 + 153//625*y21 + 3//250*y22, 381//12500000*y25, 3//50000*y19 + 9//500*y20, 18003//50000*y3 + 3//25000*y4 + 6003//50000*y10 + 3//25000*y11 + 9003//50000*y17 + 3//25000*y18 + 3//625*y24, 3//25000*y5 + 3//25000*y12 + 3//25000*y19 + 27//5*y23, 0], :new_vars => [IKK, IkBaIKK, IkBaIKKNFkB, IkBaNFkB_cytoplasm, IkBaNFkB_nucleus, IkBa_cytoplasm, IkBa_mRNA, IkBa_nucleus, IkBbIKK, IkBbIKKNFkB, IkBbNFkB_cytoplasm, IkBbNFkB_nucleus, IkBb_cytoplasm, IkBb_mRNA, IkBb_nucleus, IkBeIKK, IkBeIKKNFkB, IkBeNFkB_cytoplasm, IkBeNFkB_nucleus, IkBe_cytoplasm, IkBe_mRNA, IkBe_nucleus, NFkB_cytoplasm, NFkB_nucleus, source])]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236
+┌ Debug: Found reductions
+│   result =
+│    4-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
+│     Dict(:new_system => [0], :new_vars => [IkBb_mRNA - 178//127*IkBe_mRNA])
+│     Dict(:new_system => [0, 0], :new_vars => [IkBb_mRNA - 178//127*IkBe_mRNA, source])
+│     Dict(:new_system => [267//6250000*y3, 381//12500000*y3, 0], :new_vars => [IkBb_mRNA, IkBe_mRNA, source])
+│     Dict(:new_system => [147//1000*y2 + 87//200*y3 + 129//1000*y9 + 9//40*y10 + 141//1000*y16 + 57//200*y17, 27//20*y1*y6 + 3//50000*y3, 111//10*y1*y4 + 30*y2*y23, 3//40*y3 + 207//250*y5 + 30*y6*y23, 30*y8*y24, 3//40*y2 + 3//50000*y4 + 153//625*y7 + 3//250*y8, 99//25*y24 + 231//1250000*y25, 3//50000*y5 + 9//500*y6, 9//25*y1*y13 + 3//50000*y10, 72//25*y1*y11 + 30*y9*y23  …  27//50*y1*y20 + 3//50000*y17, 21//5*y1*y18 + 30*y16*y23, 21//200*y17 + 207//500*y19 + 30*y20*y23, 30*y22*y24, 21//200*y16 + 3//50000*y18 + 153//625*y21 + 3//250*y22, 381//12500000*y25, 3//50000*y19 + 9//500*y20, 18003//50000*y3 + 3//25000*y4 + 6003//50000*y10 + 3//25000*y11 + 9003//50000*y17 + 3//25000*y18 + 3//625*y24, 3//25000*y5 + 3//25000*y12 + 3//25000*y19 + 27//5*y23, 0], :new_vars => [IKK, IkBaIKK, IkBaIKKNFkB, IkBaNFkB_cytoplasm, IkBaNFkB_nucleus, IkBa_cytoplasm, IkBa_mRNA, IkBa_nucleus, IkBbIKK, IkBbIKKNFkB  …  IkBeIKK, IkBeIKKNFkB, IkBeNFkB_cytoplasm, IkBeNFkB_nucleus, IkBe_cytoplasm, IkBe_mRNA, IkBe_nucleus, NFkB_cytoplasm, NFkB_nucleus, source])
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:229

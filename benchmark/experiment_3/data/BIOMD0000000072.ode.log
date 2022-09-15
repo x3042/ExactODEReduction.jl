@@ -1,0 +1,47 @@
+[ Info: constructed a set of 7 matrices 9×9 from the system Jacobian
+[ Info: Called invariant_subspace_global on 7 matrices of shape (9, 9)
+[ Info: found 8-dim subspace in ambient 9-dim
+[ Info: Calling myself recursively in restricted subspace
+[ Info: Called invariant_subspace_global on 7 matrices of shape (8, 8)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+[ Info: generated a basis for Algebra of dimension 33
+[ Info: Computing the radical..
+[ Info: computed the radical of dimension 20
+[ Info: Found radical of size 20
+[ Info: Radical is nontrivial, computing the general kernel of radical
+[ Info: 2 dimensional subspace found
+[ Info: found 2-dim subspace in ambient 8-dim
+[ Info: Calling myself recursively in restricted subspace
+[ Info: Calling myself recursively in complemented subspace
+[ Info: Called invariant_subspace_global on 7 matrices of shape (6, 6)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+[ Info: generated a basis for Algebra of dimension 24
+[ Info: Computing the radical..
+[ Info: computed the radical of dimension 11
+[ Info: Found radical of size 11
+[ Info: Radical is nontrivial, computing the general kernel of radical
+[ Info: 1 dimensional subspace found
+[ Info: found 1-dim subspace in ambient 6-dim
+[ Info: Calling myself recursively in complemented subspace
+[ Info: Called invariant_subspace_global on 7 matrices of shape (5, 5)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+[ Info: generated a basis for Algebra of dimension 19
+[ Info: Computing the radical..
+[ Info: computed the radical of dimension 6
+[ Info: Found radical of size 6
+[ Info: Radical is nontrivial, computing the general kernel of radical
+[ Info: 2 dimensional subspace found
+[ Info: found 2-dim subspace in ambient 5-dim
+[ Info: Calling myself recursively in restricted subspace
+[ Info: Called invariant_subspace_global on 7 matrices of shape (2, 2)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+[ Info: generated a basis for Algebra of dimension 4
+[ Info: Calling myself recursively in complemented subspace
+[ Info: Called invariant_subspace_global on 7 matrices of shape (3, 3)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+[ Info: generated a basis for Algebra of dimension 9

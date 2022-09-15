@@ -218,7 +218,7 @@ function find_reductions(
     result = Vector{Dict{Symbol, Vector{fmpq_mpoly}}}()
     for V in invariant_subspaces
         V = basis(linear_span!(V))
-	V = positivize(V)
+	    V = positivize(V)
         transformation = polynormalize(V, parent(system))
         new_system = perform_change_of_variables(eqs, V)
         push!(result, Dict(:new_vars => transformation, :new_system => new_system))
@@ -226,7 +226,7 @@ function find_reductions(
 
     sort!(result, by=r -> length(r[:new_vars]))
 
-    @debug "Found reductions $result"
+    @debug "Found reductions" result
 
     return result
 end

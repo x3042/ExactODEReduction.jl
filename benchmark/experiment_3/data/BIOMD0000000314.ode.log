@@ -25,11 +25,11 @@
 │    JAK2'(t) = 100*SHP1(t)*pJAK2(t)*pJAK2_dephosphorylation(t)
 │    pSTAT5'(t) = 100*STAT5(t)*STAT5_phosphorylation(t)*pJAK2(t)
 │    
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:211
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:209
 [ Info: constructed a set of 30 matrices 24×24 from the system Jacobian
 [ Info: Called invariant_subspace_global on 30 matrices of shape (24, 24)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:18
 [ Info: found 20-dim subspace in ambient 24-dim
 [ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 30 matrices of shape (20, 20)
@@ -37,7 +37,7 @@
 [ Info: new reduction modulo, 2147483647
 ............[ Info: generated a basis for Algebra of dimension 111
 ┌ Debug: Dimension of the algebra is 111
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 94
 [ Info: Found radical of size 94
@@ -45,62 +45,15 @@
 [ Info: 11 dimensional subspace found
 [ Info: found 11-dim subspace in ambient 20-dim
 [ Info: Calling myself recursively in restricted subspace
-[ Info: Called invariant_subspace_global on 30 matrices of shape (11, 11)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 11-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 30 matrices of shape (10, 10)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 10-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 30 matrices of shape (9, 9)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 9-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 30 matrices of shape (8, 8)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 8-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 30 matrices of shape (7, 7)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 7-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 30 matrices of shape (6, 6)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 6-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 30 matrices of shape (5, 5)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 5-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 30 matrices of shape (4, 4)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 4-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 30 matrices of shape (3, 3)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 3-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 30 matrices of shape (2, 2)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 2-dim
+┌ Debug: Get to a 11 -dimensional space with zero action
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:124
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 30 matrices of shape (9, 9)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 ....[ Info: generated a basis for Algebra of dimension 48
 ┌ Debug: Dimension of the algebra is 48
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 31
 [ Info: Found radical of size 31
@@ -113,14 +66,14 @@
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 4
 ┌ Debug: Dimension of the algebra is 4
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 30 matrices of shape (7, 7)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 ..[ Info: generated a basis for Algebra of dimension 30
 ┌ Debug: Dimension of the algebra is 30
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 17
 [ Info: Found radical of size 17
@@ -133,7 +86,7 @@
 [ Info: new reduction modulo, 2147483647
 ..[ Info: generated a basis for Algebra of dimension 24
 ┌ Debug: Dimension of the algebra is 24
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 11
 [ Info: Found radical of size 11
@@ -146,14 +99,14 @@
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 9
 ┌ Debug: Dimension of the algebra is 9
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 30 matrices of shape (3, 3)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 6
 ┌ Debug: Dimension of the algebra is 6
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 2
 [ Info: Found radical of size 2
@@ -166,31 +119,29 @@
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 4
 ┌ Debug: Dimension of the algebra is 4
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 30 matrices of shape (4, 4)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 4
 ┌ Debug: Dimension of the algebra is 4
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: Found radical of size 4
 [ Info: Radical is nontrivial, computing the general kernel of radical
 [ Info: 2 dimensional subspace found
 [ Info: found 2-dim subspace in ambient 4-dim
 [ Info: Calling myself recursively in restricted subspace
-[ Info: Called invariant_subspace_global on 30 matrices of shape (2, 2)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 2-dim
+┌ Debug: Get to a 2 -dimensional space with zero action
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:124
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 30 matrices of shape (2, 2)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 1
 ┌ Debug: Dimension of the algebra is 1
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: Found radical of size 1
 [ Info: Radical is nontrivial, computing the general kernel of radical
@@ -272,5 +223,15 @@
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
-┌ Debug: Found reductions Dict{Symbol, Vector{fmpq_mpoly}}[Dict(:new_system => [0], :new_vars => [CD274mRNA_production]), Dict(:new_system => [0, 0], :new_vars => [CD274mRNA_production, IL13stimulation]), Dict(:new_system => [0, 0, 0], :new_vars => [CD274mRNA_production, IL13stimulation, JAK2_phosphorylation]), Dict(:new_system => [0, 0, 0, 0], :new_vars => [CD274mRNA_production, IL13stimulation, JAK2_phosphorylation, Kon_IL13Rec]), Dict(:new_system => [0, 0, 0, 0, 0], :new_vars => [CD274mRNA_production, IL13stimulation, JAK2_phosphorylation, Kon_IL13Rec, Rec_intern]), Dict(:new_system => [0, 0, 0, 0, 0, 0], :new_vars => [CD274mRNA_production, IL13stimulation, JAK2_phosphorylation, Kon_IL13Rec, Rec_intern, Rec_phosphorylation]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0], :new_vars => [CD274mRNA_production, IL13stimulation, JAK2_phosphorylation, Kon_IL13Rec, Rec_intern, Rec_phosphorylation, Rec_recycle]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [CD274mRNA_production, IL13stimulation, JAK2_phosphorylation, Kon_IL13Rec, Rec_intern, Rec_phosphorylation, Rec_recycle, SHP1]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [CD274mRNA_production, IL13stimulation, JAK2_phosphorylation, Kon_IL13Rec, Rec_intern, Rec_phosphorylation, Rec_recycle, SHP1, STAT5_phosphorylation]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [CD274mRNA_production, IL13stimulation, JAK2_phosphorylation, Kon_IL13Rec, Rec_intern, Rec_phosphorylation, Rec_recycle, SHP1, STAT5_phosphorylation, pJAK2_dephosphorylation]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [CD274mRNA_production, IL13stimulation, JAK2_phosphorylation, Kon_IL13Rec, Rec_intern, Rec_phosphorylation, Rec_recycle, SHP1, STAT5_phosphorylation, pJAK2_dephosphorylation, pSTAT5_dephosphorylation]), Dict(:new_system => [0, 0, 0, 0, 100*y6*y9, 100*y5*y7, 0, 0, 0, 0, 0, 0, 0], :new_vars => [CD274mRNA_production, IL13stimulation, JAK2_phosphorylation, Kon_IL13Rec, Rec, Rec_i, Rec_intern, Rec_phosphorylation, Rec_recycle, SHP1, STAT5_phosphorylation, pJAK2_dephosphorylation, pSTAT5_dephosphorylation]), Dict(:new_system => [0, 1888//5*y3*y5*y6, 0, 0, 0, 100*y7*y10, 100*y6*y8, 0, 0, 0, 0, 0, 0, 0], :new_vars => [CD274mRNA_production, IL13_Rec, IL13stimulation, JAK2_phosphorylation, Kon_IL13Rec, Rec, Rec_i, Rec_intern, Rec_phosphorylation, Rec_recycle, SHP1, STAT5_phosphorylation, pJAK2_dephosphorylation, pSTAT5_dephosphorylation]), Dict(:new_system => [0, 1888//5*y3*y6*y7, 0, 100*y12*y14*y15, 0, 0, 100*y8*y11, 100*y7*y9, 0, 0, 0, 0, 0, 100*y2*y4*y5 + 100*y4*y5*y17, 0, 0, 100*y2*y10*y14], :new_vars => [CD274mRNA_production, IL13_Rec, IL13stimulation, JAK2, JAK2_phosphorylation, Kon_IL13Rec, Rec, Rec_i, Rec_intern, Rec_phosphorylation, Rec_recycle, SHP1, STAT5_phosphorylation, pJAK2, pJAK2_dephosphorylation, pSTAT5_dephosphorylation, p_IL13_Rec]), Dict(:new_system => [0, 1888//5*y3*y6*y7, 0, 100*y12*y15*y16, 0, 0, 100*y8*y11, 100*y7*y9, 0, 0, 0, 0, 100*y12*y17*y18, 0, 100*y2*y4*y5 + 100*y4*y5*y19, 0, 100*y13*y14*y15, 0, 100*y2*y10*y15], :new_vars => [CD274mRNA_production, IL13_Rec, IL13stimulation, JAK2, JAK2_phosphorylation, Kon_IL13Rec, Rec, Rec_i, Rec_intern, Rec_phosphorylation, Rec_recycle, SHP1, STAT5, STAT5_phosphorylation, pJAK2, pJAK2_dephosphorylation, pSTAT5, pSTAT5_dephosphorylation, p_IL13_Rec]), Dict(:new_system => [100*y2*y18, 0, 1888//5*y4*y7*y8, 0, 100*y13*y16*y17, 0, 0, 100*y9*y12, 100*y8*y10, 0, 0, 0, 0, 100*y13*y18*y19, 0, 100*y3*y5*y6 + 100*y5*y6*y20, 0, 100*y14*y15*y16, 0, 100*y3*y11*y16], :new_vars => [CD274mRNA, CD274mRNA_production, IL13_Rec, IL13stimulation, JAK2, JAK2_phosphorylation, Kon_IL13Rec, Rec, Rec_i, Rec_intern, Rec_phosphorylation, Rec_recycle, SHP1, STAT5, STAT5_phosphorylation, pJAK2, pJAK2_dephosphorylation, pSTAT5, pSTAT5_dephosphorylation, p_IL13_Rec]), Dict(:new_system => [100*y2*y19, 0, 1888//5*y4*y7*y8, 0, 100*y13*y16*y17, 0, 0, 100*y9*y12, 100*y8*y10, 0, 0, 0, 0, 100*y13*y19*y20, 0, 100*y3*y5*y6 + 100*y5*y6*y21, 0, 0, 100*y14*y15*y16, 0, 100*y3*y11*y16], :new_vars => [CD274mRNA, CD274mRNA_production, IL13_Rec, IL13stimulation, JAK2, JAK2_phosphorylation, Kon_IL13Rec, Rec, Rec_i, Rec_intern, Rec_phosphorylation, Rec_recycle, SHP1, STAT5, STAT5_phosphorylation, pJAK2, pJAK2_dephosphorylation, pRec_degradation, pSTAT5, pSTAT5_dephosphorylation, p_IL13_Rec]), Dict(:new_system => [100*y2*y20, 0, 1888//5*y4*y7*y8, 0, 100*y13*y16*y17, 0, 0, 100*y9*y12, 100*y8*y10, 0, 0, 0, 0, 100*y13*y20*y21, 0, 100*y3*y5*y6 + 100*y5*y6*y22, 0, 0, 0, 100*y14*y15*y16, 0, 100*y3*y11*y16], :new_vars => [CD274mRNA, CD274mRNA_production, IL13_Rec, IL13stimulation, JAK2, JAK2_phosphorylation, Kon_IL13Rec, Rec, Rec_i, Rec_intern, Rec_phosphorylation, Rec_recycle, SHP1, STAT5, STAT5_phosphorylation, pJAK2, pJAK2_dephosphorylation, pRec_degradation, pRec_intern, pSTAT5, pSTAT5_dephosphorylation, p_IL13_Rec]), Dict(:new_system => [100*y2*y20, 0, 1888//5*y4*y7*y8, 0, 100*y13*y16*y17, 0, 0, 100*y9*y12, 100*y8*y10, 0, 0, 0, 0, 100*y13*y20*y21, 0, 100*y3*y5*y6 + 100*y5*y6*y22, 0, 0, 0, 100*y14*y15*y16, 0, 100*y3*y11*y16, 100*y19*y22], :new_vars => [CD274mRNA, CD274mRNA_production, IL13_Rec, IL13stimulation, JAK2, JAK2_phosphorylation, Kon_IL13Rec, Rec, Rec_i, Rec_intern, Rec_phosphorylation, Rec_recycle, SHP1, STAT5, STAT5_phosphorylation, pJAK2, pJAK2_dephosphorylation, pRec_degradation, pRec_intern, pSTAT5, pSTAT5_dephosphorylation, p_IL13_Rec, p_IL13_Rec_i])]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236
+┌ Debug: Found reductions
+│   result =
+│    19-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
+│     Dict(:new_system => [0], :new_vars => [CD274mRNA_production])
+│     Dict(:new_system => [0, 0], :new_vars => [CD274mRNA_production, IL13stimulation])
+│     Dict(:new_system => [0, 0, 0], :new_vars => [CD274mRNA_production, IL13stimulation, JAK2_phosphorylation])
+│     Dict(:new_system => [0, 0, 0, 0], :new_vars => [CD274mRNA_production, IL13stimulation, JAK2_phosphorylation, Kon_IL13Rec])
+│     ⋮
+│     Dict(:new_system => [100*y2*y19, 0, 1888//5*y4*y7*y8, 0, 100*y13*y16*y17, 0, 0, 100*y9*y12, 100*y8*y10, 0  …  0, 0, 100*y13*y19*y20, 0, 100*y3*y5*y6 + 100*y5*y6*y21, 0, 0, 100*y14*y15*y16, 0, 100*y3*y11*y16], :new_vars => [CD274mRNA, CD274mRNA_production, IL13_Rec, IL13stimulation, JAK2, JAK2_phosphorylation, Kon_IL13Rec, Rec, Rec_i, Rec_intern  …  Rec_recycle, SHP1, STAT5, STAT5_phosphorylation, pJAK2, pJAK2_dephosphorylation, pRec_degradation, pSTAT5, pSTAT5_dephosphorylation, p_IL13_Rec])
+│     Dict(:new_system => [100*y2*y20, 0, 1888//5*y4*y7*y8, 0, 100*y13*y16*y17, 0, 0, 100*y9*y12, 100*y8*y10, 0  …  0, 100*y13*y20*y21, 0, 100*y3*y5*y6 + 100*y5*y6*y22, 0, 0, 0, 100*y14*y15*y16, 0, 100*y3*y11*y16], :new_vars => [CD274mRNA, CD274mRNA_production, IL13_Rec, IL13stimulation, JAK2, JAK2_phosphorylation, Kon_IL13Rec, Rec, Rec_i, Rec_intern  …  SHP1, STAT5, STAT5_phosphorylation, pJAK2, pJAK2_dephosphorylation, pRec_degradation, pRec_intern, pSTAT5, pSTAT5_dephosphorylation, p_IL13_Rec])
+│     Dict(:new_system => [100*y2*y20, 0, 1888//5*y4*y7*y8, 0, 100*y13*y16*y17, 0, 0, 100*y9*y12, 100*y8*y10, 0  …  100*y13*y20*y21, 0, 100*y3*y5*y6 + 100*y5*y6*y22, 0, 0, 0, 100*y14*y15*y16, 0, 100*y3*y11*y16, 100*y19*y22], :new_vars => [CD274mRNA, CD274mRNA_production, IL13_Rec, IL13stimulation, JAK2, JAK2_phosphorylation, Kon_IL13Rec, Rec, Rec_i, Rec_intern  …  STAT5, STAT5_phosphorylation, pJAK2, pJAK2_dephosphorylation, pRec_degradation, pRec_intern, pSTAT5, pSTAT5_dephosphorylation, p_IL13_Rec, p_IL13_Rec_i])
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:229

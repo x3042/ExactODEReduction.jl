@@ -1,0 +1,20 @@
+[ Info: constructed a set of 6 matrices 7×7 from the system Jacobian
+[ Info: Called invariant_subspace_global on 6 matrices of shape (7, 7)
+[ Info: found 6-dim subspace in ambient 7-dim
+[ Info: Calling myself recursively in restricted subspace
+[ Info: Called invariant_subspace_global on 6 matrices of shape (6, 6)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+[ Info: generated a basis for Algebra of dimension 18
+[ Info: Computing the radical..
+[ Info: computed the radical of dimension 9
+[ Info: Found radical of size 9
+[ Info: Radical is nontrivial, computing the general kernel of radical
+[ Info: 3 dimensional subspace found
+[ Info: found 3-dim subspace in ambient 6-dim
+[ Info: Calling myself recursively in restricted subspace
+[ Info: Calling myself recursively in complemented subspace
+[ Info: Called invariant_subspace_global on 6 matrices of shape (3, 3)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+[ Info: generated a basis for Algebra of dimension 9

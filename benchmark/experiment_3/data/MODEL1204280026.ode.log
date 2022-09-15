@@ -22,14 +22,14 @@
 │    species_8'(t) = 16*species_11(t) + species_14(t) + species_16(t) + 101//100*species_9(t)
 │    species_9'(t) = 1//50*species_7(t)*species_8(t)
 │    
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:211
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:209
 [ Info: constructed a set of 12 matrices 21×21 from the system Jacobian
 [ Info: Called invariant_subspace_global on 12 matrices of shape (21, 21)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 ...................[ Info: generated a basis for Algebra of dimension 420
 ┌ Debug: Dimension of the algebra is 420
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 20
 [ Info: Found radical of size 20
@@ -42,10 +42,13 @@
 [ Info: new reduction modulo, 2147483647
 ..................[ Info: generated a basis for Algebra of dimension 400
 ┌ Debug: Dimension of the algebra is 400
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 ┌ Debug: Before positivization: BigInt[43 -43 0 -43 -1043 0 500 0 43 0 0 -43 0 0 0 43 0 43 -43 43 0]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: DimensionMismatch("No suitable matrix found")
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:41
-┌ Debug: Found reductions Dict{Symbol, Vector{fmpq_mpoly}}[Dict(:new_system => [0], :new_vars => [species_1 - species_10 - species_12 - 1043//43*species_13 + 500//43*species_15 + species_17 - species_2 + species_4 + species_6 - species_7 + species_8])]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236
+┌ Debug: Found reductions
+│   result =
+│    1-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
+│     Dict(:new_system => [0], :new_vars => [species_1 - species_10 - species_12 - 1043//43*species_13 + 500//43*species_15 + species_17 - species_2 + species_4 + species_6 - species_7 + species_8])
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:229

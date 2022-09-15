@@ -15,16 +15,16 @@
 │    NOS_slash_CaMKIIalpha_slash_kenz_slash_kenz_cplx'(t) = 19//400000000000000000*NOS_slash_CaMKIIalpha(t)*NOS_slash_nNOS(t)
 │    NOS_slash_CaMKIalpha_slash_kenz_slash_kenz_cplx'(t) = 283333333333333//10000000000000000000000000000000*NOS_slash_CaMKIalpha(t)*NOS_slash_nNOS(t)
 │    
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:211
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:209
 [ Info: constructed a set of 8 matrices 14×14 from the system Jacobian
 [ Info: Called invariant_subspace_global on 8 matrices of shape (14, 14)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:18
 [ Info: found 1-dim subspace in ambient 14-dim
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 8 matrices of shape (13, 13)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:18
 [ Info: found 10-dim subspace in ambient 13-dim
 [ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 8 matrices of shape (10, 10)
@@ -32,7 +32,7 @@
 [ Info: new reduction modulo, 2147483647
 .[ Info: generated a basis for Algebra of dimension 63
 ┌ Debug: Dimension of the algebra is 63
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 27
 [ Info: Found radical of size 27
@@ -40,22 +40,15 @@
 [ Info: 3 dimensional subspace found
 [ Info: found 3-dim subspace in ambient 10-dim
 [ Info: Calling myself recursively in restricted subspace
-[ Info: Called invariant_subspace_global on 8 matrices of shape (3, 3)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 3-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 8 matrices of shape (2, 2)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 2-dim
+┌ Debug: Get to a 3 -dimensional space with zero action
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:124
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 8 matrices of shape (7, 7)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 42
 ┌ Debug: Dimension of the algebra is 42
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 6
 [ Info: Found radical of size 6
@@ -68,17 +61,10 @@
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 36
 ┌ Debug: Dimension of the algebra is 36
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 8 matrices of shape (3, 3)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 3-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 8 matrices of shape (2, 2)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 2-dim
+┌ Debug: Get to a 3 -dimensional space with zero action
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:124
 ┌ Debug: Before positivization: BigInt[1 0 0 0 0 0 0 0 0 0 0 0 0 0]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [1 0 0 0 0 0 0 0 0 0 0 0 0 0]
@@ -111,5 +97,15 @@
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [1 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 1 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 1 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 1 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 1 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 1 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 1 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 1 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 1 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 1]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
-┌ Debug: Found reductions Dict{Symbol, Vector{fmpq_mpoly}}[Dict(:new_system => [0], :new_vars => [NOS_slash_CaMKIIalpha]), Dict(:new_system => [0, 0], :new_vars => [NOS_slash_CaMKIIalpha, NOS_slash_CaMKIV]), Dict(:new_system => [0, 0, 0], :new_vars => [NOS_slash_CaMKIIalpha, NOS_slash_CaMKIV, NOS_slash_CaMKIalpha]), Dict(:new_system => [0, 0, 0, 0], :new_vars => [NOS_slash_CaMKIIalpha, NOS_slash_CaMKIV, NOS_slash_CaMKIalpha, NOS_slash_CaM_minus_Ca4]), Dict(:new_system => [0, 361//16000*y1*y10 + 9//1000*y4*y10 + 80277777777777588888888888889//10000000000000000000000000000000*y5*y10, 361//8000*y1*y10 + 65638888888888906111111111111//10000000000000000000000000000000*y2 + 9//500*y4*y10, 0, 0, 0, 541666666666667//100000000000000000000000000000000*y6*y10 + 1388916666666663//10000000000000000000000000000000*y8, 138891666666667//10000000000000000000000000000000*y7*y9, 111113333333333//1000000000000000000000000000000*y8, 113333333333333//283333333333333000000000000000000000000000000*y2 + 1//2833333333333330000000000000000000000000000000*y3 + 833333333333333//10000000000000000000000000000000000*y7], :new_vars => [NOS_slash_CaMKIIalpha, 475000000000000*NOS_slash_CaMKIIalpha_slash_kenz_slash_kenz_cplx + 300000000000000*NOS_slash_CaMKIV_slash_kenz_slash_kenz_cplx + 283333333333333*NOS_slash_CaMKIalpha_slash_kenz_slash_kenz_cplx, 950000000000000*NOS_slash_CaMKIIalpha_slash_kenz_slash_kenz_cplx + 600000000000000*NOS_slash_CaMKIV_slash_kenz_slash_kenz_cplx + 65638888888888906111111111111*NOS_slash_NOS_star_, NOS_slash_CaMKIV, NOS_slash_CaMKIalpha, NOS_slash_CaM_minus_Ca4, NOS_slash_Ca_minus_CaMnNOS, NOS_slash_Ca_minus_CaMnNOS_slash_kenz_slash_kenz_cplx, NOS_slash_Larg, NOS_slash_nNOS]), Dict(:new_system => [0, 19//400000000000000000*y1*y11, 0, 9//1000*y3*y11 + 80277777777777588888888888889//10000000000000000000000000000000*y6*y11, 1247138888888889216111111111109//400000000000000000*y2 + 9//500*y3*y11 + 65638888888888906111111111111//10000000000000000000000000000000*y4, 0, 0, 541666666666667//100000000000000000000000000000000*y7*y11 + 1388916666666663//10000000000000000000000000000000*y9, 138891666666667//10000000000000000000000000000000*y8*y10, 111113333333333//1000000000000000000000000000000*y9, 19//100000000000000000*y2 + 113333333333333//283333333333333000000000000000000000000000000*y4 + 1//2833333333333330000000000000000000000000000000*y5 + 833333333333333//10000000000000000000000000000000000*y8], :new_vars => [NOS_slash_CaMKIIalpha, NOS_slash_CaMKIIalpha_slash_kenz_slash_kenz_cplx, NOS_slash_CaMKIV, 300000000000000*NOS_slash_CaMKIV_slash_kenz_slash_kenz_cplx + 283333333333333*NOS_slash_CaMKIalpha_slash_kenz_slash_kenz_cplx, 600000000000000*NOS_slash_CaMKIV_slash_kenz_slash_kenz_cplx + 65638888888888906111111111111*NOS_slash_NOS_star_, NOS_slash_CaMKIalpha, NOS_slash_CaM_minus_Ca4, NOS_slash_Ca_minus_CaMnNOS, NOS_slash_Ca_minus_CaMnNOS_slash_kenz_slash_kenz_cplx, NOS_slash_Larg, NOS_slash_nNOS]), Dict(:new_system => [0, 19//400000000000000000*y1*y12, 0, 9//1000*y3*y12 + 80277777777777588888888888889//10000000000000000000000000000000*y6*y12, 1247138888888889216111111111109//400000000000000000*y2 + 9//500*y3*y12 + 65638888888888906111111111111//10000000000000000000000000000000*y4, 0, 0, 541666666666667//100000000000000000000000000000000*y7*y12 + 1388916666666663//10000000000000000000000000000000*y9, 138891666666667//10000000000000000000000000000000*y8*y10, 111113333333333//1000000000000000000000000000000*y9, 277783333333333//10000000000000000000000000000000*y9, 19//100000000000000000*y2 + 113333333333333//283333333333333000000000000000000000000000000*y4 + 1//2833333333333330000000000000000000000000000000*y5 + 833333333333333//10000000000000000000000000000000000*y8], :new_vars => [NOS_slash_CaMKIIalpha, NOS_slash_CaMKIIalpha_slash_kenz_slash_kenz_cplx, NOS_slash_CaMKIV, 300000000000000*NOS_slash_CaMKIV_slash_kenz_slash_kenz_cplx + 283333333333333*NOS_slash_CaMKIalpha_slash_kenz_slash_kenz_cplx, 600000000000000*NOS_slash_CaMKIV_slash_kenz_slash_kenz_cplx + 65638888888888906111111111111*NOS_slash_NOS_star_, NOS_slash_CaMKIalpha, NOS_slash_CaM_minus_Ca4, NOS_slash_Ca_minus_CaMnNOS, NOS_slash_Ca_minus_CaMnNOS_slash_kenz_slash_kenz_cplx, NOS_slash_Larg, NOS_slash_NO, NOS_slash_nNOS]), Dict(:new_system => [0, 19//400000000000000000*y1*y13, 0, 3//100000000000000000*y3*y13, 0, 283333333333333//10000000000000000000000000000000*y5*y13, 0, 541666666666667//100000000000000000000000000000000*y7*y13 + 1388916666666663//10000000000000000000000000000000*y9, 138891666666667//10000000000000000000000000000000*y8*y10, 111113333333333//1000000000000000000000000000000*y9, 277783333333333//10000000000000000000000000000000*y9, 19//400000000000000000*y2 + 3//100000000000000000*y4 + 283333333333333//10000000000000000000000000000000*y6, 19//100000000000000000*y2 + 3//25000000000000000*y4 + 113333333333333//1000000000000000000000000000000*y6 + 833333333333333//10000000000000000000000000000000000*y8 + 231666666666667//10000000000000000000000000000000*y12], :new_vars => [NOS_slash_CaMKIIalpha, NOS_slash_CaMKIIalpha_slash_kenz_slash_kenz_cplx, NOS_slash_CaMKIV, NOS_slash_CaMKIV_slash_kenz_slash_kenz_cplx, NOS_slash_CaMKIalpha, NOS_slash_CaMKIalpha_slash_kenz_slash_kenz_cplx, NOS_slash_CaM_minus_Ca4, NOS_slash_Ca_minus_CaMnNOS, NOS_slash_Ca_minus_CaMnNOS_slash_kenz_slash_kenz_cplx, NOS_slash_Larg, NOS_slash_NO, NOS_slash_NOS_star_, NOS_slash_nNOS])]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236
+┌ Debug: Found reductions
+│   result =
+│    8-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
+│     Dict(:new_system => [0], :new_vars => [NOS_slash_CaMKIIalpha])
+│     Dict(:new_system => [0, 0], :new_vars => [NOS_slash_CaMKIIalpha, NOS_slash_CaMKIV])
+│     Dict(:new_system => [0, 0, 0], :new_vars => [NOS_slash_CaMKIIalpha, NOS_slash_CaMKIV, NOS_slash_CaMKIalpha])
+│     Dict(:new_system => [0, 0, 0, 0], :new_vars => [NOS_slash_CaMKIIalpha, NOS_slash_CaMKIV, NOS_slash_CaMKIalpha, NOS_slash_CaM_minus_Ca4])
+│     Dict(:new_system => [0, 361//16000*y1*y10 + 9//1000*y4*y10 + 80277777777777588888888888889//10000000000000000000000000000000*y5*y10, 361//8000*y1*y10 + 65638888888888906111111111111//10000000000000000000000000000000*y2 + 9//500*y4*y10, 0, 0, 0, 541666666666667//100000000000000000000000000000000*y6*y10 + 1388916666666663//10000000000000000000000000000000*y8, 138891666666667//10000000000000000000000000000000*y7*y9, 111113333333333//1000000000000000000000000000000*y8, 113333333333333//283333333333333000000000000000000000000000000*y2 + 1//2833333333333330000000000000000000000000000000*y3 + 833333333333333//10000000000000000000000000000000000*y7], :new_vars => [NOS_slash_CaMKIIalpha, 475000000000000*NOS_slash_CaMKIIalpha_slash_kenz_slash_kenz_cplx + 300000000000000*NOS_slash_CaMKIV_slash_kenz_slash_kenz_cplx + 283333333333333*NOS_slash_CaMKIalpha_slash_kenz_slash_kenz_cplx, 950000000000000*NOS_slash_CaMKIIalpha_slash_kenz_slash_kenz_cplx + 600000000000000*NOS_slash_CaMKIV_slash_kenz_slash_kenz_cplx + 65638888888888906111111111111*NOS_slash_NOS_star_, NOS_slash_CaMKIV, NOS_slash_CaMKIalpha, NOS_slash_CaM_minus_Ca4, NOS_slash_Ca_minus_CaMnNOS, NOS_slash_Ca_minus_CaMnNOS_slash_kenz_slash_kenz_cplx, NOS_slash_Larg, NOS_slash_nNOS])
+│     Dict(:new_system => [0, 19//400000000000000000*y1*y11, 0, 9//1000*y3*y11 + 80277777777777588888888888889//10000000000000000000000000000000*y6*y11, 1247138888888889216111111111109//400000000000000000*y2 + 9//500*y3*y11 + 65638888888888906111111111111//10000000000000000000000000000000*y4, 0, 0, 541666666666667//100000000000000000000000000000000*y7*y11 + 1388916666666663//10000000000000000000000000000000*y9, 138891666666667//10000000000000000000000000000000*y8*y10, 111113333333333//1000000000000000000000000000000*y9, 19//100000000000000000*y2 + 113333333333333//283333333333333000000000000000000000000000000*y4 + 1//2833333333333330000000000000000000000000000000*y5 + 833333333333333//10000000000000000000000000000000000*y8], :new_vars => [NOS_slash_CaMKIIalpha, NOS_slash_CaMKIIalpha_slash_kenz_slash_kenz_cplx, NOS_slash_CaMKIV, 300000000000000*NOS_slash_CaMKIV_slash_kenz_slash_kenz_cplx + 283333333333333*NOS_slash_CaMKIalpha_slash_kenz_slash_kenz_cplx, 600000000000000*NOS_slash_CaMKIV_slash_kenz_slash_kenz_cplx + 65638888888888906111111111111*NOS_slash_NOS_star_, NOS_slash_CaMKIalpha, NOS_slash_CaM_minus_Ca4, NOS_slash_Ca_minus_CaMnNOS, NOS_slash_Ca_minus_CaMnNOS_slash_kenz_slash_kenz_cplx, NOS_slash_Larg, NOS_slash_nNOS])
+│     Dict(:new_system => [0, 19//400000000000000000*y1*y12, 0, 9//1000*y3*y12 + 80277777777777588888888888889//10000000000000000000000000000000*y6*y12, 1247138888888889216111111111109//400000000000000000*y2 + 9//500*y3*y12 + 65638888888888906111111111111//10000000000000000000000000000000*y4, 0, 0, 541666666666667//100000000000000000000000000000000*y7*y12 + 1388916666666663//10000000000000000000000000000000*y9, 138891666666667//10000000000000000000000000000000*y8*y10, 111113333333333//1000000000000000000000000000000*y9, 277783333333333//10000000000000000000000000000000*y9, 19//100000000000000000*y2 + 113333333333333//283333333333333000000000000000000000000000000*y4 + 1//2833333333333330000000000000000000000000000000*y5 + 833333333333333//10000000000000000000000000000000000*y8], :new_vars => [NOS_slash_CaMKIIalpha, NOS_slash_CaMKIIalpha_slash_kenz_slash_kenz_cplx, NOS_slash_CaMKIV, 300000000000000*NOS_slash_CaMKIV_slash_kenz_slash_kenz_cplx + 283333333333333*NOS_slash_CaMKIalpha_slash_kenz_slash_kenz_cplx, 600000000000000*NOS_slash_CaMKIV_slash_kenz_slash_kenz_cplx + 65638888888888906111111111111*NOS_slash_NOS_star_, NOS_slash_CaMKIalpha, NOS_slash_CaM_minus_Ca4, NOS_slash_Ca_minus_CaMnNOS, NOS_slash_Ca_minus_CaMnNOS_slash_kenz_slash_kenz_cplx, NOS_slash_Larg, NOS_slash_NO, NOS_slash_nNOS])
+│     Dict(:new_system => [0, 19//400000000000000000*y1*y13, 0, 3//100000000000000000*y3*y13, 0, 283333333333333//10000000000000000000000000000000*y5*y13, 0, 541666666666667//100000000000000000000000000000000*y7*y13 + 1388916666666663//10000000000000000000000000000000*y9, 138891666666667//10000000000000000000000000000000*y8*y10, 111113333333333//1000000000000000000000000000000*y9, 277783333333333//10000000000000000000000000000000*y9, 19//400000000000000000*y2 + 3//100000000000000000*y4 + 283333333333333//10000000000000000000000000000000*y6, 19//100000000000000000*y2 + 3//25000000000000000*y4 + 113333333333333//1000000000000000000000000000000*y6 + 833333333333333//10000000000000000000000000000000000*y8 + 231666666666667//10000000000000000000000000000000*y12], :new_vars => [NOS_slash_CaMKIIalpha, NOS_slash_CaMKIIalpha_slash_kenz_slash_kenz_cplx, NOS_slash_CaMKIV, NOS_slash_CaMKIV_slash_kenz_slash_kenz_cplx, NOS_slash_CaMKIalpha, NOS_slash_CaMKIalpha_slash_kenz_slash_kenz_cplx, NOS_slash_CaM_minus_Ca4, NOS_slash_Ca_minus_CaMnNOS, NOS_slash_Ca_minus_CaMnNOS_slash_kenz_slash_kenz_cplx, NOS_slash_Larg, NOS_slash_NO, NOS_slash_NOS_star_, NOS_slash_nNOS])
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:229

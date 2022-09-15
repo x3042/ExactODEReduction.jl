@@ -45,238 +45,78 @@
 │    konT'(t) = 0
 │    krCdc5'(t) = 0
 │    
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:211
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:209
 [ Info: constructed a set of 91 matrices 44×44 from the system Jacobian
 [ Info: Called invariant_subspace_global on 91 matrices of shape (44, 44)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:18
 [ Info: found 32-dim subspace in ambient 44-dim
-[ Info: Restricting matrices from size (44, 44) to size (32, 32)
-┌ Warning: Calling myself recursively in restricted subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:136
+[ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 91 matrices of shape (32, 32)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 ................................................................................................................[ Info: generated a basis for Algebra of dimension 309
 ┌ Debug: Dimension of the algebra is 309
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 235
 [ Info: Found radical of size 235
 [ Info: Radical is nontrivial, computing the general kernel of radical
 [ Info: 20 dimensional subspace found
 [ Info: found 20-dim subspace in ambient 32-dim
-[ Info: Restricting matrices from size (32, 32) to size (20, 20)
-┌ Warning: Calling myself recursively in restricted subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:136
-[ Info: Called invariant_subspace_global on 91 matrices of shape (20, 20)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 20-dim
-[ Info: Factorizing matrices from size (20, 20) to size (19, 19)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
-[ Info: Called invariant_subspace_global on 91 matrices of shape (19, 19)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 19-dim
-[ Info: Factorizing matrices from size (19, 19) to size (18, 18)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
-[ Info: Called invariant_subspace_global on 91 matrices of shape (18, 18)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 18-dim
-[ Info: Factorizing matrices from size (18, 18) to size (17, 17)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
-[ Info: Called invariant_subspace_global on 91 matrices of shape (17, 17)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 17-dim
-[ Info: Factorizing matrices from size (17, 17) to size (16, 16)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
-[ Info: Called invariant_subspace_global on 91 matrices of shape (16, 16)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 16-dim
-[ Info: Factorizing matrices from size (16, 16) to size (15, 15)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
-[ Info: Called invariant_subspace_global on 91 matrices of shape (15, 15)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 15-dim
-[ Info: Factorizing matrices from size (15, 15) to size (14, 14)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
-[ Info: Called invariant_subspace_global on 91 matrices of shape (14, 14)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 14-dim
-[ Info: Factorizing matrices from size (14, 14) to size (13, 13)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
-[ Info: Called invariant_subspace_global on 91 matrices of shape (13, 13)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 13-dim
-[ Info: Factorizing matrices from size (13, 13) to size (12, 12)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
-[ Info: Called invariant_subspace_global on 91 matrices of shape (12, 12)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 12-dim
-[ Info: Factorizing matrices from size (12, 12) to size (11, 11)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
-[ Info: Called invariant_subspace_global on 91 matrices of shape (11, 11)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 11-dim
-[ Info: Factorizing matrices from size (11, 11) to size (10, 10)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
-[ Info: Called invariant_subspace_global on 91 matrices of shape (10, 10)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 10-dim
-[ Info: Factorizing matrices from size (10, 10) to size (9, 9)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
-[ Info: Called invariant_subspace_global on 91 matrices of shape (9, 9)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 9-dim
-[ Info: Factorizing matrices from size (9, 9) to size (8, 8)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
-[ Info: Called invariant_subspace_global on 91 matrices of shape (8, 8)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 8-dim
-[ Info: Factorizing matrices from size (8, 8) to size (7, 7)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
-[ Info: Called invariant_subspace_global on 91 matrices of shape (7, 7)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 7-dim
-[ Info: Factorizing matrices from size (7, 7) to size (6, 6)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
-[ Info: Called invariant_subspace_global on 91 matrices of shape (6, 6)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 6-dim
-[ Info: Factorizing matrices from size (6, 6) to size (5, 5)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
-[ Info: Called invariant_subspace_global on 91 matrices of shape (5, 5)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 5-dim
-[ Info: Factorizing matrices from size (5, 5) to size (4, 4)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
-[ Info: Called invariant_subspace_global on 91 matrices of shape (4, 4)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 4-dim
-[ Info: Factorizing matrices from size (4, 4) to size (3, 3)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
-[ Info: Called invariant_subspace_global on 91 matrices of shape (3, 3)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 3-dim
-[ Info: Factorizing matrices from size (3, 3) to size (2, 2)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
-[ Info: Called invariant_subspace_global on 91 matrices of shape (2, 2)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 2-dim
-[ Info: Factorizing matrices from size (32, 32) to size (12, 12)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in restricted subspace
+┌ Debug: Get to a 20 -dimensional space with zero action
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:124
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 91 matrices of shape (12, 12)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 .....................................[ Info: generated a basis for Algebra of dimension 109
 ┌ Debug: Dimension of the algebra is 109
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 35
 [ Info: Found radical of size 35
 [ Info: Radical is nontrivial, computing the general kernel of radical
 [ Info: 5 dimensional subspace found
 [ Info: found 5-dim subspace in ambient 12-dim
-[ Info: Restricting matrices from size (12, 12) to size (5, 5)
-┌ Warning: Calling myself recursively in restricted subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:136
+[ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 91 matrices of shape (5, 5)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 ........[ Info: generated a basis for Algebra of dimension 25
 ┌ Debug: Dimension of the algebra is 25
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
-[ Info: Factorizing matrices from size (12, 12) to size (7, 7)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 91 matrices of shape (7, 7)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 ................[ Info: generated a basis for Algebra of dimension 49
 ┌ Debug: Dimension of the algebra is 49
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
-[ Info: Factorizing matrices from size (44, 44) to size (12, 12)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 91 matrices of shape (12, 12)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 ..................................[ Info: generated a basis for Algebra of dimension 96
 ┌ Debug: Dimension of the algebra is 96
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 32
 [ Info: Found radical of size 32
 [ Info: Radical is nontrivial, computing the general kernel of radical
 [ Info: 4 dimensional subspace found
 [ Info: found 4-dim subspace in ambient 12-dim
-[ Info: Restricting matrices from size (12, 12) to size (4, 4)
-┌ Warning: Calling myself recursively in restricted subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:136
-[ Info: Called invariant_subspace_global on 91 matrices of shape (4, 4)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 4-dim
-[ Info: Factorizing matrices from size (4, 4) to size (3, 3)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
-[ Info: Called invariant_subspace_global on 91 matrices of shape (3, 3)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 3-dim
-[ Info: Factorizing matrices from size (3, 3) to size (2, 2)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
-[ Info: Called invariant_subspace_global on 91 matrices of shape (2, 2)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 2-dim
-[ Info: Factorizing matrices from size (12, 12) to size (8, 8)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in restricted subspace
+┌ Debug: Get to a 4 -dimensional space with zero action
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:124
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 91 matrices of shape (8, 8)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 ......................[ Info: generated a basis for Algebra of dimension 64
 ┌ Debug: Dimension of the algebra is 64
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 ┌ Debug: Before positivization: BigInt[1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1]
@@ -381,7 +221,7 @@
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
-┌ Debug: Found reductions 
+┌ Debug: Found reductions
 │   result =
 │    26-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
 │     Dict(:new_system => [0], :new_vars => [B_Bfa1 + B_Bfa1P4 + B_Bfa1P5 - Bfa1P4_Tem1GDP - Bfa1P4_Tem1GTP - Bfa1P5_Tem1GDP - Bfa1P5_Tem1GTP - Bfa1_Tem1GDP - Bfa1_Tem1GTP + SPB_B - T_Tem1GDP - T_Tem1GTP - Tem1GDP - Tem1GTP])
@@ -392,4 +232,4 @@
 │     Dict(:new_system => [-3//1000000000000000000*y1*y16*y30 - 3//1000000000000000000*y1*y17 - 3//1000000000000000000*y1*y18*y34 - 3//1000000000000000000*y1*y22 + 3//1000000000000000000*y6*y24 + 3//1000000000000000000*y7*y13*y26, 3//1000000000000000000*y1*y18*y34 - 3//1000000000000000000*y2*y16*y28 - 3//1000000000000000000*y2*y23 + 3//1000000000000000000*y3*y24 + 3//1000000000000000000*y8*y13*y27, 3//1000000000000000000*y2*y16*y28 - 3//1000000000000000000*y3*y23 - 3//1000000000000000000*y3*y24 + 3//1000000000000000000*y6*y18*y34 + 3//1000000000000000000*y9*y13*y27, 3//1000000000000000000*y1*y17 - 3//1000000000000000000*y4*y16*y29 - 3//1000000000000000000*y4*y22 + 3//1000000000000000000*y5*y24 + 3//1000000000000000000*y10*y13*y26, 3//1000000000000000000*y4*y16*y29 - 3//1000000000000000000*y5*y22 - 3//1000000000000000000*y5*y24 + 3//1000000000000000000*y6*y17 + 3//1000000000000000000*y11*y13*y26, 3//1000000000000000000*y1*y16*y30 - 3//1000000000000000000*y6*y17 - 3//1000000000000000000*y6*y18*y34 - 3//1000000000000000000*y6*y22 - 3//1000000000000000000*y6*y24 + 3//1000000000000000000*y12*y13*y26, 3//1000000000000000000*y1*y22 - 3//1000000000000000000*y7*y13*y26 - 1//10000000000000*y7*y19*y34 + 1//10000000000000*y8*y33 + 1//10000000000000*y10*y32*y34 + 1//10000000000000*y12*y24, 3//1000000000000000000*y2*y23 + 1//10000000000000*y7*y19*y34 - 3//1000000000000000000*y8*y13*y27 - 1//10000000000000*y8*y33 + 1//10000000000000*y9*y24, 3//1000000000000000000*y3*y23 - 3//1000000000000000000*y9*y13*y27 - 1//10000000000000*y9*y24 - 1//10000000000000*y9*y33 + 1//10000000000000*y12*y19*y34, 3//1000000000000000000*y4*y22 - 3//1000000000000000000*y10*y13*y26 - 1//10000000000000*y10*y32*y34 + 1//10000000000000*y11*y24  …  0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [B_Bfa1, B_Bfa1P4, B_Bfa1P4_Tem1GDP + B_Bfa1P4_Tem1GTP, B_Bfa1P5, B_Bfa1P5_Tem1GDP + B_Bfa1P5_Tem1GTP, B_Bfa1_Tem1GDP + B_Bfa1_Tem1GTP, Bfa1, Bfa1P4, Bfa1P4_Tem1GDP + Bfa1P4_Tem1GTP, Bfa1P5  …  koffT, konB, konB4, konB4T, konB5T, konBT, konT, krCdc5, krKin4, u])
 │     Dict(:new_system => [-3//1000000000000000000*y1*y16*y31 - 3//1000000000000000000*y1*y17 - 3//1000000000000000000*y1*y18*y35 - 3//1000000000000000000*y1*y23 + 3//1000000000000000000*y6*y25 + 3//1000000000000000000*y7*y13*y27, 3//1000000000000000000*y1*y18*y35 - 3//1000000000000000000*y2*y16*y29 - 3//1000000000000000000*y2*y24 + 3//1000000000000000000*y3*y25 + 3//1000000000000000000*y8*y13*y28, 3//1000000000000000000*y2*y16*y29 - 3//1000000000000000000*y3*y24 - 3//1000000000000000000*y3*y25 + 3//1000000000000000000*y6*y18*y35 + 3//1000000000000000000*y9*y13*y28, 3//1000000000000000000*y1*y17 - 3//1000000000000000000*y4*y16*y30 - 3//1000000000000000000*y4*y23 + 3//1000000000000000000*y5*y25 + 3//1000000000000000000*y10*y13*y27, 3//1000000000000000000*y4*y16*y30 - 3//1000000000000000000*y5*y23 - 3//1000000000000000000*y5*y25 + 3//1000000000000000000*y6*y17 + 3//1000000000000000000*y11*y13*y27, 3//1000000000000000000*y1*y16*y31 - 3//1000000000000000000*y6*y17 - 3//1000000000000000000*y6*y18*y35 - 3//1000000000000000000*y6*y23 - 3//1000000000000000000*y6*y25 + 3//1000000000000000000*y12*y13*y27, 3//1000000000000000000*y1*y23 - 3//1000000000000000000*y7*y13*y27 - 1//10000000000000*y7*y19*y35 + 1//10000000000000*y8*y34 + 1//10000000000000*y10*y33*y35 + 1//10000000000000*y12*y25, 3//1000000000000000000*y2*y24 + 1//10000000000000*y7*y19*y35 - 3//1000000000000000000*y8*y13*y28 - 1//10000000000000*y8*y34 + 1//10000000000000*y9*y25, 3//1000000000000000000*y3*y24 - 3//1000000000000000000*y9*y13*y28 - 1//10000000000000*y9*y25 - 1//10000000000000*y9*y34 + 1//10000000000000*y12*y19*y35, 3//1000000000000000000*y4*y23 - 3//1000000000000000000*y10*y13*y27 - 1//10000000000000*y10*y33*y35 + 1//10000000000000*y11*y25  …  0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [B_Bfa1, B_Bfa1P4, B_Bfa1P4_Tem1GDP + B_Bfa1P4_Tem1GTP, B_Bfa1P5, B_Bfa1P5_Tem1GDP + B_Bfa1P5_Tem1GTP, B_Bfa1_Tem1GDP + B_Bfa1_Tem1GTP, Bfa1, Bfa1P4, Bfa1P4_Tem1GDP + Bfa1P4_Tem1GTP, Bfa1P5  …  koffT, konB, konB4, konB4T, konB5T, konBT, konT, krCdc5, krKin4, u])
 │     Dict(:new_system => [-3//1000000000000000000*y1*y16*y32 - 3//1000000000000000000*y1*y17 - 3//1000000000000000000*y1*y18*y36 - 3//1000000000000000000*y1*y24 + 3//1000000000000000000*y6*y26 + 3//1000000000000000000*y7*y13*y28, 3//1000000000000000000*y1*y18*y36 - 3//1000000000000000000*y2*y16*y30 - 3//1000000000000000000*y2*y25 + 3//1000000000000000000*y3*y26 + 3//1000000000000000000*y8*y13*y29, 3//1000000000000000000*y2*y16*y30 - 3//1000000000000000000*y3*y25 - 3//1000000000000000000*y3*y26 + 3//1000000000000000000*y6*y18*y36 + 3//1000000000000000000*y9*y13*y29, 3//1000000000000000000*y1*y17 - 3//1000000000000000000*y4*y16*y31 - 3//1000000000000000000*y4*y24 + 3//1000000000000000000*y5*y26 + 3//1000000000000000000*y10*y13*y28, 3//1000000000000000000*y4*y16*y31 - 3//1000000000000000000*y5*y24 - 3//1000000000000000000*y5*y26 + 3//1000000000000000000*y6*y17 + 3//1000000000000000000*y11*y13*y28, 3//1000000000000000000*y1*y16*y32 - 3//1000000000000000000*y6*y17 - 3//1000000000000000000*y6*y18*y36 - 3//1000000000000000000*y6*y24 - 3//1000000000000000000*y6*y26 + 3//1000000000000000000*y12*y13*y28, 3//1000000000000000000*y1*y24 - 3//1000000000000000000*y7*y13*y28 - 1//10000000000000*y7*y19*y36 + 1//10000000000000*y8*y35 + 1//10000000000000*y10*y34*y36 + 1//10000000000000*y12*y26, 3//1000000000000000000*y2*y25 + 1//10000000000000*y7*y19*y36 - 3//1000000000000000000*y8*y13*y29 - 1//10000000000000*y8*y35 + 1//10000000000000*y9*y26, 3//1000000000000000000*y3*y25 - 3//1000000000000000000*y9*y13*y29 - 1//10000000000000*y9*y26 - 1//10000000000000*y9*y35 + 1//10000000000000*y12*y19*y36, 3//1000000000000000000*y4*y24 - 3//1000000000000000000*y10*y13*y28 - 1//10000000000000*y10*y34*y36 + 1//10000000000000*y11*y26  …  0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [B_Bfa1, B_Bfa1P4, B_Bfa1P4_Tem1GDP + B_Bfa1P4_Tem1GTP, B_Bfa1P5, B_Bfa1P5_Tem1GDP + B_Bfa1P5_Tem1GTP, B_Bfa1_Tem1GDP + B_Bfa1_Tem1GTP, Bfa1, Bfa1P4, Bfa1P4_Tem1GDP + Bfa1P4_Tem1GTP, Bfa1P5  …  koffT, konB, konB4, konB4T, konB5T, konBT, konT, krCdc5, krKin4, u])
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:229

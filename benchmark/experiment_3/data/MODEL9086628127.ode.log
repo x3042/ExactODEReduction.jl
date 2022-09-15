@@ -17,14 +17,14 @@
 │    Internal_slash_IR_star_'(t) = 27//12500000000000000*PKA_minus_active_slash_internal_minus_PKA_minus_act_sbo_1_sbc__slash_internal_minus_PKA_minus_act_sbo_1_sbc__cplx(t) + 27//50000000000000000*PKA_minus_active_slash_internal_minus_PKA_minus_act_slash_internal_minus_PKA_minus_act_cplx(t)
 │    Membrane_slash_MR'(t) = 7//2000000000000000000*Membrane_slash_PP1_minus_active_slash_PP1_slash_PP1_cplx(t) + 27//12500000000000000*PKA_minus_active_slash_memb_minus_PKA_minus_act_slash_memb_minus_PKA_minus_act_cplx(t)
 │    
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:211
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:209
 [ Info: constructed a set of 10 matrices 16×16 from the system Jacobian
 [ Info: Called invariant_subspace_global on 10 matrices of shape (16, 16)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 .......[ Info: generated a basis for Algebra of dimension 224
 ┌ Debug: Dimension of the algebra is 224
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 28
 [ Info: Found radical of size 28
@@ -32,17 +32,15 @@
 [ Info: 2 dimensional subspace found
 [ Info: found 2-dim subspace in ambient 16-dim
 [ Info: Calling myself recursively in restricted subspace
-[ Info: Called invariant_subspace_global on 10 matrices of shape (2, 2)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 2-dim
+┌ Debug: Get to a 2 -dimensional space with zero action
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:124
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 10 matrices of shape (14, 14)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 ......[ Info: generated a basis for Algebra of dimension 196
 ┌ Debug: Dimension of the algebra is 196
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 ┌ Debug: Before positivization: BigInt[0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0]
@@ -51,5 +49,9 @@
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
-┌ Debug: Found reductions Dict{Symbol, Vector{fmpq_mpoly}}[Dict(:new_system => [0], :new_vars => [Bulk_AMPAR]), Dict(:new_system => [0, 0], :new_vars => [Bulk_AMPAR, PKA_minus_active])]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236
+┌ Debug: Found reductions
+│   result =
+│    2-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
+│     Dict(:new_system => [0], :new_vars => [Bulk_AMPAR])
+│     Dict(:new_system => [0, 0], :new_vars => [Bulk_AMPAR, PKA_minus_active])
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:229

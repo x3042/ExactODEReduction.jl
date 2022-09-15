@@ -18,14 +18,14 @@
 │    species_3'(t) = -529000*species_1(t)*species_3(t) + 117//25000*species_10(t) + 13//156250000*species_11(t) - 1620000*species_14(t)*species_3(t) + 7//800*species_15(t) - 44700*species_2(t)*species_3(t) - 853000*species_3(t)*species_9(t) + 419//50000000*species_5(t)
 │    species_7'(t) = 13//1000*species_10(t) + 25*species_11(t) - 61//250*species_12(t)*species_7(t) - 111//50000000000*species_13(t)*species_7(t) + 25*species_15(t) - 297//100000*species_16(t)*species_7(t) + 13//1000*species_5(t) - 903//1000000000*species_6(t)*species_7(t)
 │    
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:211
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:209
 [ Info: constructed a set of 17 matrices 17×17 from the system Jacobian
 [ Info: Called invariant_subspace_global on 17 matrices of shape (17, 17)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 ............[ Info: generated a basis for Algebra of dimension 204
 ┌ Debug: Dimension of the algebra is 204
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 60
 [ Info: Found radical of size 60
@@ -33,32 +33,15 @@
 [ Info: 5 dimensional subspace found
 [ Info: found 5-dim subspace in ambient 17-dim
 [ Info: Calling myself recursively in restricted subspace
-[ Info: Called invariant_subspace_global on 17 matrices of shape (5, 5)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 5-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 17 matrices of shape (4, 4)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 4-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 17 matrices of shape (3, 3)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 3-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 17 matrices of shape (2, 2)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 2-dim
+┌ Debug: Get to a 5 -dimensional space with zero action
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:124
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 17 matrices of shape (12, 12)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 .......[ Info: generated a basis for Algebra of dimension 144
 ┌ Debug: Dimension of the algebra is 144
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 ┌ Debug: Before positivization: BigInt[1 0 0 0 0 0 2 1 1 1 -1 1 -1 -1 0 -1 1; 0 1 0 0 0 0 1 0 0 1 -1 0 0 0 0 -1 1; 0 0 1 0 0 1 1 1 1 0 0 1 0 0 0 0 1; 0 0 0 1 0 -1 -1 0 -1 0 1 -1 1 0 1 0 -1; 0 0 0 0 1 1 0 0 1 0 0 0 0 1 -1 1 0]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [1 0 0 1 1 0 1 1 1 1 0 0 0 0 0 0 0; 0 1 1 1 1 1 1 1 1 1 0 0 1 1 0 0 1; 0 0 1 1 0 0 0 1 0 0 1 0 1 0 1 0 0; 0 0 1 0 0 1 1 1 1 0 0 1 0 0 0 0 1; 0 0 1 1 1 1 0 1 1 0 1 0 1 1 0 1 0]
@@ -79,5 +62,12 @@
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: DimensionMismatch("No suitable matrix found")
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:41
-┌ Debug: Found reductions Dict{Symbol, Vector{fmpq_mpoly}}[Dict(:new_system => [0], :new_vars => [species_0 + 2*species_14 + species_15 + species_16 + species_2 - species_3 + species_4 - species_5 - species_6 - species_8 + species_9]), Dict(:new_system => [0, 0], :new_vars => [species_0 + 2*species_14 + species_15 + species_16 + species_2 - species_3 + species_4 - species_5 - species_6 - species_8 + species_9, species_1 + species_14 + species_2 - species_3 - species_8 + species_9]), Dict(:new_system => [0, 0, 0], :new_vars => [species_0 + 2*species_14 + species_15 + species_16 + species_2 - species_3 + species_4 - species_5 - species_6 - species_8 + species_9, species_1 + species_14 + species_2 - species_3 - species_8 + species_9, species_10 + species_13 + species_14 + species_15 + species_16 + species_4 + species_9]), Dict(:new_system => [0, 0, 0, 0], :new_vars => [species_0 + 2*species_14 + species_15 + species_16 + species_2 - species_3 + species_4 - species_5 - species_6 - species_8 + species_9, species_1 + species_14 + species_2 - species_3 - species_8 + species_9, species_10 + species_13 + species_14 + species_15 + species_16 + species_4 + species_9, species_11 - species_13 - species_14 - species_16 + species_3 - species_4 + species_5 + species_7 - species_9]), Dict(:new_system => [0, 0, 0, 0, 0], :new_vars => [species_0 + species_11 + species_12 + species_14 + species_15 + species_16 + species_2, species_1 + species_10 + species_11 + species_12 + species_13 + species_14 + species_15 + species_16 + species_2 + species_5 + species_6 + species_9, species_10 + species_11 + species_15 + species_3 + species_5 + species_7, species_10 + species_13 + species_14 + species_15 + species_16 + species_4 + species_9, species_10 + species_11 + species_12 + species_13 + species_15 + species_16 + species_3 + species_5 + species_6 + species_8])]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236
+┌ Debug: Found reductions
+│   result =
+│    5-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
+│     Dict(:new_system => [0], :new_vars => [species_0 + 2*species_14 + species_15 + species_16 + species_2 - species_3 + species_4 - species_5 - species_6 - species_8 + species_9])
+│     Dict(:new_system => [0, 0], :new_vars => [species_0 + 2*species_14 + species_15 + species_16 + species_2 - species_3 + species_4 - species_5 - species_6 - species_8 + species_9, species_1 + species_14 + species_2 - species_3 - species_8 + species_9])
+│     Dict(:new_system => [0, 0, 0], :new_vars => [species_0 + 2*species_14 + species_15 + species_16 + species_2 - species_3 + species_4 - species_5 - species_6 - species_8 + species_9, species_1 + species_14 + species_2 - species_3 - species_8 + species_9, species_10 + species_13 + species_14 + species_15 + species_16 + species_4 + species_9])
+│     Dict(:new_system => [0, 0, 0, 0], :new_vars => [species_0 + 2*species_14 + species_15 + species_16 + species_2 - species_3 + species_4 - species_5 - species_6 - species_8 + species_9, species_1 + species_14 + species_2 - species_3 - species_8 + species_9, species_10 + species_13 + species_14 + species_15 + species_16 + species_4 + species_9, species_11 - species_13 - species_14 - species_16 + species_3 - species_4 + species_5 + species_7 - species_9])
+│     Dict(:new_system => [0, 0, 0, 0, 0], :new_vars => [species_0 + species_11 + species_12 + species_14 + species_15 + species_16 + species_2, species_1 + species_10 + species_11 + species_12 + species_13 + species_14 + species_15 + species_16 + species_2 + species_5 + species_6 + species_9, species_10 + species_11 + species_15 + species_3 + species_5 + species_7, species_10 + species_13 + species_14 + species_15 + species_16 + species_4 + species_9, species_10 + species_11 + species_12 + species_13 + species_15 + species_16 + species_3 + species_5 + species_6 + species_8])
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:229

@@ -30,11 +30,11 @@
 │    k_PolDTF_binding'(t) = 0
 │    k_TF_translocation'(t) = 0
 │    
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:211
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:209
 [ Info: constructed a set of 28 matrices 29×29 from the system Jacobian
 [ Info: Called invariant_subspace_global on 28 matrices of shape (29, 29)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:18
 [ Info: found 23-dim subspace in ambient 29-dim
 [ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 28 matrices of shape (23, 23)
@@ -42,7 +42,7 @@
 [ Info: new reduction modulo, 2147483647
 ............................[ Info: generated a basis for Algebra of dimension 253
 ┌ Debug: Dimension of the algebra is 253
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 132
 [ Info: Found radical of size 132
@@ -50,92 +50,38 @@
 [ Info: 12 dimensional subspace found
 [ Info: found 12-dim subspace in ambient 23-dim
 [ Info: Calling myself recursively in restricted subspace
-[ Info: Called invariant_subspace_global on 28 matrices of shape (12, 12)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 12-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 28 matrices of shape (11, 11)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 11-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 28 matrices of shape (10, 10)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 10-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 28 matrices of shape (9, 9)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 9-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 28 matrices of shape (8, 8)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 8-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 28 matrices of shape (7, 7)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 7-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 28 matrices of shape (6, 6)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 6-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 28 matrices of shape (5, 5)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 5-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 28 matrices of shape (4, 4)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 4-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 28 matrices of shape (3, 3)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 3-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 28 matrices of shape (2, 2)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 2-dim
+┌ Debug: Get to a 12 -dimensional space with zero action
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:124
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 28 matrices of shape (11, 11)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 ............[ Info: generated a basis for Algebra of dimension 121
 ┌ Debug: Dimension of the algebra is 121
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 28 matrices of shape (6, 6)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:18
 [ Info: found 1-dim subspace in ambient 6-dim
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 28 matrices of shape (5, 5)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:18
 [ Info: found 1-dim subspace in ambient 5-dim
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 28 matrices of shape (4, 4)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:18
 [ Info: found 1-dim subspace in ambient 4-dim
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 28 matrices of shape (3, 3)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:18
 [ Info: found 1-dim subspace in ambient 3-dim
 [ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 28 matrices of shape (2, 2)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 2-dim
+┌ Debug: Get to a 2 -dimensional space with zero action
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:124
 ┌ Debug: Before positivization: BigInt[1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0]
@@ -208,5 +154,15 @@
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
-┌ Debug: Found reductions Dict{Symbol, Vector{fmpq_mpoly}}[Dict(:new_system => [0], :new_vars => [k_PolDTF_binding]), Dict(:new_system => [0, 0], :new_vars => [k_PolDTF_binding, k_PolDTF_binding_0]), Dict(:new_system => [0, 0, 0], :new_vars => [k_PolDTF_binding, k_PolDTF_binding_0, k_Pol_TFn_B_binding_weak]), Dict(:new_system => [0, 0, 0, 0], :new_vars => [k_PolDTF_binding, k_PolDTF_binding_0, k_Pol_TFn_B_binding_weak, k_Pol_TFn_B_binding_weak_0]), Dict(:new_system => [0, 0, 0, 0, 0], :new_vars => [k_PolDTF_binding, k_PolDTF_binding_0, k_Pol_TFn_B_binding_weak, k_Pol_TFn_B_binding_weak_0, k_TF_binding]), Dict(:new_system => [0, 0, 0, 0, 0, 0], :new_vars => [k_PolDTF_binding, k_PolDTF_binding_0, k_Pol_TFn_B_binding_weak, k_Pol_TFn_B_binding_weak_0, k_TF_binding, k_TF_binding_0]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0], :new_vars => [k_PolDTF_binding, k_PolDTF_binding_0, k_Pol_TFn_B_binding_weak, k_Pol_TFn_B_binding_weak_0, k_TF_binding, k_TF_binding_0, k_TF_transcription]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [k_PolDTF_binding, k_PolDTF_binding_0, k_Pol_TFn_B_binding_weak, k_Pol_TFn_B_binding_weak_0, k_TF_binding, k_TF_binding_0, k_TF_transcription, k_TF_translation]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [k_PolDTF_binding, k_PolDTF_binding_0, k_Pol_TFn_B_binding_weak, k_Pol_TFn_B_binding_weak_0, k_TF_binding, k_TF_binding_0, k_TF_transcription, k_TF_translation, k_TF_translocation]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [k_PolDTF_binding, k_PolDTF_binding_0, k_Pol_TFn_B_binding_weak, k_Pol_TFn_B_binding_weak_0, k_TF_binding, k_TF_binding_0, k_TF_transcription, k_TF_translation, k_TF_translocation, k_TFcomplex_CP_binding]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [k_PolDTF_binding, k_PolDTF_binding_0, k_Pol_TFn_B_binding_weak, k_Pol_TFn_B_binding_weak_0, k_TF_binding, k_TF_binding_0, k_TF_transcription, k_TF_translation, k_TF_translocation, k_TFcomplex_CP_binding, k_TFcomplex_CP_binding_0]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [k_PolDTF_binding, k_PolDTF_binding_0, k_Pol_TFn_B_binding_weak, k_Pol_TFn_B_binding_weak_0, k_TF_binding, k_TF_binding_0, k_TF_transcription, k_TF_translation, k_TF_translocation, k_TFcomplex_CP_binding, k_TFcomplex_CP_binding_0, k_mCherry_transcription]), Dict(:new_system => [3//1000*y11*y17, 3//1000*y8*y22 + y8*y23, 3//1000*y6*y13 + y6*y18, y6*y18, 3//1000*y6*y13 + y6*y18 + 3//1000*y7*y15 + y8*y23, 3//1000*y3*y5*y12, 3//1000*y5*y11*y14 + 3//1000*y8*y22, 3//1000*y2*y7*y21, 1//25*y4*y19, y9*y20 + 3//1000*y11*y17, 3//1000*y1*y10*y16 + 3//1000*y7*y15 + y8*y23, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [B, CP, DTF, MTFc, Pol, Pol_DTF, Pol_TFn_B, Pol_TFn_B_CP, TFc, TFn, TFn_B, k_PolDTF_binding, k_PolDTF_binding_0, k_Pol_TFn_B_binding_weak, k_Pol_TFn_B_binding_weak_0, k_TF_binding, k_TF_binding_0, k_TF_transcription, k_TF_translation, k_TF_translocation, k_TFcomplex_CP_binding, k_TFcomplex_CP_binding_0, k_mCherry_transcription]), Dict(:new_system => [3//1000*y12*y18, 3//1000*y9*y23 + y9*y24, 3//1000*y7*y14 + y7*y19, y7*y19, y9*y24, 3//1000*y7*y14 + y7*y19 + 3//1000*y8*y16 + y9*y24, 3//1000*y3*y6*y13, 3//1000*y6*y12*y15 + 3//1000*y9*y23, 3//1000*y2*y8*y22, 1//25*y4*y20, y10*y21 + 3//1000*y12*y18, 3//1000*y1*y11*y17 + 3//1000*y8*y16 + y9*y24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [B, CP, DTF, MTFc, MmCherryc, Pol, Pol_DTF, Pol_TFn_B, Pol_TFn_B_CP, TFc, TFn, TFn_B, k_PolDTF_binding, k_PolDTF_binding_0, k_Pol_TFn_B_binding_weak, k_Pol_TFn_B_binding_weak_0, k_TF_binding, k_TF_binding_0, k_TF_transcription, k_TF_translation, k_TF_translocation, k_TFcomplex_CP_binding, k_TFcomplex_CP_binding_0, k_mCherry_transcription]), Dict(:new_system => [3//1000*y12*y19, 3//1000*y9*y24 + y9*y25, 3//1000*y7*y15 + y7*y20, y7*y20, y9*y25, 3//1000*y7*y15 + y7*y20 + 3//1000*y8*y17 + y9*y25, 3//1000*y3*y6*y14, 3//1000*y6*y12*y16 + 3//1000*y9*y24, 3//1000*y2*y8*y23, 1//25*y4*y21, y10*y22 + 3//1000*y12*y19, 3//1000*y1*y11*y18 + 3//1000*y8*y17 + y9*y25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [B, CP, DTF, MTFc, MmCherryc, Pol, Pol_DTF, Pol_TFn_B, Pol_TFn_B_CP, TFc, TFn, TFn_B, k_MRNA_degrade, k_PolDTF_binding, k_PolDTF_binding_0, k_Pol_TFn_B_binding_weak, k_Pol_TFn_B_binding_weak_0, k_TF_binding, k_TF_binding_0, k_TF_transcription, k_TF_translation, k_TF_translocation, k_TFcomplex_CP_binding, k_TFcomplex_CP_binding_0, k_mCherry_transcription]), Dict(:new_system => [3//1000*y12*y19, 3//1000*y9*y25 + y9*y26, 3//1000*y7*y15 + y7*y21, y7*y21, y9*y26, 3//1000*y7*y15 + y7*y21 + 3//1000*y8*y17 + y9*y26, 3//1000*y3*y6*y14, 3//1000*y6*y12*y16 + 3//1000*y9*y25, 3//1000*y2*y8*y24, 1//25*y4*y22, y10*y23 + 3//1000*y12*y19, 3//1000*y1*y11*y18 + 3//1000*y8*y17 + y9*y26, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [B, CP, DTF, MTFc, MmCherryc, Pol, Pol_DTF, Pol_TFn_B, Pol_TFn_B_CP, TFc, TFn, TFn_B, k_MRNA_degrade, k_PolDTF_binding, k_PolDTF_binding_0, k_Pol_TFn_B_binding_weak, k_Pol_TFn_B_binding_weak_0, k_TF_binding, k_TF_binding_0, k_TF_degrade_weak, k_TF_transcription, k_TF_translation, k_TF_translocation, k_TFcomplex_CP_binding, k_TFcomplex_CP_binding_0, k_mCherry_transcription]), Dict(:new_system => [3//1000*y12*y19, 3//1000*y9*y25 + y9*y27, 3//1000*y7*y15 + y7*y21, y7*y21, y9*y27, 3//1000*y7*y15 + y7*y21 + 3//1000*y8*y17 + y9*y27, 3//1000*y3*y6*y14, 3//1000*y6*y12*y16 + 3//1000*y9*y25, 3//1000*y2*y8*y24, 1//25*y4*y22, y10*y23 + 3//1000*y12*y19, 3//1000*y1*y11*y18 + 3//1000*y8*y17 + y9*y27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [B, CP, DTF, MTFc, MmCherryc, Pol, Pol_DTF, Pol_TFn_B, Pol_TFn_B_CP, TFc, TFn, TFn_B, k_MRNA_degrade, k_PolDTF_binding, k_PolDTF_binding_0, k_Pol_TFn_B_binding_weak, k_Pol_TFn_B_binding_weak_0, k_TF_binding, k_TF_binding_0, k_TF_degrade_weak, k_TF_transcription, k_TF_translation, k_TF_translocation, k_TFcomplex_CP_binding, k_TFcomplex_CP_binding_0, k__mCherry_translation, k_mCherry_transcription]), Dict(:new_system => [3//1000*y12*y19, 3//1000*y9*y25 + y9*y27, 3//1000*y7*y15 + y7*y21, y7*y21, y9*y27, 3//1000*y7*y15 + y7*y21 + 3//1000*y8*y17 + y9*y27, 3//1000*y3*y6*y14, 3//1000*y6*y12*y16 + 3//1000*y9*y25, 3//1000*y2*y8*y24, 1//25*y4*y22, y10*y23 + 3//1000*y12*y19, 3//1000*y1*y11*y18 + 3//1000*y8*y17 + y9*y27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [B, CP, DTF, MTFc, MmCherryc, Pol, Pol_DTF, Pol_TFn_B, Pol_TFn_B_CP, TFc, TFn, TFn_B, k_MRNA_degrade, k_PolDTF_binding, k_PolDTF_binding_0, k_Pol_TFn_B_binding_weak, k_Pol_TFn_B_binding_weak_0, k_TF_binding, k_TF_binding_0, k_TF_degrade_weak, k_TF_transcription, k_TF_translation, k_TF_translocation, k_TFcomplex_CP_binding, k_TFcomplex_CP_binding_0, k__mCherry_translation, k_mCherry_transcription, k_protein_degrade])]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236
+┌ Debug: Found reductions
+│   result =
+│    18-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
+│     Dict(:new_system => [0], :new_vars => [k_PolDTF_binding])
+│     Dict(:new_system => [0, 0], :new_vars => [k_PolDTF_binding, k_PolDTF_binding_0])
+│     Dict(:new_system => [0, 0, 0], :new_vars => [k_PolDTF_binding, k_PolDTF_binding_0, k_Pol_TFn_B_binding_weak])
+│     Dict(:new_system => [0, 0, 0, 0], :new_vars => [k_PolDTF_binding, k_PolDTF_binding_0, k_Pol_TFn_B_binding_weak, k_Pol_TFn_B_binding_weak_0])
+│     ⋮
+│     Dict(:new_system => [3//1000*y12*y19, 3//1000*y9*y25 + y9*y26, 3//1000*y7*y15 + y7*y21, y7*y21, y9*y26, 3//1000*y7*y15 + y7*y21 + 3//1000*y8*y17 + y9*y26, 3//1000*y3*y6*y14, 3//1000*y6*y12*y16 + 3//1000*y9*y25, 3//1000*y2*y8*y24, 1//25*y4*y22  …  0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [B, CP, DTF, MTFc, MmCherryc, Pol, Pol_DTF, Pol_TFn_B, Pol_TFn_B_CP, TFc  …  k_Pol_TFn_B_binding_weak_0, k_TF_binding, k_TF_binding_0, k_TF_degrade_weak, k_TF_transcription, k_TF_translation, k_TF_translocation, k_TFcomplex_CP_binding, k_TFcomplex_CP_binding_0, k_mCherry_transcription])
+│     Dict(:new_system => [3//1000*y12*y19, 3//1000*y9*y25 + y9*y27, 3//1000*y7*y15 + y7*y21, y7*y21, y9*y27, 3//1000*y7*y15 + y7*y21 + 3//1000*y8*y17 + y9*y27, 3//1000*y3*y6*y14, 3//1000*y6*y12*y16 + 3//1000*y9*y25, 3//1000*y2*y8*y24, 1//25*y4*y22  …  0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [B, CP, DTF, MTFc, MmCherryc, Pol, Pol_DTF, Pol_TFn_B, Pol_TFn_B_CP, TFc  …  k_TF_binding, k_TF_binding_0, k_TF_degrade_weak, k_TF_transcription, k_TF_translation, k_TF_translocation, k_TFcomplex_CP_binding, k_TFcomplex_CP_binding_0, k__mCherry_translation, k_mCherry_transcription])
+│     Dict(:new_system => [3//1000*y12*y19, 3//1000*y9*y25 + y9*y27, 3//1000*y7*y15 + y7*y21, y7*y21, y9*y27, 3//1000*y7*y15 + y7*y21 + 3//1000*y8*y17 + y9*y27, 3//1000*y3*y6*y14, 3//1000*y6*y12*y16 + 3//1000*y9*y25, 3//1000*y2*y8*y24, 1//25*y4*y22  …  0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [B, CP, DTF, MTFc, MmCherryc, Pol, Pol_DTF, Pol_TFn_B, Pol_TFn_B_CP, TFc  …  k_TF_binding_0, k_TF_degrade_weak, k_TF_transcription, k_TF_translation, k_TF_translocation, k_TFcomplex_CP_binding, k_TFcomplex_CP_binding_0, k__mCherry_translation, k_mCherry_transcription, k_protein_degrade])
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:229

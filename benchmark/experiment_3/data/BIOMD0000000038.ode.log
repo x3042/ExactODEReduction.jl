@@ -18,14 +18,14 @@
 │    GlcP'(t) = -27//5000*EIICB(t)*GlcP(t) + 4800*EIICBPGlc(t)
 │    PEP'(t) = -1960*EI(t)*PEP(t) + 480000*PyrPI(t)
 │    
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:211
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:209
 [ Info: constructed a set of 13 matrices 17×17 from the system Jacobian
 [ Info: Called invariant_subspace_global on 13 matrices of shape (17, 17)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 ........[ Info: generated a basis for Algebra of dimension 170
 ┌ Debug: Dimension of the algebra is 170
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 70
 [ Info: Found radical of size 70
@@ -33,42 +33,15 @@
 [ Info: 7 dimensional subspace found
 [ Info: found 7-dim subspace in ambient 17-dim
 [ Info: Calling myself recursively in restricted subspace
-[ Info: Called invariant_subspace_global on 13 matrices of shape (7, 7)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 7-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 13 matrices of shape (6, 6)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 6-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 13 matrices of shape (5, 5)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 5-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 13 matrices of shape (4, 4)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 4-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 13 matrices of shape (3, 3)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 3-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 13 matrices of shape (2, 2)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 2-dim
+┌ Debug: Get to a 7 -dimensional space with zero action
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:124
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 13 matrices of shape (10, 10)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 ....[ Info: generated a basis for Algebra of dimension 100
 ┌ Debug: Dimension of the algebra is 100
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 ┌ Debug: Before positivization: BigInt[1 0 0 0 0 0 0 1 0 0 0 -1 -1 -1 0 0 1; 0 1 0 0 0 -1 0 -1 0 1 0 1 0 1 0 1 0; 0 0 1 0 -1 0 0 1 0 0 1 -1 0 0 0 -1 0; 0 0 0 1 1 1 0 0 0 -1 -1 0 0 0 0 0 0; 0 0 0 0 0 0 1 0 0 1 1 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 1 0 0 1 1 1 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [1 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 1; 1 1 0 1 1 0 1 0 1 1 0 1 0 1 0 1 1; 0 1 1 1 0 0 0 0 0 0 0 0 0 1 0 0 0; 0 0 0 1 1 1 1 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 1 0 0 1 1 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 1 0 0 1 1 1 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1]
@@ -97,5 +70,14 @@
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [1 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 1; 1 1 0 1 1 0 1 0 1 1 0 1 0 1 0 1 1; 0 1 1 1 0 0 0 0 0 0 0 0 0 1 0 0 0; 0 0 0 1 1 1 1 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 1 0 0 1 1 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 1 0 0 1 1 1 0 0 0]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
-┌ Debug: Found reductions Dict{Symbol, Vector{fmpq_mpoly}}[Dict(:new_system => [0], :new_vars => [EI + EIP - HPr - HPrP - HPrPIIA + PyrPI]), Dict(:new_system => [0, 0], :new_vars => [EI + EIP - HPr - HPrP - HPrPIIA + PyrPI, EIIA - EIICBP - EIP + Glc + HPr + HPrPIIA + Pyr]), Dict(:new_system => [0, 0, 0], :new_vars => [EI + EIP - HPr - HPrP - HPrPIIA + PyrPI, EIIA - EIICBP - EIP + Glc + HPr + HPrPIIA + Pyr, EIIAP - EIICB + EIP + GlcP - HPr - Pyr]), Dict(:new_system => [0, 0, 0, 0], :new_vars => [EI + EIP - HPr - HPrP - HPrPIIA + PyrPI, EIIA - EIICBP - EIP + Glc + HPr + HPrPIIA + Pyr, EIIAP - EIICB + EIP + GlcP - HPr - Pyr, EIIAPIICB + EIICB + EIICBP - Glc - GlcP]), Dict(:new_system => [0, 0, 0, 0, 0], :new_vars => [EI + EIP - HPr - HPrP - HPrPIIA + PyrPI, EIIA - EIICBP - EIP + Glc + HPr + HPrPIIA + Pyr, EIIAP - EIICB + EIP + GlcP - HPr - Pyr, EIIAPIICB + EIICB + EIICBP - Glc - GlcP, EIICBPGlc + Glc + GlcP]), Dict(:new_system => [0, 0, 0, 0, 0, 0], :new_vars => [EI + EIP + EIPHPr + PyrPI, EI + EIIA + EIIAPIICB + EIICB + EIICBPGlc + EIPHPr + Glc + HPr + HPrPIIA + Pyr + PyrPI, EIIA + EIIAP + EIIAPIICB + HPrPIIA, EIIAPIICB + EIICB + EIICBP + EIICBPGlc, EIICBPGlc + Glc + GlcP, EIPHPr + HPr + HPrP + HPrPIIA]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0], :new_vars => [EI + EIP + EIPHPr + PyrPI, EI + EIIA + EIIAPIICB + EIICB + EIICBPGlc + EIPHPr + Glc + HPr + HPrPIIA + Pyr + PyrPI, EIIA + EIIAP + EIIAPIICB + HPrPIIA, EIIAPIICB + EIICB + EIICBP + EIICBPGlc, EIICBPGlc + Glc + GlcP, EIPHPr + HPr + HPrP + HPrPIIA, PEP + Pyr + PyrPI])]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236
+┌ Debug: Found reductions
+│   result =
+│    7-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
+│     Dict(:new_system => [0], :new_vars => [EI + EIP - HPr - HPrP - HPrPIIA + PyrPI])
+│     Dict(:new_system => [0, 0], :new_vars => [EI + EIP - HPr - HPrP - HPrPIIA + PyrPI, EIIA - EIICBP - EIP + Glc + HPr + HPrPIIA + Pyr])
+│     Dict(:new_system => [0, 0, 0], :new_vars => [EI + EIP - HPr - HPrP - HPrPIIA + PyrPI, EIIA - EIICBP - EIP + Glc + HPr + HPrPIIA + Pyr, EIIAP - EIICB + EIP + GlcP - HPr - Pyr])
+│     Dict(:new_system => [0, 0, 0, 0], :new_vars => [EI + EIP - HPr - HPrP - HPrPIIA + PyrPI, EIIA - EIICBP - EIP + Glc + HPr + HPrPIIA + Pyr, EIIAP - EIICB + EIP + GlcP - HPr - Pyr, EIIAPIICB + EIICB + EIICBP - Glc - GlcP])
+│     Dict(:new_system => [0, 0, 0, 0, 0], :new_vars => [EI + EIP - HPr - HPrP - HPrPIIA + PyrPI, EIIA - EIICBP - EIP + Glc + HPr + HPrPIIA + Pyr, EIIAP - EIICB + EIP + GlcP - HPr - Pyr, EIIAPIICB + EIICB + EIICBP - Glc - GlcP, EIICBPGlc + Glc + GlcP])
+│     Dict(:new_system => [0, 0, 0, 0, 0, 0], :new_vars => [EI + EIP + EIPHPr + PyrPI, EI + EIIA + EIIAPIICB + EIICB + EIICBPGlc + EIPHPr + Glc + HPr + HPrPIIA + Pyr + PyrPI, EIIA + EIIAP + EIIAPIICB + HPrPIIA, EIIAPIICB + EIICB + EIICBP + EIICBPGlc, EIICBPGlc + Glc + GlcP, EIPHPr + HPr + HPrP + HPrPIIA])
+│     Dict(:new_system => [0, 0, 0, 0, 0, 0, 0], :new_vars => [EI + EIP + EIPHPr + PyrPI, EI + EIIA + EIIAPIICB + EIICB + EIICBPGlc + EIPHPr + Glc + HPr + HPrPIIA + Pyr + PyrPI, EIIA + EIIAP + EIIAPIICB + HPrPIIA, EIIAPIICB + EIICB + EIICBP + EIICBPGlc, EIICBPGlc + Glc + GlcP, EIPHPr + HPr + HPrP + HPrPIIA, PEP + Pyr + PyrPI])
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:229

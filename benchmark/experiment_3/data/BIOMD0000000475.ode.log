@@ -24,16 +24,16 @@
 │    species_3'(t) = 3//200000000*species_1(t)*species_2(t) + 1000*species_9(t)
 │    species_10'(t) = 351//10000*species_7(t)*species_9(t)
 │    
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:211
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:209
 [ Info: constructed a set of 16 matrices 23×23 from the system Jacobian
 [ Info: Called invariant_subspace_global on 16 matrices of shape (23, 23)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:18
 [ Info: found 1-dim subspace in ambient 23-dim
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 16 matrices of shape (22, 22)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:18
 [ Info: found 21-dim subspace in ambient 22-dim
 [ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 16 matrices of shape (21, 21)
@@ -41,7 +41,7 @@
 [ Info: new reduction modulo, 2147483647
 ........................[ Info: generated a basis for Algebra of dimension 399
 ┌ Debug: Dimension of the algebra is 399
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 38
 [ Info: Found radical of size 38
@@ -49,17 +49,15 @@
 [ Info: 2 dimensional subspace found
 [ Info: found 2-dim subspace in ambient 21-dim
 [ Info: Calling myself recursively in restricted subspace
-[ Info: Called invariant_subspace_global on 16 matrices of shape (2, 2)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 2-dim
+┌ Debug: Get to a 2 -dimensional space with zero action
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:124
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 16 matrices of shape (19, 19)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 ......................[ Info: generated a basis for Algebra of dimension 361
 ┌ Debug: Dimension of the algebra is 361
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 ┌ Debug: Before positivization: BigInt[1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
@@ -76,5 +74,11 @@
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: DimensionMismatch("No suitable matrix found")
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:41
-┌ Debug: Found reductions Dict{Symbol, Vector{fmpq_mpoly}}[Dict(:new_system => [0], :new_vars => [species_1]), Dict(:new_system => [0, 0], :new_vars => [species_1, species_11 - species_6]), Dict(:new_system => [0, 0, 0], :new_vars => [species_1, species_11 - species_6, species_2]), Dict(:new_system => [0, 351//10000*y20*y22, 1//100*y2, y3 + 1//200*y6, 1//200*y6 + 3//400000*y9 + 1//200*y14, 1//200000*y4*y5 + 1//10000000000*y8, 1//10000000000*y8 + 100000*y10*y21 + 1//10000000000*y13, 39//500*y6*y7, 1//200000*y5*y11 + 1//20*y8 + 1//10000000000*y13, 1//20*y8 + 1//200*y13, 3//400000*y9, 0, 39//500*y7*y9, 1//200*y13, 1//200*y14, 3//200000000*y1*y12 + 1000*y22, y3 + 1//50*y18 + 1000*y22, 2000*y17, 1//100*y2, 1//100*y2 + 1//4000000*y19*y21, 3//100000000*y4 + 1//625*y11 + 3//200*y15, 1//100*y2 + 100000*y16*y17], :new_vars => [species_1, species_10, species_11, species_12, species_13, species_14, species_15, species_16, species_17, species_18, species_19, species_2, species_20, species_21, species_22, species_3, species_4, species_5, species_6, species_7, species_8, species_9])]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236
+┌ Debug: Found reductions
+│   result =
+│    4-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
+│     Dict(:new_system => [0], :new_vars => [species_1])
+│     Dict(:new_system => [0, 0], :new_vars => [species_1, species_11 - species_6])
+│     Dict(:new_system => [0, 0, 0], :new_vars => [species_1, species_11 - species_6, species_2])
+│     Dict(:new_system => [0, 351//10000*y20*y22, 1//100*y2, y3 + 1//200*y6, 1//200*y6 + 3//400000*y9 + 1//200*y14, 1//200000*y4*y5 + 1//10000000000*y8, 1//10000000000*y8 + 100000*y10*y21 + 1//10000000000*y13, 39//500*y6*y7, 1//200000*y5*y11 + 1//20*y8 + 1//10000000000*y13, 1//20*y8 + 1//200*y13  …  39//500*y7*y9, 1//200*y13, 1//200*y14, 3//200000000*y1*y12 + 1000*y22, y3 + 1//50*y18 + 1000*y22, 2000*y17, 1//100*y2, 1//100*y2 + 1//4000000*y19*y21, 3//100000000*y4 + 1//625*y11 + 3//200*y15, 1//100*y2 + 100000*y16*y17], :new_vars => [species_1, species_10, species_11, species_12, species_13, species_14, species_15, species_16, species_17, species_18  …  species_20, species_21, species_22, species_3, species_4, species_5, species_6, species_7, species_8, species_9])
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:229

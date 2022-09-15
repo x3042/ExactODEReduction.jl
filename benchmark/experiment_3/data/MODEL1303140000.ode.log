@@ -1,0 +1,34 @@
+[ Info: constructed a set of 3 matrices 6×6 from the system Jacobian
+[ Info: Called invariant_subspace_global on 3 matrices of shape (6, 6)
+[ Info: found 1-dim subspace in ambient 6-dim
+[ Info: Calling myself recursively in complemented subspace
+[ Info: Called invariant_subspace_global on 3 matrices of shape (5, 5)
+[ Info: found 2-dim subspace in ambient 5-dim
+[ Info: Calling myself recursively in restricted subspace
+[ Info: Called invariant_subspace_global on 3 matrices of shape (2, 2)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+[ Info: generated a basis for Algebra of dimension 2
+[ Info: Computing the radical..
+[ Info: Found radical of size 0
+[ Info: Radical is trivial, using randomized algorithm
+┌ Warning: No invariant subspaces defined over Q
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/radical.jl:244
+┌ Warning: There is invariant subspace but it is either not defined over Q
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:60
+[ Info: Calling myself recursively in complemented subspace
+[ Info: Called invariant_subspace_global on 3 matrices of shape (3, 3)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+[ Info: generated a basis for Algebra of dimension 6
+[ Info: Computing the radical..
+[ Info: computed the radical of dimension 2
+[ Info: Found radical of size 2
+[ Info: Radical is nontrivial, computing the general kernel of radical
+[ Info: 1 dimensional subspace found
+[ Info: found 1-dim subspace in ambient 3-dim
+[ Info: Calling myself recursively in complemented subspace
+[ Info: Called invariant_subspace_global on 3 matrices of shape (2, 2)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+[ Info: generated a basis for Algebra of dimension 4

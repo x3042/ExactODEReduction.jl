@@ -1,4 +1,4 @@
-#2022-09-14T18:12:47.947
+#2022-09-15T09:12:07.659
 
 ## Reductions for `find_reductions`.
 Systems of sizes from 10 to 20.

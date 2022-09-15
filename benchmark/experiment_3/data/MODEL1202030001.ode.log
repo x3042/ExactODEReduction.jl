@@ -1,0 +1,5 @@
+[ Info: constructed a set of 5 matrices 6×6 from the system Jacobian
+[ Info: Called invariant_subspace_global on 5 matrices of shape (6, 6)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+[ Info: generated a basis for Algebra of dimension 36

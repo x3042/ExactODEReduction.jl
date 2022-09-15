@@ -1,0 +1,56 @@
+┌ Debug: find_reductions of 
+│   system =
+│    mRNA'(t) = 5*source(t)
+│    Protein'(t) = 1//10*mRNA(t)
+│    source'(t) = 0
+│    SINK'(t) = -3//100*Protein(t) - 3//100*mRNA(t)
+│    
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:209
+[ Info: constructed a set of 1 matrices 4×4 from the system Jacobian
+[ Info: Called invariant_subspace_global on 1 matrices of shape (4, 4)
+┌ Debug: Found an invariant subspace by saturating the first unit vector
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:18
+[ Info: found 3-dim subspace in ambient 4-dim
+[ Info: Calling myself recursively in restricted subspace
+[ Info: Called invariant_subspace_global on 1 matrices of shape (3, 3)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+[ Info: generated a basis for Algebra of dimension 2
+┌ Debug: Dimension of the algebra is 2
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
+[ Info: Computing the radical..
+[ Info: Found radical of size 2
+[ Info: Radical is nontrivial, computing the general kernel of radical
+[ Info: 1 dimensional subspace found
+[ Info: found 1-dim subspace in ambient 3-dim
+[ Info: Calling myself recursively in complemented subspace
+[ Info: Called invariant_subspace_global on 1 matrices of shape (2, 2)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+[ Info: generated a basis for Algebra of dimension 1
+┌ Debug: Dimension of the algebra is 1
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
+[ Info: Computing the radical..
+[ Info: Found radical of size 1
+[ Info: Radical is nontrivial, computing the general kernel of radical
+[ Info: 1 dimensional subspace found
+[ Info: found 1-dim subspace in ambient 2-dim
+┌ Debug: Before positivization: BigInt[1 0 0 0; 0 0 1 0; 0 0 0 1]
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
+┌ Debug: After positivization: [1 0 0 0; 0 0 1 0; 0 0 0 1]
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
+┌ Debug: Before positivization: BigInt[0 0 0 1]
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
+┌ Debug: After positivization: [0 0 0 1]
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
+┌ Debug: Before positivization: BigInt[0 0 1 0; 0 0 0 1]
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
+┌ Debug: After positivization: [0 0 1 0; 0 0 0 1]
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
+┌ Debug: Found reductions
+│   result =
+│    3-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
+│     Dict(:new_system => [0], :new_vars => [source])
+│     Dict(:new_system => [5*y2, 0], :new_vars => [mRNA, source])
+│     Dict(:new_system => [1//10*y2, 5*y3, 0], :new_vars => [Protein, mRNA, source])
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:229

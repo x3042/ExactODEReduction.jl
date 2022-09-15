@@ -1,0 +1,26 @@
+[ Info: constructed a set of 8 matrices 8×8 from the system Jacobian
+[ Info: Called invariant_subspace_global on 8 matrices of shape (8, 8)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+[ Info: generated a basis for Algebra of dimension 12
+[ Info: Computing the radical..
+[ Info: computed the radical of dimension 10
+[ Info: Found radical of size 10
+[ Info: Radical is nontrivial, computing the general kernel of radical
+[ Info: 5 dimensional subspace found
+[ Info: found 5-dim subspace in ambient 8-dim
+[ Info: Calling myself recursively in restricted subspace
+[ Info: Calling myself recursively in complemented subspace
+[ Info: Called invariant_subspace_global on 8 matrices of shape (3, 3)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+[ Info: generated a basis for Algebra of dimension 4
+[ Info: Computing the radical..
+[ Info: computed the radical of dimension 2
+[ Info: Found radical of size 2
+[ Info: Radical is nontrivial, computing the general kernel of radical
+[ Info: 2 dimensional subspace found
+[ Info: found 2-dim subspace in ambient 3-dim
+[ Info: Calling myself recursively in restricted subspace
+[ Info: Called invariant_subspace_global on 8 matrices of shape (2, 2)
+[ Info: found 1-dim subspace in ambient 2-dim

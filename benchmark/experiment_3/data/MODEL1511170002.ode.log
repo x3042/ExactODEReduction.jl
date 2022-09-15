@@ -1,0 +1,42 @@
+[ Info: constructed a set of 4 matrices 8×8 from the system Jacobian
+[ Info: Called invariant_subspace_global on 4 matrices of shape (8, 8)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+┌ Warning: inclusion check failed..
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/basis.jl:273
+[ Info: new reduction modulo, 4611686014132420667
+[ Info: generated a basis for Algebra of dimension 31
+[ Info: Computing the radical..
+[ Info: computed the radical of dimension 15
+[ Info: Found radical of size 15
+[ Info: Radical is nontrivial, computing the general kernel of radical
+[ Info: 2 dimensional subspace found
+[ Info: found 2-dim subspace in ambient 8-dim
+[ Info: Calling myself recursively in restricted subspace
+[ Info: Calling myself recursively in complemented subspace
+[ Info: Called invariant_subspace_global on 4 matrices of shape (6, 6)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+[ Info: generated a basis for Algebra of dimension 25
+[ Info: Computing the radical..
+[ Info: computed the radical of dimension 9
+[ Info: Found radical of size 9
+[ Info: Radical is nontrivial, computing the general kernel of radical
+[ Info: 1 dimensional subspace found
+[ Info: found 1-dim subspace in ambient 6-dim
+[ Info: Calling myself recursively in complemented subspace
+[ Info: Called invariant_subspace_global on 4 matrices of shape (5, 5)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+[ Info: generated a basis for Algebra of dimension 20
+[ Info: Computing the radical..
+[ Info: computed the radical of dimension 4
+[ Info: Found radical of size 4
+[ Info: Radical is nontrivial, computing the general kernel of radical
+[ Info: 4 dimensional subspace found
+[ Info: found 4-dim subspace in ambient 5-dim
+[ Info: Calling myself recursively in restricted subspace
+[ Info: Called invariant_subspace_global on 4 matrices of shape (4, 4)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+[ Info: generated a basis for Algebra of dimension 16

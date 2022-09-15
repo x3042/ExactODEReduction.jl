@@ -15,13 +15,14 @@
 │    s0_1'(t) = 166053878316273//10000000000000000000*s0_0(t)*s0_4(t) + 166053878316273//20000000000000000000*s0_3(t)
 │    s0_13'(t) = 66421551326509//4000000000000000000*s0_12(t) + 90*s0_6(t)
 │    
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:211
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:209
 [ Info: constructed a set of 11 matrices 14×14 from the system Jacobian
 [ Info: Called invariant_subspace_global on 11 matrices of shape (14, 14)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 .......[ Info: generated a basis for Algebra of dimension 196
 ┌ Debug: Dimension of the algebra is 196
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
-┌ Debug: Found reductions Dict{Symbol, Vector{fmpq_mpoly}}[]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
+┌ Debug: Found reductions
+│   result = Dict{Symbol, Vector{fmpq_mpoly}}[]
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:229

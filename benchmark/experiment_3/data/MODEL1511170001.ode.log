@@ -1,0 +1,48 @@
+[ Info: constructed a set of 3 matrices 7×7 from the system Jacobian
+[ Info: Called invariant_subspace_global on 3 matrices of shape (7, 7)
+[ Info: found 6-dim subspace in ambient 7-dim
+[ Info: Calling myself recursively in restricted subspace
+[ Info: Called invariant_subspace_global on 3 matrices of shape (6, 6)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+┌ Warning: inclusion check failed..
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/basis.jl:273
+[ Info: new reduction modulo, 4611686014132420667
+┌ Warning: inclusion check failed..
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/basis.jl:273
+[ Info: new reduction modulo, 21267647892944573271954437909048725051
+[ Info: generated a basis for Algebra of dimension 13
+[ Info: Computing the radical..
+[ Info: computed the radical of dimension 9
+[ Info: Found radical of size 9
+[ Info: Radical is nontrivial, computing the general kernel of radical
+[ Info: 2 dimensional subspace found
+[ Info: found 2-dim subspace in ambient 6-dim
+[ Info: Calling myself recursively in restricted subspace
+[ Info: Calling myself recursively in complemented subspace
+[ Info: Called invariant_subspace_global on 3 matrices of shape (4, 4)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+[ Info: generated a basis for Algebra of dimension 9
+[ Info: Computing the radical..
+[ Info: computed the radical of dimension 5
+[ Info: Found radical of size 5
+[ Info: Radical is nontrivial, computing the general kernel of radical
+[ Info: 1 dimensional subspace found
+[ Info: found 1-dim subspace in ambient 4-dim
+[ Info: Calling myself recursively in complemented subspace
+[ Info: Called invariant_subspace_global on 3 matrices of shape (3, 3)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+[ Info: generated a basis for Algebra of dimension 6
+[ Info: Computing the radical..
+[ Info: computed the radical of dimension 2
+[ Info: Found radical of size 2
+[ Info: Radical is nontrivial, computing the general kernel of radical
+[ Info: 2 dimensional subspace found
+[ Info: found 2-dim subspace in ambient 3-dim
+[ Info: Calling myself recursively in restricted subspace
+[ Info: Called invariant_subspace_global on 3 matrices of shape (2, 2)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+[ Info: generated a basis for Algebra of dimension 4

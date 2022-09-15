@@ -36,16 +36,16 @@
 │    STAT1n_star_STAT1n_star_PPN'(t) = 1//1000*PPN(t)*STAT1n_star_STAT1n_star(t)
 │    STAT1c'(t) = 803//1000*IFNRJ2_star_SHP2_SOCS1_STAT1c(t) + 3//1000*IFNRJ2_star_SHP2_STAT1c(t) + 4//5*IFNRJ2_star_SOCS1_STAT1c(t) + 4//5*IFNRJ2_star_STAT1c(t) + 1//5*STAT1c_STAT1c_star(t) + 3//1000*STAT1c_star_PPX(t) + 1//20*STAT1n(t)
 │    
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:211
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:209
 [ Info: constructed a set of 23 matrices 35×35 from the system Jacobian
 [ Info: Called invariant_subspace_global on 23 matrices of shape (35, 35)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:18
 [ Info: found 1-dim subspace in ambient 35-dim
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 23 matrices of shape (34, 34)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:18
 [ Info: found 33-dim subspace in ambient 34-dim
 [ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 23 matrices of shape (33, 33)
@@ -53,7 +53,7 @@
 [ Info: new reduction modulo, 2147483647
 .............................................................................................[ Info: generated a basis for Algebra of dimension 1024
 ┌ Debug: Dimension of the algebra is 1024
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 63
 [ Info: Found radical of size 63
@@ -66,7 +66,7 @@
 [ Info: new reduction modulo, 2147483647
 .........................................................................................[ Info: generated a basis for Algebra of dimension 992
 ┌ Debug: Dimension of the algebra is 992
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 31
 [ Info: Found radical of size 31
@@ -79,7 +79,7 @@
 [ Info: new reduction modulo, 2147483647
 .......................................................................................[ Info: generated a basis for Algebra of dimension 961
 ┌ Debug: Dimension of the algebra is 961
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 ┌ Debug: Before positivization: BigInt[1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
@@ -96,5 +96,11 @@
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
-┌ Debug: Found reductions Dict{Symbol, Vector{fmpq_mpoly}}[Dict(:new_system => [0], :new_vars => [IFN]), Dict(:new_system => [0, 0], :new_vars => [IFN, mRNAn]), Dict(:new_system => [0, 1//1000*y3, 0], :new_vars => [IFN, mRNAc, mRNAn]), Dict(:new_system => [0, 1//50*y1*y17 + 1//20*y3, 1//50*y1*y18 + 1//10*y2*y14 + 2//5*y4, 2//25*y3 + 3//1000*y6 + 3//1000*y7 + 3//1000*y8 + 3//1000*y9, 1//200*y4 + 1//5*y6 + 201//2000*y10 + 6//5*y12 + 1//2*y13, 1//1000*y5*y19 + 201//2000*y7, 1//50*y6*y20 + 4//5*y8 + 1//1000*y10*y19, 1//125*y7*y21 + 1//50*y9*y20 + 1//1000*y11*y19, 201//2000*y8 + 1//1000*y12*y19, 1//50*y5*y20 + 1//5*y7 + 4//5*y11, 1//5*y8 + 1//125*y10*y21 + 1//50*y12*y20, 1//125*y5*y21 + 1//5*y9 + 201//2000*y11, 1//200*y5*y23, 1//20*y3 + 1//20*y18, 41//200*y30 + 41//200*y32, 203//1000*y24 + 203//1000*y26, 1//50*y2 + 1//20*y18, 1//50*y3 + 1//10*y14*y17, 203//1000*y6 + 203//1000*y7 + 203//1000*y8 + 203//1000*y9, 103//1000*y7 + 103//1000*y8 + 1//10*y10 + 1//10*y11 + 1//100*y33, 803//1000*y8 + 3//1000*y9 + 4//5*y11 + 4//5*y12 + 1//5*y22 + 3//1000*y24 + 1//20*y27, 1//5000000*y21*y23 + 3//1000*y26, 2//5*y12 + 1//2*y13 + 1//5*y22 + 1//5*y24 + 1//5*y25, 1//1000*y16*y23, 1//25*y23 + 1//5*y26, 1//1000*y16*y25, 1//5*y28 + 1//200*y30, 1//5000000*y27*y29 + 1//200*y32, 1//5*y28 + 1//5*y30 + 1//5*y31, 1//1000*y15*y29, 1//200*y25 + 1//25*y29 + 1//5*y32, 1//1000*y15*y31, 1//1000*y34, 0], :new_vars => [IFN, IFNR, IFNRJ, IFNRJ2, IFNRJ2_star, IFNRJ2_star_SHP2, IFNRJ2_star_SHP2_SOCS1, IFNRJ2_star_SHP2_SOCS1_STAT1c, IFNRJ2_star_SHP2_STAT1c, IFNRJ2_star_SOCS1, IFNRJ2_star_SOCS1_STAT1c, IFNRJ2_star_STAT1c, IFNRJ2_star_STAT1c_star, JAK, PPN, PPX, R, RJ, SHP2, SOCS1, STAT1c, STAT1c_STAT1c_star, STAT1c_star, STAT1c_star_PPX, STAT1c_star_STAT1c_star, STAT1c_star_STAT1c_star_PPX, STAT1n, STAT1n_STAT1n_star, STAT1n_star, STAT1n_star_PPN, STAT1n_star_STAT1n_star, STAT1n_star_STAT1n_star_PPN, mRNAc, mRNAn])]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236
+┌ Debug: Found reductions
+│   result =
+│    4-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
+│     Dict(:new_system => [0], :new_vars => [IFN])
+│     Dict(:new_system => [0, 0], :new_vars => [IFN, mRNAn])
+│     Dict(:new_system => [0, 1//1000*y3, 0], :new_vars => [IFN, mRNAc, mRNAn])
+│     Dict(:new_system => [0, 1//50*y1*y17 + 1//20*y3, 1//50*y1*y18 + 1//10*y2*y14 + 2//5*y4, 2//25*y3 + 3//1000*y6 + 3//1000*y7 + 3//1000*y8 + 3//1000*y9, 1//200*y4 + 1//5*y6 + 201//2000*y10 + 6//5*y12 + 1//2*y13, 1//1000*y5*y19 + 201//2000*y7, 1//50*y6*y20 + 4//5*y8 + 1//1000*y10*y19, 1//125*y7*y21 + 1//50*y9*y20 + 1//1000*y11*y19, 201//2000*y8 + 1//1000*y12*y19, 1//50*y5*y20 + 1//5*y7 + 4//5*y11  …  1//25*y23 + 1//5*y26, 1//1000*y16*y25, 1//5*y28 + 1//200*y30, 1//5000000*y27*y29 + 1//200*y32, 1//5*y28 + 1//5*y30 + 1//5*y31, 1//1000*y15*y29, 1//200*y25 + 1//25*y29 + 1//5*y32, 1//1000*y15*y31, 1//1000*y34, 0], :new_vars => [IFN, IFNR, IFNRJ, IFNRJ2, IFNRJ2_star, IFNRJ2_star_SHP2, IFNRJ2_star_SHP2_SOCS1, IFNRJ2_star_SHP2_SOCS1_STAT1c, IFNRJ2_star_SHP2_STAT1c, IFNRJ2_star_SOCS1  …  STAT1c_star_STAT1c_star, STAT1c_star_STAT1c_star_PPX, STAT1n, STAT1n_STAT1n_star, STAT1n_star, STAT1n_star_PPN, STAT1n_star_STAT1n_star, STAT1n_star_STAT1n_star_PPN, mRNAc, mRNAn])
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:229

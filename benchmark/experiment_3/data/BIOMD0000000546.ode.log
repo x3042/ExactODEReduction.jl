@@ -1,0 +1,13 @@
+[ Info: constructed a set of 4 matrices 9×9 from the system Jacobian
+[ Info: Called invariant_subspace_global on 4 matrices of shape (9, 9)
+[ Info: found 1-dim subspace in ambient 9-dim
+[ Info: Calling myself recursively in complemented subspace
+[ Info: Called invariant_subspace_global on 4 matrices of shape (8, 8)
+[ Info: found 1-dim subspace in ambient 8-dim
+[ Info: Calling myself recursively in complemented subspace
+[ Info: Called invariant_subspace_global on 4 matrices of shape (7, 7)
+[ Info: found 1-dim subspace in ambient 7-dim
+[ Info: Calling myself recursively in complemented subspace
+[ Info: Called invariant_subspace_global on 4 matrices of shape (6, 6)
+[ Info: found 1-dim subspace in ambient 6-dim
+[ Info: Calling myself recursively in complemented subspace

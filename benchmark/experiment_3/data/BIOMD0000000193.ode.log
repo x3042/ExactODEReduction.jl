@@ -19,14 +19,14 @@
 │    Cdc20'(t) = -Bub3_BubR1(t)*Cdc20(t)*k5f(t)*u(t) + Bub3_BubR1_Cdc20(t)*k5r(t) - Cdc20(t)*Mad1_CMad2_OMad2(t)*k2f(t)*u(t) - Cdc20(t)*OMad2(t)*kf6(t) + Cdc20_CMad2(t)*k3f(t)
 │    k1f'(t) = 0
 │    
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:211
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:209
 [ Info: constructed a set of 27 matrices 18×18 from the system Jacobian
 [ Info: Called invariant_subspace_global on 27 matrices of shape (18, 18)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 ......[ Info: generated a basis for Algebra of dimension 72
 ┌ Debug: Dimension of the algebra is 72
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 56
 [ Info: Found radical of size 56
@@ -34,77 +34,15 @@
 [ Info: 14 dimensional subspace found
 [ Info: found 14-dim subspace in ambient 18-dim
 [ Info: Calling myself recursively in restricted subspace
-[ Info: Called invariant_subspace_global on 27 matrices of shape (14, 14)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 14-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 27 matrices of shape (13, 13)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 13-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 27 matrices of shape (12, 12)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 12-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 27 matrices of shape (11, 11)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 11-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 27 matrices of shape (10, 10)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 10-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 27 matrices of shape (9, 9)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 9-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 27 matrices of shape (8, 8)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 8-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 27 matrices of shape (7, 7)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 7-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 27 matrices of shape (6, 6)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 6-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 27 matrices of shape (5, 5)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 5-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 27 matrices of shape (4, 4)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 4-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 27 matrices of shape (3, 3)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 3-dim
-[ Info: Calling myself recursively in complemented subspace
-[ Info: Called invariant_subspace_global on 27 matrices of shape (2, 2)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 2-dim
+┌ Debug: Get to a 14 -dimensional space with zero action
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:124
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 27 matrices of shape (4, 4)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 16
 ┌ Debug: Dimension of the algebra is 16
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 ┌ Debug: Before positivization: BigInt[1 0 -1 0 1 0 1 1 0 0 0 0 0 0 0 0 0 0; 0 1 1 0 0 0 -1 -1 0 0 0 0 0 0 0 0 0 0; 0 0 0 1 1 0 1 1 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [1 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 1 1 0 1 1 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1]
@@ -161,5 +99,15 @@
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [1 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 1 1 0 1 1 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
-┌ Debug: Found reductions Dict{Symbol, Vector{fmpq_mpoly}}[Dict(:new_system => [0], :new_vars => [Bub3_BubR1 - Cdc20 + MCC + Mad1_CMad2_OMad2 + OMad2]), Dict(:new_system => [0, 0], :new_vars => [Bub3_BubR1 - Cdc20 + MCC + Mad1_CMad2_OMad2 + OMad2, Bub3_BubR1_Cdc20 + Cdc20 - Mad1_CMad2_OMad2 - OMad2]), Dict(:new_system => [0, 0, 0], :new_vars => [Bub3_BubR1 + Bub3_BubR1_Cdc20 + MCC, Bub3_BubR1_Cdc20 + Cdc20 + Cdc20_CMad2 + MCC, Cdc20_CMad2 + MCC + Mad1_CMad2_OMad2 + OMad2]), Dict(:new_system => [0, 0, 0, 0], :new_vars => [Bub3_BubR1 + Bub3_BubR1_Cdc20 + MCC, Bub3_BubR1_Cdc20 + Cdc20 + Cdc20_CMad2 + MCC, Cdc20_CMad2 + MCC + Mad1_CMad2_OMad2 + OMad2, Mad1_CMad2 + Mad1_CMad2_OMad2]), Dict(:new_system => [0, 0, 0, 0, 0], :new_vars => [Bub3_BubR1 + Bub3_BubR1_Cdc20 + MCC, Bub3_BubR1_Cdc20 + Cdc20 + Cdc20_CMad2 + MCC, Cdc20_CMad2 + MCC + Mad1_CMad2_OMad2 + OMad2, Mad1_CMad2 + Mad1_CMad2_OMad2, k1f]), Dict(:new_system => [0, 0, 0, 0, 0, 0], :new_vars => [Bub3_BubR1 + Bub3_BubR1_Cdc20 + MCC, Bub3_BubR1_Cdc20 + Cdc20 + Cdc20_CMad2 + MCC, Cdc20_CMad2 + MCC + Mad1_CMad2_OMad2 + OMad2, Mad1_CMad2 + Mad1_CMad2_OMad2, k1f, k1r]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0], :new_vars => [Bub3_BubR1 + Bub3_BubR1_Cdc20 + MCC, Bub3_BubR1_Cdc20 + Cdc20 + Cdc20_CMad2 + MCC, Cdc20_CMad2 + MCC + Mad1_CMad2_OMad2 + OMad2, Mad1_CMad2 + Mad1_CMad2_OMad2, k1f, k1r, k2f]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [Bub3_BubR1 + Bub3_BubR1_Cdc20 + MCC, Bub3_BubR1_Cdc20 + Cdc20 + Cdc20_CMad2 + MCC, Cdc20_CMad2 + MCC + Mad1_CMad2_OMad2 + OMad2, Mad1_CMad2 + Mad1_CMad2_OMad2, k1f, k1r, k2f, k3f]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [Bub3_BubR1 + Bub3_BubR1_Cdc20 + MCC, Bub3_BubR1_Cdc20 + Cdc20 + Cdc20_CMad2 + MCC, Cdc20_CMad2 + MCC + Mad1_CMad2_OMad2 + OMad2, Mad1_CMad2 + Mad1_CMad2_OMad2, k1f, k1r, k2f, k3f, k4f]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [Bub3_BubR1 + Bub3_BubR1_Cdc20 + MCC, Bub3_BubR1_Cdc20 + Cdc20 + Cdc20_CMad2 + MCC, Cdc20_CMad2 + MCC + Mad1_CMad2_OMad2 + OMad2, Mad1_CMad2 + Mad1_CMad2_OMad2, k1f, k1r, k2f, k3f, k4f, k4r]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [Bub3_BubR1 + Bub3_BubR1_Cdc20 + MCC, Bub3_BubR1_Cdc20 + Cdc20 + Cdc20_CMad2 + MCC, Cdc20_CMad2 + MCC + Mad1_CMad2_OMad2 + OMad2, Mad1_CMad2 + Mad1_CMad2_OMad2, k1f, k1r, k2f, k3f, k4f, k4r, k5f]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [Bub3_BubR1 + Bub3_BubR1_Cdc20 + MCC, Bub3_BubR1_Cdc20 + Cdc20 + Cdc20_CMad2 + MCC, Cdc20_CMad2 + MCC + Mad1_CMad2_OMad2 + OMad2, Mad1_CMad2 + Mad1_CMad2_OMad2, k1f, k1r, k2f, k3f, k4f, k4r, k5f, k5r]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [Bub3_BubR1 + Bub3_BubR1_Cdc20 + MCC, Bub3_BubR1_Cdc20 + Cdc20 + Cdc20_CMad2 + MCC, Cdc20_CMad2 + MCC + Mad1_CMad2_OMad2 + OMad2, Mad1_CMad2 + Mad1_CMad2_OMad2, k1f, k1r, k2f, k3f, k4f, k4r, k5f, k5r, kf6]), Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [Bub3_BubR1 + Bub3_BubR1_Cdc20 + MCC, Bub3_BubR1_Cdc20 + Cdc20 + Cdc20_CMad2 + MCC, Cdc20_CMad2 + MCC + Mad1_CMad2_OMad2 + OMad2, Mad1_CMad2 + Mad1_CMad2_OMad2, k1f, k1r, k2f, k3f, k4f, k4r, k5f, k5r, kf6, u])]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236
+┌ Debug: Found reductions
+│   result =
+│    14-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
+│     Dict(:new_system => [0], :new_vars => [Bub3_BubR1 - Cdc20 + MCC + Mad1_CMad2_OMad2 + OMad2])
+│     Dict(:new_system => [0, 0], :new_vars => [Bub3_BubR1 - Cdc20 + MCC + Mad1_CMad2_OMad2 + OMad2, Bub3_BubR1_Cdc20 + Cdc20 - Mad1_CMad2_OMad2 - OMad2])
+│     Dict(:new_system => [0, 0, 0], :new_vars => [Bub3_BubR1 + Bub3_BubR1_Cdc20 + MCC, Bub3_BubR1_Cdc20 + Cdc20 + Cdc20_CMad2 + MCC, Cdc20_CMad2 + MCC + Mad1_CMad2_OMad2 + OMad2])
+│     Dict(:new_system => [0, 0, 0, 0], :new_vars => [Bub3_BubR1 + Bub3_BubR1_Cdc20 + MCC, Bub3_BubR1_Cdc20 + Cdc20 + Cdc20_CMad2 + MCC, Cdc20_CMad2 + MCC + Mad1_CMad2_OMad2 + OMad2, Mad1_CMad2 + Mad1_CMad2_OMad2])
+│     ⋮
+│     Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [Bub3_BubR1 + Bub3_BubR1_Cdc20 + MCC, Bub3_BubR1_Cdc20 + Cdc20 + Cdc20_CMad2 + MCC, Cdc20_CMad2 + MCC + Mad1_CMad2_OMad2 + OMad2, Mad1_CMad2 + Mad1_CMad2_OMad2, k1f, k1r, k2f, k3f, k4f, k4r, k5f, k5r])
+│     Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [Bub3_BubR1 + Bub3_BubR1_Cdc20 + MCC, Bub3_BubR1_Cdc20 + Cdc20 + Cdc20_CMad2 + MCC, Cdc20_CMad2 + MCC + Mad1_CMad2_OMad2 + OMad2, Mad1_CMad2 + Mad1_CMad2_OMad2, k1f, k1r, k2f, k3f, k4f, k4r, k5f, k5r, kf6])
+│     Dict(:new_system => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], :new_vars => [Bub3_BubR1 + Bub3_BubR1_Cdc20 + MCC, Bub3_BubR1_Cdc20 + Cdc20 + Cdc20_CMad2 + MCC, Cdc20_CMad2 + MCC + Mad1_CMad2_OMad2 + OMad2, Mad1_CMad2 + Mad1_CMad2_OMad2, k1f, k1r, k2f, k3f, k4f, k4r, k5f, k5r, kf6, u])
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:229

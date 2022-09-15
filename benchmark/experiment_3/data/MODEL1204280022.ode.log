@@ -25,13 +25,14 @@
 │    species_13'(t) = species_14(t) + 43//500*species_24(t)
 │    species_6'(t) = species_21(t) + 15*species_5(t)
 │    
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:211
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:209
 [ Info: constructed a set of 12 matrices 24×24 from the system Jacobian
 [ Info: Called invariant_subspace_global on 12 matrices of shape (24, 24)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 ..........................[ Info: generated a basis for Algebra of dimension 576
 ┌ Debug: Dimension of the algebra is 576
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
-┌ Debug: Found reductions Dict{Symbol, Vector{fmpq_mpoly}}[]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
+┌ Debug: Found reductions
+│   result = Dict{Symbol, Vector{fmpq_mpoly}}[]
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:229

@@ -50,92 +50,60 @@
 │    PP1_minus_active'(t) = 7//4000000000000*PP1_minus_active_slash_Deph_minus_thr286_slash_Deph_minus_thr286_cplx(t) + 7//4000000000000*PP1_minus_active_slash_Deph_minus_thr286c_slash_Deph_minus_thr286c_cplx(t) + 7//4000000000000*PP1_minus_active_slash_Deph_minus_thr305_slash_Deph_minus_thr305_cplx(t) + 7//4000000000000*PP1_minus_active_slash_Deph_minus_thr306_slash_Deph_minus_thr306_cplx(t) + 7//4000000000000*PP1_minus_active_slash_Deph_thr286b_slash_Deph_thr286b_cplx(t) + 1//1000000000000*PP1_slash_PP1_minus_I1(t) + 1//10000000000000*PP1_slash_PP1_minus_I1_star_(t)
 │    PP1_slash_I1_star_'(t) = 17//12500000000000*CaM_po_Ca_pc_n_minus_CaNAB_slash_dephosph_inhib1_slash_dephosph_inhib1_cplx(t) + 17//125000000000000*CaNAB_minus_Ca4_slash_dephosph_inhib1_noCaM_slash_dephosph_inhib1_noCaM_cplx(t) + 9//1000000000000*PKA_minus_active_slash_PKA_minus_phosph_minus_I1_slash_PKA_minus_phosph_minus_I1_cplx(t) + 1//10000000000000*PP1_slash_PP1_minus_I1_star_(t) + 1//40000000000*PP2A_slash_PP2A_minus_dephosph_minus_I1_slash_PP2A_minus_dephosph_minus_I1_cplx(t)
 │    
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:211
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:209
 [ Info: constructed a set of 28 matrices 49×49 from the system Jacobian
 [ Info: Called invariant_subspace_global on 28 matrices of shape (49, 49)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:18
 [ Info: found 1-dim subspace in ambient 49-dim
-[ Info: Factorizing matrices from size (49, 49) to size (48, 48)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 28 matrices of shape (48, 48)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:18
 [ Info: found 42-dim subspace in ambient 48-dim
-[ Info: Restricting matrices from size (48, 48) to size (42, 42)
-┌ Warning: Calling myself recursively in restricted subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:136
+[ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 28 matrices of shape (42, 42)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 ............................................................................................................................................................................................[ Info: generated a basis for Algebra of dimension 1680
 ┌ Debug: Dimension of the algebra is 1680
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 80
 [ Info: Found radical of size 80
 [ Info: Radical is nontrivial, computing the general kernel of radical
 [ Info: 2 dimensional subspace found
 [ Info: found 2-dim subspace in ambient 42-dim
-[ Info: Restricting matrices from size (42, 42) to size (2, 2)
-┌ Warning: Calling myself recursively in restricted subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:136
-[ Info: Called invariant_subspace_global on 28 matrices of shape (2, 2)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 2-dim
-[ Info: Factorizing matrices from size (42, 42) to size (40, 40)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+[ Info: Calling myself recursively in restricted subspace
+┌ Debug: Get to a 2 -dimensional space with zero action
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:124
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 28 matrices of shape (40, 40)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 ..................................................................................................................................................................................[ Info: generated a basis for Algebra of dimension 1600
 ┌ Debug: Dimension of the algebra is 1600
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
-[ Info: Factorizing matrices from size (48, 48) to size (6, 6)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
+[ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 28 matrices of shape (6, 6)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:18
 [ Info: found 2-dim subspace in ambient 6-dim
-[ Info: Restricting matrices from size (6, 6) to size (2, 2)
-┌ Warning: Calling myself recursively in restricted subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:136
+[ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 28 matrices of shape (2, 2)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 1
 ┌ Debug: Dimension of the algebra is 1
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: Found radical of size 1
 [ Info: Radical is nontrivial, computing the general kernel of radical
 [ Info: 1 dimensional subspace found
 [ Info: found 1-dim subspace in ambient 2-dim
-[ Info: Factorizing matrices from size (6, 6) to size (4, 4)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
-[ Info: Called invariant_subspace_global on 28 matrices of shape (4, 4)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 4-dim
-[ Info: Factorizing matrices from size (4, 4) to size (3, 3)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
-[ Info: Called invariant_subspace_global on 28 matrices of shape (3, 3)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 3-dim
-[ Info: Factorizing matrices from size (3, 3) to size (2, 2)
-┌ Warning: Calling myself recursively in complemented subspace
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:149
-[ Info: Called invariant_subspace_global on 28 matrices of shape (2, 2)
-┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
-[ Info: found 1-dim subspace in ambient 2-dim
+[ Info: Calling myself recursively in complemented subspace
+┌ Debug: Get to a 4 -dimensional space with zero action
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:124
 ┌ Debug: Before positivization: BigInt[1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
@@ -172,7 +140,7 @@
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 4 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 4 0 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0; 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
-┌ Debug: Found reductions 
+┌ Debug: Found reductions
 │   result =
 │    9-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
 │     Dict(:new_system => [0], :new_vars => [Ca])
@@ -183,4 +151,4 @@
 │     Dict(:new_system => [0, 1//200000000000*y3 + 7//80000000000000*y32 - 7//80000000000000*y33 + 7//80000000000000*y34, 249999//5000000000000000*y2*y14 + 1//500000000000*y10 + 7//20000000000000*y31, 3//1000000000000000*y2 + 1//10000000000000*y5 + 3//125000000000*y11 + 7//20000000000000*y34, 5001//5000000000000*y4*y14 + 1//2000000000000*y10 + 7//5000000000000*y31, 3//500000000000*y11 + 7//5000000000000*y33, 7//20000000000000*y32, -66021//250000000000000000*y3*y4 - 55017//2500000000000000000*y3*y5 - 55017//1250000000000000000*y3 - 66021//250000000000000000*y4*y5 + 1//400000000000*y9, 198063//62500000000000000*y3*y4 + 55017//2500000000000000000*y3*y5 + 55017//1250000000000000000*y3 + 198063//62500000000000000*y4*y5, 7143//500000000000000000*y3*y4 + 55017//2500000000000000000*y3*y5 + 7143//500000000000000000*y3*y6 + 55017//1250000000000000000*y3  …  17//50000000000000*y17 + 3//500000000000*y41, 17//12500000000000*y17 + 24999//50000000000000*y30*y36 + 1//40000000000*y41, 31//1000000000000*y40 + 31//1000000000000*y41, 99//25000000000000*y36*y39, 99//25000000000000*y38*y39, 3//12500000000000*y15*y23, 1119//500000000000000*y13*y23, 3//5000000000*y14*y23, 1//1000000000000*y46, 1251//62500000000*y1*y45 + 1//1000000000000*y23], :new_vars => [Ca, CaMKII_slash_CaMKII, CaMKII_slash_CaMKII_minus_CaM, CaMKII_slash_CaMKII_minus_thr286, CaMKII_slash_CaMKII_minus_thr286_star__minus_CaM, CaMKII_slash_CaMKII_star__star__star_, CaMKII_slash_CaMK_minus_thr306, CaMKII_slash_tot_CaM_CaMKII, CaMKII_slash_tot_CaM_CaMKII_slash_CaM_act_286_slash_CaM_act_286_cplx + 12*CaMKII_slash_tot_CaM_CaMKII_slash_CaM_act_305_slash_CaM_act_305_cplx, CaMKII_slash_tot_CaM_CaMKII_slash_CaM_act_286_slash_CaM_act_286_cplx + CaMKII_slash_tot_autonomous_CaMKII_slash_auton_286_slash_auton_286_cplx  …  PP1_slash_PP1_minus_I1, PP1_slash_PP1_minus_I1_star_, PP2A, PP2A_slash_PP2A_minus_dephosph_minus_I1_slash_PP2A_minus_dephosph_minus_I1_cplx, PP2A_slash_PP2A_minus_dephosph_minus_PP1_minus_I_star__slash_PP2A_minus_dephosph_minus_PP1_minus_I_star__cplx, PP2B_slash_CaMCa2_minus_CANAB, PP2B_slash_CaMCa3_minus_CaNAB, PP2B_slash_CaMCa4_minus_CaNAB, PP2B_slash_CaNAB, PP2B_slash_CaNAB_minus_Ca2])
 │     Dict(:new_system => [0, 1//200000000000*y3 + 7//80000000000000*y33 - 7//80000000000000*y34 + 7//80000000000000*y35, 249999//5000000000000000*y2*y15 + 1//500000000000*y9 + 1//500000000000*y12 + 7//20000000000000*y32, 3//1000000000000000*y2 + 1//10000000000000*y5 + 3//125000000000*y10 + 3//125000000000*y13 + 7//20000000000000*y35, 5001//5000000000000*y4*y15 + 1//2000000000000*y9 + 1//2000000000000*y12 + 7//5000000000000*y32, 3//500000000000*y10 + 3//500000000000*y13 + 7//5000000000000*y34, 7//20000000000000*y33, -66021//250000000000000000*y3*y4 - 55017//2500000000000000000*y3*y5 - 55017//1250000000000000000*y3 - 66021//250000000000000000*y4*y5 + 1//400000000000*y9 + 3//100000000000*y10, 55017//2500000000000000000*y3*y5 + 55017//1250000000000000000*y3, 66021//250000000000000000*y3*y4 + 66021//250000000000000000*y4*y5  …  17//50000000000000*y18 + 3//500000000000*y42, 17//12500000000000*y18 + 24999//50000000000000*y31*y37 + 1//40000000000*y42, 31//1000000000000*y41 + 31//1000000000000*y42, 99//25000000000000*y37*y40, 99//25000000000000*y39*y40, 3//12500000000000*y16*y24, 1119//500000000000000*y14*y24, 3//5000000000*y15*y24, 1//1000000000000*y47, 1251//62500000000*y1*y46 + 1//1000000000000*y24], :new_vars => [Ca, CaMKII_slash_CaMKII, CaMKII_slash_CaMKII_minus_CaM, CaMKII_slash_CaMKII_minus_thr286, CaMKII_slash_CaMKII_minus_thr286_star__minus_CaM, CaMKII_slash_CaMKII_star__star__star_, CaMKII_slash_CaMK_minus_thr306, CaMKII_slash_tot_CaM_CaMKII, CaMKII_slash_tot_CaM_CaMKII_slash_CaM_act_286_slash_CaM_act_286_cplx, CaMKII_slash_tot_CaM_CaMKII_slash_CaM_act_305_slash_CaM_act_305_cplx  …  PP1_slash_PP1_minus_I1, PP1_slash_PP1_minus_I1_star_, PP2A, PP2A_slash_PP2A_minus_dephosph_minus_I1_slash_PP2A_minus_dephosph_minus_I1_cplx, PP2A_slash_PP2A_minus_dephosph_minus_PP1_minus_I_star__slash_PP2A_minus_dephosph_minus_PP1_minus_I_star__cplx, PP2B_slash_CaMCa2_minus_CANAB, PP2B_slash_CaMCa3_minus_CaNAB, PP2B_slash_CaMCa4_minus_CaNAB, PP2B_slash_CaNAB, PP2B_slash_CaNAB_minus_Ca2])
 │     Dict(:new_system => [0, 1//200000000000*y3 + 7//80000000000000*y34 - 7//80000000000000*y35 + 7//80000000000000*y36, 249999//5000000000000000*y2*y15 + 1//500000000000*y9 + 1//500000000000*y12 + 7//20000000000000*y33, 3//1000000000000000*y2 + 1//10000000000000*y5 + 3//125000000000*y10 + 3//125000000000*y13 + 7//20000000000000*y36, 5001//5000000000000*y4*y15 + 1//2000000000000*y9 + 1//2000000000000*y12 + 7//5000000000000*y33, 3//500000000000*y10 + 3//500000000000*y13 + 7//5000000000000*y35, 7//20000000000000*y34, -66021//250000000000000000*y3*y4 - 55017//2500000000000000000*y3*y5 - 55017//1250000000000000000*y3 - 66021//250000000000000000*y4*y5 + 1//400000000000*y9 + 3//100000000000*y10, 55017//2500000000000000000*y3*y5 + 55017//1250000000000000000*y3, 66021//250000000000000000*y3*y4 + 66021//250000000000000000*y4*y5  …  17//50000000000000*y19 + 3//500000000000*y43, 17//12500000000000*y19 + 24999//50000000000000*y32*y38 + 1//40000000000*y43, 31//1000000000000*y42 + 31//1000000000000*y43, 99//25000000000000*y38*y41, 99//25000000000000*y40*y41, 3//12500000000000*y16*y25, 1119//500000000000000*y14*y25, 3//5000000000*y15*y25, 1//1000000000000*y48, 1251//62500000000*y1*y47 + 1//1000000000000*y25], :new_vars => [Ca, CaMKII_slash_CaMKII, CaMKII_slash_CaMKII_minus_CaM, CaMKII_slash_CaMKII_minus_thr286, CaMKII_slash_CaMKII_minus_thr286_star__minus_CaM, CaMKII_slash_CaMKII_star__star__star_, CaMKII_slash_CaMK_minus_thr306, CaMKII_slash_tot_CaM_CaMKII, CaMKII_slash_tot_CaM_CaMKII_slash_CaM_act_286_slash_CaM_act_286_cplx, CaMKII_slash_tot_CaM_CaMKII_slash_CaM_act_305_slash_CaM_act_305_cplx  …  PP1_slash_PP1_minus_I1, PP1_slash_PP1_minus_I1_star_, PP2A, PP2A_slash_PP2A_minus_dephosph_minus_I1_slash_PP2A_minus_dephosph_minus_I1_cplx, PP2A_slash_PP2A_minus_dephosph_minus_PP1_minus_I_star__slash_PP2A_minus_dephosph_minus_PP1_minus_I_star__cplx, PP2B_slash_CaMCa2_minus_CANAB, PP2B_slash_CaMCa3_minus_CaNAB, PP2B_slash_CaMCa4_minus_CaNAB, PP2B_slash_CaNAB, PP2B_slash_CaNAB_minus_Ca2])
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:229

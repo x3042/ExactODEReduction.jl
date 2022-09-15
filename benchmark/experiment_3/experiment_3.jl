@@ -30,8 +30,9 @@ function uwuwu(from_size, to_size)
         ODE = ExactODEReduction.ODE{fmpq_mpoly}(system)
         
         reductions = []
-        
-        fnamerel = "/home/sumiya11/exactreduction/Exact-reduction-of-ODE-systems/benchmark/$fname"
+
+        global CHANGE_ME
+        fnamerel = "$CHANGE_ME/$fname"
         redirect_stdio(stderr=fnamerel, stdout=fnamerel) do
             append!(reductions, ExactODEReduction.find_reductions(ODE, loglevel=Logging.Debug))
         end
@@ -98,7 +99,9 @@ function write_md(sizes)
         md *= "\n"
 
         fnname = "experiment_3/data/$(system[1]).jl"
-        open("/home/sumiya11/exactreduction/Exact-reduction-of-ODE-systems/benchmark/$fnname", "w") do f
+
+        global CHANGE_ME
+        open("$CHANGE_ME/$fnname", "w") do f
             println(f, "Original system:\n")
             println(f, "[\n"*join(system[2], ",\n")*"\n]")
             println(f)
@@ -116,7 +119,9 @@ function write_md(sizes)
     md *= "\n$(sprint(versioninfo, context=:compact => false))\n"
 
     fnname = "experiment_3/experiment_3_$(sizes[1])-$(sizes[2]).md"
-    f = open("/home/sumiya11/exactreduction/Exact-reduction-of-ODE-systems/benchmark/$fnname", "w")
+
+    global CHANGE_ME
+    f = open("$CHANGE_ME/$fnname", "w")
     # f = open("$fnname", "w")
     write(f, md)
     close(f)
@@ -124,7 +129,10 @@ end
 
 #------------------------------------------------------------------------------
 
-for sz in [ (10, 20) ] # [(5, 5), (10, 15)]
+# path to Exact-reduction-of-ODE-systems/benchmark/
+CHANGE_ME = "/home/sumiya11/exactreduction/Exact-reduction-of-ODE-systems/benchmark/"
+
+for sz in [ (5, 10) ] # [(5, 5), (10, 15)]
     uwuwu(sz...)
     write_md(sz)
 end

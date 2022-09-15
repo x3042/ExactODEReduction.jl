@@ -12,11 +12,11 @@
 │    species_8'(t) = 23//125000*source(t)
 │    species_9'(t) = 0
 │    
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:211
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:209
 [ Info: constructed a set of 1 matrices 11×11 from the system Jacobian
 [ Info: Called invariant_subspace_global on 1 matrices of shape (11, 11)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:18
 [ Info: found 10-dim subspace in ambient 11-dim
 [ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 1 matrices of shape (10, 10)
@@ -33,7 +33,7 @@
 [ Info: new reduction modulo, 452312846898269747177134906898940722629719546145834725994587090848594952607
 [ Info: generated a basis for Algebra of dimension 9
 ┌ Debug: Dimension of the algebra is 9
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 2
 [ Info: Found radical of size 2
@@ -43,12 +43,12 @@
 [ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 1 matrices of shape (8, 8)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:18
 [ Info: found 1-dim subspace in ambient 8-dim
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 1 matrices of shape (7, 7)
 ┌ Debug: Found an invariant subspace by saturating the first unit vector
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:16
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:18
 [ Info: found 4-dim subspace in ambient 7-dim
 [ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 1 matrices of shape (4, 4)
@@ -65,7 +65,7 @@
 [ Info: new reduction modulo, 452312846898269747177134906898940722629719546145834725994587090848594952607
 [ Info: generated a basis for Algebra of dimension 4
 ┌ Debug: Dimension of the algebra is 4
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: Found radical of size 0
 [ Info: Radical is trivial, using randomized algorithm
@@ -74,7 +74,7 @@
 ┌ Warning: No invariant subspaces defined over Q
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/radical.jl:244
 ┌ Warning: There is invariant subspace but it is either not defined over Q
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:58
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:60
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 1 matrices of shape (3, 3)
 [ Info: generating a basis for Algebra using find_basis_1_β
@@ -84,7 +84,7 @@
 [ Info: new reduction modulo, 4611686014132420667
 [ Info: generated a basis for Algebra of dimension 3
 ┌ Debug: Dimension of the algebra is 3
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: Found radical of size 0
 [ Info: Radical is trivial, using randomized algorithm
@@ -93,14 +93,14 @@
 ┌ Warning: No invariant subspaces defined over Q
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/radical.jl:244
 ┌ Warning: There is invariant subspace but it is either not defined over Q
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:58
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:60
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 1 matrices of shape (2, 2)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 1
 ┌ Debug: Dimension of the algebra is 1
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:23
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: Found radical of size 1
 [ Info: Radical is nontrivial, computing the general kernel of radical
@@ -126,5 +126,12 @@
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:36
 ┌ Debug: After positivization: [0 1 0 0 0 0 0 0 0 0 0; 0 0 1 0 0 0 0 0 0 0 0; 0 0 0 1 0 0 0 0 0 0 0; 0 0 0 0 1 0 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0 0; 0 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 0 1916107 57377 0 0; 0 0 0 0 0 0 0 2392861 0 0 1553270; 0 0 0 0 0 0 0 0 220985 22716 0]
 └ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/positivizor.jl:48
-┌ Debug: Found reductions Dict{Symbol, Vector{fmpq_mpoly}}[Dict(:new_system => [0], :new_vars => [source]), Dict(:new_system => [0, 49//800000*y1 + 33783//500000*y3 + 152723//100000000*y4, 26709//2000000*y2 + 3//500000000*y5, 252437//400000000*y2, 130617//31250*y1 + 3409665959//5000000*y4], :new_vars => [source, species_1, species_2, species_3, 220985*species_7 + 22716*species_8]), Dict(:new_system => [0, 49//800000*y1 + 33783//500000*y3 + 152723//100000000*y4, 26709//2000000*y2 + 3//500000000*y8, 252437//400000000*y2, 36127//800000000000*y1 + 140223//10000000*y6 + 1//100000000*y7, 5229//160000000000*y1 + 152623//20000000*y5, 23141358731//500000*y6, 130617//31250*y1 + 3409665959//5000000*y4], :new_vars => [source, species_1, species_2, species_3, species_4, species_5, 2392861*species_6 + 1553270*species_9, 220985*species_7 + 22716*species_8]), Dict(:new_system => [0, 49//800000*y1 + 33783//500000*y3 + 152723//100000000*y4, 26709//2000000*y2 + 3//500000000*y9, 252437//400000000*y2, 36127//800000000000*y1 + 140223//10000000*y6 + 1//100000000*y8, 5229//160000000000*y1 + 152623//20000000*y5, 4426463419//25000000*y4 + 18530670797//500000*y6, 23141358731//500000*y6, 130617//31250*y1 + 3409665959//5000000*y4], :new_vars => [source, species_1, species_2, species_3, species_4, species_5, 1916107*species_6 + 57377*species_7, 2392861*species_6 + 1553270*species_9, 220985*species_7 + 22716*species_8]), Dict(:new_system => [-97697//800000000*y3 - 140347//80000000*y6 - 340947//400000000*y7 - 1//4000000000*y8, 0, 49//800000*y2 + 33783//500000*y4 + 152723//100000000*y5, 26709//2000000*y3 + 3//500000000*y10, 252437//400000000*y3, 36127//800000000000*y2 + 140223//10000000*y7 + 1//100000000*y9, 5229//160000000000*y2 + 152623//20000000*y6, 4426463419//25000000*y5 + 18530670797//500000*y7, 23141358731//500000*y7, 130617//31250*y2 + 3409665959//5000000*y5], :new_vars => [SINK, source, species_1, species_2, species_3, species_4, species_5, 1916107*species_6 + 57377*species_7, 2392861*species_6 + 1553270*species_9, 220985*species_7 + 22716*species_8])]
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:236
+┌ Debug: Found reductions
+│   result =
+│    5-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
+│     Dict(:new_system => [0], :new_vars => [source])
+│     Dict(:new_system => [0, 49//800000*y1 + 33783//500000*y3 + 152723//100000000*y4, 26709//2000000*y2 + 3//500000000*y5, 252437//400000000*y2, 130617//31250*y1 + 3409665959//5000000*y4], :new_vars => [source, species_1, species_2, species_3, 220985*species_7 + 22716*species_8])
+│     Dict(:new_system => [0, 49//800000*y1 + 33783//500000*y3 + 152723//100000000*y4, 26709//2000000*y2 + 3//500000000*y8, 252437//400000000*y2, 36127//800000000000*y1 + 140223//10000000*y6 + 1//100000000*y7, 5229//160000000000*y1 + 152623//20000000*y5, 23141358731//500000*y6, 130617//31250*y1 + 3409665959//5000000*y4], :new_vars => [source, species_1, species_2, species_3, species_4, species_5, 2392861*species_6 + 1553270*species_9, 220985*species_7 + 22716*species_8])
+│     Dict(:new_system => [0, 49//800000*y1 + 33783//500000*y3 + 152723//100000000*y4, 26709//2000000*y2 + 3//500000000*y9, 252437//400000000*y2, 36127//800000000000*y1 + 140223//10000000*y6 + 1//100000000*y8, 5229//160000000000*y1 + 152623//20000000*y5, 4426463419//25000000*y4 + 18530670797//500000*y6, 23141358731//500000*y6, 130617//31250*y1 + 3409665959//5000000*y4], :new_vars => [source, species_1, species_2, species_3, species_4, species_5, 1916107*species_6 + 57377*species_7, 2392861*species_6 + 1553270*species_9, 220985*species_7 + 22716*species_8])
+│     Dict(:new_system => [-97697//800000000*y3 - 140347//80000000*y6 - 340947//400000000*y7 - 1//4000000000*y8, 0, 49//800000*y2 + 33783//500000*y4 + 152723//100000000*y5, 26709//2000000*y3 + 3//500000000*y10, 252437//400000000*y3, 36127//800000000000*y2 + 140223//10000000*y7 + 1//100000000*y9, 5229//160000000000*y2 + 152623//20000000*y6, 4426463419//25000000*y5 + 18530670797//500000*y7, 23141358731//500000*y7, 130617//31250*y2 + 3409665959//5000000*y5], :new_vars => [SINK, source, species_1, species_2, species_3, species_4, species_5, 1916107*species_6 + 57377*species_7, 2392861*species_6 + 1553270*species_9, 220985*species_7 + 22716*species_8])
+└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/ExactODEReduction.jl:229
