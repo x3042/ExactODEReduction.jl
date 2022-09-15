@@ -38,8 +38,8 @@ using SparseArrays
 # Make two matrices of size n with k fraction of nonzeros
 # with numbers ranging from 1 to UB
 
-UB = 2^3
-n, k = 50, 0.1
+UB = 2^8
+n, k = 200, 0.02
 a = rand(1:T(UB), n, n); b = rand(1:T(UB), n, n);
 while count(!iszero, a) / (n^2) >= k
     a[rand(1:n^2)] = zero(a[rand(1:n^2)])
