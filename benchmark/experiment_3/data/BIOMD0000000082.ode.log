@@ -1,8 +1,24 @@
+┌ Debug: find_reductions of 
+│   system =
+│    agonist'(t) = 1//2*DR(t) - 5000000*Recptor(t)*agonist(t)
+│    DRG_GTP'(t) = 10000000*DRG(t)*GTP(t) - 3//20*DRG_GTP(t)
+│    G_GDP'(t) = -100000000*DR(t)*G_GDP(t) + 1//10*DRG_GDP(t) + 1//10*G_GTP(t)
+│    DRG'(t) = -100000*DRG(t)*GDP(t) - 10000000*DRG(t)*GTP(t) + 1//10*DRG_GDP(t) + 1//10*DRG_GTP(t)
+│    DRG_GDP'(t) = 100000000*DR(t)*G_GDP(t) + 100000*DRG(t)*GDP(t) - 1//5*DRG_GDP(t)
+│    Recptor'(t) = 1//2*DR(t) - 5000000*Recptor(t)*agonist(t)
+│    GDP'(t) = -100000*DRG(t)*GDP(t) + 1//10*DRG_GDP(t)
+│    GTP'(t) = -10000000*DRG(t)*GTP(t) + 1//10*DRG_GTP(t)
+│    DR'(t) = -100000000*DR(t)*G_GDP(t) - 1//2*DR(t) + 1//10*DRG_GDP(t) + 1//20*DRG_GTP(t) + 5000000*Recptor(t)*agonist(t)
+│    G_GTP'(t) = 1//20*DRG_GTP(t) - 1//10*G_GTP(t)
+│    
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/ExactODEReduction.jl:209
 [ Info: constructed a set of 8 matrices 10×10 from the system Jacobian
 [ Info: Called invariant_subspace_global on 8 matrices of shape (10, 10)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 60
+┌ Debug: Dimension of the algebra is 60
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 24
 [ Info: Found radical of size 24
@@ -10,8 +26,36 @@
 [ Info: 4 dimensional subspace found
 [ Info: found 4-dim subspace in ambient 10-dim
 [ Info: Calling myself recursively in restricted subspace
+┌ Debug: Get to a 4 -dimensional space with zero action
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:124
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 8 matrices of shape (6, 6)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 36
+┌ Debug: Dimension of the algebra is 36
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:25
+┌ Debug: Before positivization: BigInt[1 0 0 0 0 0 -1 -1 0 1; 0 1 0 0 -1 -1 0 0 0 0; 0 0 1 1 1 1 1 1 0 0; 0 0 0 0 0 0 0 0 1 -1]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:36
+┌ Debug: After positivization: [1 1 1 1 0 0 0 0 0 1; 1 1 1 1 0 0 0 0 1 0; 1 0 1 1 1 1 0 0 0 1; 0 1 1 1 0 0 1 1 0 0]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:48
+┌ Debug: Before positivization: BigInt[1 0 0 0 0 0 -1 -1 0 1]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:36
+┌ Debug: DimensionMismatch("No suitable matrix found")
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:41
+┌ Debug: Before positivization: BigInt[1 0 0 0 0 0 -1 -1 0 1; 0 1 0 0 -1 -1 0 0 0 0]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:36
+┌ Debug: DimensionMismatch("No suitable matrix found")
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:41
+┌ Debug: Before positivization: BigInt[1 0 0 0 0 0 -1 -1 0 1; 0 1 0 0 -1 -1 0 0 0 0; 0 0 1 1 1 1 1 1 0 0]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:36
+┌ Debug: After positivization: [1 1 1 1 0 0 0 0 0 1; 1 0 1 1 1 1 0 0 0 1; 0 1 1 1 0 0 1 1 0 0]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:48
+┌ Debug: Found reductions
+│   result =
+│    4-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
+│     Dict(:new_system => [0], :new_vars => [DR - G_GDP - G_GTP + agonist])
+│     Dict(:new_system => [0, 0], :new_vars => [DR - G_GDP - G_GTP + agonist, DRG - GDP - GTP])
+│     Dict(:new_system => [0, 0, 0], :new_vars => [DR + DRG + DRG_GDP + DRG_GTP + agonist, DR + DRG_GDP + DRG_GTP + GDP + GTP + agonist, DRG + DRG_GDP + DRG_GTP + G_GDP + G_GTP])
+│     Dict(:new_system => [0, 0, 0, 0], :new_vars => [DR + DRG + DRG_GDP + DRG_GTP + agonist, DR + DRG + DRG_GDP + DRG_GTP + Recptor, DR + DRG_GDP + DRG_GTP + GDP + GTP + agonist, DRG + DRG_GDP + DRG_GTP + G_GDP + G_GTP])
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/ExactODEReduction.jl:229

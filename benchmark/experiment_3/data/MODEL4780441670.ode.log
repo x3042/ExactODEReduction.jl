@@ -1,11 +1,27 @@
+┌ Debug: find_reductions of 
+│   system =
+│    GC_slash_sGC_basal'(t) = -163333333333333//100000000000000000000000000000*GC_slash_NO(t)*GC_slash_sGC_basal(t) + 116666666666667//1000000000000000000000000000000000*GC_slash_NO_sGCfull_act(t) + 583333333333333//1000000000000000000000000000000*GC_slash_NO_sGCpart_act(t)
+│    GC_slash_cGMP'(t) = 666666666666667//10000000000000000000000000000000*GC_slash_NO_sGCfull_act_slash_full_act_sGC_slash_full_act_sGC_cplx(t)
+│    GC_slash_GTP'(t) = -574716666666667//100000000000000000000000000000000*GC_slash_GTP(t)*GC_slash_NO_sGCfull_act(t) + 266666666666667//1000000000000000000000000000000*GC_slash_NO_sGCfull_act_slash_full_act_sGC_slash_full_act_sGC_cplx(t)
+│    GC_slash_NO_sGCpart_act'(t) = 163333333333333//100000000000000000000000000000*GC_slash_NO(t)*GC_slash_sGC_basal(t) - 7//2500000000000000000*GC_slash_NO_a(t)*GC_slash_NO_sGCpart_act(t) + 233333333333333//10000000000000000000000000000000000*GC_slash_NO_sGCfull_act(t) - 583434833333333//1000000000000000000000000000000*GC_slash_NO_sGCpart_act(t)
+│    GC_slash_NO_sGCfull_act_slash_full_act_sGC_slash_full_act_sGC_cplx'(t) = 574716666666667//100000000000000000000000000000000*GC_slash_GTP(t)*GC_slash_NO_sGCfull_act(t) - 3333333333333337//10000000000000000000000000000000*GC_slash_NO_sGCfull_act_slash_full_act_sGC_slash_full_act_sGC_cplx(t)
+│    GC_slash_NO'(t) = -163333333333333//100000000000000000000000000000*GC_slash_NO(t)*GC_slash_sGC_basal(t) + 116666666666667//1000000000000000000000000000000000*GC_slash_NO_sGCfull_act(t) + 583333333333333//1000000000000000000000000000000*GC_slash_NO_sGCpart_act(t)
+│    GC_slash_NO_a'(t) = -7//2500000000000000000*GC_slash_NO_a(t)*GC_slash_NO_sGCpart_act(t)
+│    GC_slash_NO_sGCfull_act'(t) = -574716666666667//100000000000000000000000000000000*GC_slash_GTP(t)*GC_slash_NO_sGCfull_act(t) + 7//2500000000000000000*GC_slash_NO_a(t)*GC_slash_NO_sGCpart_act(t) - 1400000000000003//10000000000000000000000000000000000*GC_slash_NO_sGCfull_act(t) + 3333333333333337//10000000000000000000000000000000*GC_slash_NO_sGCfull_act_slash_full_act_sGC_slash_full_act_sGC_cplx(t) + 203//2000000000000000000000*GC_slash_NO_sGCpart_act(t)
+│    
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/ExactODEReduction.jl:209
 [ Info: constructed a set of 7 matrices 8×8 from the system Jacobian
 [ Info: Called invariant_subspace_global on 7 matrices of shape (8, 8)
+┌ Debug: Found an invariant subspace by saturating the first unit vector
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:18
 [ Info: found 7-dim subspace in ambient 8-dim
 [ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 7 matrices of shape (7, 7)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 35
+┌ Debug: Dimension of the algebra is 35
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 10
 [ Info: Found radical of size 10
@@ -13,8 +29,31 @@
 [ Info: 2 dimensional subspace found
 [ Info: found 2-dim subspace in ambient 7-dim
 [ Info: Calling myself recursively in restricted subspace
+┌ Debug: Get to a 2 -dimensional space with zero action
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:124
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 7 matrices of shape (5, 5)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 25
+┌ Debug: Dimension of the algebra is 25
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:25
+┌ Debug: Before positivization: BigInt[1 0 0 0 0 0 0 0; 0 1 0 0 0 0 0 0; 0 0 1 0 0 0 0 0; 0 0 0 1 0 0 0 0; 0 0 0 0 1 0 0 0; 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 1]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:36
+┌ Debug: After positivization: [1 0 0 0 0 0 0 0; 0 1 0 0 0 0 0 0; 0 0 1 0 0 0 0 0; 0 0 0 1 0 0 0 0; 0 0 0 0 1 0 0 0; 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 1]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:48
+┌ Debug: Before positivization: BigInt[0 1 0 0 0 0 0 -1; 0 0 0 1 1 1 0 1]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:36
+┌ Debug: After positivization: [0 1 0 1 1 1 0 0; 0 0 0 1 1 1 0 1]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:48
+┌ Debug: Before positivization: BigInt[0 1 0 0 0 0 0 -1]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:36
+┌ Debug: DimensionMismatch("No suitable matrix found")
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:41
+┌ Debug: Found reductions
+│   result =
+│    3-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
+│     Dict(:new_system => [0], :new_vars => [GC_slash_NO - GC_slash_sGC_basal])
+│     Dict(:new_system => [0, 0], :new_vars => [GC_slash_NO + GC_slash_NO_sGCfull_act + GC_slash_NO_sGCfull_act_slash_full_act_sGC_slash_full_act_sGC_cplx + GC_slash_NO_sGCpart_act, GC_slash_NO_sGCfull_act + GC_slash_NO_sGCfull_act_slash_full_act_sGC_slash_full_act_sGC_cplx + GC_slash_NO_sGCpart_act + GC_slash_sGC_basal])
+│     Dict(:new_system => [-574716666666667//100000000000000000000000000000000*y1*y4 + 266666666666667//1000000000000000000000000000000*y5, -163333333333333//100000000000000000000000000000*y2*y7 + 116666666666667//1000000000000000000000000000000000*y4 + 583333333333333//1000000000000000000000000000000*y6, -7//2500000000000000000*y3*y6, -574716666666667//100000000000000000000000000000000*y1*y4 + 7//2500000000000000000*y3*y6 - 1400000000000003//10000000000000000000000000000000000*y4 + 3333333333333337//10000000000000000000000000000000*y5 + 203//2000000000000000000000*y6, 574716666666667//100000000000000000000000000000000*y1*y4 - 3333333333333337//10000000000000000000000000000000*y5, 163333333333333//100000000000000000000000000000*y2*y7 - 7//2500000000000000000*y3*y6 + 233333333333333//10000000000000000000000000000000000*y4 - 583434833333333//1000000000000000000000000000000*y6, -163333333333333//100000000000000000000000000000*y2*y7 + 116666666666667//1000000000000000000000000000000000*y4 + 583333333333333//1000000000000000000000000000000*y6], :new_vars => [GC_slash_GTP, GC_slash_NO, GC_slash_NO_a, GC_slash_NO_sGCfull_act, GC_slash_NO_sGCfull_act_slash_full_act_sGC_slash_full_act_sGC_cplx, GC_slash_NO_sGCpart_act, GC_slash_sGC_basal])
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/ExactODEReduction.jl:229

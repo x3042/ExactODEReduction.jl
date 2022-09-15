@@ -1,11 +1,26 @@
+┌ Debug: find_reductions of 
+│   system =
+│    E'(t) = ES(t)*kcat(t) + ES(t)*kr(t)
+│    kf'(t) = 0
+│    ES'(t) = E(t)*S(t)*kf(t)
+│    P'(t) = ES(t)*kcat(t)
+│    kr'(t) = 0
+│    S'(t) = ES(t)*kr(t)
+│    kcat'(t) = 0
+│    
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/ExactODEReduction.jl:209
 [ Info: constructed a set of 6 matrices 7×7 from the system Jacobian
 [ Info: Called invariant_subspace_global on 6 matrices of shape (7, 7)
+┌ Debug: Found an invariant subspace by saturating the first unit vector
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:18
 [ Info: found 6-dim subspace in ambient 7-dim
 [ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 6 matrices of shape (6, 6)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 18
+┌ Debug: Dimension of the algebra is 18
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 9
 [ Info: Found radical of size 9
@@ -13,8 +28,36 @@
 [ Info: 3 dimensional subspace found
 [ Info: found 3-dim subspace in ambient 6-dim
 [ Info: Calling myself recursively in restricted subspace
+┌ Debug: Get to a 3 -dimensional space with zero action
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:124
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 6 matrices of shape (3, 3)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 9
+┌ Debug: Dimension of the algebra is 9
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:25
+┌ Debug: Before positivization: BigInt[1 0 0 0 0 0 0; 0 1 0 0 0 0 0; 0 0 0 1 0 0 0; 0 0 0 0 1 0 0; 0 0 0 0 0 1 0; 0 0 0 0 0 0 1]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:36
+┌ Debug: After positivization: [1 0 0 0 0 0 0; 0 1 0 0 0 0 0; 0 0 0 1 0 0 0; 0 0 0 0 1 0 0; 0 0 0 0 0 1 0; 0 0 0 0 0 0 1]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:48
+┌ Debug: Before positivization: BigInt[0 0 0 0 1 0 0; 0 0 0 0 0 1 0; 0 0 0 0 0 0 1]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:36
+┌ Debug: After positivization: [0 0 0 0 1 0 0; 0 0 0 0 0 1 0; 0 0 0 0 0 0 1]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:48
+┌ Debug: Before positivization: BigInt[0 0 0 0 1 0 0]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:36
+┌ Debug: After positivization: [0 0 0 0 1 0 0]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:48
+┌ Debug: Before positivization: BigInt[0 0 0 0 1 0 0; 0 0 0 0 0 1 0]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:36
+┌ Debug: After positivization: [0 0 0 0 1 0 0; 0 0 0 0 0 1 0]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:48
+┌ Debug: Found reductions
+│   result =
+│    4-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
+│     Dict(:new_system => [0], :new_vars => [kcat])
+│     Dict(:new_system => [0, 0], :new_vars => [kcat, kf])
+│     Dict(:new_system => [0, 0, 0], :new_vars => [kcat, kf, kr])
+│     Dict(:new_system => [y2*y4 + y2*y6, y1*y3*y5, y2*y6, 0, 0, 0], :new_vars => [E, ES, S, kcat, kf, kr])
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/ExactODEReduction.jl:229

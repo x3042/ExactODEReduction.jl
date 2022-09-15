@@ -1,11 +1,29 @@
+┌ Debug: find_reductions of 
+│   system =
+│    LacZ_slash_elRIB'(t) = 499983333333333//1000000000000000000000000000000*LacZ_slash_RibRBS(t)
+│    LacZ_slash_Protein'(t) = 29999//2000000000000000000000*LacZ_slash_elRIB(t)
+│    LacZ_slash_RibRBS'(t) = 999893337111067//10000000000000000000000000000*LacZ_slash_RBS(t)*LacZ_slash_Ribosome(t)
+│    LacZ_slash_P'(t) = 999966666666667//100000000000000000000000000000*LacZ_slash_P_RNAP(t) + 999966666666667//1000000000000000000000000000000*LacZ_slash_TrRNAP(t)
+│    LacZ_slash_P_RNAP'(t) = 999893337111067//10000000000000000000000000000*LacZ_slash_P(t)*LacZ_slash_RNAP(t)
+│    LacZ_slash_TrRNAP'(t) = 999966666666667//1000000000000000000000000000000*LacZ_slash_P_RNAP(t)
+│    LacZ_slash_RBS'(t) = 2749908333333333//1000000000000000000000000000000*LacZ_slash_RibRBS(t) + 999966666666667//1000000000000000000000000000000*LacZ_slash_TrRNAP(t)
+│    LacZ_slash_RNAP'(t) = 0
+│    LacZ_slash_ElRNAP'(t) = 999966666666667//1000000000000000000000000000000*LacZ_slash_TrRNAP(t)
+│    LacZ_slash_Ribosome'(t) = 0
+│    
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/ExactODEReduction.jl:209
 [ Info: constructed a set of 5 matrices 10×10 from the system Jacobian
 [ Info: Called invariant_subspace_global on 5 matrices of shape (10, 10)
+┌ Debug: Found an invariant subspace by saturating the first unit vector
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:18
 [ Info: found 5-dim subspace in ambient 10-dim
 [ Info: Calling myself recursively in restricted subspace
 [ Info: Called invariant_subspace_global on 5 matrices of shape (5, 5)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 12
+┌ Debug: Dimension of the algebra is 12
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 3
 [ Info: Found radical of size 3
@@ -13,22 +31,28 @@
 [ Info: 2 dimensional subspace found
 [ Info: found 2-dim subspace in ambient 5-dim
 [ Info: Calling myself recursively in restricted subspace
+┌ Debug: Get to a 2 -dimensional space with zero action
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:124
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 5 matrices of shape (3, 3)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 9
+┌ Debug: Dimension of the algebra is 9
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:25
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 5 matrices of shape (5, 5)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 ┌ Warning: inclusion check failed..
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/basis.jl:273
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/basis.jl:273
 [ Info: new reduction modulo, 4611686014132420667
 ┌ Warning: inclusion check failed..
-└ @ Main.ExactODEReduction ~/exactreduction/Exact-reduction-of-ODE-systems/src/linalg/basis.jl:273
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/basis.jl:273
 [ Info: new reduction modulo, 21267647892944573271954437909048725051
 [ Info: generated a basis for Algebra of dimension 10
+┌ Debug: Dimension of the algebra is 10
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 6
 [ Info: Found radical of size 6
@@ -36,11 +60,15 @@
 [ Info: 2 dimensional subspace found
 [ Info: found 2-dim subspace in ambient 5-dim
 [ Info: Calling myself recursively in restricted subspace
+┌ Debug: Get to a 2 -dimensional space with zero action
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:124
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 5 matrices of shape (3, 3)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 6
+┌ Debug: Dimension of the algebra is 6
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 2
 [ Info: Found radical of size 2
@@ -52,3 +80,39 @@
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 4
+┌ Debug: Dimension of the algebra is 4
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:25
+┌ Debug: Before positivization: BigInt[1 0 0 0 0 0 0 0 0 0; 0 1 0 0 0 0 0 0 0 0; 0 0 1 0 0 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 0 0 1 0]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:36
+┌ Debug: After positivization: [1 0 0 0 0 0 0 0 0 0; 0 1 0 0 0 0 0 0 0 0; 0 0 1 0 0 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 0 0 1 0]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:48
+┌ Debug: Before positivization: BigInt[1 -1 0 0 0 0 0 0 10 0; 0 0 0 0 0 1 0 0 0 0]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:36
+┌ Debug: DimensionMismatch("No suitable matrix found")
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:41
+┌ Debug: Before positivization: BigInt[1 -1 0 0 0 0 0 0 10 0]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:36
+┌ Debug: DimensionMismatch("No suitable matrix found")
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:41
+┌ Debug: Before positivization: BigInt[1 0 0 0 0 0 0 0 0 0; 0 1 0 0 0 0 0 0 0 0; 0 0 1 0 0 0 0 0 0 0; 0 0 0 0 166661111111111 0 0 0 0 -916636111111111; 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 0 1 0]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:36
+┌ Debug: DimensionMismatch("No suitable matrix found")
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:41
+┌ Debug: Before positivization: BigInt[1 0 0 0 0 0 0 0 0 0; 0 1 0 0 0 0 0 0 0 0; 0 0 1 0 0 0 0 0 0 0; 0 0 0 0 166661111111111 0 0 0 0 -916636111111111; 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 0 0 1 0]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:36
+┌ Debug: DimensionMismatch("No suitable matrix found")
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:41
+┌ Debug: Before positivization: BigInt[1 0 0 0 0 0 0 0 0 0; 0 1 0 0 0 0 0 0 0 0; 0 0 1 0 0 0 0 0 0 0; 0 0 0 0 1 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 1 0 0 0; 0 0 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 0 1 0; 0 0 0 0 0 0 0 0 0 1]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:36
+┌ Debug: After positivization: [1 0 0 0 0 0 0 0 0 0; 0 1 0 0 0 0 0 0 0 0; 0 0 1 0 0 0 0 0 0 0; 0 0 0 0 1 0 0 0 0 0; 0 0 0 0 0 1 0 0 0 0; 0 0 0 0 0 0 1 0 0 0; 0 0 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 0 1 0; 0 0 0 0 0 0 0 0 0 1]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:48
+┌ Debug: Found reductions
+│   result =
+│    6-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
+│     Dict(:new_system => [0], :new_vars => [LacZ_slash_ElRNAP - LacZ_slash_P + 10*LacZ_slash_TrRNAP])
+│     Dict(:new_system => [0, 0], :new_vars => [LacZ_slash_ElRNAP - LacZ_slash_P + 10*LacZ_slash_TrRNAP, LacZ_slash_RNAP])
+│     Dict(:new_system => [999966666666667//1000000000000000000000000000000*y5, 999966666666667//100000000000000000000000000000*y3 + 999966666666667//1000000000000000000000000000000*y5, 999893337111067//10000000000000000000000000000*y2*y4, 0, 999966666666667//1000000000000000000000000000000*y3], :new_vars => [LacZ_slash_ElRNAP, LacZ_slash_P, LacZ_slash_P_RNAP, LacZ_slash_RNAP, LacZ_slash_TrRNAP])
+│     Dict(:new_system => [999966666666667//1000000000000000000000000000000*y6, 999966666666667//100000000000000000000000000000*y3 + 999966666666667//1000000000000000000000000000000*y6, 999893337111067//10000000000000000000000000000*y2*y5, 999966666666667//1000000000000000000000000000000*y6, 0, 999966666666667//1000000000000000000000000000000*y3], :new_vars => [LacZ_slash_ElRNAP, LacZ_slash_P, LacZ_slash_P_RNAP, LacZ_slash_RBS - 916636111111111//166661111111111*LacZ_slash_elRIB, LacZ_slash_RNAP, LacZ_slash_TrRNAP])
+│     Dict(:new_system => [999966666666667//1000000000000000000000000000000*y7, 999966666666667//100000000000000000000000000000*y3 + 999966666666667//1000000000000000000000000000000*y7, 999893337111067//10000000000000000000000000000*y2*y5, 999966666666667//1000000000000000000000000000000*y7, 0, 0, 999966666666667//1000000000000000000000000000000*y3], :new_vars => [LacZ_slash_ElRNAP, LacZ_slash_P, LacZ_slash_P_RNAP, LacZ_slash_RBS - 916636111111111//166661111111111*LacZ_slash_elRIB, LacZ_slash_RNAP, LacZ_slash_Ribosome, LacZ_slash_TrRNAP])
+│     Dict(:new_system => [999966666666667//1000000000000000000000000000000*y8, 999966666666667//100000000000000000000000000000*y3 + 999966666666667//1000000000000000000000000000000*y8, 999893337111067//10000000000000000000000000000*y2*y5, 2749908333333333//1000000000000000000000000000000*y6 + 999966666666667//1000000000000000000000000000000*y8, 0, 999893337111067//10000000000000000000000000000*y4*y7, 0, 999966666666667//1000000000000000000000000000000*y3, 499983333333333//1000000000000000000000000000000*y6], :new_vars => [LacZ_slash_ElRNAP, LacZ_slash_P, LacZ_slash_P_RNAP, LacZ_slash_RBS, LacZ_slash_RNAP, LacZ_slash_RibRBS, LacZ_slash_Ribosome, LacZ_slash_TrRNAP, LacZ_slash_elRIB])
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/ExactODEReduction.jl:229

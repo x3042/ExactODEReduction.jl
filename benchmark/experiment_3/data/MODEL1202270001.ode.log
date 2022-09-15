@@ -1,8 +1,23 @@
+┌ Debug: find_reductions of 
+│   system =
+│    P'(t) = -1//100*P(t)*T(t) + 21//50*TP(t)
+│    T'(t) = -1//100*N(t)*T(t) - 1//100*P(t)*T(t) - 1//50*T(t)*x(t) + 21//50*TN(t) + 21//50*TP(t) + 21//10000*Tx(t) + 21//10000*xT(t)
+│    TP'(t) = 1//100*P(t)*T(t) - 21//50*TP(t)
+│    xT'(t) = 1//100*T(t)*x(t) - 21//10000*xT(t)
+│    x'(t) = -1//50*T(t)*x(t) - 1//100*Tx(t)*x(t) + 21//10000*Tx(t) + 21//10000*xT(t) + 21//10000*xTx(t)
+│    xTx'(t) = 1//100*Tx(t)*x(t) - 21//10000*xTx(t)
+│    N'(t) = -1//100*N(t)*T(t) + 21//50*TN(t)
+│    TN'(t) = 1//100*N(t)*T(t) - 21//50*TN(t)
+│    Tx'(t) = 1//100*T(t)*x(t) - 1//100*Tx(t)*x(t) - 21//10000*Tx(t) + 21//10000*xTx(t)
+│    
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/ExactODEReduction.jl:209
 [ Info: constructed a set of 6 matrices 9×9 from the system Jacobian
 [ Info: Called invariant_subspace_global on 6 matrices of shape (9, 9)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 37
+┌ Debug: Dimension of the algebra is 37
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 20
 [ Info: Found radical of size 20
@@ -10,11 +25,15 @@
 [ Info: 4 dimensional subspace found
 [ Info: found 4-dim subspace in ambient 9-dim
 [ Info: Calling myself recursively in restricted subspace
+┌ Debug: Get to a 4 -dimensional space with zero action
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:124
 [ Info: Calling myself recursively in complemented subspace
 [ Info: Called invariant_subspace_global on 6 matrices of shape (5, 5)
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 21
+┌ Debug: Dimension of the algebra is 21
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:25
 [ Info: Computing the radical..
 [ Info: computed the radical of dimension 4
 [ Info: Found radical of size 4
@@ -26,3 +45,34 @@
 [ Info: generating a basis for Algebra using find_basis_1_β
 [ Info: new reduction modulo, 2147483647
 [ Info: generated a basis for Algebra of dimension 16
+┌ Debug: Dimension of the algebra is 16
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/linalg/invariants.jl:25
+┌ Debug: Before positivization: BigInt[1 0 0 1 0 0 0 0 0; 0 1 0 0 1 0 0 0 0; 0 0 1 1 1 0 -1 0 -1; 0 0 0 0 0 1 1 1 2]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:36
+┌ Debug: After positivization: [1 0 0 1 0 0 0 0 0; 0 1 0 0 1 0 0 0 0; 0 0 1 1 1 1 0 1 1; 0 0 0 0 0 1 1 1 2]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:48
+┌ Debug: Before positivization: BigInt[1 0 0 1 0 0 0 0 0]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:36
+┌ Debug: After positivization: [1 0 0 1 0 0 0 0 0]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:48
+┌ Debug: Before positivization: BigInt[1 0 0 1 0 0 0 0 0; 0 1 0 0 1 0 0 0 0]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:36
+┌ Debug: After positivization: [1 0 0 1 0 0 0 0 0; 0 1 0 0 1 0 0 0 0]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:48
+┌ Debug: Before positivization: BigInt[1 0 0 1 0 0 0 0 0; 0 1 0 0 1 0 0 0 0; 0 0 1 1 1 0 -1 0 -1]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:36
+┌ Debug: DimensionMismatch("No suitable matrix found")
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:41
+┌ Debug: Before positivization: BigInt[1 0 0 0 -1 0 0 0 0; 0 1 0 0 1 0 0 0 0; 0 0 1 0 0 0 0 0 0; 0 0 0 1 1 0 0 0 0; 0 0 0 0 0 1 0 0 0; 0 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 1 0; 0 0 0 0 0 0 0 0 1]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:36
+┌ Debug: After positivization: [1 0 0 1 0 0 0 0 0; 1 1 0 0 0 0 0 0 0; 0 1 0 0 1 0 0 0 0; 0 0 1 0 0 0 0 0 0; 0 0 0 0 0 1 0 0 0; 0 0 0 0 0 0 1 0 0; 0 0 0 0 0 0 0 1 0; 0 0 0 0 0 0 0 0 1]
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/positivizor.jl:48
+┌ Debug: Found reductions
+│   result =
+│    5-element Vector{Dict{Symbol, Vector{fmpq_mpoly}}}:
+│     Dict(:new_system => [0], :new_vars => [N + TN])
+│     Dict(:new_system => [0, 0], :new_vars => [N + TN, P + TP])
+│     Dict(:new_system => [0, 0, 0], :new_vars => [N + TN, P + TP, T + TN + TP - x - xTx])
+│     Dict(:new_system => [0, 0, 0, 0], :new_vars => [N + TN, P + TP, T + TN + TP + Tx + xT + xTx, Tx + x + xT + 2*xTx])
+│     Dict(:new_system => [0, 21//50*y1 - 1//100*y2*y4 - 21//50*y2 + 21//50*y3, 0, 21//50*y1 - 1//100*y2*y4 - 21//50*y2 + 21//50*y3 - 1//50*y4*y6 + 21//10000*y5 + 21//10000*y7, 1//100*y4*y6 - 1//100*y5*y6 - 21//10000*y5 + 21//10000*y8, -1//50*y4*y6 - 1//100*y5*y6 + 21//10000*y5 + 21//10000*y7 + 21//10000*y8, 1//100*y4*y6 - 21//10000*y7, 1//100*y5*y6 - 21//10000*y8], :new_vars => [N + TN, N + P, P + TP, T, Tx, x, xT, xTx])
+└ @ Main.ExactODEReduction ~/.julia/dev/ExactODEReduction/src/ExactODEReduction.jl:229

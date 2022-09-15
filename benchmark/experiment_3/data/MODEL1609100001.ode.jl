@@ -12,11 +12,12 @@ s5 => 1//200*s4
 
 Reductions:
 
-
-new_vars = fmpq_mpoly[s6]
+Interesting
+new_vars = fmpq_mpoly[s1 - 720//31*s6, s2 - 600//31*s6]
 new_system = 
 [
-0
+-83//1000*y1 + 1//20*y2,
+1//20*y1 - 3//50*y2
 ]
 
 
