@@ -6,9 +6,11 @@
 #   - a boolean value corresponding to the existence of the common invariant subspace
 #   - a common invariant subspace represented by basis vectors if it could be computed
 function invariant_subspace_global(matrices::AbstractArray{T}) where {T<:AbstractSparseMatrix}
-    isempty(matrices) && error("empty system invariants are ill-defined")
-
     @info "Called invariant_subspace_global on $(length(matrices)) matrices of shape $(size(matrices[1]))"
+
+    if all(iszero, matrices)
+        return (true, [unit_sparsik(size(first(matrices), 1), 1, Nemo.QQ)])
+    end
 
     unit_vect = unit_sparsik(size(first(matrices), 1), 1, Nemo.QQ)
     constrained = invariant_subspace_local(matrices, [unit_vect])
@@ -117,6 +119,14 @@ function many_invariant_subspaces(
 
     n = size(first(As), 1)
     ground = base_ring(first(As))
+
+    if all(iszero, As)
+        @debug "Get to a $n -dimensional space with zero action"
+        return [
+            [unit_sparsik(n, j, Nemo.QQ) for j in 1:i]
+            for i in 1:(n - 1)
+        ]
+    end
 
     # search for a subspace
     (exists, V) = find_invariant(As)
