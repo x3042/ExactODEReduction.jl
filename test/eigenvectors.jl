@@ -1,27 +1,26 @@
 @testset "Eigenvectors" begin
 
-    S = MatrixSpace(Nemo.QQ, 10, 10)
-    SBar = MatrixSpace(Nemo.QQBar, 10, 10) 
+    N = 5
+    S = MatrixSpace(Nemo.QQ, N, N)
+    SBar = MatrixSpace(Nemo.QQBar, N, N) 
 
-    for i in 1:20
-    
+    for i in 1:8
         while true
-            M = S([rand(-10:10) for i in 1:10 for j in 1:10])
+            M = S([rand(-2:2) for i in 1:N for j in 1:N])
             chpoly = Nemo.charpoly(Nemo.PolynomialRing(Nemo.QQ, "x")[1], M)
             factors = collect(AbstractAlgebra.factor(chpoly))
-            if length(factors) > 1
+            if any([f[2] != 1 for f in factors])
                 println("rerunning")
                 continue
             end
             vect = eigenvectors(M)
-            @test length(vect) == 10
-            MBar = SBar([M[i, j] for i in 1:10 for j in 1:10])
+            @test length(vect) == N
+            MBar = SBar([M[i, j] for i in 1:N for j in 1:N])
             for v in vect
                 Mv = MBar * v
                 @test iszero(Mv[1, 1] * v - v[1, 1] * Mv)
             end
+            break
         end
-
     end
-
 end
