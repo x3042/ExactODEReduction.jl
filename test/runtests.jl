@@ -17,7 +17,7 @@ using ExactODEReduction: from_dense, to_dense, from_COO, zero_sparsik, random_sp
                           scale!, reduce!, first_nonzero, find_basis_1_β, find_basis_1,
                           minimal_polynomial_wiedemann, unit_sparsik, evaluate, reconstruct!,
                           square_nonsingular_deterministic_wiedemann, square_nonsingular_randomized_wiedemann,
-                          positivize
+                          positivize, find_radical_sup
 
 
 @info "Testing started"

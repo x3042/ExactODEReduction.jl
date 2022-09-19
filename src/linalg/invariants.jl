@@ -124,7 +124,7 @@ function many_invariant_subspaces(
         return []
     end
 
-    toreturn = Vs
+    toreturn = Array{Any, 1}(Vs)
 
     @info "found $([length(V) for V in Vs])-dim subspaces in ambient $(size(first(As), 1))-dim"
 
@@ -152,14 +152,14 @@ function many_invariant_subspaces(
                 lifted = map(
                     vs -> lift(vs, complement_subspace(linear_span!(last(Vs)))),
                     subspaces)
-                tail = deepcopy(last(Vs))
-                if base_ring(first(first(subspaces))) == Nemo.QQBar
-                    tail = [extend_field(v, Nemo.QQBar) for v in tail]
+                for l in lifted
+                    tail = deepcopy(last(Vs))
+                    if base_ring(first(l)) == Nemo.QQBar
+                        tail = [extend_field(v, Nemo.QQBar) for v in tail]
+                    end
+                    append!(l, tail)
+                    push!(toreturn, l)
                 end
-                lifted = map(
-                    vs -> append!(vs, tail),
-                    lifted)
-                append!(toreturn, lifted)
             end
         end
     end
