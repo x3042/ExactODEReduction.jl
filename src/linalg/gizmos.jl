@@ -300,3 +300,17 @@ function gram_matrix(As::Array{AbstractSparseObject{FlintRationalField},1})
 
     return from_COO(n, n, nnz_coords, F)
 end
+
+#-------------------------------------------------------------------------------
+
+function eigenvectors(M)
+    n = size(M, 1)
+    SBar = Nemo.MatrixSpace(Nemo.QQBar, n, n)
+    MBar = SBar([M[i, j] for i in 1:n for j in 1:n])
+    eigenvals = Nemo.eigenvalues(M, Nemo.QQBar)
+    result = []
+    for l in eigenvals
+        push!(result, AbstractAlgebra.nullspace(MBar - l * one(MatrixSpace(Nemo.QQBar, size(M)...)))[2])
+    end
+    return result
+end
