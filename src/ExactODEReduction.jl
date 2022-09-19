@@ -119,11 +119,12 @@ function find_some_reduction(
     if length(matrices) == 0
         matrices = [from_COO(length(eqs), length(eqs), [], Nemo.QQ)]
     end
-    @savetime (exists, subspace) =  invariant_subspace_global(matrices) total_times
+    @savetime subspaces =  invariant_subspace_global(matrices) total_times
 
-    @debug "Subspace global" subspace
+    @debug "Subspace global" subspacese
 
-    isempty(subspace) && return Dict{Symbol, Vector{fmpq_mpoly}}()
+    isempty(subspaces) && return Dict{Symbol, Vector{fmpq_mpoly}}()
+    subspace = first(subspaces)
 
     subspace = basis(linear_span!(subspace))
     subspace = positivize(subspace)

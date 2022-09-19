@@ -72,9 +72,6 @@ end
 # in case the latter is semisimple
 function invariant_subspace_semisimple(Algebra::Subspacik)
     es = basis(Algebra)
-    # @debug Algebra
-    
-    @debug "!!Inside invariant_subspace_semisimple"
     
     n = size(first(es), 1)
     F = base_ring(Algebra)
@@ -123,7 +120,7 @@ function invariant_subspace_semisimple(Algebra::Subspacik)
 
         # if is proper and invaiant
         if 0 < length(V) < n && check_invariance!(es, deepcopy(V))
-            return V
+            return [V]
         end
     end
 end
