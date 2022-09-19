@@ -148,17 +148,19 @@ function many_invariant_subspaces(
             @info "Calling myself recursively in complemented subspace"
             
             subspaces = many_invariant_subspaces(As_V_sparse, find_invariant)
-            lifted = map(
-                vs -> lift(vs, complement_subspace(linear_span!(last(Vs)))),
-                subspaces)
-            tail = deepcopy(last(Vs))
-            if base_ring(first(first(subspaces))) == Nemo.QQBar
-                tail = [extend_field(v, Nemo.QQBar) for v in tail]
+            if length(subspaces) > 0
+                lifted = map(
+                    vs -> lift(vs, complement_subspace(linear_span!(last(Vs)))),
+                    subspaces)
+                tail = deepcopy(last(Vs))
+                if base_ring(first(first(subspaces))) == Nemo.QQBar
+                    tail = [extend_field(v, Nemo.QQBar) for v in tail]
+                end
+                lifted = map(
+                    vs -> append!(vs, tail),
+                    lifted)
+                append!(toreturn, lifted)
             end
-            lifted = map(
-                vs -> append!(vs, tail),
-                lifted)
-            append!(toreturn, lifted)
         end
     end
 

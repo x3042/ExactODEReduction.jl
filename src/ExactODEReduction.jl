@@ -216,7 +216,7 @@ function find_reductions(
         matrices = [from_COO(length(eqs), length(eqs), [], Nemo.QQ)]
     end
     invariant_subspaces = many_invariant_subspaces(matrices, invariant_subspace_global)
-    result = Vector{Dict{Symbol, Vector{fmpq_mpoly}}}()
+    result = Vector{Dict{Symbol, Vector{Any}}}()
     for V in invariant_subspaces
         V = basis(linear_span!(V))
 	    V = positivize(V)
