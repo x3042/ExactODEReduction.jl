@@ -21,8 +21,8 @@
 
     # -----
 
-    Z13 = GF(13)
-    ZZ =  GF(2^31 - 1)
+    Z13 = Nemo.GF(13)
+    ZZ =  Nemo.GF(2^31 - 1)
 
     # a series of tests
     sizes = [10, 10, 10, 15, 30, 50, 50, 75, 100]

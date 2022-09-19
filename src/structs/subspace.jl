@@ -416,6 +416,9 @@ end
 
 # checks whether the given subspace is invariant under the given matrices
 function check_invariance!(matrices, V::Union{Subspacik, HashedSubspacik})
+    if base_ring(first(matrices)[1, 1]) != base_ring(V)
+        matrices = [extend_field(M, base_ring(V)) for M in matrices]
+    end
     for matr in matrices
         for vec in values(V.echelon_form)
             product = matr * vec
@@ -431,14 +434,7 @@ end
 function check_invariance!(matrices, vectors::AbstractArray)
     isempty(vectors) && return true
     isubspace = linear_span!(deepcopy(vectors))
-    for e in matrices
-        for v in vectors
-            if !check_inclusion!(isubspace, e * v)
-                return false
-            end
-        end
-    end
-    return true
+    return check_invariance!(matrices, isubspace)
 end
 
 #------------------------------------------------------------------------------

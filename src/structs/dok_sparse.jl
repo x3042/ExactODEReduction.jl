@@ -37,6 +37,15 @@ end
 
 Nemo.base_ring(v::DOK_Sparsik) = v.field
 
+function extend_field(v::DOK_Sparsik, F)
+    return DOK_Sparsik(
+        v.m, v.n, F, 
+        copy(v.nnz_rows), copy(v.nnz_cols),
+        Dict(i => extend_field(x, F) for (i, x) in v.rows),
+        Dict(i => extend_field(x, F) for (i, x) in v.cols)
+    )
+end
+
 #------------------------------------------------------------------------------
 
 # O(k)

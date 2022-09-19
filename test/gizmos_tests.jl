@@ -85,7 +85,7 @@ end
     ε = 0.01
     for n in (100, )
         for d in (0.1, 0.5, 1)
-            for 𝔽 in (QQ, GF(2^31-1))
+            for 𝔽 in (Nemo.QQ, Nemo.GF(2^31-1))
                 vector = random_sparsik(n, 𝔽, density=d)
                 @test abs(density(vector) - d) < ε
 
@@ -100,8 +100,6 @@ end
 @testset "Subspaces -- check invariance" begin
 
     A = @sparse [1 0 0; 0 2 0; 0 0 3;]
-
-    @test check_invariance!([], [A])
 
     v1 = @sparse [1,0,0]
     v2 = @sparse [0,1,0]

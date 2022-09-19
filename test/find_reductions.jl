@@ -68,7 +68,7 @@ cases = [
 	    x3'(t) = -x4(t),
 	    x4'(t) = x3(t)
         ),
-	:dims => [Set([2])],
+	:dims => [Set([1, 2, 3])],
 	:constrained => [([x1 + x2], 2), ([x3], 2)]
     ),
     Dict(
@@ -79,6 +79,29 @@ cases = [
 	),
 	:dims => [Set([1]), Set([2])],
 	:constrained => [([x2], 2), ([x1], 1)]
+    ),
+    Dict(
+        :sys => @ODEsystem(
+	    x1'(t) = x1(t) - x2(t) + x3(t)^3,
+	    x2'(t) = x1(t),
+	    x3'(t) = -x4(t),
+	    x4'(t) = x3(t)
+	),
+	:dims => [Set([1, 2, 3])],
+	:constrained => [([x1], 4)]
+    ),
+    Dict(
+        :sys => @ODEsystem(
+            s1'(t) = -83//1000*s1(t) + 1//20*s2(t) + 24//25*s6(t),
+            s6'(t) = 0,
+            s2'(t) = 1//20*s1(t) - 3//50*s2(t),
+            s3'(t) = 1//100*s2(t) - 1//100*s3(t),
+            s8'(t) = 33//1000*s1(t),
+            s4'(t) = 1//100*s3(t) - 1//200*s4(t),
+            s5'(t) = 1//200*s4(t)
+        ),
+	:dims => [Set([1, 2, 3, 4, 5, 6])],
+	:constrained => []
     )
 ]
 

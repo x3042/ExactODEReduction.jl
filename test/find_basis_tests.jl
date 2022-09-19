@@ -68,7 +68,7 @@ function test_find_basis(algorithm)
     # --------
     # a series of random tests
 
-    ZZ  = GF(2^31 - 1)
+    ZZ  = Nemo.GF(2^31 - 1)
 
     dims      = [3, 3, 4, 4, 5, 5, 5, 5, 8, 8, 8, 8, 10, 10, 10]
     sizes     = [1, 3, 10]

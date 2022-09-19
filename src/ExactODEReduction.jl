@@ -119,11 +119,12 @@ function find_some_reduction(
     if length(matrices) == 0
         matrices = [from_COO(length(eqs), length(eqs), [], Nemo.QQ)]
     end
-    @savetime (exists, subspace) =  invariant_subspace_global(matrices) total_times
+    @savetime subspaces =  invariant_subspace_global(matrices) total_times
 
-    @debug "Subspace global" subspace
+    @debug "Subspace global" subspacese
 
-    isempty(subspace) && return Dict{Symbol, Vector{fmpq_mpoly}}()
+    isempty(subspaces) && return Dict{Symbol, Vector{fmpq_mpoly}}()
+    subspace = first(subspaces)
 
     subspace = basis(linear_span!(subspace))
     subspace = positivize(subspace)
@@ -215,11 +216,17 @@ function find_reductions(
         matrices = [from_COO(length(eqs), length(eqs), [], Nemo.QQ)]
     end
     invariant_subspaces = many_invariant_subspaces(matrices, invariant_subspace_global)
-    result = Vector{Dict{Symbol, Vector{fmpq_mpoly}}}()
+    result = Vector{Dict{Symbol, Vector{Any}}}()
     for V in invariant_subspaces
         V = basis(linear_span!(V))
 	    V = positivize(V)
-        transformation = polynormalize(V, parent(system))
+        poly_ring = parent(system)
+
+        # checking if we live over QQBar
+        if base_ring(first(V)) != base_ring(poly_ring)
+            poly_ring, _ = Nemo.PolynomialRing(base_ring(first(V)), ["$x" for x in gens(poly_ring)])
+        end
+        transformation = polynormalize(V, poly_ring)
         new_system = perform_change_of_variables(eqs, V)
         push!(result, Dict(:new_vars => transformation, :new_system => new_system))
     end

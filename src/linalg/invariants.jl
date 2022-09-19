@@ -1,22 +1,31 @@
 #------------------------------------------------------------------------------
 
-# computes an invariant subspaces of the given matrices
-#
-# returns a pair of
-#   - a boolean value corresponding to the existence of the common invariant subspace
-#   - a common invariant subspace represented by basis vectors if it could be computed
+"""
+    invariant_subspace_global(matrices)
+
+Takes as input a nonempty list of matrices. Returns a list [V1, ..., Vs] of 
+common invariant nonzero proper subspace such that
+ - if there exists at least one such subspace, then s > 0
+ - V1 subsetneq V2 subsetneq ... subsetneq Vs
+ - for every i, there is no invariant subspace Vi and V(i + 1)
+"""
 function invariant_subspace_global(matrices::AbstractArray{T}) where {T<:AbstractSparseMatrix}
     @info "Called invariant_subspace_global on $(length(matrices)) matrices of shape $(size(matrices[1]))"
 
+    n = size(first(matrices), 1)
+
     if all(iszero, matrices)
-        return (true, [unit_sparsik(size(first(matrices), 1), 1, Nemo.QQ)])
+        return [
+            [unit_sparsik(n, j, Nemo.QQ) for j in 1:i]
+            for i in 1:(n - 1)
+        ]
     end
 
-    unit_vect = unit_sparsik(size(first(matrices), 1), 1, Nemo.QQ)
+    unit_vect = unit_sparsik(n, 1, Nemo.QQ)
     constrained = invariant_subspace_local(matrices, [unit_vect])
-    if length(constrained) < size(first(matrices), 1)
+    if length(constrained) < n
         @debug "Found an invariant subspace by saturating the first unit vector"
-        return (true, constrained)
+        return [constrained]
     end
 
     # generate a basis for the Algebra
@@ -24,7 +33,7 @@ function invariant_subspace_global(matrices::AbstractArray{T}) where {T<:Abstrac
 
     @debug "Dimension of the algebra is $(dim(algebra))"
     if dim(algebra) == size(first(matrices), 1)^2
-        return (false, [])
+        return []
     end
 
     # find the radical of the Algebra
@@ -39,36 +48,23 @@ function invariant_subspace_global(matrices::AbstractArray{T}) where {T<:Abstrac
         @info "Radical is nontrivial, computing the general kernel of radical"
         @savetime invariant = general_kernel(map(to_dense, radical)) general_kernel_times
         push!(invariant_subspace_semisimple_times, 0.0)
-        invariant = [
+        invariants = [[
             from_dense([invariant[:, i]...], Nemo.QQ)
             for i in 1:size(invariant, 2)
-        ]
-        if !check_invariance!(deepcopy(matrices), deepcopy(invariant))
+        ]]
+        if !check_invariance!(deepcopy(matrices), deepcopy(first(invariants)))
             error("Kernel of the radical turned out not to be invariant, math is wrong")
         end
     else
-        @info "Radical is trivial, using randomized algorithm"
-        if dim(algebra) != 0
-            @savetime invariant = invariant_subspace_semisimple(algebra) invariant_subspace_semisimple_times
-            push!(general_kernel_times, 0.0)
-        else
-            invariant = fullspace(size(first(matrices), 1), base_ring(first(matrices)))
-        end
+        @info "Radical is trivial, going to semisimple case"
+        @savetime invariants = invariant_subspace_semisimple(algebra) invariant_subspace_semisimple_times
+        push!(general_kernel_times, 0.0)
     end
 
-    if isempty(invariant)
-        @warn "There is invariant subspace but it is either not defined over Q"
-        return (true, [])
-    end
-    
-    invariant = basis(linear_span!(invariant))
-    @info "$(length(invariant)) dimensional subspace found"
+    invariants = [basis(linear_span!(inv)) for inv in invariants]
+    @info "$([length(inv) for inv in invariants])-dimensional subspaces found"
 
-    for v in invariant
-        scale!(v, lcm(v))
-    end
-
-    return (true, invariant)
+    return invariants
 end
 
 #------------------------------------------------------------------------------
@@ -120,53 +116,51 @@ function many_invariant_subspaces(
     n = size(first(As), 1)
     ground = base_ring(first(As))
 
-    if all(iszero, As)
-        @debug "Get to a $n -dimensional space with zero action"
-        return [
-            [unit_sparsik(n, j, Nemo.QQ) for j in 1:i]
-            for i in 1:(n - 1)
-        ]
-    end
-
     # search for a subspace
-    (exists, V) = find_invariant(As)
+    Vs = find_invariant(As)
 
     # no subspaces found
-    if length(V) == 0
+    if length(Vs) == 0
         return []
     end
 
-    toreturn = [ V ]
+    toreturn = Array{Any, 1}(Vs)
 
-    @info "found $(length(V))-dim subspace in ambient $(size(first(As), 1))-dim"
+    @info "found $([length(V) for V in Vs])-dim subspaces in ambient $(size(first(As), 1))-dim"
 
     # restrict
-    if length(V) > 1 && length(V) < n
-        As_V = restrict(As, V)
+    if length(first(Vs)) > 1
+        As_V = restrict(As, first(Vs))
         As_V_sparse = map(x-> from_dense(x, ground), map(Array, As_V))
         
         @info "Calling myself recursively in restricted subspace"
 
         subspaces = many_invariant_subspaces(As_V_sparse, find_invariant)
-        append!(toreturn, map(vs -> lift(vs, V), subspaces))
+        toreturn = [map(vs -> lift(vs, first(Vs)), subspaces)..., toreturn...]
     end
 
     # factorize
-    if length(V) < n - 1
-        As_V = factorize(As, V)
+    if length(last(Vs)) < n - 1
+        As_V = factorize(As, last(Vs))
         if !isempty(As_V)
             As_V_sparse = map(x-> from_dense(x, ground), map(Array, As_V))
             
             @info "Calling myself recursively in complemented subspace"
             
             subspaces = many_invariant_subspaces(As_V_sparse, find_invariant)
-            lifted = map(
-                vs -> lift(vs, complement_subspace(linear_span!(V))),
-                subspaces)
-            lifted = map(
-                vs -> append!(vs, deepcopy(V)),
-                lifted)
-            append!(toreturn, lifted)
+            if length(subspaces) > 0
+                lifted = map(
+                    vs -> lift(vs, complement_subspace(linear_span!(last(Vs)))),
+                    subspaces)
+                for l in lifted
+                    tail = deepcopy(last(Vs))
+                    if base_ring(first(l)) == Nemo.QQBar
+                        tail = [extend_field(v, Nemo.QQBar) for v in tail]
+                    end
+                    append!(l, tail)
+                    push!(toreturn, l)
+                end
+            end
         end
     end
 
@@ -188,8 +182,6 @@ end
 # generated by vectors from `vs`
 # Returns new, restriced representations of the matrices
 function restrict(As::AbstractArray, vs)
-    # Gleb: TODO for the future: the restriction is implicitly computed by check_invariance, so
-    # it could be done there (and in the sparse way!)
     n = size(first(As), 1)
     ground = base_ring(first(As))
 
@@ -256,7 +248,12 @@ end
 # Returns new, lifted representations of the vectors
 function lift(vs, Vs)
     n = dim(first(Vs))
-    ground = base_ring(first(Vs))
+    ground = base_ring(first(vs))
+
+    # lift to QQBar if necessary
+    if ground != base_ring(first(Vs))
+        Vs = [extend_field(v, ground) for v in Vs]
+    end
 
     lifted = []
 

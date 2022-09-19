@@ -8,16 +8,28 @@
     new_vars_name (optional) - the name for variables in the lumped polynomials
 """
 function perform_change_of_variables(system, invariants; new_vars_name="y")
-
     ground = base_ring(first(invariants))
     olddim = length(gens(parent(first(system))))
     oldring = parent(first(system))
+
+    if ground != base_ring(oldring)
+        oldring, vars = Nemo.PolynomialRing(ground, ["$x" for x in gens(oldring)])
+	newsys = []
+	for p in system
+            res = zero(oldring)
+            for (c, exp) in zip(Nemo.coefficients(p), Nemo.exponent_vectors(p))
+                res += Nemo.QQBar(c) * prod(vars .^ exp)
+            end
+	    push!(newsys, res)
+	end
+	system = newsys
+    end
 
     newdim = length(invariants)
     newvars = ["$new_vars_name$i" for i in 1:newdim]
     newring, newgens = PolynomialRing(ground, newvars)
 
-    S = MatrixSpace(Nemo.QQ, newdim, olddim)
+    S = MatrixSpace(ground, newdim, olddim)
     transform_matrix = zero(S)
     for i in 1:newdim
         transform_matrix[i, :] = to_dense(invariants[i])

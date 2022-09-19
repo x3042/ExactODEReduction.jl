@@ -1,82 +1,4 @@
 # Finds the radical of the given matrix Algebra by
-# computing the center of the Algebra using
-# the characteristic polynomial of the Gramian matrix
-function find_radical(Algebra::Subspacik)
-    As = basis(Algebra)
-    F = base_ring(Algebra)
-    n = dim(Algebra)
-
-    traces = Dict{Tuple{Int, Int}, elem_type(F)}(
-        (i, j) => tr(As[i] * As[j])
-        for i in 1 : n
-            for j in i : n
-    )
-
-    nnz_coords = [
-        (i, j, traces[min(i, j), max(i, j)])
-        for i in 1 : n
-            for j in 1 : n
-                if ! iszero(traces[min(i, j), max(i, j)])
-    ]
-
-    if isempty(nnz_coords)
-        return As
-    end
-
-    ZZ = Nemo.GF(2^31 - 1)
-    A = from_COO(n, n, nnz_coords, F)
-
-    A = modular_reduction(A, ZZ)
-
-    # wiedemannchik.jl
-    PolySpace, _ = ZZ["x"]
-    MSpace = MatrixSpace(ZZ, n, n)
-    char_poly = minimal_polynomial_wiedemann(
-        A,
-        subspace_minpoly=__randomized_wiedemann_minpoly
-    )
-    # char_poly = charpoly(PolySpace, MSpace(to_dense(A)))
-
-    radical_basis = []
-
-    # hm??
-    # Gleb: why "hm??"
-    if (!iszero(coeff(char_poly, 0)))
-        return radical_basis
-    end
-
-    while iszero(coeff(char_poly, 0))
-        char_poly = shift_right_x(char_poly)
-    end
-
-    Image = evaluate_2(char_poly, A)
-
-    Image = rational_reconstruction(Image)
-    # Gleb: technically, there should be some way to check and rerun with larger prime
-    # however, if this is not the winner-radical-algorithm, not needed really
-
-    transpose!(Image)
-
-    basis_cols = linear_span!(collect(values(Image.rows)))
-
-    summator(x, y) = reduce(x, y, 1)
-    for (piv, vect) in basis_cols.echelon_form
-        vectors = []
-        for j in 1 : size(Image, 2)
-            if !iszero(vect[j])
-                push!(vectors, scale(As[j], vect[j]))
-            end
-        end
-        push!(radical_basis, reduce(summator, vectors))
-    end
-
-    @info "computed the radical of dimension $(length(radical_basis))"
-
-    return radical_basis
-end
-
-
-# Finds the radical of the given matrix Algebra by
 # computing the radical of the Algebra *directly*
 
 """
@@ -144,80 +66,12 @@ function find_radical_sup(Algebra::Subspacik)
     return rad
 end
 
-
-
-# Finds the radical of the given matrix Algebra by
-# computing the center of the Algebra *directly*
-# with the means of Nemo.jl functions
-function find_radical_2(Algebra::Subspacik)
-    As = basis(Algebra)
-    F = base_ring(Algebra)
-    n = dim(Algebra)
-
-    # Gleb: to a function (see above)
-    traces = Dict{Tuple{Int, Int}, elem_type(F)}(
-        (i, j) => tr(As[i] * As[j])
-        for i in 1 : n
-            for j in i : n
-    )
-
-    nnz_coords = [
-        (i, j, traces[min(i, j), max(i, j)])
-        for i in 1 : n
-            for j in 1 : n
-                if ! iszero(traces[min(i, j), max(i, j)])
-    ]
-
-    if isempty(nnz_coords)
-        return As
-    end
-
-    ZZ = Nemo.GF(2^31 - 1)
-    A = zeros(ZZ, n, n)
-    for (i, j, x) in nnz_coords
-        A[i, j] = modular_reduction(x, ZZ)
-    end
-
-    MSpace = MatrixSpace(ZZ, n, n)
-    sz, vectors = kernel(MSpace(A))
-
-    sz == 0 && return As
-
-    basis_cols = linear_span!([
-                rational_reconstruction(
-                    from_dense([vectors[:, i]...], ZZ)
-                )
-                for i in 1:sz
-    ])
-
-    radical_basis = []
-
-    summator(x, y) = reduce(x, y, 1)
-    for (piv, vect) in basis_cols.echelon_form
-        vectors = []
-        for j in 1:length(As)
-            if !iszero(vect[j])
-                push!(vectors, scale(As[j], vect[j]))
-            end
-        end
-        push!(radical_basis, reduce(summator, vectors))
-    end
-
-    @info "computed the radical of dimension $(length(radical_basis))"
-
-    return radical_basis
-end
-
-
 #------------------------------------------------------------------------------
 
 # returns an invariant subspace of the given Algebra
 # in case the latter is semisimple
 function invariant_subspace_semisimple(Algebra::Subspacik)
     es = basis(Algebra)
-    # @debug Algebra
-    
-    @debug "!!Inside invariant_subspace_semisimple"
     
     n = size(first(es), 1)
     F = base_ring(Algebra)
@@ -241,21 +95,14 @@ function invariant_subspace_semisimple(Algebra::Subspacik)
 
         if length(factors) == 1
             if first(factors)[2] == 1 # multiplicity of the only factor
-                @warn "No invariant subspaces defined over Q"
-                return []
+                @warn "No invariant subspaces defined over Q, taking eigenvectors"
+                eigenvect = eigenvectors(MSpace(to_dense(M)))
+                return [
+                    [from_dense([v[i, 1] for i in 1:n], Nemo.QQBar) for v in eigenvect[1:j]]
+                    for j in 1:(n - 1)
+                ]
             end
-            # a more thorough check
-            p = 0.99
-            sampling = Int(ceil(n^2 / (1 - p)))
-            # Alex: changed just now by me
-            M_dense = sum([rand(1:sampling) * m for m in es])
-            reconstruct!(M_dense)
-            chpoly_dense = charpoly(PSpace, MSpace(to_dense(M_dense)))
-            factors_dense = collect(AbstractAlgebra.factor(chpoly_dense))
-            if length(factors_dense) == 1 && (first(factors_dense)[2] == first(factors)[2])
-                @warn "Exceptional case with several equal blocks"
-                return []
-            end
+            @warn "Charpoly is a power of irreducible $M"
             continue
         end
 
@@ -277,7 +124,7 @@ function invariant_subspace_semisimple(Algebra::Subspacik)
 
         # if is proper and invaiant
         if 0 < length(V) < n && check_invariance!(es, deepcopy(V))
-            return V
+            return [V]
         end
     end
 end

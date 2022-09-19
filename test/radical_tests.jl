@@ -115,7 +115,7 @@ end
 
 @testset "radical" begin
 
-    test_find_radical(find_radical)
+    test_find_radical(find_radical_sup)
 
 end
 

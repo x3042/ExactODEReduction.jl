@@ -275,7 +275,7 @@ function polynormalize(vectors, domain) where {T}
         )
     end
 
-    polynômes
+    return polynômes
 end
 
 #------------------------------------------------------------------------------
@@ -299,4 +299,25 @@ function gram_matrix(As::Array{AbstractSparseObject{FlintRationalField},1})
     ]
 
     return from_COO(n, n, nnz_coords, F)
+end
+
+#-------------------------------------------------------------------------------
+
+"""
+    eigenvectors(M)
+
+For a matrix M over QQ or QQBar with only simple eigenvalues, returns a list of 
+eigenvectors with entries in QQBar
+"""
+function eigenvectors(M)
+    n = size(M, 1)
+    SBar = Nemo.MatrixSpace(Nemo.QQBar, n, n)
+    MBar = SBar([M[i, j] for i in 1:n for j in 1:n])
+    eigenvals = Nemo.eigenvalues(M, Nemo.QQBar)
+    result = []
+    id = one(MatrixSpace(Nemo.QQBar, size(M)...))
+    for l in eigenvals
+        push!(result, AbstractAlgebra.nullspace(MBar - l * id)[2])
+    end
+    return result
 end
