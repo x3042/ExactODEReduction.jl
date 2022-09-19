@@ -31,6 +31,10 @@ Arguments
   - `subspace`: a list of linearly independent Sparsik's
 """
 function positivize(subspace)
+    if base_ring(first(subspace)) != Nemo.QQ
+        @debug "The base ring is not Q but $(base_ring(first(subspace))), no positivization"
+        return subspace
+    end
     stacked_basis = Matrix(transpose(reduce(hcat, map(v -> to_dense(v), subspace))))
     integerized = rational_to_int(stacked_basis)
     @debug "Before positivization: $integerized"

@@ -96,7 +96,11 @@ function invariant_subspace_semisimple(Algebra::Subspacik)
         if length(factors) == 1
             if first(factors)[2] == 1 # multiplicity of the only factor
                 @warn "No invariant subspaces defined over Q, taking eigenvectors"
-                return []
+                eigenvect = eigenvectors(MSpace(to_dense(M)))
+                return [
+                    [from_dense([v[i, 1] for i in 1:n], Nemo.QQBar) for v in eigenvect[1:j]]
+                    for j in 1:(n - 1)
+                ]
             end
             @warn "Charpoly is a power of irreducible $M"
             continue

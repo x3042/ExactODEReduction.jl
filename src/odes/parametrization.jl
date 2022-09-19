@@ -17,7 +17,7 @@ function perform_change_of_variables(system, invariants; new_vars_name="y")
     newvars = ["$new_vars_name$i" for i in 1:newdim]
     newring, newgens = PolynomialRing(ground, newvars)
 
-    S = MatrixSpace(Nemo.QQ, newdim, olddim)
+    S = MatrixSpace(ground, newdim, olddim)
     transform_matrix = zero(S)
     for i in 1:newdim
         transform_matrix[i, :] = to_dense(invariants[i])
@@ -33,15 +33,15 @@ function perform_change_of_variables(system, invariants; new_vars_name="y")
         substitutions[pind] = sum([newgens[j] * inv_trans[i, j] for j in 1:newdim])
     end
 
-    newsystem = zeros(oldring, newdim)
+    system_subs = [Nemo.evaluate(p, substitutions) for p in system]
+
+    newsystem = zeros(newring, newdim)
 
     for (i, vec) in enumerate(invariants)
         for (idx, val) in vec
-            newsystem[i] += system[idx] * val
+            newsystem[i] += system_subs[idx] * val
         end
     end
-
-    newsystem = [Nemo.evaluate(p, substitutions) for p in newsystem]
 
     return newsystem
 end

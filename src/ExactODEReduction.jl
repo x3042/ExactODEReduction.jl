@@ -220,7 +220,13 @@ function find_reductions(
     for V in invariant_subspaces
         V = basis(linear_span!(V))
 	    V = positivize(V)
-        transformation = polynormalize(V, parent(system))
+        poly_ring = parent(system)
+
+        # checking if we live over QQBar
+        if base_ring(first(V)) != base_ring(poly_ring)
+            poly_ring, _ = Nemo.PolynomialRing(base_ring(first(V)), ["$x" for x in gens(poly_ring)])
+        end
+        transformation = polynormalize(V, poly_ring)
         new_system = perform_change_of_variables(eqs, V)
         push!(result, Dict(:new_vars => transformation, :new_system => new_system))
     end

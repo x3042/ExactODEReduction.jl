@@ -151,8 +151,12 @@ function many_invariant_subspaces(
             lifted = map(
                 vs -> lift(vs, complement_subspace(linear_span!(last(Vs)))),
                 subspaces)
+            tail = deepcopy(last(Vs))
+            if base_ring(first(first(subspaces))) == Nemo.QQBar
+                tail = [extend_field(v, Nemo.QQBar) for v in tail]
+            end
             lifted = map(
-                vs -> append!(vs, deepcopy(last(Vs))),
+                vs -> append!(vs, tail),
                 lifted)
             append!(toreturn, lifted)
         end
@@ -242,7 +246,12 @@ end
 # Returns new, lifted representations of the vectors
 function lift(vs, Vs)
     n = dim(first(Vs))
-    ground = base_ring(first(Vs))
+    ground = base_ring(first(vs))
+
+    # lift to QQBar if necessary
+    if ground != base_ring(first(Vs))
+        Vs = [extend_field(v, ground) for v in Vs]
+    end
 
     lifted = []
 

@@ -275,7 +275,7 @@ function polynormalize(vectors, domain) where {T}
         )
     end
 
-    polynômes
+    return polynômes
 end
 
 #------------------------------------------------------------------------------

@@ -39,6 +39,12 @@ Nemo.base_ring(v::Sparsik) = v.field
 
 #------------------------------------------------------------------------------
 
+function extend_field(v::Sparsik, F)
+    return Sparsik(v.dim, F, copy(v.nonzero), Dict(i => F(x) for (i, x) in v.data))
+end
+
+#------------------------------------------------------------------------------
+
 # hitherto `Sparsik(other::Sparik)` has stood for the `deepcopy`,
 # from now on we override Base.deepcopy
 function Base.deepcopy_internal(x::Sparsik, stackdict::IdDict)
