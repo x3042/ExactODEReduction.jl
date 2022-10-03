@@ -9,7 +9,7 @@ common invariant nonzero proper subspace such that
  - V1 subsetneq V2 subsetneq ... subsetneq Vs
  - for every i, there is no invariant subspace Vi and V(i + 1)
 """
-function invariant_subspace_global(matrices::AbstractArray{T}) where {T<:AbstractSparseMatrix}
+function invariant_subspace_global(matrices::AbstractArray{T}; overQ=true) where {T<:AbstractSparseMatrix}
     @info "Called invariant_subspace_global on $(length(matrices)) matrices of shape $(size(matrices[1]))"
 
     n = size(first(matrices), 1)
@@ -57,7 +57,7 @@ function invariant_subspace_global(matrices::AbstractArray{T}) where {T<:Abstrac
         end
     else
         @info "Radical is trivial, going to semisimple case"
-        @savetime invariants = invariant_subspace_semisimple(algebra) invariant_subspace_semisimple_times
+        @savetime invariants = invariant_subspace_semisimple(algebra; overQ=overQ) invariant_subspace_semisimple_times
         push!(general_kernel_times, 0.0)
     end
 
@@ -111,13 +111,14 @@ end
 
 function many_invariant_subspaces(
         As::AbstractArray{T},
-        find_invariant)   where {T<:AbstractSparseMatrix}
+        find_invariant;
+	overQ=true)   where {T<:AbstractSparseMatrix}
 
     n = size(first(As), 1)
     ground = base_ring(first(As))
 
     # search for a subspace
-    Vs = find_invariant(As)
+    Vs = find_invariant(As; overQ=overQ)
 
     # no subspaces found
     if length(Vs) == 0
@@ -135,8 +136,8 @@ function many_invariant_subspaces(
         
         @info "Calling myself recursively in restricted subspace"
 
-        subspaces = many_invariant_subspaces(As_V_sparse, find_invariant)
-        toreturn = [map(vs -> lift(vs, first(Vs)), subspaces)..., toreturn...]
+        subspaces = many_invariant_subspaces(As_V_sparse, find_invariant; overQ=overQ)
+        toreturn = Array{Any, 1}([map(vs -> lift(vs, first(Vs)), subspaces)..., toreturn...])
     end
 
     # factorize
@@ -147,7 +148,7 @@ function many_invariant_subspaces(
             
             @info "Calling myself recursively in complemented subspace"
             
-            subspaces = many_invariant_subspaces(As_V_sparse, find_invariant)
+            subspaces = many_invariant_subspaces(As_V_sparse, find_invariant; overQ=overQ)
             if length(subspaces) > 0
                 lifted = map(
                     vs -> lift(vs, complement_subspace(linear_span!(last(Vs)))),

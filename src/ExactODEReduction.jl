@@ -101,6 +101,7 @@ Arguments:
 """
 function find_some_reduction(
         system::ODE{P};
+	overQ=true,
         loglevel=Logging.Info) where {P}
 
     # hmm
@@ -119,7 +120,7 @@ function find_some_reduction(
     if length(matrices) == 0
         matrices = [from_COO(length(eqs), length(eqs), [], Nemo.QQ)]
     end
-    @savetime subspaces =  invariant_subspace_global(matrices) total_times
+    @savetime subspaces =  invariant_subspace_global(matrices; overQ=overQ) total_times
 
     @debug "Subspace global" subspaces
 
@@ -202,6 +203,7 @@ Arguments:
 """
 function find_reductions(
         system::ODE{P};
+	overQ=true,
         loglevel=Logging.Info) where {P}
 
     package_logger = Logging.ConsoleLogger(stderr, loglevel)
@@ -215,7 +217,7 @@ function find_reductions(
     if length(matrices) == 0
         matrices = [from_COO(length(eqs), length(eqs), [], Nemo.QQ)]
     end
-    invariant_subspaces = many_invariant_subspaces(matrices, invariant_subspace_global)
+    invariant_subspaces = many_invariant_subspaces(matrices, invariant_subspace_global; overQ=overQ)
     result = Vector{Dict{Symbol, Vector{Any}}}()
     for V in invariant_subspaces
         V = basis(linear_span!(V))

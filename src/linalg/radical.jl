@@ -70,7 +70,7 @@ end
 
 # returns an invariant subspace of the given Algebra
 # in case the latter is semisimple
-function invariant_subspace_semisimple(Algebra::Subspacik)
+function invariant_subspace_semisimple(Algebra::Subspacik; overQ=true)
     es = basis(Algebra)
     
     n = size(first(es), 1)
@@ -96,7 +96,11 @@ function invariant_subspace_semisimple(Algebra::Subspacik)
         if length(factors) == 1
             if first(factors)[2] == 1 # multiplicity of the only factor
                 @warn "No invariant subspaces defined over Q, taking eigenvectors"
+		if overQ
+		    return []
+		end
                 eigenvect = eigenvectors(MSpace(to_dense(M)))
+                @debug "Eigenvectors done"
                 return [
                     [from_dense([v[i, 1] for i in 1:n], Nemo.QQBar) for v in eigenvect[1:j]]
                     for j in 1:(n - 1)
