@@ -60,7 +60,7 @@ odes = @ODEsystem(
 4. Call `find_reductions` providing the system
 
 ```julia
-reductions = find_reduction(odes)
+reductions = find_reductions(odes)
 ```
 
 which returns the list of possible reductions. You will get the following result

@@ -8,6 +8,8 @@ using LinearAlgebra: SingularException, det
 using AbstractAlgebra
 using Nemo
 
+# include("../src/ExactODEReduction.jl")
+
 using ExactODEReduction
 using ExactODEReduction: from_dense, to_dense, from_COO, zero_sparsik, random_sparsik,
                           construct_jacobians, check_invariance!, @sparse, linear_span!,
