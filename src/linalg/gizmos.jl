@@ -256,28 +256,6 @@ function construct_jacobians(system)
     construct_jacobians([system[x] for x in gens(ring)])
 end
 
-
-#------------------------------------------------------------------------------
-
-# vectors - an array of 1D iterables
-# domain - an MPoly domain
-#
-# converts the given vectors into the polynomial form
-# with respect to the generators of the given domain
-function polynormalize(vectors, domain) where {T}
-    polynômes = zeros(domain, 0)
-    vars = Nemo.gens(domain)
-
-    for v in vectors
-        push!(
-            polynômes,
-            sum(map(prod, zip(vars, to_dense(v))))
-        )
-    end
-
-    return polynômes
-end
-
 #------------------------------------------------------------------------------
 
 # for As[i] in array As compute dok_sparsik Tr: Tr_ij = trace(A_i, A_j)
@@ -318,7 +296,7 @@ function eigenspaces(M)
     id = one(MatrixSpace(Nemo.QQBar, size(M)...))
     for l in eigenvals
         as_matrix = AbstractAlgebra.nullspace(MBar - l * id)[2]
-        push!(result, [as_matrix[:, i] for i in size(as_matrix, 2)])
+        push!(result, [as_matrix[:, i] for i in 1:size(as_matrix, 2)])
     end
     return result
 end

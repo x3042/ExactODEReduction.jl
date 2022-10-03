@@ -102,6 +102,16 @@ cases = [
         ),
 	:dims => [Set([1, 2, 3, 4, 5, 6])],
 	:constrained => []
+    ),
+    Dict(
+        :sys => @ODEsystem(
+            x1'(t) = x1(t) + x3(t)^2 - x4(t)^2,
+            x2'(t) = x2(t) + 2 * x3(t) * x4(t),
+            x3'(t) = -x3(t) + x1(t)^2 - x2(t)^2,
+            x4'(t) = -x4(t) + 2 * x1(t) * x2(t)
+        ),
+        :dims => [Set([2])],
+        :constrained => [([x1], 4)]
     )
 ]
 

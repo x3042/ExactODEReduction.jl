@@ -129,8 +129,7 @@ function find_some_reduction(
 
     subspace = basis(linear_span!(subspace))
     subspace = positivize(subspace)
-    transformation = polynormalize(subspace, parent(system))
-    new_system = perform_change_of_variables(eqs, subspace)
+    (transformation, new_system) = perform_change_of_variables(eqs, subspace)
 
     return Dict(:new_vars => transformation, :new_system => new_system)
 end
@@ -182,8 +181,7 @@ function find_smallest_constrained_reduction(
 
     subspace = basis(linear_span!(subspace))
     subspave = positivize(subspace)
-    transformation = polynormalize(subspace, parent(system))
-    new_system = perform_change_of_variables(eqs, subspace)
+    (transformation, new_system) = perform_change_of_variables(eqs, subspace)
 
     return Dict(:new_vars => transformation, :new_system => new_system)
 end
@@ -228,8 +226,7 @@ function find_reductions(
         if base_ring(first(V)) != base_ring(poly_ring)
             poly_ring, _ = Nemo.PolynomialRing(base_ring(first(V)), ["$x" for x in gens(poly_ring)])
         end
-        transformation = polynormalize(V, poly_ring)
-        new_system = perform_change_of_variables(eqs, V)
+        (transformation, new_system) = perform_change_of_variables(eqs, V)
         push!(result, Dict(:new_vars => transformation, :new_system => new_system))
     end
 

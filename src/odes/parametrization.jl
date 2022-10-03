@@ -14,20 +14,22 @@ function perform_change_of_variables(system, invariants; new_vars_name="y")
 
     if ground != base_ring(oldring)
         oldring, vars = Nemo.PolynomialRing(ground, ["$x" for x in gens(oldring)])
-	newsys = []
-	for p in system
+	    newsys = []
+        for p in system
             res = zero(oldring)
             for (c, exp) in zip(Nemo.coefficients(p), Nemo.exponent_vectors(p))
                 res += Nemo.QQBar(c) * prod(vars .^ exp)
             end
-	    push!(newsys, res)
-	end
-	system = newsys
+	        push!(newsys, res)
+	    end
+	    system = newsys
     end
 
     newdim = length(invariants)
     newvars = ["$new_vars_name$i" for i in 1:newdim]
     newring, newgens = PolynomialRing(ground, newvars)
+
+    transform = [sum([a * b for (a, b) in zip(to_dense(v), gens(oldring))]) for v in invariants]
 
     S = MatrixSpace(ground, newdim, olddim)
     transform_matrix = zero(S)
@@ -55,7 +57,7 @@ function perform_change_of_variables(system, invariants; new_vars_name="y")
 
     newsystem = [Nemo.evaluate(p, substitutions) for p in newsystem]
 
-    return newsystem
+    return (transform, newsystem)
 end
 
 

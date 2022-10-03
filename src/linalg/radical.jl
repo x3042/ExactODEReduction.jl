@@ -92,27 +92,42 @@ function invariant_subspace_semisimple(Algebra::Subspacik; overQ=true)
         chpoly = charpoly(PSpace, MSpace(to_dense(M)))
 
         factors = collect(AbstractAlgebra.factor(chpoly))
+        @debug "Factors of the charpoly $(factors)"
 
         if length(factors) == 1
             if first(factors)[2] == 1 # multiplicity of the only factor
-                @warn "No invariant subspaces defined over Q, taking eigenvectors"
-		if overQ
-		    return []
-		end
-                eigensp = eigenspaces(MSpace(to_dense(M)))
-                @debug "Eigenspaces done"
-                to_return = [[]]
-                for j in 1:(n - 1)
-                    prev = to_return[end]
-                    push!(
-                        to_return, 
-                        vcat(
-                            prev, 
-                            [from_dense([v[i] for i in 1:n], Nemo.QQBar) for v in eigensp[j]]
+                @warn "No invariant subspaces defined over Q"
+		        if overQ
+		            return []
+		        end
+                @info "Computing eigenspaces of the center"
+                Z = center(Algebra)
+                count_center = 1
+                while true
+                    Zelem = sum([rand(0:count_center) * z for z in Z])
+                    chpoly = charpoly(PSpace, Zelem)
+                    factors = AbstractAlgebra.factor(chpoly)
+                    if (length(factors) > 1) || (Nemo.degree(first(factors)[1]) < length(Z))
+                        count_center *= 2
+                        @warn "Nongeneric element of the center sampled"
+                        continue
+                    end
+                    eigensp = eigenspaces(Zelem)
+                    @debug "Eigenspaces of $Zelem done $eigensp"
+                    to_return = [[]]
+                    for j in 1:(length(eigensp) - 1)
+                        prev = to_return[end]
+                        push!(
+                            to_return, 
+                            vcat(
+                                prev, 
+                                [from_dense([v[i] for i in 1:n], Nemo.QQBar) for v in eigensp[j]]
+                            )
                         )
-                    )
+                    end
+                    @debug "To return $to_return"
+                    return to_return[2:end]
                 end
-                return to_return[2:end]
             end
             @warn "Charpoly is a power of irreducible $M"
             continue
@@ -138,6 +153,7 @@ function invariant_subspace_semisimple(Algebra::Subspacik; overQ=true)
         if 0 < length(V) < n && check_invariance!(es, deepcopy(V))
             return [V]
         end
+        @warn "There was a spurious factorization, resampling a matrix"
     end
 end
 
@@ -148,6 +164,36 @@ function general_kernel(matrices::AbstractArray)
     stacked = vcat(matrices...)
     Space = MatrixSpace(Nemo.QQ, size(stacked)...)
     return Array(last(kernel(Space(stacked))))
+end
+
+#------------------------------------------------------------------------------
+
+function center(algebra::Subspacik)
+    es = basis(algebra)
+    n = size(first(es), 1)
+    S = MatrixSpace(Nemo.QQ, n^2 * length(es), length(es))
+    A = zero(S)
+    for (i, v) in enumerate(es)
+        for (j, u) in enumerate(es)
+            comm = es[i] * es[j] - es[j] * es[i]
+            for k in 1:n
+                for l in 1:n
+                    A[(j - 1) * n^2 + (k - 1) * n + l, i] = comm[k, l]
+                end
+            end
+        end
+    end
+    sols = kernel(A)
+    result = []
+    SS = MatrixSpace(Nemo.QQ, n, n)
+    for i in 1:sols[1]
+        Z = zero(SS)
+        for j in 1:length(es)
+            Z += sols[2][j, i] * SS(to_dense(es[j]))
+        end
+        push!(result, Z)
+    end
+    return result
 end
 
 #------------------------------------------------------------------------------
