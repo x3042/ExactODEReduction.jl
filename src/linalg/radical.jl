@@ -99,12 +99,20 @@ function invariant_subspace_semisimple(Algebra::Subspacik; overQ=true)
 		if overQ
 		    return []
 		end
-                eigenvect = eigenvectors(MSpace(to_dense(M)))
-                @debug "Eigenvectors done"
-                return [
-                    [from_dense([v[i, 1] for i in 1:n], Nemo.QQBar) for v in eigenvect[1:j]]
-                    for j in 1:(n - 1)
-                ]
+                eigensp = eigenspaces(MSpace(to_dense(M)))
+                @debug "Eigenspaces done"
+                to_return = [[]]
+                for j in 1:(n - 1)
+                    prev = to_return[end]
+                    push!(
+                        to_return, 
+                        vcat(
+                            prev, 
+                            [from_dense([v[i] for i in 1:n], Nemo.QQBar) for v in eigensp[j]]
+                        )
+                    )
+                end
+                return to_return[2:end]
             end
             @warn "Charpoly is a power of irreducible $M"
             continue

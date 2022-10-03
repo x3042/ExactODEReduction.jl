@@ -306,18 +306,19 @@ end
 """
     eigenvectors(M)
 
-For a matrix M over QQ or QQBar with only simple eigenvalues, returns a list of 
-eigenvectors with entries in QQBar
+For a diagonalizable matrix M over QQ or QQBar, returns a list of 
+bases of eigenspaces with entries in QQBar
 """
-function eigenvectors(M)
+function eigenspaces(M)
     n = size(M, 1)
     SBar = Nemo.MatrixSpace(Nemo.QQBar, n, n)
     MBar = SBar([M[i, j] for i in 1:n for j in 1:n])
-    eigenvals = Nemo.eigenvalues(M, Nemo.QQBar)
+    eigenvals = Set(Nemo.eigenvalues(M, Nemo.QQBar))
     result = []
     id = one(MatrixSpace(Nemo.QQBar, size(M)...))
     for l in eigenvals
-        push!(result, AbstractAlgebra.nullspace(MBar - l * id)[2])
+        as_matrix = AbstractAlgebra.nullspace(MBar - l * id)[2]
+        push!(result, [as_matrix[:, i] for i in size(as_matrix, 2)])
     end
     return result
 end
