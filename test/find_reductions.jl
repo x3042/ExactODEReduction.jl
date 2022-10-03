@@ -141,11 +141,11 @@ end
     for c in cases
         sys = c[:sys]
         @info "Testing the system $sys"
-        red = find_some_reduction(sys)
+        red = find_some_reduction(sys; overQ=false)
         (f1, f2) = check_reduction(sys, red[:new_vars], red[:new_system])
         @test f1 == f2
 
-        reds = find_reductions(sys)
+        reds = find_reductions(sys; overQ=false)
         for r in reds
             (f1, f2) = check_reduction(sys, r[:new_vars], r[:new_system])
             @test f1 == f2
@@ -161,7 +161,7 @@ end
 
         for i in 1:50
             sys_change = random_linear_change(sys)
-            reds_change = find_reductions(sys_change)
+            reds_change = find_reductions(sys_change; overQ=false)
             for r in reds_change
                 (f1, f2) = check_reduction(sys_change, r[:new_vars], r[:new_system])
                 @test f1 == f2
