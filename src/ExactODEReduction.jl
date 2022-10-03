@@ -121,7 +121,7 @@ function find_some_reduction(
     end
     @savetime subspaces =  invariant_subspace_global(matrices) total_times
 
-    @debug "Subspace global" subspacese
+    @debug "Subspace global" subspaces
 
     isempty(subspaces) && return Dict{Symbol, Vector{fmpq_mpoly}}()
     subspace = first(subspaces)
