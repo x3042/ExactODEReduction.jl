@@ -18,7 +18,8 @@ end
 const QQField = typeof(Nemo.QQ)
 const QQCoeff = Nemo.fmpq
 
-const QQBarCoeff = Nemo.qqbar
+const QQBarField = Nemo.QQBar
+const QQBarCoeff = elem_type(QQBarField)
 
 const FFCoeff = MyModNumber
 const FFField = Nemo.GaloisFmpzField
