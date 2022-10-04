@@ -142,6 +142,10 @@ function Nemo.base_ring(v::MySparseMatrix{FFCoeff})
     global_field[]
 end
 
+function Nemo.base_ring(v::MySparseMatrix{QQBarCoeff})
+    Nemo.QQBar
+end
+
 function Nemo.base_ring(v::MySparseVector{QQCoeff})
     # if iszero(v)
     #     throw("Beda beda ogorchenie")
@@ -152,6 +156,10 @@ end
 
 function Nemo.base_ring(v::MySparseVector{FFCoeff})
     global_field[]
+end
+
+function Nemo.base_ring(v::MySparseVector{QQBarCoeff})
+    Nemo.QQBar
 end
 
 function extend_field(A::MySparseMatrix, F)
