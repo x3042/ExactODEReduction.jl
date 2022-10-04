@@ -16,5 +16,5 @@ DOK_Sparsik
 
 
 ```@docs
-Subspacik
+Subspace
 ```

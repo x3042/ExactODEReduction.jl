@@ -14,25 +14,29 @@ function perform_change_of_variables(system, invariants; new_vars_name="y")
 
     if ground != base_ring(oldring)
         oldring, vars = Nemo.PolynomialRing(ground, ["$x" for x in gens(oldring)])
-	newsys = []
-	for p in system
+	    newsys = []
+        for p in system
             res = zero(oldring)
             for (c, exp) in zip(Nemo.coefficients(p), Nemo.exponent_vectors(p))
                 res += Nemo.QQBar(c) * prod(vars .^ exp)
             end
-	    push!(newsys, res)
-	end
-	system = newsys
+	        push!(newsys, res)
+	    end
+	    system = newsys
     end
 
     newdim = length(invariants)
     newvars = ["$new_vars_name$i" for i in 1:newdim]
     newring, newgens = PolynomialRing(ground, newvars)
 
+    transform = [sum([a * b for (a, b) in zip(collect(v), gens(oldring))]) for v in invariants]
+
     S = MatrixSpace(ground, newdim, olddim)
     transform_matrix = zero(S)
+
     for i in 1:newdim
-        transform_matrix[i, :] = to_dense(invariants[i])
+        # TODO: !!! `vec`
+        transform_matrix[i, :] = vec(collect(invariants[i]))
     end
 
     (rank, echelon) = Nemo.rref(transform_matrix)
@@ -47,17 +51,19 @@ function perform_change_of_variables(system, invariants; new_vars_name="y")
 
     newsystem = zeros(oldring, newdim)
 
-    for (i, vec) in enumerate(invariants)
-        for (idx, val) in vec
+    for (i, vv) in enumerate(invariants)
+        # for (idx, val) in vec
+        #     newsystem[i] += system[idx] * val
+        # end
+        for (idx, val) in enumerate(vec(vv))
             newsystem[i] += system[idx] * val
         end
     end
 
     newsystem = [Nemo.evaluate(p, substitutions) for p in newsystem]
 
-    return newsystem
+    return (transform, newsystem)
 end
-
 
 """
     Method that checks the consistency of the differential systems
@@ -93,24 +99,3 @@ function check_consistency(restricted, original, varmapping)
     return rhs == lhs
 end
 
-#=
-using Nemo: QQ
-
-R, (x1, x2, x3, x4) = QQ["x1", "x2", "x3", "x4"]
-
-system = [
-    x1^2 + 2x1*x2,
-    x2^2 + x3 + x4,
-    x2 + x4,
-    x1 + x3
-]
-
-matrices = construct_jacobians(system)
-invariants = invariant_subspace_1(matrices)
-transformation = polynormalize(invariants, R)
-
-restricted = perform_change_of_variables(system, invariants)
-println( restricted )
-
-println( check_consistency(restricted, system, transformation) )
-=#

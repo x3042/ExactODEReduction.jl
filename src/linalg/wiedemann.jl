@@ -24,16 +24,18 @@ end
 # returns f(x₀)
 # O(d) multiplications/additions of x₀ if d = degree(f)
 function evaluate(f::PolyElem, x₀)
-    accum = lead(f)
     d = degree(f)
-    reconstruct!(x₀)
+    # reconstruct!(x₀)
 
     I = one(x₀)
+    accum = [lead(f)] .* I
+
     for i in 1 : d
-        accum = accum * x₀ + coeff(f, d - i) * I
+        accum = accum * x₀ + [coeff(f, d - i)] .* I
     end
 
-    return reconstruct!(accum)
+    # return reconstruct!(accum)
+    return accum
 end
 
 # returns f(x₀) * b
@@ -301,7 +303,7 @@ function __deterministic_simple_minpoly(A, PolySpace)
     C = transpose!(C)
 
     # Computing the degree of the minimal polynomial
-    V = Subspacik(field)
+    V = Subspace(field)
     power = 0
     for i in 1:size(C, 1)
         eatcode = eat_sparsik!(V, deepcopy(C.rows[i]))

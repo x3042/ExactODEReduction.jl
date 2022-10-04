@@ -16,7 +16,7 @@ for nnz in [1, 5, 15]
     Acsr = sparse(Adense)
     Asparsik = ExactODEReduction.from_dense(Adense, QQ)
 
-    @btime *($Acsr, $Acsr);
+    @btime +($Acsr, $Acsr);
     # nnz = 1
     # 27.500 μs (441 allocations: 23.94 KiB)
     # nnz = 5
@@ -24,7 +24,7 @@ for nnz in [1, 5, 15]
     # nnz = 15
     # 1.614 ms (38674 allocations: 1.33 MiB)
 
-    (@btime prod($Asparsik, $Asparsik); true)
+    (@btime +($Asparsik, $Asparsik); true)
     # nnz = 1
     # 1.671 ms (13169 allocations: 471.30 KiB)
     # nnz = 5

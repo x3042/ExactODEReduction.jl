@@ -1,4 +1,4 @@
-@testset "Eigenvectors" begin
+@testset "Eigenspaces" begin
 
     N = 5
     S = MatrixSpace(Nemo.QQ, N, N)
@@ -13,12 +13,12 @@
                 println("rerunning")
                 continue
             end
-            vect = eigenvectors(M)
+            vect = eigenspaces(M)
             @test length(vect) == N
             MBar = SBar([M[i, j] for i in 1:N for j in 1:N])
             for v in vect
-                Mv = MBar * v
-                @test iszero(Mv[1, 1] * v - v[1, 1] * Mv)
+                Mv = MBar * v[1]
+                @test iszero(Mv[1, 1] * v[1] - v[1][1, 1] * Mv)
             end
             break
         end

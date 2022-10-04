@@ -32,13 +32,13 @@ Arguments
 """
 function positivize(subspace)
     if base_ring(first(subspace)) != Nemo.QQ
-        @debug "The base ring is not Q but $(base_ring(first(subspace))), no positivization"
+        @warn "The base ring is not Q but $(base_ring(first(subspace))), no positivization"
         return subspace
     end
-    stacked_basis = Matrix(transpose(reduce(hcat, map(v -> to_dense(v), subspace))))
+    stacked_basis = Matrix(transpose(reduce(hcat, map(v -> collect(v), subspace))))
     integerized = rational_to_int(stacked_basis)
     @debug "Before positivization: $integerized"
-    positivized = undef
+    positivized = nothing
     try
         positivized = positivize_int(integerized)
     catch e
@@ -51,7 +51,7 @@ function positivize(subspace)
     end
     @debug "After positivization: $positivized"
     (nr, nc) = size(positivized)
-    return [from_dense([positivized[i, j] for j in 1:nc], Nemo.QQ) for i in 1:nr] 
+    return [sparse([positivized[i, j] for j in 1:nc]) for i in 1:nr] 
 end
 
 #------------------------------------------------------------------------------

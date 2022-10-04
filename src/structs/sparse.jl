@@ -18,7 +18,7 @@ Supports these *fast* operations:
 
 One can construct `Sparsik` from a dense vector with the `from_dense` function.
 """
-mutable struct Sparsik{T<:AbstractAlgebra.Field} <: AbstractSparseVector{T}
+mutable struct Sparsik{T<:AbstractAlgebra.Field}
     dim::Int
     field::T
     nonzero::Vector{Int}
@@ -32,7 +32,7 @@ end
 density(v::Sparsik) = length(v.nonzero) / v.dim
 
 # returns the number of nonzero-valued elements in `v`
-nnz(v::Sparsik) = length(v.nonzero)
+SparseArrays.nnz(v::Sparsik) = length(v.nonzero)
 
 # ground field!
 Nemo.base_ring(v::Sparsik) = v.field

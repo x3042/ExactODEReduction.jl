@@ -7,7 +7,11 @@ import JSON
 import Logging
 import OffsetArrays: OffsetVector
 import Primes
-import SparseArrays
+
+using SparseArrays
+import SparseArrays: getnzval, getcolptr, getrowval,
+                    nonzeroinds
+
 import LinearAlgebra
 
 using Base.Threads
@@ -62,10 +66,8 @@ end
 
 # Utilities
 include("utils.jl")
-# type declarations
-include("structs/types.jl")
 # some useful but hardly categorizable things
-include("linalg/gizmos.jl")
+include("gizmos.jl")
 
 # Reading input
 include("parser/myeval.jl")
@@ -80,13 +82,16 @@ include("structs/subspace.jl")
 
 # Main functionality
 include("linalg/wiedemann.jl")
-include("linalg/basis.jl")
-include("linalg/radical.jl")
+include("basis.jl")
+include("radical.jl")
 include("positivizor.jl")
-include("linalg/invariants.jl")
-include("odes/parametrization.jl")
-include("odes/ODE.jl")
+include("invariants.jl")
+include("parametrization.jl")
+include("ODE.jl")
 
+include("modular.jl")
+include("qqbar.jl")
+include("sparse.jl")
 
 #------------------------------------------------------------------------------
 
@@ -101,7 +106,7 @@ Arguments:
 """
 function find_some_reduction(
         system::ODE{P};
-	overQ=true,
+	    overQ=true,
         loglevel=Logging.Info) where {P}
 
     # hmm
@@ -118,9 +123,10 @@ function find_some_reduction(
     # @debug "Matrices:" matrices
 
     if length(matrices) == 0
-        matrices = [from_COO(length(eqs), length(eqs), [], Nemo.QQ)]
+        # TODO: !!! actually, what is this case even??
+        matrices = [sparsezero(length(eqs), length(eqs), QQCoeff)]
     end
-    @savetime subspaces =  invariant_subspace_global(matrices; overQ=overQ) total_times
+    @savetime subspaces = invariant_subspace_global(matrices; overQ=overQ) total_times
 
     @debug "Subspace global" subspaces
 
@@ -128,9 +134,14 @@ function find_some_reduction(
     subspace = first(subspaces)
 
     subspace = basis(linear_span!(subspace))
+    
+    @debug "Linear span" subspace
+
     subspace = positivize(subspace)
-    transformation = polynormalize(subspace, parent(system))
-    new_system = perform_change_of_variables(eqs, subspace)
+
+    @debug "After positivize" subspace
+
+    (transformation, new_system) = perform_change_of_variables(eqs, subspace)
 
     return Dict(:new_vars => transformation, :new_system => new_system)
 end
@@ -167,11 +178,11 @@ function find_smallest_constrained_reduction(
     ground = base_ring(first(observables))
     variables = gens(parent(first(observables)))
     vector_obs = [
-        from_dense([coeff(f, v) for v in variables], ground) 
-	for f in observables
+        sparse([coeff(f, v) for v in variables])
+        for f in observables
     ]
 
-    subspace = undef
+    subspace = nothing
     if length(matrices) > 0
         subspace =  invariant_subspace_local(matrices, vector_obs)
     else
@@ -181,10 +192,10 @@ function find_smallest_constrained_reduction(
     isempty(subspace) && return Dict{Symbol, Vector{fmpq_mpoly}}()
 
     subspace = basis(linear_span!(subspace))
-    subspave = positivize(subspace)
-    transformation = polynormalize(subspace, parent(system))
-    new_system = perform_change_of_variables(eqs, subspace)
+    subspace = positivize(subspace)
 
+    (transformation, new_system) = perform_change_of_variables(eqs, subspace)
+    
     return Dict(:new_vars => transformation, :new_system => new_system)
 end
 
@@ -215,7 +226,7 @@ function find_reductions(
     matrices = construct_jacobians(eqs)
 
     if length(matrices) == 0
-        matrices = [from_COO(length(eqs), length(eqs), [], Nemo.QQ)]
+        matrices = [sparsezero(length(eqs), length(eqs), QQCoeff)]
     end
     invariant_subspaces = many_invariant_subspaces(matrices, invariant_subspace_global; overQ=overQ)
     result = Vector{Dict{Symbol, Vector{Any}}}()
@@ -228,8 +239,7 @@ function find_reductions(
         if base_ring(first(V)) != base_ring(poly_ring)
             poly_ring, _ = Nemo.PolynomialRing(base_ring(first(V)), ["$x" for x in gens(poly_ring)])
         end
-        transformation = polynormalize(V, poly_ring)
-        new_system = perform_change_of_variables(eqs, V)
+        (transformation, new_system) = perform_change_of_variables(eqs, V)
         push!(result, Dict(:new_vars => transformation, :new_system => new_system))
     end
 

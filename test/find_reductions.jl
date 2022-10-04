@@ -7,7 +7,7 @@
 
 cases = [
     Dict(
-        :sys => @ODEsystem(
+        :sys => ExactODEReduction.@ODEsystem(
 	    x1'(t) = x1(t),
 	    x2'(t) = 2 * x2(t),
 	),
@@ -15,7 +15,7 @@ cases = [
 	:constrained => [([x1], 1), ([x1 + x2], 2)]
     ),
     Dict(
-        :sys => @ODEsystem(
+        :sys => ExactODEReduction.@ODEsystem(
 	    x1'(t) = x1(t),
 	    x2'(t) = 2 * x2(t),
 	    x3'(t) = 3 * x3(t)
@@ -24,7 +24,7 @@ cases = [
 	:constrained => [([x1], 1), ([x1 + x2], 2)]
     ),
     Dict(
-        :sys => @ODEsystem(
+        :sys => ExactODEReduction.@ODEsystem(
 	    x1'(t) = 2 + x1(t),
 	    x2'(t) = x1(t)^3 + x1(t) + x2(t),
 	    x3'(t) = x1(t) * x2(t) - 10 * x2(t)^2 + x3(t),
@@ -34,7 +34,7 @@ cases = [
 	:constrained => [([x1], 1), ([x2], 2), ([x2, x3], 3)]
     ),
     Dict(
-        :sys => @ODEsystem(
+        :sys => ExactODEReduction.@ODEsystem(
 	    x1'(t) = 2,
 	    x2'(t) = x1(t)^3 + x1(t),
 	    x3'(t) = x1(t) * x2(t) - 10 * x2(t)^2,
@@ -44,7 +44,7 @@ cases = [
 	:constrained => [([x1], 1), ([x2], 2), ([x2, x3], 3)]
     ),
     Dict(
-        :sys => @ODEsystem(
+        :sys => ExactODEReduction.@ODEsystem(
 	    x1'(t) = x1(t),
 	    x2'(t) = x2(t),
 	    x3'(t) = x3(t)
@@ -53,7 +53,7 @@ cases = [
 	:constrained => [([x1 + x2], 1), ([x1 + x3, x2 + x3], 2)]
     ),
     Dict(
-        :sys => @ODEsystem(
+        :sys => ExactODEReduction.@ODEsystem(
 	    x1'(t) = 0,
 	    x2'(t) = 0,
 	    x3'(t) = 0
@@ -62,7 +62,7 @@ cases = [
 	:constrained => [([x1 + x2], 1), ([x1 + x3, x2 + x3], 2)]
     ),
     Dict(
-        :sys => @ODEsystem(
+        :sys => ExactODEReduction.@ODEsystem(
 	    x1'(t) = -x2(t),
 	    x2'(t) = x1(t),
 	    x3'(t) = -x4(t),
@@ -72,7 +72,7 @@ cases = [
 	:constrained => [([x1 + x2], 2), ([x3], 2)]
     ),
     Dict(
-        :sys => @ODEsystem(
+        :sys => ExactODEReduction.@ODEsystem(
 	    x1'(t) = 3 * x1(t)^2 + 7,
 	    x2'(t) = x2(t) - 3 * x2(t) * x3(t) + x3(t)^3 + 7 * x3(t),
 	    x3'(t) = x3(t) - 5 * x2(t) + x2(t)^2 * x3(t)
@@ -81,7 +81,7 @@ cases = [
 	:constrained => [([x2], 2), ([x1], 1)]
     ),
     Dict(
-        :sys => @ODEsystem(
+        :sys => ExactODEReduction.@ODEsystem(
 	    x1'(t) = x1(t) - x2(t) + x3(t)^3,
 	    x2'(t) = x1(t),
 	    x3'(t) = -x4(t),
@@ -91,7 +91,7 @@ cases = [
 	:constrained => [([x1], 4)]
     ),
     Dict(
-        :sys => @ODEsystem(
+        :sys => ExactODEReduction.@ODEsystem(
             s1'(t) = -83//1000*s1(t) + 1//20*s2(t) + 24//25*s6(t),
             s6'(t) = 0,
             s2'(t) = 1//20*s1(t) - 3//50*s2(t),
@@ -102,6 +102,16 @@ cases = [
         ),
 	:dims => [Set([1, 2, 3, 4, 5, 6])],
 	:constrained => []
+    ),
+    Dict(
+        :sys => ExactODEReduction.@ODEsystem(
+            x1'(t) = x1(t) + x3(t)^2 - x4(t)^2,
+            x2'(t) = x2(t) + 2 * x3(t) * x4(t),
+            x3'(t) = -x3(t) + x1(t)^2 - x2(t)^2,
+            x4'(t) = -x4(t) + 2 * x1(t) * x2(t)
+        ),
+        :dims => [Set([2])],
+        :constrained => [([x1], 4)]
     )
 ]
 
@@ -117,9 +127,9 @@ function random_linear_change(sys)
         end
         Minv = M^(-1)
         eval_point = [sum([Minv[i, j] * gens(parent(sys))[i] for i in 1:n]) for j in 1:n]
-        new_eqs = [sum([M[i, j] * equations(sys)[i] for i in 1:n]) for j in 1:n]
+        new_eqs = [sum([M[i, j] * ExactODEReduction.equations(sys)[i] for i in 1:n]) for j in 1:n]
         new_eqs = [Nemo.evaluate(e, eval_point) for e in new_eqs]
-        return ODE{fmpq_mpoly}(Dict(gens(parent(sys))[i] => new_eqs[i] for i in 1:n))
+        return ExactODEReduction.ODE{fmpq_mpoly}(Dict(gens(parent(sys))[i] => new_eqs[i] for i in 1:n))
     end
 end
 
@@ -141,11 +151,11 @@ end
     for c in cases
         sys = c[:sys]
         @info "Testing the system $sys"
-        red = find_some_reduction(sys; overQ=false)
+        red = ExactODEReduction.find_some_reduction(sys; overQ=false)
         (f1, f2) = check_reduction(sys, red[:new_vars], red[:new_system])
         @test f1 == f2
 
-        reds = find_reductions(sys; overQ=false)
+        reds = ExactODEReduction.find_reductions(sys; overQ=false)
         for r in reds
             (f1, f2) = check_reduction(sys, r[:new_vars], r[:new_system])
             @test f1 == f2
@@ -153,7 +163,7 @@ end
         @test Set([length(r[:new_vars]) for r in reds]) in c[:dims]
 
         for (obs, dim) in c[:constrained]
-            red = find_smallest_constrained_reduction(sys, obs)
+            red = ExactODEReduction.find_smallest_constrained_reduction(sys, obs)
             @test length(red[:new_vars]) == dim
             (f1, f2) = check_reduction(sys, red[:new_vars], red[:new_system])
             @test f1 == f2
@@ -161,7 +171,7 @@ end
 
         for i in 1:50
             sys_change = random_linear_change(sys)
-            reds_change = find_reductions(sys_change; overQ=false)
+            reds_change = ExactODEReduction.find_reductions(sys_change; overQ=false)
             for r in reds_change
                 (f1, f2) = check_reduction(sys_change, r[:new_vars], r[:new_system])
                 @test f1 == f2

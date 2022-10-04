@@ -1,6 +1,4 @@
 
-# TODO: we want to handle paramters better
-
 """
     The main structure that represents input ODE system.
     Stores information about states (`x_vars`), and the equations.

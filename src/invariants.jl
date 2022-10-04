@@ -9,7 +9,7 @@ common invariant nonzero proper subspace such that
  - V1 subsetneq V2 subsetneq ... subsetneq Vs
  - for every i, there is no invariant subspace Vi and V(i + 1)
 """
-function invariant_subspace_global(matrices::AbstractArray{T}; overQ=true) where {T<:AbstractSparseMatrix}
+function invariant_subspace_global(matrices::AbstractArray{T}; overQ=true) where {T}
     @info "Called invariant_subspace_global on $(length(matrices)) matrices of shape $(size(matrices[1]))"
 
     n = size(first(matrices), 1)
@@ -46,10 +46,10 @@ function invariant_subspace_global(matrices::AbstractArray{T}; overQ=true) where
     # find an invariant subspace
     if length(radical) != 0
         @info "Radical is nontrivial, computing the general kernel of radical"
-        @savetime invariant = general_kernel(map(to_dense, radical)) general_kernel_times
+        @savetime invariant = general_kernel(map(collect, radical)) general_kernel_times
         push!(invariant_subspace_semisimple_times, 0.0)
         invariants = [[
-            from_dense([invariant[:, i]...], Nemo.QQ)
+            sparse([invariant[:, i]...])
             for i in 1:size(invariant, 2)
         ]]
         if !check_invariance!(deepcopy(matrices), deepcopy(first(invariants)))
@@ -72,7 +72,7 @@ end
 
 # computes invariant subspaces using the given hint,
 # , i.e, an array of vectors generating a subspace
-function invariant_subspace_local(matrices::AbstractArray{T}, hint) where {T<:AbstractSparseMatrix}
+function invariant_subspace_local(matrices::AbstractArray{T}, hint) where {T}
     isempty(matrices) && error("empty system invariants are ill-defined")
     isempty(hint) && error("empty hint is given")
 
@@ -112,7 +112,8 @@ end
 function many_invariant_subspaces(
         As::AbstractArray{T},
         find_invariant;
-	overQ=true)   where {T<:AbstractSparseMatrix}
+        overQ=true)   where {T}
+    # filter!(!iszero, As)
 
     n = size(first(As), 1)
     ground = base_ring(first(As))
@@ -130,21 +131,20 @@ function many_invariant_subspaces(
     @info "found $([length(V) for V in Vs])-dim subspaces in ambient $(size(first(As), 1))-dim"
 
     # restrict
-    if length(first(Vs)) > 1
-        As_V = restrict(As, first(Vs))
-        As_V_sparse = map(x-> from_dense(x, ground), map(Array, As_V))
+    if length(first(Vs)) > 1 && base_ring(first(first(Vs))) != Nemo.QQBar        As_V = restrict(As, first(Vs))
+        As_V_sparse = map(x-> sparse(x), map(Array, As_V))
         
         @info "Calling myself recursively in restricted subspace"
 
         subspaces = many_invariant_subspaces(As_V_sparse, find_invariant; overQ=overQ)
-        toreturn = Array{Any, 1}([map(vs -> lift(vs, first(Vs)), subspaces)..., toreturn...])
+        toreturn = Vector{Any}([map(vs -> lift(vs, first(Vs)), subspaces)..., toreturn...])
     end
 
     # factorize
-    if length(last(Vs)) < n - 1
+    if length(last(Vs)) < n - 1 && base_ring(first(last(Vs))) != Nemo.QQBar
         As_V = factorize(As, last(Vs))
         if !isempty(As_V)
-            As_V_sparse = map(x-> from_dense(x, ground), map(Array, As_V))
+            As_V_sparse = map(x-> sparse(x), map(Array, As_V))
             
             @info "Calling myself recursively in complemented subspace"
             
@@ -167,6 +167,7 @@ function many_invariant_subspaces(
 
     for vs in toreturn
         if !check_invariance!(deepcopy(As), deepcopy(vs))
+            # nice
             @assert false
         end
     end
@@ -188,16 +189,18 @@ function restrict(As::AbstractArray, vs)
 
     MSpace = AbstractAlgebra.Generic.MatrixSpace(ground, n, length(vs))
 
+    # TODO: !!! do not use ...
+
     # Asvs = [A*f1 A*f2 .. Afd]
     # for fi in vs
     Asvs = [
-        MSpace(hcat([ to_dense(A * v) for v in vs ]...))
+        MSpace(hcat([ collect(A * v) for v in vs ]...))
         for A in As
     ]
 
     # matrix = [v1 v2 .. vn]
     # for vi in vs
-    matrix = MSpace(hcat([ to_dense(v) for v in vs ]...))
+    matrix = MSpace(hcat([ collect(v) for v in vs ]...))
 
     # solve for each A from As
     #   A*fi = a1*f1 + a2*f2 + ... + ad*fd
@@ -223,7 +226,7 @@ function factorize(As::AbstractArray, vs)
     # Asvs = [A*f1 A*f2 .. A*fd]
     # for fi in complement
     Asvs = [
-        MSpace(hcat([to_dense(A * v) for v in complement ]...))
+        MSpace(hcat([collect(A * v) for v in complement ]...))
         for A in As
     ]
 
@@ -231,8 +234,8 @@ function factorize(As::AbstractArray, vs)
     # for fi in complement
     # for ei in vs
     matrix = MSpaceplus(hcat(
-        map(to_dense, complement)...,
-        map(to_dense, vs)...)
+        map(collect, complement)...,
+        map(collect, vs)...)
     )
 
     # solve for each A from As
@@ -260,9 +263,15 @@ function lift(vs, Vs)
 
     for v in vs
         lifted_vector = zero_sparsik(n, ground)
-        for (i, t) in v
-            lifted_vector = lifted_vector + scale(Vs[i], t)
+        
+        # for (i, t) in v
+        #     lifted_vector = lifted_vector + Vs[i]*t
+        # end
+        for (i, t) in enumerate(vec(v))
+            iszero(t) && continue
+            lifted_vector = lifted_vector + Vs[i] .* [t]
         end
+
         push!(lifted, lifted_vector)
     end
 

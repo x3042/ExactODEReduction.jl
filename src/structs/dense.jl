@@ -9,7 +9,7 @@
 """
 Densik
 """
-mutable struct Densik{T <: AbstractAlgebra.Field} <: AbstractSparseVector{T}
+mutable struct Densik{T <: AbstractAlgebra.Field}
     field::T
     data::Vector{<: AbstractAlgebra.FieldElem}
 end
@@ -18,7 +18,7 @@ end
 
 
 density(v::Densik) = error("O(n)")
-nnz(v::Densik) = error("O(n)")
+SparseArrays.nnz(v::Densik) = error("O(n)")
 
 Nemo.base_ring(v::Densik) = v.field
 
@@ -45,7 +45,7 @@ scale(v::Densik, c) = error("O(n)")
 # mutates v
 # if vector `u` has k nonzeroes
 # O(k)
-function reduce!(v::Densik{T}, u::AbstractSparseObject{T}, c) where {T}
+function reduce!(v::Densik{T}, u, c) where {T}
     for (idx, val) in u
         v[idx] += val * c
     end
@@ -55,7 +55,7 @@ end
 # returns v + c * u
 # if vector `u` has k nonzeroes
 # O(k)
-function Base.reduce(v::Densik{T}, u::AbstractSparseObject{T}, c) where {T}
+function Base.reduce(v::Densik{T}, u, c) where {T}
     return reduce!(deepcopy(v), u, c)
 end
 
@@ -104,7 +104,6 @@ Base.isempty(v::Densik) =  error("O(n)")
 # -----------------------------------------------------------------------------
 
 ==(v::Densik{T}, u::Densik{T}) where {T} = (v.data = u.data)
-!=(v::Densik{T}, u::Densik{T}) where {T} = !(v == u)
 
 # -----------------------------------------------------------------------------
 
@@ -144,35 +143,6 @@ function modular_reduction(v::Densik, field)
 
     return ans
 end
-
-#-----------------------------------------------------------------------------
-
-#=
-# returns a new Sparsik object consisting of elements
-# from the `v` each reconstructed from v.field to QQ
-#
-# O†(k) if k is the number of nonzero in `v`
-# † reconstruction cost not included
-function rational_reconstruction(v::Densik)
-    ans = Densik(zeros(dim(v)), QQ)
-
-    tmp_type = BigInt
-    if isa(base_ring(v), GaloisField)
-        tmp_type = Int
-    end
-    ch = convert(tmp_type, characteristic(v.field))
-
-    for (i, x) in v.data
-        y = rational_reconstruction(convert(tmp_type, x), ch)
-        ans.data[i] = y
-    end
-
-    return ans
-end
-=#
-
-#-----------------------------------------------------------------------------
-
 
 #-----------------------------------------------------------------------------
 

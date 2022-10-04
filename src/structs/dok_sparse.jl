@@ -18,7 +18,7 @@ Supports these *fast* operations:
 
 One can construct `BidimSparsik` from a dense matrix with the `from_dense` function.
 """
-mutable struct DOK_Sparsik{T <: AbstractAlgebra.Field} <: AbstractSparseMatrix{T}
+mutable struct DOK_Sparsik{T <: AbstractAlgebra.Field}
     # This implementation stores rows data regularly while constructing
     # columns data only when needed
     m::Int
@@ -880,7 +880,7 @@ end
 
 # -----------------------------------------------------------------------------
 
-function tr(A::DOK_Sparsik)
+function SparseArrays.tr(A::DOK_Sparsik)
     if iszero(A)
         return zero(base_ring(A))
     end

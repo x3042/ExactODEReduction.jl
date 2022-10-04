@@ -6,11 +6,10 @@
 #------------------------------------------------------------------------------
 
 function test_positivize_no_change(algorithm)
-  
     cases = [
-        [from_dense([1, -1], Nemo.QQ)],
-	[from_dense([1, 0, -1], Nemo.QQ), from_dense([0, -1, 1], Nemo.QQ)],
-	[from_dense([1, 0, 0], Nemo.QQ), from_dense([0, 1, -1], Nemo.QQ)]
+        [sparse(Nemo.QQ.([1, -1]))],
+	    [sparse(Nemo.QQ.([1, 0, -1])), sparse(Nemo.QQ.([0, -1, 1]))],
+	    [sparse(Nemo.QQ.(([1, 0, 0]))), sparse(Nemo.QQ.([0, 1, -1]))]
     ]
 
     for c in cases
@@ -20,18 +19,18 @@ end
 
 function test_positivize_change(algorithm)
     cases = [
-        Dict(:in => [from_dense([2, 2], Nemo.QQ)], :out => [from_dense([1, 1], Nemo.QQ)]),
+        Dict(:in => [sparse(Nemo.QQ.([2, 2]))], :out => [sparse(Nemo.QQ.([1, 1]))]),
 	Dict(
-	    :in => [from_dense([1, -1], Nemo.QQ), from_dense([2, -3], Nemo.QQ)], 
-	    :out => [from_dense([1, 0], Nemo.QQ), from_dense([0, 1], Nemo.QQ)]
+	    :in => [sparse(Nemo.QQ.([1, -1])), sparse(Nemo.QQ.([2, -3]))], 
+	    :out => [sparse(Nemo.QQ.([1, 0])), sparse(Nemo.QQ.(([0, 1])))]
 	),
 	Dict(
-	    :in => [from_dense([1, 0, -1], Nemo.QQ), from_dense([1, 1, 0], Nemo.QQ)],
-	    :out => [from_dense([1, 1, 0], Nemo.QQ), from_dense([0, 1, 1], Nemo.QQ)]
+	    :in => [sparse(Nemo.QQ.([1, 0, -1])), sparse(Nemo.QQ.([1, 1, 0]))],
+	    :out => [sparse(Nemo.QQ.([1, 1, 0])), sparse(Nemo.QQ.([0, 1, 1]))]
 	),
 	Dict(
-	    :in => [from_dense([1, -1, 0, 0], Nemo.QQ), from_dense([0, 0, 1, -1], Nemo.QQ), from_dense([0, 1, 1, 0], Nemo.QQ)],
-	    :out => [from_dense([1, 0, 1, 0], Nemo.QQ), from_dense([1, 0, 0, 1], Nemo.QQ), from_dense([0, 1, 0, 1], Nemo.QQ)]
+	    :in => [sparse(Nemo.QQ.([1, -1, 0, 0])), sparse(Nemo.QQ.([0, 0, 1, -1])), sparse(Nemo.QQ.([0, 1, 1, 0]))],
+	    :out => [sparse(Nemo.QQ.([1, 0, 1, 0])), sparse(Nemo.QQ.([1, 0, 0, 1])), sparse(Nemo.QQ.([0, 1, 0, 1]))]
 	)
     ]
 

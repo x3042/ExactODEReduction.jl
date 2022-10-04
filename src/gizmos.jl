@@ -33,6 +33,7 @@ function rational_reconstruction(a::I, m::I) where {I<:Union{Int, BigInt}}
     end
     bnd = sqrt(float(m) / 2)
 
+    # TODO: !!!
     U = I[1, 0, m]
     V = I[0, 1, a]
     while abs(V[3]) >= bnd
@@ -229,7 +230,6 @@ function construct_jacobians(system::AbstractArray{T}) where {T<:MPolyElem}
                 monom = monomial(term, 1)
                 cf = coeff(term, 1)
 
-                # how can we do it in a normal way..
                 !haskey(jacobians, monom) && (jacobians[monom] = Dict())
                 idx = (v_idx, p_idx)
                 if !haskey(jacobians[monom], idx)
@@ -242,7 +242,8 @@ function construct_jacobians(system::AbstractArray{T}) where {T<:MPolyElem}
 
     m, n = length(system), length(gens(poly_ring))
     factors = [
-        from_COO(m, n, jac, domain)
+        # 1
+        mysparse(from_COO(m, n, jac, domain))
         for jac in values(jacobians)
     ]
 
@@ -256,37 +257,15 @@ function construct_jacobians(system)
     construct_jacobians([system[x] for x in gens(ring)])
 end
 
-
-#------------------------------------------------------------------------------
-
-# vectors - an array of 1D iterables
-# domain - an MPoly domain
-#
-# converts the given vectors into the polynomial form
-# with respect to the generators of the given domain
-function polynormalize(vectors, domain) where {T}
-    polynômes = zeros(domain, 0)
-    vars = Nemo.gens(domain)
-
-    for v in vectors
-        push!(
-            polynômes,
-            sum(map(prod, zip(vars, to_dense(v))))
-        )
-    end
-
-    return polynômes
-end
-
 #------------------------------------------------------------------------------
 
 # for As[i] in array As compute dok_sparsik Tr: Tr_ij = trace(A_i, A_j)
-function gram_matrix(As::Array{AbstractSparseObject{FlintRationalField},1})
+function gram_matrix(As::AbstractArray)
     F = base_ring(As[1])
     n = length(As)
 
     traces = Dict{Tuple{Int, Int}, elem_type(F)}(
-        (i, j) => tr(As[i] * As[j])
+        (i, j) => SparseArrays.tr(As[i] * As[j])
         for i in 1 : n
             for j in i : n
     )
@@ -298,26 +277,27 @@ function gram_matrix(As::Array{AbstractSparseObject{FlintRationalField},1})
                 if ! iszero(traces[min(i, j), max(i, j)])
     ]
 
-    return from_COO(n, n, nnz_coords, F)
+    mysparse(from_COO(n, n, nnz_coords, F))
 end
 
 #-------------------------------------------------------------------------------
 
 """
-    eigenvectors(M)
+    eigenspaces(M)
 
-For a matrix M over QQ or QQBar with only simple eigenvalues, returns a list of 
-eigenvectors with entries in QQBar
+For a diagonalizable matrix M over QQ or QQBar, returns a list of 
+bases of eigenspaces with entries in QQBar
 """
-function eigenvectors(M)
+function eigenspaces(M)
     n = size(M, 1)
     SBar = Nemo.MatrixSpace(Nemo.QQBar, n, n)
     MBar = SBar([M[i, j] for i in 1:n for j in 1:n])
-    eigenvals = Nemo.eigenvalues(M, Nemo.QQBar)
+    eigenvals = Set(Nemo.eigenvalues(M, Nemo.QQBar))
     result = []
     id = one(MatrixSpace(Nemo.QQBar, size(M)...))
     for l in eigenvals
-        push!(result, AbstractAlgebra.nullspace(MBar - l * id)[2])
+        as_matrix = AbstractAlgebra.nullspace(MBar - l * id)[2]
+        push!(result, [as_matrix[:, i] for i in 1:size(as_matrix, 2)])
     end
     return result
 end
