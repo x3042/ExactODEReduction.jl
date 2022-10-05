@@ -17,3 +17,5 @@ const FFCoeffT = MyModNumber
 spec_elem_type(::Type{QQFieldT}) = QQCoeffT
 spec_elem_type(::Type{QQBarFieldT}) = QQBarCoeffT
 spec_elem_type(::Type{FFFieldT}) = FFCoeffT
+
+spec_elem_type(x) = spec_elem_type(typeof(x))

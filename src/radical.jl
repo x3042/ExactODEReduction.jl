@@ -7,7 +7,6 @@
 Finds a basis of the radical of given matrix Algebra.
 """
 function find_radical_sup(Algebra::Subspace)
-    # TODO: !!! `basis(Algebra)` is misleading
     As = basis(Algebra)
     F = base_ring(Algebra)
     n = dim(Algebra)

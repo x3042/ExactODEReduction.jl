@@ -35,10 +35,6 @@ import LinearAlgebra: SingularException
 import Nemo: base_ring, gfp_elem, gfp_fmpz_elem, fmpq_mpoly,
             fmpq, terms, monomials, fmpz, elem_type, parent
 
-
-import CustomUnitRanges: filename_for_zerorange
-include(filename_for_zerorange)
-
 const find_basis_times = []
 const find_radical_sup_times = []
 const general_kernel_times = []

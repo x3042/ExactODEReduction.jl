@@ -35,7 +35,21 @@ end
     @test ExactODEReduction.unit_sparse_vector(3, 1, Nemo.QQ) == sparse([Nemo.QQ(1), 0, 0])
     @test ExactODEReduction.unit_sparse_vector(3, 2, Nemo.QQ) == sparse([0, Nemo.QQ(1), 0])
     @test ExactODEReduction.unit_sparse_vector(3, 3, Nemo.QQ) == sparse([0, 0, Nemo.QQ(1)])
-
+    
     # @test ExactODEReduction.unit_sparse_vector((2, 4), 1, Nemo.QQ) == sparse([Nemo.QQ(1) 0; 0 0; 0 0; 0 0;])
 
+end
+
+@testset "Lazy matrix indexing" begin
+    A = sparse([1 0 0; 0 0 1; 0 0 0; 2 1 0;])
+    set_ = [(1, 1), (4, 1), (4, 2), (2, 3)]
+    notset_ = [(1, 2), (1, 3), (2, 1), (2, 2), (3, 1), (3, 2), (3, 3), (4, 3)]
+    for I in set_
+        @test ExactODEReduction.issetindex(A, I...)
+    end
+    for I in notset_
+        @test !ExactODEReduction.issetindex(A, I...)
+    end
+    set_ = [1, 4, 8, 10]
+    notset_ = [2, 3, 5, 6, 7, 9, 11, 12]
 end

@@ -7,6 +7,7 @@ import Base: zero, one, iszero, isone, convert, inv,
             length, iterate, broadcastable
 import Base: +, -, *
 import Nemo: parent, data
+import SparseArrays: dot
 
 # backend for modular numbers.
 # global_field points to a finite field implemented in Nemo
@@ -47,3 +48,5 @@ Nemo.parent(x::MyModNumber) = parent(x.x)
 -(x::MyModNumber) = MyModNumber(- x.x)
 -(x::MyModNumber, y::MyModNumber) = MyModNumber(x.x - y.x)
 *(x::MyModNumber, y::MyModNumber) = MyModNumber(x.x * y.x)
+
+SparseArrays.dot(x::MyModNumber, y::MyModNumber) = x*y

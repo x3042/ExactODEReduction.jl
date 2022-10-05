@@ -258,29 +258,43 @@ end
 
 #------------------------------------------------------------------------------
 
-# for As[i] in array As compute dok_sparsik Tr: Tr_ij = trace(A_i, A_j)
 function gram_matrix(As::AbstractArray)
     F = base_ring(As[1])
     n = length(As)
 
-    traces = Dict{Tuple{Int, Int}, elem_type(F)}(
-        (i, j) => SparseArrays.tr(As[i] * As[j])
-        for i in 1 : n
-            for j in i : n
-    )
+    # allocate buffers
+    xs = Vector{Int}(undef, n^2)
+    ys = Vector{Int}(undef, n^2)
+    vs = Vector{spec_elem_type(F)}(undef, n^2)
 
-    nnz_coords = [
-        (i, j, traces[min(i, j), max(i, j)])
-        for i in 1 : n
-            for j in 1 : n
-                if ! iszero(traces[min(i, j), max(i, j)])
-    ]
+    as = map(sparse ∘ vec, As)
+    ast = map(sparse ∘ vec ∘ transpose, As)
 
-    sparse(
-        map(x -> x[1], nnz_coords), 
-        map(x -> x[2], nnz_coords), 
-        map(x -> x[3], nnz_coords), 
-        n, n)
+    # multiply everything with everything
+    k = 0
+    for i in 1:n
+        for j in i:n
+            z = mydot(as[i], ast[j])
+            if !iszero(z)
+                k += 1
+                xs[k] = i
+                ys[k] = j
+                vs[k] = z
+                if j > i
+                    k += 1
+                    xs[k] = j
+                    ys[k] = i
+                    vs[k] = z
+                end
+            end
+        end
+    end
+    # trim buffers
+    resize!(xs, k)
+    resize!(ys, k)
+    resize!(vs, k)
+
+    sparse(xs, ys, vs, n, n)
 end
 
 #-------------------------------------------------------------------------------
@@ -302,5 +316,5 @@ function eigenspaces(M)
         as_matrix = AbstractAlgebra.nullspace(MBar - l * id)[2]
         push!(result, [as_matrix[:, i] for i in 1:size(as_matrix, 2)])
     end
-    return result
+    result
 end

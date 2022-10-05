@@ -187,3 +187,59 @@ function first_nonzero(A::MySparseVector{T}) where {T}
     first(nonzeroinds(A))
 end
 
+# return true if A[I] is a structural nonzero in A
+# and false otherwise
+function issetindex(A::MySparseMatrix{T}, I...) where {T}
+    i0, i1 = Base._to_subscript_indices(A, I...)
+    @boundscheck checkbounds(A, i0, i1)
+    r1 = Int(getcolptr(A)[i1])
+    r2 = Int(getcolptr(A)[i1+1]-1)
+    (r1 > r2) && return false
+    r1 = searchsortedfirst(rowvals(A), i0, r1, r2, Base.Forward)
+    ((r1 > r2) || (rowvals(A)[r1] != i0)) ? false : true
+end
+
+function issetindex(x::MySparseVector{T}, i::Integer) where {T}
+    m = nnz(x) 
+    nzind = nonzeroinds(x)
+    nzval = nonzeros(x)
+    ii = searchsortedfirst(nzind, i)
+    (ii <= m && nzind[ii] == i) ? true : false
+end
+
+# copied from v1.8 SparseArrays
+function mydot(x::MySparseVector{T}, y::MySparseVector{T}) where {T}
+    x === y && return sum(abs2, x)
+    n = length(x)
+    length(y) == n || throw(DimensionMismatch())
+
+    xnzind = nonzeroinds(x)
+    ynzind = nonzeroinds(y)
+    xnzval = nonzeros(x)
+    ynzval = nonzeros(y)
+
+    _myspdot(dot,
+           1, length(xnzind), xnzind, xnzval,
+           1, length(ynzind), ynzind, ynzval)
+end
+
+function _myspdot(f::Function,
+                xj::Int, xj_last::Int, xnzind, xnzval,
+                yj::Int, yj_last::Int, ynzind, ynzval)
+    # dot product between ranges of non-zeros,
+    s = f(zero(eltype(xnzval)), zero(eltype(ynzval)))
+    @inbounds while xj <= xj_last && yj <= yj_last
+        ix = xnzind[xj]
+        iy = ynzind[yj]
+        if ix == iy
+            s += f(xnzval[xj], ynzval[yj])
+            xj += 1
+            yj += 1
+        elseif ix < iy
+            xj += 1
+        else
+            yj += 1
+        end
+    end
+    s
+end

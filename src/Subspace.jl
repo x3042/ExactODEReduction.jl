@@ -82,7 +82,7 @@ function eat_sparsik!(V::Subspace, new_vector; ω=1.0)
 
     # O(kr) if k = nnz(new_vector) and r = len(echelon_form)
     for (piv, vect) in V.echelon_form
-        if !iszero(new_vector[piv])
+        if issetindex(new_vector, piv)
             new_vector = new_vector - scale(vect, new_vector[piv])
         end
     end
@@ -108,7 +108,7 @@ function eat_sparsik!(V::Subspace, new_vector; ω=1.0)
 
     # O(kR)  if k = nnz(new_vector) and R = Σnnz(v) for v in echelon_form
     for (piv, vect) in V.echelon_form
-        if !iszero(vect[pivot])
+        if issetindex(vect, pivot)
             V.echelon_form[piv] = V.echelon_form[piv] - scale(new_vector, vect[pivot])
         end
     end
@@ -139,7 +139,7 @@ end
 # checks whether the given vector lies in V
 function check_inclusion!(V::Subspace, vector::SparseArrays.AbstractSparseArray)
     for (piv, vect) in V.echelon_form
-        if ! iszero(vector[piv])
+        if issetindex(vector, piv)
             vector = vector - scale(vect, vector[piv])
         end
     end

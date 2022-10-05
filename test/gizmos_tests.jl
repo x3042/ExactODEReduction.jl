@@ -112,3 +112,15 @@ end
     @test !ExactODEReduction.check_invariance!([A], [v1 + v2])
 
 end
+
+@testset "Gram matrix" begin
+    A = sparse(Nemo.QQ.([1 2 0; 0 1 0; 0 0 3;]))
+    @test ExactODEReduction.gram_matrix([A]) == sparse([Nemo.QQ(11);;])
+    A1 = sparse(Nemo.QQ.([1 0; 0 1;]))
+    A2 = sparse(Nemo.QQ.([0 2; 0 3;]))
+    @test ExactODEReduction.gram_matrix([A1, A2]) == sparse(Nemo.QQ.([2 3; 3 9;]))
+    A1 = sparse(Nemo.QQ.([0 0; 0 1;]))
+    A2 = sparse(Nemo.QQ.([0 1; 0 0;]))
+    A3 = sparse(Nemo.QQ.([0 1; 1 0;]))
+    @test ExactODEReduction.gram_matrix([A1, A2, A3]) == sparse(Nemo.QQ.([1 0 0; 0 0 1; 0 1 2]))
+end
