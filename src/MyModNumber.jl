@@ -20,7 +20,7 @@ function set_modular_globals!(field)
 end
 
 # MyModNumber 
-struct MyModNumber
+struct MyModNumber <: Number
     x::Nemo.gfp_fmpz_elem
 end
 

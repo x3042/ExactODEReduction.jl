@@ -168,7 +168,6 @@ end
 
 # the index of the first nonzero (column-major order)
 function first_nonzero(A::MySparseMatrix{T}) where {T}
-    dropzeros!(A)
     if iszero(A)
         return -1
     end
@@ -182,7 +181,6 @@ end
 
 # the index of the first nonzero
 function first_nonzero(A::MySparseVector{T}) where {T}
-    dropzeros!(A)
     if iszero(A)
         return -1
     end

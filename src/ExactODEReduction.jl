@@ -126,6 +126,9 @@ function find_some_reduction(
     eqs = equations(system)
     matrices = construct_jacobians(eqs)
 
+    @debug "Matrices" matrices
+    @debug "Densities" map(density, matrices) 
+
     # @debug "Matrices:" matrices
 
     if length(matrices) == 0
