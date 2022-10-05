@@ -16,12 +16,12 @@ function invariant_subspace_global(matrices::AbstractArray{T}; overQ=true) where
 
     if all(iszero, matrices)
         return [
-            [unit_sparsik(n, j, Nemo.QQ) for j in 1:i]
+            [unit_sparse_vector(n, j, Nemo.QQ) for j in 1:i]
             for i in 1:(n - 1)
         ]
     end
 
-    unit_vect = unit_sparsik(n, 1, Nemo.QQ)
+    unit_vect = unit_sparse_vector(n, 1, Nemo.QQ)
     constrained = invariant_subspace_local(matrices, [unit_vect])
     if length(constrained) < n
         @debug "Found an invariant subspace by saturating the first unit vector"
@@ -262,14 +262,14 @@ function lift(vs, Vs)
     lifted = []
 
     for v in vs
-        lifted_vector = zero_sparsik(n, ground)
+        lifted_vector = zero_sparse_vector(n, ground)
         
         # for (i, t) in v
         #     lifted_vector = lifted_vector + Vs[i]*t
         # end
         for (i, t) in enumerate(vec(v))
             iszero(t) && continue
-            lifted_vector = lifted_vector + Vs[i] .* [t]
+            lifted_vector = lifted_vector + scale(Vs[i], t)
         end
 
         push!(lifted, lifted_vector)

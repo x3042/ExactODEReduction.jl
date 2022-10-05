@@ -58,7 +58,7 @@ function find_basis(vectors; used_algorithm=find_basis_1_β, initialprime=2^31-1
         prime = last(primes)
         field = Nemo.GF(fmpz(prime))
         # TODO: !!!
-        set_globals!(prime, field)
+        set_modular_globals!(field)
 
         @info "new reduction modulo, $prime"
 

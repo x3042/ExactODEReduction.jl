@@ -13,7 +13,7 @@
                 println("rerunning")
                 continue
             end
-            vect = eigenspaces(M)
+            vect = ExactODEReduction.eigenspaces(M)
             @test length(vect) == N
             MBar = SBar([M[i, j] for i in 1:N for j in 1:N])
             for v in vect

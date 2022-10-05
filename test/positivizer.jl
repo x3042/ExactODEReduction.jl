@@ -44,7 +44,7 @@ end
 
 @testset "positivize" begin
 
-    test_positivize_no_change(positivize)
-    test_positivize_change(positivize)
+    test_positivize_no_change(ExactODEReduction.positivize)
+    test_positivize_change(ExactODEReduction.positivize)
 
 end

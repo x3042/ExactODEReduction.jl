@@ -18,7 +18,7 @@
     @test empty!(A) == zero(A)
     @test length(A) == 0
     @test is_thorough(A)
-    @test is_thorough(zero_sparsik(2, 4, R3))
+    @test is_thorough(zero_sparse_vector(2, 4, R3))
 
     A = from_dense([0 3 4; 1 2 3; -1 1 1;], R3)
     @test [to_plain(A, to_cartesian(A, i)...) for i in 1:dim(A)] == 1:dim(A)
@@ -35,8 +35,8 @@ end
 
     R3 = Nemo.GF(3)
 
-    A = zero_sparsik(3, 2, R3)
-    @test A - A == A + A == A * 5 == A == zero_sparsik(3, 2, R3)
+    A = zero_sparse_vector(3, 2, R3)
+    @test A - A == A + A == A * 5 == A == zero_sparse_vector(3, 2, R3)
 
     A = from_dense([3 6 9; -0 0 0; 0 0 0], R3)
     @test iszero(A)
@@ -71,9 +71,9 @@ end
     @test E * v == v
 
     v = from_dense([1, 2, 3, 4, 5], Nemo.QQ)
-    @test zero_sparsik(3, 5, Nemo.QQ) * v == zero_sparsik(3, Nemo.QQ)
+    @test zero_sparse_vector(3, 5, Nemo.QQ) * v == zero_sparse_vector(3, Nemo.QQ)
 
-    @test A * zero_sparsik(4, Nemo.QQ) == zero_sparsik(4, Nemo.QQ)
+    @test A * zero_sparse_vector(4, Nemo.QQ) == zero_sparse_vector(4, Nemo.QQ)
 
     v = from_dense([1, 0, 0, 4], Nemo.QQ)
     @test A * v == from_dense([21, 10, 3, 16], Nemo.QQ)
@@ -93,7 +93,7 @@ end
     # to_dense tests
     for n in sz
         for λ in densities
-            A = random_sparsik((n, n), ZZ, density=λ)
+            A = random_sparse_vector((n, n), ZZ, density=λ)
             @test A == from_dense(to_dense(A), ZZ)
         end
     end
@@ -101,7 +101,7 @@ end
     # trace tests
     for n in sz
         for λ in densities
-            A = random_sparsik((n, n), ZZ, density=λ)
+            A = random_sparse_vector((n, n), ZZ, density=λ)
             B = to_dense(A)
             @test tr(A) == sum(B[i, i] for i in 1:n)
         end
@@ -110,7 +110,7 @@ end
     # transpose tests
     for n in sz
         for λ in densities
-            A = random_sparsik((n, n), ZZ, density=λ)
+            A = random_sparse_vector((n, n), ZZ, density=λ)
             empty!(A.cols); empty!(A.nnz_cols)
             B = transpose!(deepcopy(A))
             empty!(B.cols); empty!(B.nnz_cols)
@@ -121,7 +121,7 @@ end
     # vec tests
     for n in sz
         for λ in densities
-            A = random_sparsik((n, n), ZZ, density=λ)
+            A = random_sparse_vector((n, n), ZZ, density=λ)
             v = vec(A)
             @test v == from_dense(reshape(to_dense(transpose!(A)), n^2), ZZ)
         end

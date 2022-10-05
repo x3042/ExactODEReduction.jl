@@ -41,7 +41,7 @@ function test_minimal_polynomial(minpoly)
     S, _ = ZZ["x"]
     for n in sizes
         for λ in densities
-            A = random_sparsik((n, n), ZZ, density=λ)
+            A = random_sparse_vector((n, n), ZZ, density=λ)
             try
                 f = minpoly(A)
                 @test iszero(evaluate(f, A))
@@ -57,7 +57,7 @@ function test_minimal_polynomial(minpoly)
     for _ in 1 : n^2
         i, j, k, r = rand(1:n^2, 4)
         # sum of four random unit matrices
-        A = sum(unit_sparsik((n, n), pos, Nemo.QQ) for pos in (i, j, k, r))
+        A = sum(unit_sparse_vector((n, n), pos, Nemo.QQ) for pos in (i, j, k, r))
         reconstruct!(A)
         f = minpoly(A)
         @test !iszero(f) && iszero(evaluate(f, A))

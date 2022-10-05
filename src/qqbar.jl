@@ -1,4 +1,6 @@
 
+# Define zero and one for Nemo rationals 
+# and Nemo extended rationals
 import Base: zero, one
 
 Base.zero(::Type{Nemo.qqbar}) = Nemo.qqbar(0)

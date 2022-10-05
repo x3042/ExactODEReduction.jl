@@ -1,28 +1,28 @@
+
+# MyModNumber definition - a number from Z/Zp
+# compatible with MySparseVector and MySparseMatrix
+
+# these are extended
 import Base: zero, one, iszero, isone, convert, inv,
-            length, iterate
+            length, iterate, broadcastable
 import Base: +, -, *
 import Nemo: parent, data
 
-const modulo = Nemo.fmpz(2^31-1)
-const FieldT = Nemo.GaloisFmpzField
-const global_field = Ref{FieldT}(FieldT(modulo))
+# backend for modular numbers.
+# global_field points to a finite field implemented in Nemo
+const ModularFieldT = Nemo.GaloisFmpzField
+const initial_modulo = Nemo.fmpz(2^31-1)
+const global_field = Ref{ModularFieldT}(ModularFieldT(initial_modulo))
 
-function set_globals!(prime, field)
+# updates the current global field used in modular computation
+function set_modular_globals!(field)
     global_field[] = field
 end
 
+# MyModNumber 
 struct MyModNumber
     x::Nemo.gfp_fmpz_elem
 end
-
-const QQField = typeof(Nemo.QQ)
-const QQCoeff = Nemo.fmpq
-
-const QQBarField = Nemo.QQBar
-const QQBarCoeff = elem_type(QQBarField)
-
-const FFCoeff = MyModNumber
-const FFField = Nemo.GaloisFmpzField
 
 MyModNumber(y) = MyModNumber(global_field[](y))
 
@@ -38,9 +38,8 @@ Base.inv(x::MyModNumber) = MyModNumber(inv(x.x))
 Base.iszero(x::MyModNumber) = iszero(x.x)
 Base.isone(x::MyModNumber) = isone(x.x)
 
-Base.length(x::MyModNumber) = 1
-Base.iterate(x::MyModNumber) = (x, nothing)
-Base.iterate(x::MyModNumber, y) = (x, x)
+# magic to allow broadcasting with sparse arrays
+Base.broadcastable(x::MyModNumber) = Ref{MyModNumber}(x)
 
 Nemo.parent(x::MyModNumber) = parent(x.x)
 

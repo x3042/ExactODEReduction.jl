@@ -45,7 +45,7 @@ function find_radical_sup(Algebra::Subspace)
 
     for i in 1:n
         if pivs[i] == 0
-            y = unit_sparsik(n, i, F)
+            y = unit_sparse_vector(n, i, F)
             # y = Sparsik(n, F, Int[], Dict{Int, elem_type(F)}())
             # reduce!(y, i, one(F))
             for j in orig_pivs
@@ -62,7 +62,7 @@ function find_radical_sup(Algebra::Subspace)
         vectors = []
         for j in 1:length(As)
             if !iszero(vect[j])
-                push!(vectors, As[j] .* [vect[j]])
+                push!(vectors, scale(As[j], vect[j]))
             end
         end
         push!(rad, reduce(+, vectors))

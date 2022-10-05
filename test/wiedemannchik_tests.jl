@@ -29,8 +29,8 @@
     for n in sizes
         A, b = 0, 0
         while true
-            A = random_sparsik((n, n), ZZ, density=0.3)
-            b = random_sparsik((n, ), ZZ)
+            A = random_sparse_vector((n, n), ZZ, density=0.3)
+            b = random_sparse_vector((n, ), ZZ)
             try
                 y = square_nonsingular_deterministic_wiedemann(A, b)
             catch e

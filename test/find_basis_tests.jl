@@ -16,7 +16,7 @@ function test_find_basis(algorithm)
     set0 = [
         sparse(Nemo.QQ.([0 1; 0 0;])),
     ]
-    ans0 = linear_span!([
+    ans0 = ExactODEReduction.linear_span!([
         sparse(Nemo.QQ.([0 1; 0 0;]))
     ])
 
@@ -25,7 +25,7 @@ function test_find_basis(algorithm)
         sparse(Nemo.QQ.([0 1; 0 0;])),
         sparse(Nemo.QQ.([0 0; 0 1;])),
     ]
-    ans1 = linear_span!([
+    ans1 = ExactODEReduction.linear_span!([
         sparse(Nemo.QQ.([0 1; 0 0;])),
         sparse(Nemo.QQ.([0 0; 0 1;])),
     ])
@@ -35,7 +35,7 @@ function test_find_basis(algorithm)
         sparse(Nemo.QQ.([1 2 3; 0 1 0; 0 0 0;])),
         sparse(Nemo.QQ.([1 0 0; 0 0 0; 0 2 1;]))
     ]
-    ans2 = linear_span!([
+    ans2 = ExactODEReduction.linear_span!([
         sparse(Nemo.QQ.([1 0 0; 0 0 0; 0 0 1;])),
         sparse(Nemo.QQ.([0 1 0; 0 0 0; 0 0 0;])),
         sparse(Nemo.QQ.([0 0 1; 0 0 0; 0 0 -1//3;])),
@@ -48,7 +48,7 @@ function test_find_basis(algorithm)
         sparse(Nemo.QQ.([1 0 0; 2 1 3; 1 0 0;])),
         sparse(Nemo.QQ.([0 1 0; 1 0 0; 0 0 1;]))
     ]
-    ans3 = linear_span!([
+    ans3 = ExactODEReduction.linear_span!([
         sparse(Nemo.QQ.([1 0 0; 0 0 0; 0 0 0;])),
         sparse(Nemo.QQ.([0 1 0; 0 0 0; 0 0 0;])),
         sparse(Nemo.QQ.([0 0 1; 0 0 0; 0 0 0;])),
@@ -62,7 +62,7 @@ function test_find_basis(algorithm)
 
     for (set, ans) in zip([set0, set1, set2, set3], [ans0, ans1, ans2, ans3])
         V = algorithm(deepcopy(set))
-        @test check_inclusion!(deepcopy(ans), deepcopy(V)) && check_inclusion!(V, deepcopy(ans))
+        @test ExactODEReduction.check_inclusion!(deepcopy(ans), deepcopy(V)) && ExactODEReduction.check_inclusion!(V, deepcopy(ans))
     end
 
     # --------
@@ -78,15 +78,15 @@ function test_find_basis(algorithm)
         for sz in sizes
             for d in densities
                 As = [
-                    random_sparsik((n, n), ZZ, density=d)
+                    ExactODEReduction.random_sparse_vector((n, n), ZZ, density=d)
                     for _ in 1:sz
                 ]
                 if all(iszero, As)
                     continue
                 end
-                ans = find_basis_1(deepcopy(As))
+                ans = ExactODEReduction.find_basis_1(deepcopy(As))
                 V   = algorithm(deepcopy(As))
-                @test check_inclusion!(ans, deepcopy(V)) && check_inclusion!(V, deepcopy(ans))
+                @test ExactODEReduction.check_inclusion!(ans, deepcopy(V)) && ExactODEReduction.check_inclusion!(V, deepcopy(ans))
             end
         end
     end
@@ -98,13 +98,13 @@ end
 
 @testset "basis, just in case" begin
     # This must always pass
-    test_find_basis(find_basis_1)
+    test_find_basis(ExactODEReduction.find_basis_1)
 
 end
 
 @testset "basis, β algorithm" begin
 
-    test_find_basis(find_basis_1_β)
+    test_find_basis(ExactODEReduction.find_basis_1_β)
 
 end
 

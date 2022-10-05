@@ -86,10 +86,10 @@ end
     for n in (100, )
         for d in (0.1, 0.5, 1)
             for 𝔽 in (Nemo.QQ, Nemo.GF(2^31-1))
-                vector = random_sparsik(n, 𝔽, density=d)
+                vector = random_sparse_vector(n, 𝔽, density=d)
                 @test abs(density(vector) - d) < ε
 
-                matrix = random_sparsik((n, n), 𝔽, density=d)
+                matrix = random_sparse_vector((n, n), 𝔽, density=d)
                 @test abs(density(matrix) - d) < 2ε
             end
         end

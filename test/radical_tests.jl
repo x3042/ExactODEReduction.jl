@@ -100,15 +100,15 @@ cases = [
 function test_find_radical(algorithm)
     for c in cases
         basis = c[:basis]
-        basis = linear_span!(basis)
+        basis = ExactODEReduction.linear_span!(basis)
         V = algorithm(deepcopy(basis))
-        @test (isempty(c[:correct]) && isempty(V)) || check_inclusion!(linear_span!(deepcopy(c[:correct])), linear_span!(deepcopy(V))) && check_inclusion!(linear_span!(V), linear_span!(c[:correct]))
+        @test (isempty(c[:correct]) && isempty(V)) || ExactODEReduction.check_inclusion!(ExactODEReduction.linear_span!(deepcopy(c[:correct])), ExactODEReduction.linear_span!(deepcopy(V))) && ExactODEReduction.check_inclusion!(ExactODEReduction.linear_span!(V), ExactODEReduction.linear_span!(c[:correct]))
     end
 end
 
 #------------------------------------------------------------------------------
 
 @testset "radical" begin
-    test_find_radical(find_radical_sup)
+    test_find_radical(ExactODEReduction.find_radical_sup)
 end
 

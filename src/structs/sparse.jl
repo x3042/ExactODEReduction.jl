@@ -208,14 +208,14 @@ end
 
 # function for Sparsiks compatibility
 # O(1)
-function zero_sparsik(dim, field)
+function zero_sparse_vector(dim, field)
     return Sparsik(dim, field, Int[], Dict{Int, elem_type(field)}())
     # return zero(field)
 end
 
 #------------------------------------------------------------------------------
 
-Base.zero(v::Sparsik) = zero_sparsik(v.dim, v.field)
+Base.zero(v::Sparsik) = zero_sparse_vector(v.dim, v.field)
 Base.iszero(v::Sparsik{T}) where {T} = length(v) == 0
 
 Base.get(v::Sparsik, i::Int) = get(v.data, i, zero(v.field))
@@ -331,7 +331,7 @@ end
 
 #-----------------------------------------------------------------------------
 
-function unit_sparsik(dim, i, field)
+function unit_sparse_vector(dim, i, field)
     # Int unfolding results into Int
     # Tuple{Int} unfolding results into Int
     # We can generalize it!
@@ -343,7 +343,7 @@ end
 
 # returns a Sparsik object consisting of O(sz * density) nnz entries,
 # each entry is generated uniformly and independently
-function random_sparsik(sz::Int, field::T; density=0.1) where {T <: AbstractAlgebra.Field}
+function random_sparse_vector(sz::Int, field::T; density=0.1) where {T <: AbstractAlgebra.Field}
     λ = density * sz
 
     nnz = Int[]
@@ -362,8 +362,8 @@ function random_sparsik(sz::Int, field::T; density=0.1) where {T <: AbstractAlge
     return Sparsik(sz, field, nnz, data)
 end
 
-function random_sparsik(sz::Tuple{Int}, field::T; density=0.1) where {T <: AbstractAlgebra.Field}
-    random_sparsik(sz..., field, density=density)
+function random_sparse_vector(sz::Tuple{Int}, field::T; density=0.1) where {T <: AbstractAlgebra.Field}
+    random_sparse_vector(sz..., field, density=density)
 end
 
 #-----------------------------------------------------------------------------

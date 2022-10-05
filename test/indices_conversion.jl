@@ -32,10 +32,10 @@
 end
 
 @testset "Unit sparse vectors" begin
-    @test ExactODEReduction.unit_sparsik(3, 1, Nemo.QQ) == sparse([Nemo.QQ(1), 0, 0])
-    @test ExactODEReduction.unit_sparsik(3, 2, Nemo.QQ) == sparse([0, Nemo.QQ(1), 0])
-    @test ExactODEReduction.unit_sparsik(3, 3, Nemo.QQ) == sparse([0, 0, Nemo.QQ(1)])
+    @test ExactODEReduction.unit_sparse_vector(3, 1, Nemo.QQ) == sparse([Nemo.QQ(1), 0, 0])
+    @test ExactODEReduction.unit_sparse_vector(3, 2, Nemo.QQ) == sparse([0, Nemo.QQ(1), 0])
+    @test ExactODEReduction.unit_sparse_vector(3, 3, Nemo.QQ) == sparse([0, 0, Nemo.QQ(1)])
 
-    # @test ExactODEReduction.unit_sparsik((2, 4), 1, Nemo.QQ) == sparse([Nemo.QQ(1) 0; 0 0; 0 0; 0 0;])
+    # @test ExactODEReduction.unit_sparse_vector((2, 4), 1, Nemo.QQ) == sparse([Nemo.QQ(1) 0; 0 0; 0 0; 0 0;])
 
 end

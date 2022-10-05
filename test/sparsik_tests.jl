@@ -50,8 +50,8 @@
     c = 1
     @test length(reduce!(v, u, c)) == 3
     @test scale!(v, -1) == from_dense([0, -1, -1, 0, 6, 0], RR)
-    @test scale!(v, 7) == zero_sparsik(size(v)..., RR)
-    @test v + zero_sparsik(size(v)..., RR) == zero_sparsik(size(v)..., RR)
+    @test scale!(v, 7) == zero_sparse_vector(size(v)..., RR)
+    @test v + zero_sparse_vector(size(v)..., RR) == zero_sparse_vector(size(v)..., RR)
 
     v = from_dense([1, 0, 0, 0, 0, 7, -7, 3, 1, 1, 0, 4, 5, 11], RR)
     u = from_dense([0, 0, 3, 7, 1, -1, 7, 4, 0, 6, 0, 0, 2, 3], RR)
@@ -101,7 +101,7 @@ end
     # to_dense tests
     for n in sz
         for λ in densities
-            v = random_sparsik(n, ZZ, density=λ)
+            v = random_sparse_vector(n, ZZ, density=λ)
             @test v == from_dense(to_dense(v), ZZ)
         end
     end

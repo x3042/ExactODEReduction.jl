@@ -183,7 +183,7 @@ function reconstruct_2!(A::DOK_Sparsik)
     for i in A.nnz_rows
         for (j, x) in A.rows[i]
             if !haskey(A.cols, j)
-                A.cols[j] = zero_sparsik(size(A, 1), A.field)
+                A.cols[j] = zero_sparse_vector(size(A, 1), A.field)
             end
             push!(A.cols[j].nonzero, i)
             A.cols[j].data[i] = x
@@ -323,7 +323,7 @@ function reduce!(A::DOK_Sparsik{T}, B::DOK_Sparsik{T}, c) where {T}
         end
 
         if !haskey(A.rows, new_idx)
-            A.rows[new_idx] = zero_sparsik(size(A, 2), A.field)
+            A.rows[new_idx] = zero_sparse_vector(size(A, 2), A.field)
         end
         if haskey(B.rows, new_idx)
             reduce!(A.rows[new_idx], B.rows[new_idx], c)
@@ -533,15 +533,15 @@ end
 #------------------------------------------------------------------------------
 
 # returns zero matrix of the dimensions (m, n)
-function zero_sparsik(m, n, field)
+function zero_sparse_vector(m, n, field)
     from_rows(m, n, field, Int[], Dict{Int, Sparsik{typeof(field)}}())
     #zero(field)
 end
 
-zero_sparsik(sz::Tuple{Int, Int}, field) = zero_sparsik(sz..., field)
+zero_sparse_vector(sz::Tuple{Int, Int}, field) = zero_sparse_vector(sz..., field)
 
 # returns zero matrix of the dimensions of `A`
-Base.zero(A::DOK_Sparsik) = zero_sparsik(size(A)..., A.field)
+Base.zero(A::DOK_Sparsik) = zero_sparse_vector(size(A)..., A.field)
 
 Base.iszero(A::DOK_Sparsik{T}) where {T} = length(A.nnz_rows) == 0
 
@@ -726,7 +726,7 @@ function Base.one(A::DOK_Sparsik{T}) where {T}
         field,
         Array(1:order(A)),
         Dict{Int, Sparsik{T}}(
-            i => unit_sparsik(order(A), i, field)
+            i => unit_sparse_vector(order(A), i, field)
             for i in 1:order(A)
         )
     ))
@@ -734,7 +734,7 @@ end
 
 #-----------------------------------------------------------------------------
 
-function random_sparsik(sz::Tuple{Int, Int}, field; density=0.1)
+function random_sparse_vector(sz::Tuple{Int, Int}, field; density=0.1)
     @assert 0 <= density <= 1
 
     # outer product
@@ -841,14 +841,14 @@ end
 
 # -----------------------------------------------------------------------------
 
-function unit_sparsik(sz::Tuple{Int, Int}, idx::Int, field)
+function unit_sparse_vector(sz::Tuple{Int, Int}, idx::Int, field)
     i, j = to_cartesian(sz, idx)
     return DOK_Sparsik(
         sz...,
         field,
         [ i ],
         Int[],
-        Dict(i => unit_sparsik(sz[2], j, field)),
+        Dict(i => unit_sparse_vector(sz[2], j, field)),
         Dict{Int, Sparsik{typeof(field)}}()
     )
 end

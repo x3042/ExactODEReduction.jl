@@ -229,14 +229,14 @@ end
 
 # function for Sparsiks compatibility
 # O(1)
-function zero_sparsik(dim, field, funcbloom)
+function zero_sparse_vector(dim, field, funcbloom)
     return BloomSparsik(dim, field, Int[], Dict{Int, elem_type(field)}(), UInt64(0), funcbloom)
     # return zero(field)
 end
 
 #------------------------------------------------------------------------------
 
-Base.zero(v::BloomSparsik) = zero_sparsik(v.dim, v.field, _default_bloom)
+Base.zero(v::BloomSparsik) = zero_sparse_vector(v.dim, v.field, _default_bloom)
 Base.iszero(v::BloomSparsik{T}) where {T} = length(v) == 0
 
 Base.get(v::BloomSparsik, i::Int) = get(v.data, i, zero(v.field))
@@ -356,7 +356,7 @@ end
 
 #-----------------------------------------------------------------------------
 
-function unit_sparsik(dim, i, field, funcbloom)
+function unit_sparse_vector(dim, i, field, funcbloom)
     return BloomSparsik(dim..., field, [i], Dict(i => one(field)), _powersof2[i], funcbloom)
 end
 
@@ -365,7 +365,7 @@ end
 
 # returns a Sparsik object consisting of O(sz * density) nnz entries,
 # each entry is generated uniformly and independently
-function random_sparsik(sz::Int, field::T, funcbloom; density=0.1) where {T<:Field}
+function random_sparse_vector(sz::Int, field::T, funcbloom; density=0.1) where {T<:Field}
     λ = density * sz
 
     nnz = Int[]
@@ -386,8 +386,8 @@ function random_sparsik(sz::Int, field::T, funcbloom; density=0.1) where {T<:Fie
     return BloomSparsik(sz, field, nnz, data, nnzbloom, funcbloom)
 end
 
-function random_sparsik(sz::Tuple{Int}, field::T, funcbloom; density=0.1) where {T<:Field}
-    random_sparsik(sz..., field, funcbloom, density=density)
+function random_sparse_vector(sz::Tuple{Int}, field::T, funcbloom; density=0.1) where {T<:Field}
+    random_sparse_vector(sz..., field, funcbloom, density=density)
 end
 
 #-----------------------------------------------------------------------------

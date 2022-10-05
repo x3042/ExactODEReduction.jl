@@ -84,7 +84,7 @@ function eat_sparsik!(V::Subspace, new_vector; ω=1.0)
         if !iszero(new_vector[piv])
             # reduce!(new_vector, vect, -new_vector[piv])
             # 1
-            new_vector = new_vector - vect .* [new_vector[piv]]
+            new_vector = new_vector - scale(vect, new_vector[piv])
         end
     end
 
@@ -104,13 +104,13 @@ function eat_sparsik!(V::Subspace, new_vector; ω=1.0)
     pivot = first_nonzero(new_vector)
 
     # scale!(new_vector, inv(new_vector[pivot]))
-    new_vector = new_vector .* [inv(new_vector[pivot])]
+    new_vector = scale(new_vector, inv(new_vector[pivot]))
 
     # O(kR)  if k = nnz(new_vector) and R = Σnnz(v) for v in echelon_form
     for (piv, vect) in V.echelon_form
         if !iszero(vect[pivot])
             # reduce!(V.echelon_form[piv], new_vector, -vect[pivot])
-            V.echelon_form[piv] = V.echelon_form[piv] - new_vector .* [vect[pivot]]
+            V.echelon_form[piv] = V.echelon_form[piv] - scale(new_vector, vect[pivot])
         end
     end
 
@@ -268,8 +268,7 @@ end
 function check_inclusion!(V::Subspace, vector::SparseArrays.AbstractSparseArray)
     for (piv, vect) in V.echelon_form
         if ! iszero(vector[piv])
-            # reduce!(vector, vect, -vector[piv])
-            vector = vector - vect .* [vector[piv]]
+            vector = vector - scale(vect, vector[piv])
         end
     end
     return iszero(vector)
@@ -369,7 +368,7 @@ function complement_subspace(V::Subspace)
     each = [i for i in 1:ambient_dim(V)]
     present = collect(keys(V.echelon_form))
     [
-        unit_sparsik(ambient_dim(V), i, base_ring(V))
+        unit_sparse_vector(ambient_dim(V), i, base_ring(V))
         for i in setdiff(each, present)
     ]
 end
@@ -377,7 +376,7 @@ end
 # maby `universum(dim, field)` ?
 function fullspace(dim, field)
     [
-        unit_sparsik(dim, i, field)
+        unit_sparse_vector(dim, i, field)
         for i in 1 : dim
     ]
 end

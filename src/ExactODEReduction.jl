@@ -64,21 +64,17 @@ end
 
 #------------------------------------------------------------------------------
 
-# Utilities
 include("utils.jl")
-# some useful but hardly categorizable things
+
+# Some useful but hardly categorizable things
 include("gizmos.jl")
 
-# Reading input
+# Reading input from files
 include("parser/myeval.jl")
 include("parser/parser.jl")
 
-# Structures for sparse linear algebra
-include("structs/sparse.jl")
-include("structs/dok_sparse.jl")
-# include("structs/csr_sparsik.jl")
-include("structs/dense.jl")
-include("structs/subspace.jl")
+# Linear subspace type definition
+include("Subspace.jl")
 
 # Main functionality
 include("linalg/wiedemann.jl")
@@ -89,8 +85,15 @@ include("invariants.jl")
 include("parametrization.jl")
 include("ODE.jl")
 
-include("modular.jl")
+# define some methods for Nemo.QQBar
 include("qqbar.jl")
+
+# introduce modular number type
+include("MyModNumber.jl")
+
+# 
+include("coefficients.jl")
+
 include("sparse.jl")
 
 #------------------------------------------------------------------------------
@@ -124,7 +127,7 @@ function find_some_reduction(
 
     if length(matrices) == 0
         # TODO: !!! actually, what is this case even??
-        matrices = [sparsezero(length(eqs), length(eqs), QQCoeff)]
+        matrices = [zero_sparse_vector(length(eqs), length(eqs), Nemo.QQ)]
     end
     @savetime subspaces = invariant_subspace_global(matrices; overQ=overQ) total_times
 
@@ -226,7 +229,7 @@ function find_reductions(
     matrices = construct_jacobians(eqs)
 
     if length(matrices) == 0
-        matrices = [sparsezero(length(eqs), length(eqs), QQCoeff)]
+        matrices = [zero_sparse_vector(length(eqs), length(eqs), Nemo.QQ)]
     end
     invariant_subspaces = many_invariant_subspaces(matrices, invariant_subspace_global; overQ=overQ)
     result = Vector{Dict{Symbol, Vector{Any}}}()

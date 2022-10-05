@@ -25,16 +25,14 @@ end
 # O(d) multiplications/additions of x₀ if d = degree(f)
 function evaluate(f::PolyElem, x₀)
     d = degree(f)
-    # reconstruct!(x₀)
 
     I = one(x₀)
-    accum = [lead(f)] .* I
+    accum = scale(I, lead(f))
 
     for i in 1 : d
-        accum = accum * x₀ + [coeff(f, d - i)] .* I
+        accum = accum * x₀ + scale(I, coeff(f, d - i))
     end
 
-    # return reconstruct!(accum)
     return accum
 end
 
@@ -88,7 +86,7 @@ function square_nonsingular_randomized_wiedemann(A::AbstractSparseMatrix, b::Abs
     # 2
     while !iszero(b)
         # 3
-        u = random_sparsik(n, field, density=1)
+        u = random_sparse_vector(n, field, density=1)
 
         # 4
         seq = elem_type(field)[]
@@ -108,7 +106,7 @@ function square_nonsingular_randomized_wiedemann(A::AbstractSparseMatrix, b::Abs
         # 6
         f⁻ = shift_right_x(f)
 
-        accum = zero_sparsik(n, field)
+        accum = zero_sparse_vector(n, field)
         for j in 0 : degree(f⁻)
             reduce!(accum, subspace[j + 1], coeff(f⁻, j))
         end
@@ -165,7 +163,7 @@ function square_nonsingular_deterministic_wiedemann(A::AbstractSparseMatrix, b::
 
     while k < n && degree(g) < n
         # 3
-        u = unit_sparsik(n, k + 1, field)
+        u = unit_sparse_vector(n, k + 1, field)
 
         # 4
         # O(n)
@@ -193,7 +191,7 @@ function square_nonsingular_deterministic_wiedemann(A::AbstractSparseMatrix, b::
     f = g * inv(coeff(g, 0))
     f⁻ = shift_right_x(f)
 
-    accum = zero_sparsik(n, field)
+    accum = zero_sparse_vector(n, field)
     for j in 0 : degree(f⁻)
         reduce!(accum, subspace[j + 1], coeff(f⁻, j))
     end
@@ -316,7 +314,7 @@ function __deterministic_simple_minpoly(A, PolySpace)
     # Computing the minimal polynomial
     x = gen(PolySpace)
     f = x^(power-1)
-    last_row = haskey(C.rows, power) ? C.rows[power] : zero_sparsik(n + 1, field)
+    last_row = haskey(C.rows, power) ? C.rows[power] : zero_sparse_vector(n + 1, field)
     for (piv, val) in last_row
         if haskey(V.echelon_form, piv)
             f -= val * x^(piv-1)
@@ -333,7 +331,7 @@ end
 function __deterministic_wiedemann_minpoly(A::AbstractSparseMatrix, PolySpace)
     field = base_ring(A)
     n = order(A)
-    b = random_sparsik(n, field, density=1.0)
+    b = random_sparse_vector(n, field, density=1.0)
 
     subspace = [ b ]
     for i in 1 : 2n - 1
@@ -343,7 +341,7 @@ function __deterministic_wiedemann_minpoly(A::AbstractSparseMatrix, PolySpace)
     k = 0
     g = one(PolySpace)
     while k < n && degree(g) < n
-        u = unit_sparsik(n, k + 1, field)
+        u = unit_sparse_vector(n, k + 1, field)
 
         # O(n)
         seq = [inner(x, u) for x in subspace]
@@ -369,7 +367,7 @@ end
 function __randomized_wiedemann_minpoly(A::AbstractSparseMatrix, PolySpace)
     field = base_ring(A)
     n = order(A)
-    b = random_sparsik(n, field, density=1.0)
+    b = random_sparse_vector(n, field, density=1.0)
     g = PolySpace(1)
 
     subspace = [ b ]
@@ -378,7 +376,7 @@ function __randomized_wiedemann_minpoly(A::AbstractSparseMatrix, PolySpace)
     end
 
     while degree(g) < n
-        u = random_sparsik(n, field, density=1)
+        u = random_sparse_vector(n, field, density=1)
 
         seq = elem_type(field)[]
         for i in 1 : 2 * (n - degree(g))
