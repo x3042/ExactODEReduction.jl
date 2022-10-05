@@ -16,11 +16,16 @@ Online documentation could be found at https://x3042.github.io/Exact-reduction-o
 
 Exact reduction of the system of differential equations is an exact variable substitution which preserves the invariants of the system. In this project we mainly consider reductions obtained with **linear transformations**. We will explain it using a toy example. Consider the system
 
-$\begin{cases} \dot{x}_1 = x_1^2 %2b 2x_1x_2,\\ \dot{x}_2  =  x_2^2 %2b x_3 %2b x_4,\\ \dot{x}_3  = x_2 %2b x_4, \\\dot{x}_4 = x_1 %2b x_3 \end{cases}\\$
+$$\begin{cases} 
+\dot{x}_1 = x_1^2 %2b 2x_1x_2,\\ 
+\dot{x}_2 =  x_2^2 %2b x_3 %2b x_4,\\ 
+\dot{x}_3 = x_2 %2b x_4, 
+\\dot{x}_4 = x_1 %2b x_3 
+\end{cases}$$
 
 An example of an exact reduction in this case would be the following set of new variables
 
-<img src="https://render.githubusercontent.com/render/math?math=y_1 = x_1 %2b x_2 \quad \text{ and } \quad y_2 = x_3 %2b x_4\\">
+$y_1 = x_1 %2b x_2 \quad \text{ and } \quad y_2 = x_3 %2b x_4$
 
 The important feature of these variables is that their derivatives can be written in terms of ![$y_1$](https://render.githubusercontent.com/render/math?math=%24y_1%24) and ![$y_2$](https://render.githubusercontent.com/render/math?math=%24y_2%24) only:
 
