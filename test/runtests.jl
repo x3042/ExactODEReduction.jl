@@ -18,7 +18,7 @@ using .ExactODEReduction
 
     @includetests ["parser_tests"]    
 
-    @includetests ["indices_conversion"]
+    @includetests ["indices_conversion", "gizmos_tests"]
 
     @includetests ["find_basis_tests", "eigenspaces",
                 "radical_tests", "positivizer"]

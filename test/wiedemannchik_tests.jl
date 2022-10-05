@@ -65,6 +65,3 @@ end
 
 
 end
-
-
-@info "OK"

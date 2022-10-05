@@ -107,5 +107,3 @@ end
     test_find_basis(ExactODEReduction.find_basis_1_β)
 
 end
-
-@info "OK"

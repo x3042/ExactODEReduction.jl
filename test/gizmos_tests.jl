@@ -3,13 +3,7 @@
     The File contains tests for some project utils and etc..
 =#
 
-#------------------------------------------------------------------------------
-
-#using Suppressor
-
-#------------------------------------------------------------------------------
-
-@testset "Gizmos -- construct_jacobians" begin
+@testset "construct_jacobians" begin
 
     # simple tests #
 
@@ -22,30 +16,29 @@
         x₁ + x₃
     ]
     true_js = [
-        from_dense([
+        sparse(Nemo.QQ.([
             2 0 0 0;
             2 0 0 0;
             0 0 0 0;
             0 0 0 0;
-        ], Nemo.QQ),
-        from_dense([
+        ])),
+        sparse(Nemo.QQ.([
             2 0 0 0;
             0 2 0 0;
             0 0 0 0;
             0 0 0 0;
-        ], Nemo.QQ),
-        from_dense([
+        ])),
+        sparse(Nemo.QQ.([
             0 0 0 1;
             0 0 1 0;
             0 1 0 1;
             0 1 1 0;
-        ], Nemo.QQ)
+        ]))
     ]
 
-    js = construct_jacobians(system)
+    js = ExactODEReduction.construct_jacobians(system)
 
     @test all(J in true_js for J in js) && length(true_js) == length(js)
-
 
     # test #2
     R, (x₁, x₂, x₃) = Nemo.QQ["x₁", "x₂", "x₃"]
@@ -56,72 +49,66 @@
         x₁ + x₂                 # derivative of x3
     ]
     true_js = [
-        from_dense([
+        sparse(Nemo.QQ.([
             0 0 0;
             2 0 0;
             4 0 0;
-        ], Nemo.QQ),
-        from_dense([
+        ])),
+        sparse(Nemo.QQ.([
             0 0 0;
             4 0 0;
             8 0 0;
-        ], Nemo.QQ),
-        from_dense([
+        ])),
+        sparse(Nemo.QQ.([
             0 -2 1;
             0 0 1;
             0 4 0;
-        ], Nemo.QQ)
+        ]))
     ]
 
-    js = construct_jacobians(system)
+    js = ExactODEReduction.construct_jacobians(system)
 
     @test all(J in true_js for J in js) && length(true_js) == length(js)
-
-
 end
 
-@testset "General -- randomness" begin
-
-    ε = 0.01
+@testset "Randomness" begin
+    ε = 0.1
     for n in (100, )
-        for d in (0.1, 0.5, 1)
-            for 𝔽 in (Nemo.QQ, Nemo.GF(2^31-1))
-                vector = random_sparse_vector(n, 𝔽, density=d)
-                @test abs(density(vector) - d) < ε
+        for d in (0.1, 0.5, 1.0)
+            for 𝔽 in (Nemo.QQ, Nemo.GF(Nemo.fmpz(2^31-1)))
+                vector = ExactODEReduction.random_sparse_vector(n, 𝔽, density=d)
+                @test abs(ExactODEReduction.density(vector) - d) < ε
 
-                matrix = random_sparse_vector((n, n), 𝔽, density=d)
-                @test abs(density(matrix) - d) < 2ε
+                matrix = ExactODEReduction.random_sparse_vector((n, n), 𝔽, density=d)
+                @test abs(ExactODEReduction.density(matrix) - d) < 2ε
             end
         end
     end
-
 end
 
-@testset "Subspaces -- check invariance" begin
+@testset "Check invariance" begin
 
-    A = @sparse [1 0 0; 0 2 0; 0 0 3;]
+    A = sparse(Nemo.QQ.([1 0 0; 0 2 0; 0 0 3;]))
 
-    v1 = @sparse [1,0,0]
-    v2 = @sparse [0,1,0]
-    v3 = @sparse [0,0,1]
+    v1 = sparse(Nemo.QQ.([1,0,0]))
+    v2 = sparse(Nemo.QQ.([0,1,0]))
+    v3 = sparse(Nemo.QQ.([0,0,1]))
 
-    @test check_invariance!([A], [v1, v2, v3])
-    @test check_invariance!([A], [v1])
-    @test check_invariance!([A], [v2])
-    @test check_invariance!([A], [v3])
+    @test ExactODEReduction.check_invariance!([A], [v1, v2, v3])
+    @test ExactODEReduction.check_invariance!([A], [v1])
+    @test ExactODEReduction.check_invariance!([A], [v2])
+    @test ExactODEReduction.check_invariance!([A], [v3])
 
 
-    A = @sparse [1 2 0; 0 1 0; 0 0 3;]
-    @test check_invariance!([A], [v1, v3])
-    @test check_invariance!([A], [v1 + v2, v2])
-    @test !check_invariance!([A], [v2])
+    A = sparse(Nemo.QQ.([1 2 0; 0 1 0; 0 0 3;]))
+    @test ExactODEReduction.check_invariance!([A], [v1, v3])
+    @test ExactODEReduction.check_invariance!([A], [v1 + v2, v2])
+    @test !ExactODEReduction.check_invariance!([A], [v2])
 
-    A = @sparse [0 4 0 1; 0 0 1 1; 0 0 0 2; 0 0 0 4]
-    v1 = @sparse [1, 0, 0, 0]
-    v2 = @sparse [0, 3//8, 1//2, 1]
-    @test check_invariance!([A], [v1, v2])
-    @test !check_invariance!([A], [v1 + v2])
+    A = sparse(Nemo.QQ.([0 4 0 1; 0 0 1 1; 0 0 0 2; 0 0 0 4]))
+    v1 = sparse(Nemo.QQ.([1, 0, 0, 0]))
+    v2 = sparse(Nemo.QQ.([0, 3//8, 1//2, 1]))
+    @test ExactODEReduction.check_invariance!([A], [v1, v2])
+    @test !ExactODEReduction.check_invariance!([A], [v1 + v2])
 
 end
-
-@info "OK"

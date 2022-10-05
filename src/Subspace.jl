@@ -87,6 +87,8 @@ function eat_sparsik!(V::Subspace, new_vector; ω=1.0)
         end
     end
 
+    dropzeros!(new_vector)
+
     if iszero(new_vector)
         # new_vector reduced to zero
         return reduced()
@@ -98,8 +100,10 @@ function eat_sparsik!(V::Subspace, new_vector; ω=1.0)
         # new_vector has lost sparsity
         return deferred()
     end
-    
+
     pivot = first_nonzero(new_vector)
+    @assert !iszero(new_vector[pivot])
+
     new_vector = scale(new_vector, inv(new_vector[pivot]))
 
     # O(kR)  if k = nnz(new_vector) and R = Σnnz(v) for v in echelon_form

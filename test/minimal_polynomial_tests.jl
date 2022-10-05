@@ -72,5 +72,3 @@ end
     # test_minimal_polynomial(minimal_polynomial_wiedemann)
 
 end
-
-@info "OK"

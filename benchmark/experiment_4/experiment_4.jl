@@ -7,6 +7,7 @@ using Nemo
 using Distributions
 using Printf
 using Dates
+using Logging 
 
 #------------------------------------------------------------------------------
 
@@ -24,7 +25,7 @@ function uwuwu(from_size, to_size)
         @info "$i-th, loaded a system $filename of size $(length(system))"
         
         ODE = ExactODEReduction.ODE{fmpq_mpoly}(system)
-        reduction = ExactODEReduction.find_some_reduction(ODE)
+        reduction = ExactODEReduction.find_some_reduction(ODE, loglevel=Logging.Debug)
     
         push!(all_reductions, reduction)
     end
@@ -111,7 +112,7 @@ end
 
 #------------------------------------------------------------------------------
 
-for sz in [(20, 50)]
+for sz in [(50, 80)]
 # for sz in [(110, 200)]
     uwuwu(sz...)
     write_md(sz)
