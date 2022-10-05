@@ -131,7 +131,8 @@ function many_invariant_subspaces(
     @info "found $([length(V) for V in Vs])-dim subspaces in ambient $(size(first(As), 1))-dim"
 
     # restrict
-    if length(first(Vs)) > 1 && base_ring(first(first(Vs))) != Nemo.QQBar        As_V = restrict(As, first(Vs))
+    if length(first(Vs)) > 1 && base_ring(first(first(Vs))) != Nemo.QQBar        
+        As_V = restrict(As, first(Vs))
         As_V_sparse = map(x-> sparse(x), map(Array, As_V))
         
         @info "Calling myself recursively in restricted subspace"
