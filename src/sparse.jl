@@ -84,7 +84,7 @@ for (op, args) in ((:MySparseVector, (:n, :inds, :vals)),
     end
 
     # dissalow creating sparse vectors 
-    # with anything other that `supported_domains`
+    # with anything other that supported_domains
     @eval begin
         @noinline ($op)($(args...), field::Any) = _sparse_domain_error(field)
         @noinline (zero_sparse_vector)($(n_or_mn...), field::Any) = _sparse_domain_error(field)

@@ -14,8 +14,6 @@ import SparseArrays: getnzval, getcolptr, getrowval,
 
 import LinearAlgebra
 
-using Base.Threads
-
 import MacroTools
 import MacroTools: @capture
 
@@ -73,27 +71,32 @@ include("gizmos.jl")
 include("parser/myeval.jl")
 include("parser/parser.jl")
 
+# Wiedemann-style sparse system solving
+include("wiedemann.jl")
+
 # Linear subspace type definition
 include("Subspace.jl")
-
-# Main functionality
-include("linalg/wiedemann.jl")
-include("basis.jl")
-include("radical.jl")
-include("positivizor.jl")
-include("invariants.jl")
-include("parametrization.jl")
+# ODE type definition
 include("ODE.jl")
 
-# define some methods for Nemo.QQBar
+# Algebra basis algorithms
+include("basis.jl")
+# Algebra radical algorithms
+include("radical.jl")
+# Be positive!
+include("positivizor.jl")
+# Finding invariant subspaces
+include("invariants.jl")
+# Parametrizing the final system
+include("parametrization.jl")
+
+# Extending methods for Nemo.QQBar
 include("qqbar.jl")
-
-# introduce modular number type
+# Modular number type definition
 include("MyModNumber.jl")
-
-# 
+# Describes coefficient domains
 include("coefficients.jl")
-
+# Sparse data structures definitions
 include("sparse.jl")
 
 #------------------------------------------------------------------------------
