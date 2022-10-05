@@ -71,6 +71,15 @@ include("gizmos.jl")
 include("parser/myeval.jl")
 include("parser/parser.jl")
 
+# Extending methods for Nemo.QQBar
+include("qqbar.jl")
+# Modular number type definition
+include("MyModNumber.jl")
+# Describes coefficient domains
+include("coefficients.jl")
+# Sparse data structures definitions
+include("sparse.jl")
+
 # Wiedemann-style sparse system solving
 include("wiedemann.jl")
 
@@ -89,15 +98,6 @@ include("positivizor.jl")
 include("invariants.jl")
 # Parametrizing the final system
 include("parametrization.jl")
-
-# Extending methods for Nemo.QQBar
-include("qqbar.jl")
-# Modular number type definition
-include("MyModNumber.jl")
-# Describes coefficient domains
-include("coefficients.jl")
-# Sparse data structures definitions
-include("sparse.jl")
 
 #------------------------------------------------------------------------------
 

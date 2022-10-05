@@ -144,12 +144,12 @@ function find_orthogonal!(vectors::AbstractDict)
     # some complexity estimations should be done
     while ! found
         # taking the i-th unit vector
-        u = unit_sparse_vector(n, i, field)
+        u = unit_sparsik(n, i, field)
 
         # the only change of `vectors`
         vectors[n] = u
 
-        b = unit_sparse_vector(n, n, field)
+        b = unit_sparsik(n, n, field)
 
         B = from_rows(n, n, field, nnz_rows, vectors)
 
@@ -242,7 +242,7 @@ function construct_jacobians(system::AbstractArray{T}) where {T<:MPolyElem}
 
     m, n = length(system), length(gens(poly_ring))
     factors = [
-        sparse(coo_dict_to_arrays(jac)..., m, n)
+        sparse(coo_to_arrays(jac)..., m, n)
         for jac in values(jacobians)
     ]
 

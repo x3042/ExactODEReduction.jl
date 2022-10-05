@@ -136,11 +136,19 @@ Nemo.base_ring(x::MySparseVector{FFCoeffT}) = global_field[]
 Nemo.base_ring(x::MySparseVector{QQBarCoeffT}) = Nemo.QQBar
 
 # dictionary representation to three-arrays representation
-function coo_dict_to_arrays(coo::Dict{T, U}) where {T, U}
+function coo_to_arrays(coo::Dict{T, U}) where {T, U}
     xys = collect(keys(coo))
     xs = map(first, xys)
     ys = map(last, xys)
     vs = [coo[xy] for xy in xys]
+    xs, ys, vs
+end
+
+# dictionary representation to three-arrays representation
+function coo_to_arrays(coo::Vector{T}) where {T}
+    xs = [xyv[1] for xyv in coo]
+    ys = [xyv[2] for xyv in coo]
+    vs = [xyv[3] for xyv in coo]
     xs, ys, vs
 end
 
@@ -160,6 +168,7 @@ end
 
 # the index of the first nonzero (column-major order)
 function first_nonzero(A::MySparseMatrix{T}) where {T}
+    dropzeros!(A)
     if iszero(A)
         return -1
     end
@@ -173,6 +182,7 @@ end
 
 # the index of the first nonzero
 function first_nonzero(A::MySparseVector{T}) where {T}
+    dropzeros!(A)
     if iszero(A)
         return -1
     end

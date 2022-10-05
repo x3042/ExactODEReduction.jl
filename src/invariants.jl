@@ -94,7 +94,7 @@ function invariant_subspace_local(matrices::AbstractArray{T}, hint) where {T}
 
                 if !iszero(product)
                     new_pivot = eat_sparsik!(V, product)
-                    if new_pivot != reduced
+                    if !isreduced(new_pivot)
                         push!(new_pivots, new_pivot)
                     end
                 end

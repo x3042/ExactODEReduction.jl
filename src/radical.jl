@@ -23,10 +23,7 @@ function find_radical_sup(Algebra::Subspace)
 
     pivs = zeros(Int64, n)
     V = Subspace(F)
-    # for (piv, vec) in A.rows
-    #     eat_sparsik!(V, vec)
-    # end
-    # 1
+    
     for r in eachrow(A)
         eat_sparsik!(V, sparse(r))
     end
