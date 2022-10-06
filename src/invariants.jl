@@ -200,7 +200,9 @@ function restrict(As::AbstractArray, vs)
     # matrix = [v1 v2 .. vn]
     # for vi in vs
     matrix = MSpace(hcat([ collect(v) for v in vs ]...))
-
+    
+    # minv = Nemo.inv(matrix)
+    
     # N, P, L, U = Nemo.lu(matrix)
     # Linv = Nemo.inv(L)
     # solve_triu = AbstractAlgebra.Generic.solve_triu
@@ -210,6 +212,7 @@ function restrict(As::AbstractArray, vs)
     restricted = [
         # solve_triu(U, Linv*Avs)
         Nemo.solve(matrix, Avs)
+        # minv * Avs
         for Avs in Asvs
     ]
 
@@ -244,11 +247,14 @@ function factorize(As::AbstractArray, vs)
         map(collect, vs)...)
     )
 
+    # minv = Nemo.inv(matrix)
+
     # solve for each A from As
     #   A*fi = a1*f1 + a2*f2 + ... + ad*fd + e
     #   where e ∈ vs
     quotient = [
         Nemo.solve(matrix, Avs)[1:end-length(vs), :]
+        # (minv * Avs)[1:end-length(vs), :]
         for Avs in Asvs
     ]
 

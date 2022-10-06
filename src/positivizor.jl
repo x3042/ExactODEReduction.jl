@@ -121,10 +121,10 @@ function find_sparsiest_basis(m::Array{BigInt, 2})
 
     for (weight, i) in rows_list
         next_matrix = [cur_matrix; reshape(m[i, :], 1, ncols)]
-	S_cur = MatrixSpace(Nemo.QQ, size(next_matrix)...)
+        S_cur = MatrixSpace(Nemo.QQ, size(next_matrix)...)
         if LinearAlgebra.rank(S_cur(next_matrix)) > size(cur_matrix)[1]
-	    cur_matrix = next_matrix
-	end
+            cur_matrix = next_matrix
+        end
     end
 
     return cur_matrix
