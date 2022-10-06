@@ -5,7 +5,6 @@ import DataStructures
 import Distributions
 import JSON
 import Logging
-import OffsetArrays: OffsetVector
 import Primes
 
 using SparseArrays

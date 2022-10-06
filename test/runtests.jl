@@ -16,9 +16,11 @@ using .ExactODEReduction
 
 @testset "All tests" begin
 
-    # @includetests ["parser_tests"]    
+    @includetests ["parser_tests"]    
 
     @includetests ["indices_conversion", "gizmos_tests"]
+
+    @includetests ["invariant_tests"]
 
     @includetests ["find_basis_tests", "eigenspaces", 
         "radical_tests", "positivizer"]

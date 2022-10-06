@@ -1,0 +1,19 @@
+[ Info: constructed a set of 91 matrices 62×62 from the system Jacobian
+[ Info: Called invariant_subspace_global on 91 matrices of shape (62, 62)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+..............................................................................................................................................................................................................................................................................................................................................................................................[ Info: generated a basis for Algebra of dimension 1054
+[ Info: Computing the radical..
+[ Info: computed the radical of dimension 765
+[ Info: Found radical of size 765
+[ Info: Radical is nontrivial, computing the general kernel of radical
+[ Info: [45]-dimensional subspaces found
+[ Info: found [45]-dim subspaces in ambient 62-dim
+[ Info: Calling myself recursively in restricted subspace
+[ Info: Called invariant_subspace_global on 91 matrices of shape (45, 45)
+[ Info: found [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44]-dim subspaces in ambient 45-dim
+[ Info: Calling myself recursively in complemented subspace
+[ Info: Called invariant_subspace_global on 91 matrices of shape (17, 17)
+[ Info: generating a basis for Algebra using find_basis_1_β
+[ Info: new reduction modulo, 2147483647
+........................................................................................................[ Info: generated a basis for Algebra of dimension 289
