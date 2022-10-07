@@ -3,8 +3,6 @@
     The File contains tests for positivize
 =#
 
-#------------------------------------------------------------------------------
-
 function test_positivize_no_change(algorithm)
     cases = [
         [sparse(Nemo.QQ.([1, -1]))],

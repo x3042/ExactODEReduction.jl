@@ -1,10 +1,4 @@
 
-#=
-    The File contains tests for find_basis Algorithms
-=#
-
-#------------------------------------------------------------------------------
-
 function test_minimal_polynomial(minpoly)
     #=
         Only annihilating property is tested
@@ -67,7 +61,7 @@ end
 
 #------------------------------------------------------------------------------
 
-@testset "minpolynomial, basic deterministic" begin
+@testset "Minpolynomial, basic deterministic" begin
 
     # test_minimal_polynomial(minimal_polynomial_wiedemann)
 

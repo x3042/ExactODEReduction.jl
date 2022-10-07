@@ -1,6 +1,6 @@
 
 #=
-    The File contains Sparsik tests
+    The File contains tests for W. algorithm
 =#
 
 #------------------------------------------------------------------------------
@@ -56,12 +56,5 @@
     b = from_dense([1, 2], Nemo.QQ)
     @test_throws SingularException square_nonsingular_deterministic_wiedemann(A, b)
     @test_throws SingularException square_nonsingular_randomized_wiedemann(A, b)
-
-end
-
-
-@testset "W. matrix minpolynomial" begin
-
-
 
 end

@@ -1,9 +1,7 @@
 
 #=
-    The File contains tests for the main functions
+    The File contains tests for main functions
 =#
-
-#------------------------------------------------------------------------------
 
 cases = [
     Dict(
@@ -146,7 +144,7 @@ end
 
 #------------------------------------------------------------------------------
 
-@testset "finding_reductions" begin
+@testset "Finding reductions" begin
 
     for c in cases
         sys = c[:sys]

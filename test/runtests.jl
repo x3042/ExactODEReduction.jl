@@ -5,6 +5,7 @@ using TestSetExtensions
 using JSON
 using LinearAlgebra: SingularException, det
 
+using Primes
 using AbstractAlgebra
 using Nemo
 using SparseArrays
@@ -16,14 +17,16 @@ using .ExactODEReduction
 
 @testset "All tests" begin
 
-    # @includetests ["parser_tests"]    
+    @includetests ["parser_tests"]    
+    
+    @includetests ["modular", "sparse"]
 
-    @includetests ["indices_conversion", "gizmos_tests"]
+    @includetests ["reconstruction"]
 
-    @includetests ["invariant_tests"]
+    @includetests ["indices_conversion", "gizmos"]
 
-    @includetests ["find_basis_tests", "eigenspaces", 
-        "radical_tests", "positivizer"]
+    @includetests ["find_basis", "eigenspaces", 
+                "radical", "positivizer", "invariants"]
     
     @includetests ["find_some_reduction", "find_reductions"]
 

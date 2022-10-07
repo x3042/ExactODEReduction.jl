@@ -1,10 +1,4 @@
 
-#=
-    The File contains tests for find_basis Algorithms
-=#
-
-#------------------------------------------------------------------------------
-
 # Tests the given algorithm for correctness by comparing
 # it with the output of standard find_basis_1 on random samples
 # The latter is assumed to be correct
@@ -96,13 +90,13 @@ end
 
 #------------------------------------------------------------------------------
 
-@testset "basis, just in case" begin
+@testset "Find basis, just in case" begin
     # This must always pass
     test_find_basis(ExactODEReduction.find_basis_1)
 
 end
 
-@testset "basis, β algorithm" begin
+@testset "Find basis, β algorithm" begin
 
     test_find_basis(ExactODEReduction.find_basis_1_β)
 

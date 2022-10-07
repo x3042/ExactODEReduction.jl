@@ -1,5 +1,5 @@
 
-@testset "Sparse Arrays linear indexing" begin
+@testset "Matrix linear indexing" begin
     xxx = sparse([0 0 0; 0 0 0; 1 1 1;])
     @test ExactODEReduction.first_nonzero(xxx) == 3
     @test xxx[3] == 1

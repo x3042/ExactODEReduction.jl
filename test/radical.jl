@@ -1,6 +1,6 @@
 
 #=
-    The File contains tests for find_radical
+    The File contains tests for radical finding algorithms
 =#
 
 #------------------------------------------------------------------------------

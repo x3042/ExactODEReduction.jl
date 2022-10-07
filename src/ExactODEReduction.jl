@@ -76,7 +76,10 @@ include("coefficients.jl")
 include("sparse.jl")
 
 # Wiedemann-style sparse system solving
-include("wiedemann.jl")
+include("linalg/wiedemann.jl")
+
+# Rational number reconstruction
+include("reconstruction.jl")
 
 # Linear subspace type definition
 include("Subspace.jl")

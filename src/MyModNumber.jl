@@ -4,7 +4,7 @@
 
 # these are extended
 import Base: zero, one, iszero, isone, convert, inv,
-            length, iterate, broadcastable
+            length, iterate, broadcastable, abs2
 import Base: +, -, *
 import Nemo: parent, data
 import SparseArrays: dot
@@ -38,6 +38,8 @@ Base.inv(x::MyModNumber) = MyModNumber(inv(x.x))
 
 Base.iszero(x::MyModNumber) = iszero(x.x)
 Base.isone(x::MyModNumber) = isone(x.x)
+
+Base.abs2(x::MyModNumber) = x*x
 
 # magic to allow broadcasting with sparse arrays
 Base.broadcastable(x::MyModNumber) = Ref{MyModNumber}(x)

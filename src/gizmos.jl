@@ -1,82 +1,7 @@
-#------------------------------------------------------------------------------
 
-# rational number reconstruction implementation borrowed from CLUE
-# and modified a bit to suit the 'Modern Computer Algebra' definitions
-# returns a rational r // h of QQ field in a canonical form such that
-#   r // h ≡ a (mod m)
-#
-# let n = max( λ(a), λ(m) ) , where λ(x) is a number of bits for x
-# O(n^2)
-"""
-    rational_reconstruction(a, m)
-
-Rational number reconstruction implementation borrowed from CLUE
-and modified a bit to suit the 'Modern Computer Algebra' definitions.
-Returns a rational of QQ field in a canonical form that
-is congruent a modulo m
-
-a, m are integers
-"""
-function rational_reconstruction(a::I, m::I) where {I<:Union{Int, BigInt}}
-    a = mod(a, m)
-    if a == 0 || m == 0
-        return Nemo.QQ(0, 1)
-    end
-    if m < 0
-        m = -m
-    end
-    if a < 0
-        a = m - a
-    end
-    if a == 1
-        return Nemo.QQ(1, 1)
-    end
-    bnd = sqrt(float(m) / 2)
-
-    # TODO: !!!
-    U = I[1, 0, m]
-    V = I[0, 1, a]
-    while abs(V[3]) >= bnd
-        q = div(U[3], V[3])
-        T = U .- q .* V
-        U = V
-        V = T
-    end
-
-    t = abs(V[2])
-    r = V[3] * sign(V[2])
-    # changed from `<= bnd` to `<= m / bnd`
-    if t <= m / bnd && gcd(r, t) == 1
-        return Nemo.QQ(r, t)
-    end
-
-    throw(DomainError(
-        :($a//$m), "rational reconstruction of $a (mod $m) does not exist"
-    ))
-end
+# Some useful but hardly categorizable things
 
 #------------------------------------------------------------------------------
-
-function modular_reduction(x::FracElem, field)
-    n, d = field(numerator(x)), field(denominator(x))
-    if iszero(d)
-        throw(DomainError(
-            :($x), "modular reduction of $x (to $field) does not exist"
-        ))
-    end
-    n // d
-end
-
-function modular_reduction(x::gfp_fmpz_elem, field)
-    return field(convert(BigInt, x))
-end
-
-function modular_reduction(x::gfp_elem, field)
-    return field(x)
-end
-
-#------------------------------------------------------------------------------
-
 
 # Returns the minimal polynomial of the sequence `h` modulo `m`,
 # the sequence `h` is formed as the given polynomial coefficients
@@ -176,32 +101,19 @@ function find_orthogonal!(vectors::AbstractDict)
     # undo the change
     delete!(vectors, n)
 
-    return f
+    f
 end
 
 # A slower analogue of the upper function
 #
 # vectors :: array of sparsiks
 function find_orthogonal!(vectors::AbstractVector)
-    return find_orthogonal!(
+    find_orthogonal!(
         Dict(i => vect for (i, vect) in enumerate(vectors))
     )
 end
 
 #------------------------------------------------------------------------------
-
-#=
-function construct_jacobians(system)
-    nnz = [
-        (i, var_index(v), derivative(f, v))
-        for (i, f) in enumerate(system)
-            for v in vars(f)
-    ]
-    m, n = length(system), length(degrees(first(system)))
-    ring = parent(first(system))
-    return from_COO(m, n, nnz, ring)
-end
-=#
 
 # for the given system of polynomials in variables xi
 # consturucts a set of matrices Ai over number field
@@ -248,7 +160,7 @@ function construct_jacobians(system::AbstractArray{T}) where {T<:MPolyElem}
 
     @info "constructed a set of $(length(factors)) matrices $m×$n from the system Jacobian"
 
-    return factors
+    factors
 end
 
 function construct_jacobians(system)

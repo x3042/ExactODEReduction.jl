@@ -1,5 +1,5 @@
 #=
-    The File contains additional tests for the main functions
+    The File contains additional tests for main functions
 =#
 
 cases = [
@@ -78,7 +78,7 @@ barcases = [
     )
 ]
 
-@testset "Find one reduction" begin
+@testset "Finding one reduction" begin
     for case in cases
         system = case.system
         reduction = ExactODEReduction.find_some_reduction(system)
@@ -92,7 +92,7 @@ barcases = [
     end
 end
 
-@testset "Find one reduction over QQbar" begin
+@testset "Finding one reduction over QQbar" begin
     for case in barcases
         system = case.system
         reduction = ExactODEReduction.find_some_reduction(system, overQ=false)

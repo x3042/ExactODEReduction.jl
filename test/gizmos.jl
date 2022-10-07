@@ -1,9 +1,9 @@
 
 #=
-    The File contains tests for some project utils and etc..
+    The File contains tests for some utils and etc..
 =#
 
-@testset "construct_jacobians" begin
+@testset "Construct jacobians" begin
 
     # simple tests #
 

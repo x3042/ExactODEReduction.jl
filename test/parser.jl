@@ -3,11 +3,9 @@
     The File contains parser tests
 =#
 
-#------------------------------------------------------------------------------
-
 @testset "parser - JSON to DOK_Sparsik" begin
 
-    set_fn = "matrices_1.json"
+    set_fn = "matrices/matrices_1.json"
     matrices = [sparse(ExactODEReduction.coo_to_arrays(arr[3])..., arr[1], arr[2])
                 for arr in ExactODEReduction.load_COO_set(set_fn)]
 
@@ -15,7 +13,7 @@
     @test matrices[1] == sparse(Nemo.QQ.([2 0; -1 0;]))
 
     # and the second..
-    set_fn = "matrices_2.json"
+    set_fn = "matrices/matrices_2.json"
     matrices = [sparse(ExactODEReduction.coo_to_arrays(arr[3])..., arr[1], arr[2]) 
                 for arr in ExactODEReduction.load_COO_set(set_fn)]
 
