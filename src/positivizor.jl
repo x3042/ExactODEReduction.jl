@@ -38,16 +38,9 @@ function positivize(subspace)
     stacked_basis = Matrix(transpose(reduce(hcat, map(v -> collect(v), subspace))))
     integerized = rational_to_int(stacked_basis)
     @debug "Before positivization: $integerized"
-    positivized = nothing
-    try
-        positivized = positivize_int(integerized)
-    catch e
-        @debug "$e"
-        if typeof(e) == DimensionMismatch
-            return subspace
-        else
-            throw(e)
-        end
+    positivized = positivize_int(integerized)
+    if size(positivized, 1) < length(subspace)
+        return subspace
     end
     @debug "After positivization: $positivized"
     (nr, nc) = size(positivized)
@@ -88,14 +81,12 @@ function positivize_int(m::Array{BigInt, 2})
     intersect_matrix = rational_to_int(intersect_matrix)
     intersect_matrix = sort_matrix(intersect_matrix)
 
-    if size(intersect_matrix)[1] < nrows
-        throw(DimensionMismatch("No suitable matrix found"))
-    elseif size(intersect_matrix)[1] > nrows
+    if size(intersect_matrix)[1] > nrows
         intersect_matrix = find_sparsiest_basis(intersect_matrix)
         intersect_matrix = sort_matrix(intersect_matrix)
     end
 
-    S = MatrixSpace(Nemo.QQ, nrows, ncols)
+    S = MatrixSpace(Nemo.QQ, size(intersect_matrix)...)
     return S(intersect_matrix)
 end
 
