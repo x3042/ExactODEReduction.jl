@@ -132,7 +132,7 @@ end
 # path to Exact-reduction-of-ODE-systems/benchmark/
 CHANGE_ME = "/home/sumiya11/exactreduction/Exact-reduction-of-ODE-systems/benchmark/"
 
-for sz in [ (40, 70 )] # [(5, 5), (10, 15)]
+for sz in [ (110, 140)] # [(5, 5), (10, 15)]
     uwuwu(sz...)
     write_md(sz)
 end
