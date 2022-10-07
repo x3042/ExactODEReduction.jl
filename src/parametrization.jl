@@ -99,3 +99,6 @@ function check_consistency(restricted, original, varmapping)
     return rhs == lhs
 end
 
+function is_first_integral_reduction(new_system)
+    all(iszero, new_system)
+end

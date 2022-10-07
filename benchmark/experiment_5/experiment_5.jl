@@ -11,85 +11,168 @@ using Statistics
 
 #------------------------------------------------------------------------------
 
-const cache = Dict()
+# TODO: !!! 70-79 !!!
 
-function uwuwu(from_size, to_size)
-    if (from_size, to_size) in keys(cache)
-        dataset = cache[from_size, to_size][1]
+P = "/home/sumiya11/exactreduction/Exact-reduction-of-ODE-systems/benchmark/experiment_5"
+
+skip_models = ["e3.ode"]
+
+const load_cache = Dict()
+const computed_cache = Dict()
+
+function uwuwu(sz...)
+    from_size, to_size = sz
+    if sz in keys(load_cache)
+        dataset = load_cache[sz]
     else    
         dataset = ExactODEReduction.load_ODEs_recursive_if("/data/ODEs/",from_size=from_size, to_size=to_size)
-        cache[from_size, to_size] = [dataset, []]
+        load_cache[sz] = dataset
     end
-
-    all_times = []
-    all_reductions = []
     for  (i, (filename, system)) in enumerate(dataset)
-        @info "$i-th, loaded a system $filename of size $(length(system))"
-        
+        @info "$i-th, loaded a system $filename of size $(length(system))" 
+        if filename in keys(computed_cache)
+            @info "skipping $filename -- already computed"
+            continue
+        end
+        if filename in skip_models
+            @warn "skipping $filename -- just skipping"
+            continue
+        end
         ODE = ExactODEReduction.ODE{fmpq_mpoly}(system)
-        
         x = @timed ExactODEReduction.find_reductions(ODE)
-        
-        push!(all_reductions, x.value)
-        push!(all_times, x.time)
+        computed_cache[filename] = [length(system), x.time, x.value]
     end
-    
-    cache[from_size, to_size][2] = [all_reductions, all_times]
 end
 
 #------------------------------------------------------------------------------
 
-function write_md(sizes)
+function dumpdata()
+    is_first_integral_reduction = ExactODEReduction.is_first_integral_reduction
+    for (modelname, modeldata) in computed_cache
+        dimension, runtime, reductions = modeldata
+        open("$P/result_data/$modelname", "w") do f
+            println(f, dimension)
+            println(f, runtime)
+            println(f, length(reductions))
+            println(f,
+                length(reductions) - count(
+                    red -> is_first_integral_reduction(red[:new_system]),
+                    reductions)
+            )
+        end
+    end
+end
+
+function readdata()
+    alldata = Any[]
+    for fname in readdir("$P/result_data", join=false)
+        f = open("$P/result_data/$fname", "r")
+        dimension = parse(Int, readline(f))
+        runtime = parse(Float64, readline(f))
+        reductions = parse(Int, readline(f))
+        nnzreductions = parse(Int, readline(f))
+        close(f)
+
+        push!(alldata, [fname, dimension, runtime, reductions, nnzreductions])
+    end
+    alldata
+end
+
+#------------------------------------------------------------------------------
+
+function write_md_all()
     md = "#$(now())\n\n"
     md *= "## Benchmark results for `find_reductions`.\n"
-    md *= "Systems of sizes from $(sizes[1]) to $(sizes[2]).\n\n"
+    md *= "All systems.\n\n"
 
-    round2 = x -> round(x, digits=3)
-    times = cache[sizes][2][2]
-
-    md *= "### Benchmark outline\n"
-
-    md *= "All timing here and below are given in **seconds**.\n"
-
-    md *= "Computed **$(length(times))** models of sizes from $(sizes[1]) to $(sizes[2]).\n"
+    round3 = x -> round(x, digits=3)
 
     md *= "\n"
-    md *= "| Total time median | Total time average |Total time std |\n"
-    md *= "| ---------- | ---------- | ------------ |\n"
-    md *= "| $(round2(median(times)))"
-    md *= "| $(round2(mean(times)))"
-    md *= "| $(round2(std(times)))"
+    md *= "| System | Dimension | # Reductions | # *nonzero* Reductions | Total time |\n"
+    md *= "| ------ | --------- | ------------ | ---------------------- |----------- |\n"
 
-    md *= "|\n"
+    alldata = readdata()
+    sort!(alldata, by=x->x[2])
 
-    md *= "### Benchmark results\n"
-
-    md *= "\n"
-    md *= "| System | Dimension | Total time |\n"
-    md *= "| ------ | --------- | ---------- |\n"
-
-    for (i, system) in enumerate(cache[sizes][1])
-        md *= "| $(system[1]) | $(length(system[2]))"
-        
-        md *= "| $(round2(times[i])) |"
+    for (fname, dimension, runtime, reductions, nnzreductions) in alldata
+        md *= "| $fname "
+        md *= "| $dimension"
+        md *= "| $reductions"
+        md *= "| $nnzreductions"
+        md *= "| $runtime"
+        md *= "|"
 
         md *= "\n"
     end
 
     md *= "\n$(sprint(versioninfo, context=:compact => false))\n"
 
-    fnname = "experiment_5/experiment_5_$(sizes[1])-$(sizes[2]).md"
-    f = open("/home/sumiya11/exactreduction/Exact-reduction-of-ODE-systems/benchmark/$fnname", "w")
-    # f = open("$fnname", "w")
+    fnname = "experiment_5_all.md"
+    f = open("$P/$fnname", "w")
+    write(f, md)
+    close(f)
+end
+
+function write_md_segregate(thresholds)
+    md = "#$(now())\n\n"
+    md *= "## (Segregated) Benchmark results for `find_reductions`.\n"
+    md *= "All systems.\n\n"
+
+    round4 = x -> round(x, digits=4)
+
+    alldata = readdata()
+
+    md *= "\n"
+    md *= "| Dimension | # Systems | # Reductions, on average | # *nonzero* Reductions, on average | Rutime, on average |\n"
+    md *= "| --------- | --------- | ------------------------ | ---------------------------------- |------------------- |\n"
+
+    for (from_size, to_size) in thresholds
+        gooddata = filter(model -> (from_size <= model[2] <= to_size), alldata)
+
+        if isempty(gooddata)
+            md *= "| $(from_size) - $(to_size) | . | . | . | . |\n"
+            continue
+        end
+        md *= "| $(from_size) - $(to_size) "
+        md *= "| $(length(gooddata))"
+        md *= "| $(round4(mean([x[4] for x in gooddata])))"
+        md *= "| $(round4(mean([x[5] for x in gooddata])))"
+        md *= "| $(round4(mean([x[3] for x in gooddata]))) s"
+        md *= "|"
+    
+        md *= "\n"
+    end
+
+    md *= "\n$(sprint(versioninfo, context=:compact => false))\n"
+
+    fnname = "experiment_5_$(abs(rand(Int32))).md"
+    f = open("$P/$fnname", "w")
     write(f, md)
     close(f)
 end
 
 #------------------------------------------------------------------------------
 
-# for sz in [(20, 50), (50, 80), ]#(80, 110)]
-# [(50, 60), (60, 70), (90, 110)]
-for sz in [(90, 110)]
-    uwuwu(sz...)
-    write_md(sz)
+function clear_all_data()
+    for d in readdir("$P/result_data", join=true)
+        rm(d)
+    end
 end
+
+#------------------------------------------------------------------------------
+
+# clear_all_data()
+
+for sz in [(150, 200)]
+    uwuwu(sz...)
+end
+
+dumpdata()
+
+write_md_all()
+
+write_md_segregate([(2, 5), (6, 9), (10, 19), (20, 29),
+                    (30, 39), (40, 49), (50, 59),
+                    (60, 69), (70, 79), (80, 89),
+                    (90, 99), (100, 109), (110, 149),
+                    (149, 199)])
