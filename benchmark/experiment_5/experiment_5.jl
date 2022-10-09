@@ -13,7 +13,9 @@ using Statistics
 
 # TODO: !!! 70-79 !!!
 
-P = "/home/sumiya11/exactreduction/Exact-reduction-of-ODE-systems/benchmark/experiment_5"
+postfix = "_server"
+Experiment_dir = "/home/ademin/exactreducton/Exact-reduction-of-ODE-systems/benchmark/experiment_5"
+Result_dirname = "result_data$(postfix)"
 
 skip_models = ["e3.ode"]
 
@@ -50,7 +52,7 @@ function dumpdata()
     is_first_integral_reduction = ExactODEReduction.is_first_integral_reduction
     for (modelname, modeldata) in computed_cache
         dimension, runtime, reductions = modeldata
-        open("$P/result_data/$modelname", "w") do f
+        open("$Experiment_dir/$Result_dirname/$modelname", "w") do f
             println(f, dimension)
             println(f, runtime)
             println(f, length(reductions))
@@ -65,8 +67,8 @@ end
 
 function readdata()
     alldata = Any[]
-    for fname in readdir("$P/result_data", join=false)
-        f = open("$P/result_data/$fname", "r")
+    for fname in readdir("$Experiment_dir/$Result_dirname", join=false)
+        f = open("$Experiment_dir/$Result_dirname/$fname", "r")
         dimension = parse(Int, readline(f))
         runtime = parse(Float64, readline(f))
         reductions = parse(Int, readline(f))
@@ -107,8 +109,8 @@ function write_md_all()
 
     md *= "\n$(sprint(versioninfo, context=:compact => false))\n"
 
-    fnname = "experiment_5_all.md"
-    f = open("$P/$fnname", "w")
+    fnname = "experiment_5_all$(postfix).md"
+    f = open("$Experiment_dir/$fnname", "w")
     write(f, md)
     close(f)
 end
@@ -145,8 +147,8 @@ function write_md_segregate(thresholds)
 
     md *= "\n$(sprint(versioninfo, context=:compact => false))\n"
 
-    fnname = "experiment_5_$(abs(rand(Int32))).md"
-    f = open("$P/$fnname", "w")
+    fnname = "experiment_5_$(abs(rand(Int32)))$(postfix).md"
+    f = open("$Experiment_dir/$fnname", "w")
     write(f, md)
     close(f)
 end
@@ -154,7 +156,7 @@ end
 #------------------------------------------------------------------------------
 
 function clear_all_data()
-    for d in readdir("$P/result_data", join=true)
+    for d in readdir("$Experiment_dir/$Result_dirname", join=true)
         rm(d)
     end
 end
@@ -163,7 +165,7 @@ end
 
 # clear_all_data()
 
-for sz in [(150, 200)]
+for sz in [(5, 8)]
     uwuwu(sz...)
 end
 
