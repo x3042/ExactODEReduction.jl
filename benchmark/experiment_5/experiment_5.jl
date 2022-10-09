@@ -137,9 +137,9 @@ function write_md_segregate(thresholds)
         end
         md *= "| $(from_size) - $(to_size) "
         md *= "| $(length(gooddata))"
-        md *= "| $(round4(mean([x[4] for x in gooddata])))"
-        md *= "| $(round4(mean([x[5] for x in gooddata])))"
-        md *= "| $(round4(mean([x[3] for x in gooddata]))) s"
+        md *= "| $(round4(median([x[4] for x in gooddata])))"
+        md *= "| $(round4(median([x[5] for x in gooddata])))"
+        md *= "| $(round4(median([x[3] for x in gooddata]))) s"
         md *= "|"
     
         md *= "\n"
@@ -165,7 +165,7 @@ end
 
 # clear_all_data()
 
-for sz in [(5, 8)]
+for sz in [(50, 80)]
     uwuwu(sz...)
 end
 
@@ -173,8 +173,6 @@ dumpdata()
 
 write_md_all()
 
-write_md_segregate([(2, 5), (6, 9), (10, 19), (20, 29),
-                    (30, 39), (40, 49), (50, 59),
-                    (60, 69), (70, 79), (80, 89),
-                    (90, 99), (100, 109), (110, 149),
-                    (149, 199)])
+write_md_segregate([(2, 9), (10, 19), (20, 39),
+                    (40, 59), (60, 79), (80, 99),
+                    (100, 150)])
