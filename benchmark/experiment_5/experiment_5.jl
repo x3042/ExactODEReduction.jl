@@ -11,8 +11,6 @@ using Statistics
 
 #------------------------------------------------------------------------------
 
-# TODO: !!! 70-79 !!!
-
 P = "/home/sumiya11/exactreduction/Exact-reduction-of-ODE-systems/benchmark/experiment_5"
 
 skip_models = ["e3.ode"]
@@ -163,7 +161,7 @@ end
 
 # clear_all_data()
 
-for sz in [(150, 200)]
+for sz in [(150, 300)]
     uwuwu(sz...)
 end
 

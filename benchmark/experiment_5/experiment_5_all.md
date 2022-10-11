@@ -1,4 +1,4 @@
-#2022-10-07T21:04:38.686
+#2022-10-09T16:57:00.664
 
 ## Benchmark results for `find_reductions`.
 All systems.
