@@ -11,7 +11,11 @@ using Statistics
 
 #------------------------------------------------------------------------------
 
-P = "/home/sumiya11/exactreduction/Exact-reduction-of-ODE-systems/benchmark/experiment_5"
+# TODO: !!! 70-79 !!!
+
+postfix = "_server"
+Experiment_dir = "/home/ademin/exactreducton/Exact-reduction-of-ODE-systems/benchmark/experiment_5"
+Result_dirname = "result_data$(postfix)"
 
 skip_models = ["e3.ode"]
 
@@ -48,7 +52,7 @@ function dumpdata()
     is_first_integral_reduction = ExactODEReduction.is_first_integral_reduction
     for (modelname, modeldata) in computed_cache
         dimension, runtime, reductions = modeldata
-        open("$P/result_data/$modelname", "w") do f
+        open("$Experiment_dir/$Result_dirname/$modelname", "w") do f
             println(f, dimension)
             println(f, runtime)
             println(f, length(reductions))
@@ -63,8 +67,8 @@ end
 
 function readdata()
     alldata = Any[]
-    for fname in readdir("$P/result_data", join=false)
-        f = open("$P/result_data/$fname", "r")
+    for fname in readdir("$Experiment_dir/$Result_dirname", join=false)
+        f = open("$Experiment_dir/$Result_dirname/$fname", "r")
         dimension = parse(Int, readline(f))
         runtime = parse(Float64, readline(f))
         reductions = parse(Int, readline(f))
@@ -105,8 +109,8 @@ function write_md_all()
 
     md *= "\n$(sprint(versioninfo, context=:compact => false))\n"
 
-    fnname = "experiment_5_all.md"
-    f = open("$P/$fnname", "w")
+    fnname = "experiment_5_all$(postfix).md"
+    f = open("$Experiment_dir/$fnname", "w")
     write(f, md)
     close(f)
 end
@@ -133,9 +137,9 @@ function write_md_segregate(thresholds)
         end
         md *= "| $(from_size) - $(to_size) "
         md *= "| $(length(gooddata))"
-        md *= "| $(round4(mean([x[4] for x in gooddata])))"
-        md *= "| $(round4(mean([x[5] for x in gooddata])))"
-        md *= "| $(round4(mean([x[3] for x in gooddata]))) s"
+        md *= "| $(round4(median([x[4] for x in gooddata])))"
+        md *= "| $(round4(median([x[5] for x in gooddata])))"
+        md *= "| $(round4(median([x[3] for x in gooddata]))) s"
         md *= "|"
     
         md *= "\n"
@@ -143,8 +147,8 @@ function write_md_segregate(thresholds)
 
     md *= "\n$(sprint(versioninfo, context=:compact => false))\n"
 
-    fnname = "experiment_5_$(abs(rand(Int32))).md"
-    f = open("$P/$fnname", "w")
+    fnname = "experiment_5_$(abs(rand(Int32)))$(postfix).md"
+    f = open("$Experiment_dir/$fnname", "w")
     write(f, md)
     close(f)
 end
@@ -152,7 +156,7 @@ end
 #------------------------------------------------------------------------------
 
 function clear_all_data()
-    for d in readdir("$P/result_data", join=true)
+    for d in readdir("$Experiment_dir/$Result_dirname", join=true)
         rm(d)
     end
 end
@@ -169,8 +173,6 @@ dumpdata()
 
 write_md_all()
 
-write_md_segregate([(2, 5), (6, 9), (10, 19), (20, 29),
-                    (30, 39), (40, 49), (50, 59),
-                    (60, 69), (70, 79), (80, 89),
-                    (90, 99), (100, 109), (110, 149),
-                    (149, 199)])
+write_md_segregate([(2, 9), (10, 19), (20, 39),
+                    (40, 59), (60, 79), (80, 99),
+                    (100, 150)])
