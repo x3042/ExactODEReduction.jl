@@ -1,7 +1,4 @@
 
-
-# TODO: write tests
-
 """
     Restrict a system of ODEs with the rhs given by
     system (multivariate polynomials) to the subspace
@@ -35,7 +32,6 @@ function perform_change_of_variables(system, invariants; new_vars_name="y")
     transform_matrix = zero(S)
 
     for i in 1:newdim
-        # TODO: !!! `vec`
         transform_matrix[i, :] = vec(collect(invariants[i]))
     end
 

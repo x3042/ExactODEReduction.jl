@@ -1,4 +1,3 @@
-
 # MyModNumber definition - a number from Z/Zp
 # compatible with MySparseVector and MySparseMatrix
 

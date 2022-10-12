@@ -71,8 +71,8 @@ isreduced(x::Integer) = x == reduced()
 isdeferred(x::Integer) = x == deferred() 
 
 # adds `new_vector` to the set of spanning vectors of V while modifying both;
-# returns -1 if `new_vector` lies in V,
-# returns -2 if `new_vector` is not very sparse,
+# returns reduced() if `new_vector` lies in V,
+# returns deferred() if `new_vector` is not very sparse,
 # returns new pivot index in V otherwise
 #
 # O(kR)  if k = nnz(new_vector) and R = Σnnz(v) for v in echelon_form

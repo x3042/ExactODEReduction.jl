@@ -1,5 +1,5 @@
 
-# Define zero, one, and dot, abs2 for Nemo rationals 
+# Define zero, one, dot, abs2 for Nemo rationals 
 # and Nemo extended rationals
 import Base: zero, one, abs2
 import SparseArrays: dot

@@ -97,6 +97,4 @@ Dict{Symbol, Vector{Nemo.fmpq_mpoly}} with 2 entries:
  ```
 
 
-
-
 For more examples we refer to the `examples` folder.

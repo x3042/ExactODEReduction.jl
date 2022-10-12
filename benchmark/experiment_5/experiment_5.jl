@@ -11,10 +11,8 @@ using Statistics
 
 #------------------------------------------------------------------------------
 
-# TODO: !!! 70-79 !!!
-
 postfix = "_server"
-Experiment_dir = "/home/ademin/exactreducton/Exact-reduction-of-ODE-systems/benchmark/experiment_5"
+Experiment_dir = "/home/sumiya11/exactreduction/Exact-reduction-of-ODE-systems/benchmark/experiment_5"
 Result_dirname = "result_data$(postfix)"
 
 skip_models = ["e3.ode"]
@@ -120,13 +118,13 @@ function write_md_segregate(thresholds)
     md *= "## (Segregated) Benchmark results for `find_reductions`.\n"
     md *= "All systems.\n\n"
 
-    round4 = x -> round(x, digits=4)
+    round4 = x -> round(x, digits=2)
 
     alldata = readdata()
 
     md *= "\n"
-    md *= "| Dimension | # Systems | # Reductions, on average | # *nonzero* Reductions, on average | Rutime, on average |\n"
-    md *= "| --------- | --------- | ------------------------ | ---------------------------------- |------------------- |\n"
+    md *= "| Dimension | # Systems | # Reductions | # *nonzero* Reductions | Min runtime | Rutime | Max runtime |\n"
+    md *= "| --------- | --------- | ------------ | ---------------------- |------------ | ------ | ----------- |\n"
 
     for (from_size, to_size) in thresholds
         gooddata = filter(model -> (from_size <= model[2] <= to_size), alldata)
@@ -137,9 +135,12 @@ function write_md_segregate(thresholds)
         end
         md *= "| $(from_size) - $(to_size) "
         md *= "| $(length(gooddata))"
-        md *= "| $(round4(median([x[4] for x in gooddata])))"
-        md *= "| $(round4(median([x[5] for x in gooddata])))"
-        md *= "| $(round4(median([x[3] for x in gooddata]))) s"
+        md *= "| $(round4(mean([x[4] for x in gooddata])))"
+        md *= "| $(round4(mean([x[5] for x in gooddata])))"
+        md *= "| $(round4(minimum([x[3] for x in gooddata]))) s"
+        md *= "| $(round4(mean([x[3] for x in gooddata]))) s"
+        md *= "| $(round4(maximum([x[3] for x in gooddata]))) s"
+
         md *= "|"
     
         md *= "\n"
@@ -173,6 +174,7 @@ dumpdata()
 
 write_md_all()
 
-write_md_segregate([(2, 9), (10, 19), (20, 39),
+write_md_segregate([(2, 9), (10, 19), (20, 29),
+                    (30, 39),
                     (40, 59), (60, 79), (80, 99),
                     (100, 150)])

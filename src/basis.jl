@@ -14,8 +14,6 @@ function apply_matrices_inplace!(V::Subspace, matrices; ω=1.)
 
         for pivot in pivots_to_process
             for (vectidx, vect) in enumerate(matrices)
-                # [indentation broken]
-                #
                 # Alex: sparse-dense product
                 # 
                 #   S × D
@@ -137,10 +135,10 @@ function find_basis_1_β(vectors)
     alg = linear_span!(deepcopy(vectors))
 
     # apply them with the threshold of ω
-    fat_vectors = apply_matrices_inplace!(alg, deepcopy(vectors), ω=0.05)
+    dense_vectors = apply_matrices_inplace!(alg, deepcopy(vectors), ω=0.05)
 
     # eat discarded vectors
-    for vect in fat_vectors
+    for vect in dense_vectors
         eat_sparsik!(alg, vect)
     end
 
@@ -180,7 +178,6 @@ function find_basis(vectors; used_algorithm=find_basis_1_β, initialprime=2^31-1
     while true
         prime = last(primes)
         field = Nemo.GF(fmpz(prime))
-        # TODO: !!!
         set_modular_globals!(field)
 
         @info "new reduction modulo, $prime"

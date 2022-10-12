@@ -207,7 +207,8 @@ function issetindex(x::MySparseVector{T}, i::Integer) where {T}
     (ii <= m && nzind[ii] == i) ? true : false
 end
 
-# copied from v1.8 SparseArrays
+# functions below are (partly) copied from SparseArrays v1.8
+
 function mydot(x::MySparseVector{T}, y::MySparseVector{T}) where {T}
     x === y && return sum(abs2, x)
     n = length(x)

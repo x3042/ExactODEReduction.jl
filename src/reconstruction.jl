@@ -1,4 +1,8 @@
 
+@noinline _reconstruction_error(x, m) = throw(DomainError(
+    :($x//$m), "rational reconstruction of $x (mod $m) does not exist"
+))
+
 # rational number reconstruction implementation borrowed from CLUE
 # and modified a bit to suit the 'Modern Computer Algebra' definitions
 # returns a rational r // h of QQ field in a canonical form such that
@@ -32,7 +36,6 @@ function rational_reconstruction(a::I, m::I) where {I<:Union{Int, BigInt}}
     end
     bnd = sqrt(float(m) / 2)
 
-    # TODO: !!!
     U = (I(1), I(0), I(m))
     V = (I(0), I(1), I(a))
     while abs(V[3]) >= bnd
@@ -49,9 +52,7 @@ function rational_reconstruction(a::I, m::I) where {I<:Union{Int, BigInt}}
         return Nemo.QQ(r, t)
     end
 
-    throw(DomainError(
-        :($a//$m), "rational reconstruction of $a (mod $m) does not exist"
-    ))
+    _reconstruction_error(a, m)
 end
 
 #------------------------------------------------------------------------------

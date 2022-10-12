@@ -1,4 +1,4 @@
-#2022-10-09T23:00:30.379
+#2022-10-11T22:59:32.258
 
 ## Benchmark results for `find_reductions`.
 All systems.
@@ -215,14 +215,15 @@ All systems.
 | BIOMD0000000220.ode | 129| 90| 3| 207.335984803|
 | BIOMD0000000227.ode | 133| 102| 14| 247.036391768|
 
-Julia Version 1.7.1
-Commit ac5cc99908 (2021-12-22 19:35 UTC)
+Julia Version 1.8.2
+Commit 36034abf260 (2022-09-29 15:21 UTC)
 Platform Info:
-  OS: Linux (x86_64-pc-linux-gnu)
-  CPU: AMD EPYC 7702 64-Core Processor
+  OS: Linux (x86_64-linux-gnu)
+  CPU: 8 × Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz
   WORD_SIZE: 64
   LIBM: libopenlibm
-  LLVM: libLLVM-12.0.1 (ORCJIT, znver2)
+  LLVM: libLLVM-13.0.1 (ORCJIT, skylake)
+  Threads: 1 on 8 virtual cores
 Environment:
   JULIA_EDITOR = code
   JULIA_NUM_THREADS = 

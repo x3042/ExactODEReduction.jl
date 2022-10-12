@@ -130,7 +130,6 @@ function find_some_reduction(
     # @debug "Matrices:" matrices
 
     if length(matrices) == 0
-        # TODO: !!! actually, what is this case even??
         matrices = [zero_sparse_vector(length(eqs), length(eqs), Nemo.QQ)]
     end
     @savetime subspaces = invariant_subspace_global(matrices; overQ=overQ) total_times
