@@ -34,27 +34,6 @@ import LinearAlgebra: SingularException
 import Nemo: base_ring, gfp_elem, gfp_fmpz_elem, fmpq_mpoly,
             fmpq, terms, monomials, fmpz, elem_type, parent
 
-const find_basis_times = []
-const find_radical_sup_times = []
-const general_kernel_times = []
-const invariant_subspace_semisimple_times = []
-const total_times = []
-
-function dump_times()
-    data = (find_basis=deepcopy(ExactODEReduction.find_basis_times),
-    find_radical_sup=deepcopy(ExactODEReduction.find_radical_sup_times),
-    general_kernel=deepcopy(ExactODEReduction.general_kernel_times),
-    invariant_subspace_semisimple=deepcopy(ExactODEReduction.invariant_subspace_semisimple_times),
-    total_times=deepcopy(ExactODEReduction.total_times))
-    
-    empty!(ExactODEReduction.find_basis_times)
-    empty!(ExactODEReduction.find_radical_sup_times)
-    empty!(ExactODEReduction.general_kernel_times)
-    empty!(ExactODEReduction.invariant_subspace_semisimple_times)
-    empty!(ExactODEReduction.total_times)
-    return data
-end
-
 #------------------------------------------------------------------------------
 
 include("utils.jl")
@@ -132,7 +111,7 @@ function find_some_reduction(
     if length(matrices) == 0
         matrices = [zero_sparse_vector(length(eqs), length(eqs), Nemo.QQ)]
     end
-    @savetime subspaces = invariant_subspace_global(matrices; overQ=overQ) total_times
+    subspaces = invariant_subspace_global(matrices; overQ=overQ)
 
     @debug "Subspace global" subspaces
 
@@ -261,5 +240,6 @@ end
 export find_smallest_constrained_reduction, find_reductions, find_some_reduction
 export check_consistency
 export ODE, @ODEsystem, equations
+export load_ODE
 
 end

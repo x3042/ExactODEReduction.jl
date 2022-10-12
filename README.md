@@ -1,8 +1,12 @@
 # Exact reduction of ODE systems*
 
+<!---
 [![Build](https://github.com/x3042/Exact-reduction-of-ODE-systems/actions/workflows/Build.yml/badge.svg)](https://github.com/x3042/Exact-reduction-of-ODE-systems/actions/workflows/Build.yml) [![Runtests](https://github.com/x3042/Exact-reduction-of-ODE-systems/actions/workflows/Runtests.yml/badge.svg)](https://github.com/x3042/Exact-reduction-of-ODE-systems/actions/workflows/Runtests.yml)
+--->
 
+<!---
 **any thoughts on a possible acronym?..*
+--->
 
 This repository contains a Julia implementation of algorithms for finding exact reductions of ODE systems via a linear change of variables.
 
@@ -10,7 +14,11 @@ This repository contains a Julia implementation of algorithms for finding exact 
 researching the structure of ODEs of system biology models. The core interface allows to compute invariant subspaces for an exact reduction to be performed. 
 --->
 
-Online documentation could be found at https://x3042.github.io/Exact-reduction-of-ODE-systems/dev/
+Online documentation could be found at 
+
+<!---
+https://x3042.github.io/Exact-reduction-of-ODE-systems/dev/
+--->
 
 ## What is exact reduction?
 
@@ -65,7 +73,7 @@ odes = @ODEsystem(
 )
 ```
 
-4. Call `find_reductions` providing the system
+3. Call `find_reductions` providing the system
 
 ```julia
 reductions = find_reductions(odes)

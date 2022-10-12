@@ -7,7 +7,6 @@ end
 
 Base.showerror(io::IO, e::ParseException) = print(io, e.msg)
 
-
 #------------------------------------------------------------------------------
 
 # returns a model parsed from the given `filename`
@@ -404,4 +403,8 @@ function load_ODEs(filepath)
     # @info "loaded a system of $(length(ODEs)) ODEs from $filepath"
 
     return ODEs
+end
+
+function load_ODE(filepath)
+    ODE{Nemo.fmpq_mpoly}(load_ODEs(filepath))
 end
