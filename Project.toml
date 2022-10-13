@@ -1,6 +1,6 @@
 name = "ExactODEReduction"
 uuid = "790186a0-1ec0-11ec-1f13-43a2532b2fa8"
-authors = ["x3042", "sumiya11", "pogudingleb"]
+authors = ["XXX-1", "XXX-2", "XXX-3"]
 version = "0.1.0"
 
 [deps]
