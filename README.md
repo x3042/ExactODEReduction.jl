@@ -10,33 +10,30 @@ Online documentation could be found at XXX (link removed).
 
 https://julialang.org/downloads/platform/
 
-1. Download the `archive.tar` file from this directory and unpack it. You can either select the file in the file-tree and press `Download file` in the top-right corner, or get it directly from `https://anonymous.4open.science/r/056E/archive.tar`. For example,
+1. Download the `archive.tar` file from this directory and unpack it. You can either select the file in the file-tree and press `Download file` in the top-right corner, or get it directly from `https://anonymous.4open.science/api/repo/056E/file/archive.tar`. For example, in your favorite :
 
 ```
-
+home$ mkdir downloads
+home$ cd downloads
+home/downloads$ wget https://anonymous.4open.science/api/repo/056E/file/archive.tar
+home/downloads$ tar zxvf archive.tar
 ```
 
-2. In your favorite terminal, run julia and install the package:
+2. In your favorite terminal, run julia and install the package. You will need to specify the path to the unpacked archive:
 
 ```
-home$ julia
+home/downloads$ julia
 julia> import Pkg
-julia> Pkg.add("")
+julia> Pkg.add("archive/Exact-reduction-of-ODE-systems")
 ```
 
-If the package is installed correctly, you should be able to execute
+If the package is installed correctly, you should be able to execute without errors:
 
 ```
 julia> using ExactODEReduction
 ```
 
-without errors.
-
-3. We can try to reduce a simple model:
-
-```
-julia> using 
-```
+For the package usage examples, please see examples below in this readme and in the `examples` directory.
 
 *Note: the package cannot be installed on Windows OS.* 
 
