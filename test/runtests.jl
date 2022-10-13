@@ -10,8 +10,7 @@ using AbstractAlgebra
 using Nemo
 using SparseArrays
 
-include("../src/ExactODEReduction.jl")
-using .ExactODEReduction
+using ExactODEReduction
 
 @info "Testing started"
 
@@ -23,7 +22,7 @@ using .ExactODEReduction
 
     @includetests ["reconstruction"]
 
-    @includetests ["indices_conversion", "gizmos"]
+    @includetests ["indices_conversion", "gizmos", "random_elements"]
 
     @includetests ["find_basis", "eigenspaces", 
                 "radical", "positivizer", "invariants"]
