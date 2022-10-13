@@ -16,7 +16,7 @@ https://julialang.org/downloads/platform/
 home$ mkdir downloads
 home$ cd downloads
 home/downloads$ wget https://anonymous.4open.science/api/repo/056E/file/archive.tar
-home/downloads$ tar zxvf archive.tar
+home/downloads$ tar -xvf archive.tar
 ```
 
 As a result, directory `home/downloads/ExactODEReduction` will be created.
