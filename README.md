@@ -4,6 +4,42 @@ This repository contains a Julia implementation of algorithms for finding exact 
 
 Online documentation could be found at XXX (link removed).
 
+## Installation guide
+
+0. For installation, Julia language of version 1.6+ is required. We refer to an official step-by-step Julia installaton guide:
+
+https://julialang.org/downloads/platform/
+
+1. Download the `archive.tar` file from this directory and unpack it. You can either select the file in the file-tree and press `Download file` in the top-right corner, or get it directly from `https://anonymous.4open.science/r/056E/archive.tar`. For example,
+
+```
+
+```
+
+2. In your favorite terminal, run julia and install the package:
+
+```
+home$ julia
+julia> import Pkg
+julia> Pkg.add("")
+```
+
+If the package is installed correctly, you should be able to execute
+
+```
+julia> using ExactODEReduction
+```
+
+without errors.
+
+3. We can try to reduce a simple model:
+
+```
+julia> using 
+```
+
+*Note: the package cannot be installed on Windows OS.* 
+
 ## What is exact reduction?
 
 Exact reduction of the system of differential equations is an exact variable substitution which preserves the invariants of the system. In this project we mainly consider reductions obtained with **linear transformations**. We will explain it using a toy example. Consider the system
