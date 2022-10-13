@@ -19,14 +19,14 @@ home/downloads$ wget https://anonymous.4open.science/api/repo/056E/file/archive.
 home/downloads$ tar zxvf archive.tar
 ```
 
-As a result, directory `home/downloads/Exact-reduction-of-ODE-systems` will be created.
+As a result, directory `home/downloads/ExactODEReduction` will be created.
 
 2. Run julia and install the package. You will need to specify the path to the unpacked archive:
 
 ```
 home/downloads$ julia
 julia> import Pkg
-julia> Pkg.develop(path="Exact-reduction-of-ODE-systems")
+julia> Pkg.develop(path="ExactODEReduction")
 ```
 
 If the package is installed correctly, you should be able to import it:
