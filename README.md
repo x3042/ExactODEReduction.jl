@@ -10,7 +10,7 @@ Online documentation could be found at XXX (link removed).
 
 https://julialang.org/downloads/platform/
 
-1. Download the `archive.tar.bz2` file from this directory and unpack it. You can do it by either selecting the file in the file-tree and pressing `Download file` in the top-right corner, or getting it directly from `https://anonymous.4open.science/api/repo/056E/file/archive.tar`. For example, type in your favorite terminal:
+1. Download the `archive.tar` file from this directory and unpack it. You can do it by either selecting the file in the file-tree and pressing `Download file` in the top-right corner, or getting it directly from `https://anonymous.4open.science/api/repo/056E/file/archive.tar`. For example, type in your favorite terminal:
 
 ```
 home$ mkdir downloads
