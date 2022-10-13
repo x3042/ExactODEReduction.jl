@@ -17,7 +17,7 @@ using .ExactODEReduction
 
 @testset "All tests" begin
 
-    # @includetests ["parser"]    
+    @includetests ["parser"]    
     
     @includetests ["modular", "sparse"]
 
