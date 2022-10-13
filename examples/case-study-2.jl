@@ -4,12 +4,12 @@
     Model of cell death.
 
     The model is described in the file
-    MODEL8262229752.ode in this directory.
+    BIOMD0000000407.ode in this directory.
 =#
 
 using ExactODEReduction
 
-fname = abspath("MODEL8262229752.ode")
+fname = abspath("BIOMD0000000407.ode")
 
 # Load the ODE system from the file
 ode = load_ODE(fname)
@@ -22,9 +22,8 @@ reductions = find_reductions(ode)
 
 @info "Found reductions" reductions
 
-# Reduction of dimension 5 (3 variables + 2 params) 
-# observed in the paper
-reduction = reductions[5]
+# Reduction referred to in the paper
+reduction = reductions[8]
 
 @info "New system" reduction[:new_system]
 @info "New variables" reduction[:new_vars]
