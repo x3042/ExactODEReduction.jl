@@ -10,13 +10,14 @@ using AbstractAlgebra
 using Nemo
 using SparseArrays
 
-using ExactODEReduction
+include("../src/ExactODEReduction.jl")
+using .ExactODEReduction
 
 @info "Testing started"
 
 @testset "All tests" begin
 
-    @includetests ["parser"]    
+    # @includetests ["parser"]    
     
     @includetests ["modular", "sparse"]
 
