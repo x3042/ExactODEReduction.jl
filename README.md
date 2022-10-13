@@ -6,11 +6,11 @@ Online documentation could be found at XXX (link removed).
 
 ## Installation guide
 
-0. For installation, Julia language of version 1.6+ is required. We refer to an official step-by-step Julia installaton guide:
+0. For the installation, Julia language of version 1.6+ is required. We refer to an official step-by-step Julia installaton guide:
 
 https://julialang.org/downloads/platform/
 
-1. Download the `archive.tar.bz2` file from this directory and unpack it. You can either select the file in the file-tree and press `Download file` in the top-right corner, or get it directly from `https://anonymous.4open.science/api/repo/056E/file/archive.tar`. For example, in your favorite terminal:
+1. Download the `archive.tar.bz2` file from this directory and unpack it. You can do it by either selecting the file in the file-tree and pressing `Download file` in the top-right corner, or getting it directly from `https://anonymous.4open.science/api/repo/056E/file/archive.tar`. For example, type in your favorite terminal:
 
 ```
 home$ mkdir downloads
@@ -19,23 +19,23 @@ home/downloads$ wget https://anonymous.4open.science/api/repo/056E/file/archive.
 home/downloads$ tar zxvf archive.tar
 ```
 
-As a result, directory `home/downloads/Exact-reduction-of-ODE-systems` was created.
+As a result, directory `home/downloads/Exact-reduction-of-ODE-systems` will be created.
 
 2. Run julia and install the package. You will need to specify the path to the unpacked archive:
 
 ```
 home/downloads$ julia
 julia> import Pkg
-julia> Pkg.add(path="Exact-reduction-of-ODE-systems")
+julia> Pkg.develop(path="Exact-reduction-of-ODE-systems")
 ```
 
-If the package is installed correctly, you should be able to execute without errors:
+If the package is installed correctly, you should be able to import it:
 
 ```
 julia> using ExactODEReduction
 ```
 
-For the package usage examples, please see examples below in this readme and in the `examples` directory.
+For the package usage examples, please see examples below in this file.
 
 *Note: the package cannot be installed on Windows OS.* 
 
