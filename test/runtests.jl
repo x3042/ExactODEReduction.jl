@@ -25,9 +25,11 @@ using .ExactODEReduction
 
     # @includetests ["indices_conversion", "gizmos"]
 
-    @includetests ["find_basis", "eigenspaces", 
-                "radical", "positivizer", "invariants"]
+    # @includetests ["find_basis", "eigenspaces", 
+     #           "radical", "positivizer", "invariants"]
     
     # @includetests ["find_some_reduction", "find_reductions"]
+
+    @includetests ARGS
 
 end

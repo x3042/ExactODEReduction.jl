@@ -210,10 +210,11 @@ end
 # returns a random element from the given space,
 # constructed as a linear combination of `count` basis vectors
 function random_element(A::Subspace; count=5)
+    sampling_range = count
     count = min(dim(A), count)
     indices = rand(1:dim(A), count)
     # a₁e₁ + … + aₖeₖ
-    sum(map(prod, zip(rand(1:count, count), basis(A)[indices])))
+    sum(map(prod, zip(rand(1:sampling_range, count), basis(A)[indices])))
 end
 
 #------------------------------------------------------------------------------

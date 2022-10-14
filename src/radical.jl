@@ -84,7 +84,7 @@ function invariant_subspace_semisimple(Algebra::Subspace; overQ=true)
     PSpace, x = F["x"]
 
     # randomization parameter
-    count = 5
+    count = BigInt(5)
 
     while true
         M = random_element(Algebra, count=count)
