@@ -77,7 +77,7 @@ end
         for d in (0.1, 0.5, 1.0)
             for 𝔽 in (Nemo.QQ, Nemo.GF(Nemo.fmpz(2^31-1)))
                 vector = ExactODEReduction.random_sparse_vector(n, 𝔽, density=d)
-                @test abs(ExactODEReduction.density(vector) - d) < ε
+                @test abs(ExactODEReduction.density(vector) - d) < 2ε
 
                 matrix = ExactODEReduction.random_sparse_vector((n, n), 𝔽, density=d)
                 @test abs(ExactODEReduction.density(matrix) - d) < 2ε
