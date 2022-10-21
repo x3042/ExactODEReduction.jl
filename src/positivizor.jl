@@ -32,7 +32,7 @@ Arguments
 """
 function positivize(subspace)
     if base_ring(first(subspace)) != Nemo.QQ
-        @warn "The base ring is not Q but $(base_ring(first(subspace))), no positivization"
+        @info "The base ring is not Q but $(base_ring(first(subspace))), no positivization"
         return subspace
     end
     stacked_basis = Matrix(transpose(reduce(hcat, map(v -> collect(v), subspace))))

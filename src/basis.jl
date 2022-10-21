@@ -193,9 +193,9 @@ function find_basis(vectors; used_algorithm=find_basis_1_β, initialprime=2^31-1
             if check_invariance!(deepcopy(vectors), deepcopy(V))
                 break
             end
-            @warn "invariance check failed.."
+            @debug "invariance check failed.."
         else
-            @warn "inclusion check failed.."
+            @debug "inclusion check failed.."
         end
 
         # how to choose the next better?

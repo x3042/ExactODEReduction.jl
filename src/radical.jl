@@ -1,3 +1,13 @@
+function full_matrix_algebra(n)
+    return Subspace(Nemo.QQ, Dict((j - 1) * n + i => begin
+        a = spzeros(Nemo.fmpq, n, n)
+        a[i, j] = 1
+        a
+    end for i in 1:n for j in 1:n))
+end
+
+#------------------------------------------------------------------------------
+
 # Finds the radical of the given matrix Algebra by
 # computing the radical of the Algebra *directly*
 
@@ -98,42 +108,53 @@ function invariant_subspace_semisimple(Algebra::Subspace; overQ=true)
         @debug "Factors of the charpoly $(factors)"
 
         if length(factors) == 1
+            Z = center(Algebra)
+            C = nothing # to be the centralizer
+            num_blocks = n ÷ Nemo.degree(first(factors)[1])
             if first(factors)[2] == 1 # multiplicity of the only factor
+                C = Z
                 @warn "No invariant subspaces defined over Q"
 		        if overQ
 		            return []
 		        end
-                @info "Computing eigenspaces of the center"
-                Z = center(Algebra)
-                count_center = 1
-                while true
-                    Zelem = sum([rand(0:count_center) * z for z in Z])
-                    chpoly = charpoly(PSpace, Zelem)
-                    factors = AbstractAlgebra.factor(chpoly)
-                    if (length(factors) > 1) || (Nemo.degree(first(factors)[1]) < length(Z))
-                        count_center *= 2
-                        @warn "Nongeneric element of the center sampled"
-                        continue
-                    end
-                    eigensp = eigenspaces(Zelem)
-                    @debug "Eigenspaces of $Zelem done $eigensp"
-                    to_return = [[]]
-                    for j in 1:(length(eigensp) - 1)
-                        prev = to_return[end]
-                        push!(
-                            to_return, 
-                            vcat(
-                                prev, 
-                                [sparse([v[i] for i in 1:n]) for v in eigensp[j]]
-                            )
-                        )
-                    end
-                    @debug "To return $to_return"
-                    return to_return[2:end]
+            else
+                C = centralizer(Algebra)
+                if length(C) < length(Z) * num_blocks^2
+                    continue
                 end
+                @warn """There are subspaces defined over Q but they come only from equal blocks.
+                If you wish to compute them, run the code over Qbar"""
             end
-            @warn "Charpoly is a power of irreducible $M"
-            continue
+
+            @info "Computing eigenspaces a random element in the centralizer"
+            count_center = BigInt(1)
+            while true
+                Celem = sum([rand(0:count_center) * z for z in C])
+                chpoly = charpoly(PSpace, Celem)
+                factors = AbstractAlgebra.factor(chpoly)
+                @debug "Factors: $factors"
+                @debug "Dimension of the center is $(length(Z)) and the number of blocks is $num_blocks"
+                if (length(factors) > 1) || (Nemo.degree(first(factors)[1]) < length(Z) * num_blocks)
+                    count_center *= 2
+                    @warn "Nongeneric element of the center sampled"
+                    continue
+                end
+                eigensp = eigenspaces(Celem)
+                @debug "Eigenspaces of $Zelem done $eigensp"
+                to_return = [[]]
+                for j in 1:(length(eigensp) - 1)
+                    prev = to_return[end]
+                    push!(
+                        to_return, 
+                        vcat(
+                            prev, 
+                            [sparse([v[i] for i in 1:n]) for v in eigensp[j]]
+                        )
+                    )
+                end
+                @debug "To return $to_return"
+                return to_return[2:end]
+            end
         end
 
         f = first(factors)[1]
@@ -156,20 +177,21 @@ function invariant_subspace_semisimple(Algebra::Subspace; overQ=true)
         if 0 < length(V) < n && check_invariance!(es, deepcopy(V))
             return [V]
         end
-        @warn "There was a spurious factorization, resampling a matrix"
+        @debug "There was a spurious factorization, resampling a matrix"
     end
 end
 
 #------------------------------------------------------------------------------
 
-function center(algebra::Subspace)
+function centralizer(algebra::Subspace, ambient::Subspace)
     es = basis(algebra)
+    fs = basis(ambient)
     n = size(first(es), 1)
-    S = MatrixSpace(Nemo.QQ, n^2 * length(es), length(es))
+    S = MatrixSpace(Nemo.QQ, n^2 * length(es), length(fs))
     A = zero(S)
-    for (i, v) in enumerate(es)
+    for (i, v) in enumerate(fs)
         for (j, u) in enumerate(es)
-            comm = es[i] * es[j] - es[j] * es[i]
+            comm = v * u - u * v
             for k in 1:n
                 for l in 1:n
                     A[(j - 1) * n^2 + (k - 1) * n + l, i] = comm[k, l]
@@ -182,12 +204,21 @@ function center(algebra::Subspace)
     SS = MatrixSpace(Nemo.QQ, n, n)
     for i in 1:sols[1]
         Z = zero(SS)
-        for j in 1:length(es)
-            Z += sols[2][j, i] * SS(collect(es[j]))
+        for j in 1:length(fs)
+            Z += sols[2][j, i] * SS(collect(fs[j]))
         end
         push!(result, Z)
     end
     return result
+end
+
+function centralizer(algebra::Subspace)
+    n = size(first(basis(algebra)), 1)
+    return centralizer(algebra, full_matrix_algebra(n))
+end
+
+function center(algebra::Subspace)
+    return centralizer(algebra, algebra)
 end
 
 #------------------------------------------------------------------------------

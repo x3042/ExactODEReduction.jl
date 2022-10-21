@@ -110,8 +110,7 @@ cases = [
         ),
         :dims => [Set([2])],
         :constrained => [([x1], 4)]
-    )
-    #= This test case yields and infinite loop
+    ),
     Dict(
         :sys => ExactODEReduction.@ODEsystem(
             x0'(t) = 0,
@@ -123,7 +122,6 @@ cases = [
         :dims => [Set([1, 3])],
         :constrained => []
     )
-    =#
 ]
 
 #------------------------------------------------------------------------------
