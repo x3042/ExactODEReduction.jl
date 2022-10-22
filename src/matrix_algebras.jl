@@ -1,3 +1,8 @@
+"""
+    full_matrix_algebra(n)
+
+For an integer `n`, returns the full n-by-n matrix algebra over QQ as a Subspace object
+"""
 function full_matrix_algebra(n)
     return Subspace(Nemo.QQ, Dict((j - 1) * n + i => begin
         a = spzeros(Nemo.fmpq, n, n)
@@ -8,18 +13,15 @@ end
 
 #------------------------------------------------------------------------------
 
-# Finds the radical of the given matrix Algebra by
-# computing the radical of the Algebra *directly*
-
 """
-    find_radical_sup(Algebra)
+    find_radical(algebra)
 
-Finds a basis of the radical of given matrix Algebra.
+Finds a basis of the radical of given matrix `algebra`.
 """
-function find_radical_sup(Algebra::Subspace)
-    As = basis(Algebra)
-    F = base_ring(Algebra)
-    n = dim(Algebra)
+function find_radical(algebra::Subspace)
+    As = basis(algebra)
+    F = base_ring(algebra)
+    n = dim(algebra)
 
     if n == 0
         return []
@@ -81,13 +83,21 @@ end
 
 #------------------------------------------------------------------------------
 
-# returns an invariant subspace of the given Algebra
-# in case the latter is semisimple
-function invariant_subspace_semisimple(Algebra::Subspace; overQ=true)
-    es = basis(Algebra)
+"""
+    invariant_subspace_semisimple(algebra)
+
+For a given semisimple matrix `algebra` returns a chain of invariant subspaces such that
+no new invariant subspace can be inserted between the element of the chain. If there is no
+invariant subspaces, an empty list will be returned.
+If `overQ` parameter is set to be `true`, computes subspaces over Q only. It is guaranteed
+to find them unless there are identical blocks in the representation. In the latter case,
+a warning will be displayed.
+"""
+function invariant_subspace_semisimple(algebra::Subspace; overQ=true)
+    es = basis(algebra)
     
     n = size(first(es), 1)
-    F = base_ring(Algebra)
+    F = base_ring(algebra)
 
     # we want to do dense LA here
     MSpace = MatrixSpace(F, n, n)
@@ -97,7 +107,7 @@ function invariant_subspace_semisimple(Algebra::Subspace; overQ=true)
     count = BigInt(5)
 
     while true
-        M = random_element(Algebra, count=count)
+        M = random_element(algebra, count=count)
         count = 2 * count
 
         # reconstruct!(M)
@@ -108,7 +118,7 @@ function invariant_subspace_semisimple(Algebra::Subspace; overQ=true)
         @debug "Factors of the charpoly $(factors)"
 
         if length(factors) == 1
-            Z = center(Algebra)
+            Z = center(algebra)
             C = nothing # to be the centralizer
             num_blocks = n ÷ Nemo.degree(first(factors)[1])
             if first(factors)[2] == 1 # multiplicity of the only factor
@@ -118,7 +128,7 @@ function invariant_subspace_semisimple(Algebra::Subspace; overQ=true)
 		            return []
 		        end
             else
-                C = centralizer(Algebra)
+                C = centralizer(algebra)
                 if length(C) < length(Z) * num_blocks^2
                     continue
                 end
@@ -183,6 +193,12 @@ end
 
 #------------------------------------------------------------------------------
 
+"""
+    centralizer(algebra, ambient)
+
+For a matrix subspace `algebra` and a matrix subspace `ambient` of the same order,
+the function returns a basis of the subspace of `ambient` commuting with all the elements of the `algebra`
+"""
 function centralizer(algebra::Subspace, ambient::Subspace)
     es = basis(algebra)
     fs = basis(ambient)
@@ -212,22 +228,25 @@ function centralizer(algebra::Subspace, ambient::Subspace)
     return result
 end
 
+"""
+    centralizer(algebra)
+
+For a matrix subspace `algebra`, returns a basis of the space of all the matrices
+commuting with `algebra`
+"""
 function centralizer(algebra::Subspace)
     n = size(first(basis(algebra)), 1)
     return centralizer(algebra, full_matrix_algebra(n))
 end
 
+"""
+    center(algebra)
+
+For a matrix subspace `algebra`, returns a basis of all the matrices in this subspace
+commuting with all other matrices in `algebra`
+"""
 function center(algebra::Subspace)
     return centralizer(algebra, algebra)
-end
-
-#------------------------------------------------------------------------------
-
-# finds the general kernel of the given matrices
-function general_kernel(matrices::AbstractArray)
-    stacked = vcat(matrices...)
-    Space = MatrixSpace(Nemo.QQ, size(stacked)...)
-    return Array(last(kernel(Space(stacked))))
 end
 
 #------------------------------------------------------------------------------

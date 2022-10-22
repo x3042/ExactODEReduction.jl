@@ -35,21 +35,21 @@ import Nemo: base_ring, gfp_elem, gfp_fmpz_elem, fmpq_mpoly,
             fmpq, terms, monomials, fmpz, elem_type, parent
 
 const find_basis_times = []
-const find_radical_sup_times = []
-const general_kernel_times = []
+const find_radical_times = []
+const common_kernel_times = []
 const invariant_subspace_semisimple_times = []
 const total_times = []
 
 function dump_times()
     data = (find_basis=deepcopy(ExactODEReduction.find_basis_times),
-    find_radical_sup=deepcopy(ExactODEReduction.find_radical_sup_times),
-    general_kernel=deepcopy(ExactODEReduction.general_kernel_times),
+    find_radical=deepcopy(ExactODEReduction.find_radical_times),
+    common_kernel=deepcopy(ExactODEReduction.common_kernel_times),
     invariant_subspace_semisimple=deepcopy(ExactODEReduction.invariant_subspace_semisimple_times),
     total_times=deepcopy(ExactODEReduction.total_times))
     
     empty!(ExactODEReduction.find_basis_times)
-    empty!(ExactODEReduction.find_radical_sup_times)
-    empty!(ExactODEReduction.general_kernel_times)
+    empty!(ExactODEReduction.find_radical_times)
+    empty!(ExactODEReduction.common_kernel_times)
     empty!(ExactODEReduction.invariant_subspace_semisimple_times)
     empty!(ExactODEReduction.total_times)
     return data
@@ -59,8 +59,8 @@ end
 
 include("utils.jl")
 
-# Some useful but hardly categorizable things
-include("gizmos.jl")
+# Some useful subroutines from linear algebra
+include("linalg_utils.jl")
 
 # Reading input from files
 include("parser/myeval.jl")
@@ -75,21 +75,18 @@ include("coefficients.jl")
 # Sparse data structures definitions
 include("sparse.jl")
 
-# Wiedemann-style sparse system solving
-include("linalg/wiedemann.jl")
-
 # Rational number reconstruction
 include("reconstruction.jl")
 
 # Linear subspace type definition
 include("Subspace.jl")
-# ODE type definition
+# ODE type definition/functionality
 include("ODE.jl")
 
-# Algebra basis algorithms
+# Computing a basis of matrix algebra
 include("basis.jl")
-# Algebra radical algorithms
-include("radical.jl")
+# Algotirhms for matrix algebra
+include("matrix_algebras.jl")
 # Be positive!
 include("positivizor.jl")
 # Finding invariant subspaces

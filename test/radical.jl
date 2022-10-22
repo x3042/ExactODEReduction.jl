@@ -109,6 +109,6 @@ end
 #------------------------------------------------------------------------------
 
 @testset "radical" begin
-    test_find_radical(ExactODEReduction.find_radical_sup)
+    test_find_radical(ExactODEReduction.find_radical)
 end
 

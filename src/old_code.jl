@@ -1,5 +1,119 @@
 #------------------------------------------------------------------------------
 
+# Returns the minimal polynomial of the sequence `h` modulo `m`,
+# the sequence `h` is formed as the given polynomial coefficients
+# If n is max(deg(h), deg(m))
+# O(n^2)
+function minimal_polynomial(h::PolyElem, m::PolyElem)
+    # The function implements Algorithm 12.9 from
+    #   "Modern Computer Algebra", second edition,
+    #   Joachim von zur Gathen, Jürgen Gerhard
+
+    n = div(degree(m), 2)
+    FF = parent(h)
+
+    U = (FF(1), FF(0), m)
+    V = (FF(0), FF(1), h)
+    while degree(V[3]) >= n
+        q = div(U[3], V[3])
+        T = U .- q .* V
+        U = V
+        V = T
+    end
+
+    s, t = V[3], V[2]
+
+    if iszero(coeff(t, 0))
+        throw(SingularException(0))
+    end
+
+    t *= inv(coeff(t, 0))
+    d = max(degree(s) + 1, degree(t))
+
+    if gcd(s, t) == 1 && degree(t) <= n
+        return reverse(t, d + 1)
+    end
+
+    throw(DomainError(
+        h, "minimal polynomial of $h (mod $m) does not exist"
+    ))
+end
+
+#------------------------------------------------------------------------------
+
+# Returns such vector, that it is orthogonal to the given vector set
+# The given `vectors` set must be linearly independent
+# and for any vect from `vectors` the following must hold
+#   length(vectors) = dim(vect) - 1
+#
+# vectors :: dict of elems (row_idx, row)
+#
+# Note that vectors may be modified, CAREFUL ABOUT CONCURRENCY!
+# It is guaranteed that after the function yields,
+# `vectors` will be in the original state
+#
+# NOT GUARANTEED FOR RETURNED VECTOR TO BE ORTHOGONAL
+function find_orthogonal!(vectors::AbstractDict)
+    first_vector = first(values(vectors))
+    field = base_ring(first_vector)
+    n = dim(first_vector)
+
+    i = 1
+    found = false
+    nnz_rows = Array(1 : n)
+    f = zero(first_vector)
+
+    # some complexity estimations should be done
+    while ! found
+        # taking the i-th unit vector
+        u = unit_sparsik(n, i, field)
+
+        # the only change of `vectors`
+        vectors[n] = u
+
+        b = unit_sparsik(n, n, field)
+
+        B = from_rows(n, n, field, nnz_rows, vectors)
+
+        try
+            # if the selected `u` is not independent with `vectors`
+            # then the wiedemann must fail and we should choose a new vector
+            # Gleb: we could use probabilistic here
+            # Alex: we could, so, the answer could be "almost orthogonal"
+            # (only orthogonal to some of the vectors)
+            f = square_nonsingular_randomized_wiedemann(B, b)
+            found = true
+        catch e
+            if isa(e, SingularException)
+                @info e
+            else
+                rethrow()
+            end
+        end
+
+        i += 1
+        i % 10 == 0 && error("something is wrong")
+    end
+
+    # undo the change
+    delete!(vectors, n)
+
+    f
+end
+
+# A slower analogue of the upper function
+#
+# vectors :: array of sparsiks
+function find_orthogonal!(vectors::AbstractVector)
+    find_orthogonal!(
+        Dict(i => vect for (i, vect) in enumerate(vectors))
+    )
+end
+
+#----------------------------------------------------------------
+
+#------------------------------------------------------------------------------
+
 
 # returns f(x₀)
 function evaluate_2(f::PolyElem, x₀)
@@ -18,22 +132,6 @@ function evaluate_2(f::PolyElem, x₀)
     accum = from_dense(Array(accum), Nemo.QQ)
 
     return reconstruct!(modular_reduction(accum, base_ring(x₀)))
-end
-
-
-# returns f(x₀)
-# O(d) multiplications/additions of x₀ if d = degree(f)
-function evaluate(f::PolyElem, x₀)
-    d = degree(f)
-
-    I = one(x₀)
-    accum = scale(I, lead(f))
-
-    for i in 1 : d
-        accum = accum * x₀ + scale(I, coeff(f, d - i))
-    end
-
-    return accum
 end
 
 # returns f(x₀) * b
@@ -399,3 +497,5 @@ function __randomized_wiedemann_minpoly(A::AbstractSparseMatrix, PolySpace)
 
     return g
 end
+
+#-------------------------------------------------------------------------

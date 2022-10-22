@@ -38,15 +38,15 @@ function invariant_subspace_global(matrices::AbstractArray{T}; overQ=true) where
 
     # find the radical of the Algebra
     @info "Computing the radical.."
-    @savetime radical = find_radical_sup(algebra) find_radical_sup_times
+    @savetime radical = find_radical(algebra) find_radical_times
 
     # @debug "Algebra radical:" radical 
     @info "Found radical of size $(length(radical))"
 
     # find an invariant subspace
     if length(radical) != 0
-        @info "Radical is nontrivial, computing the general kernel of radical"
-        @savetime invariant = general_kernel(map(collect, radical)) general_kernel_times
+        @info "Radical is nontrivial, computing the common kernel of radical"
+        @savetime invariant = common_kernel(map(collect, radical)) common_kernel_times
         push!(invariant_subspace_semisimple_times, 0.0)
         invariants = [[
             sparse([invariant[:, i]...])
@@ -58,7 +58,7 @@ function invariant_subspace_global(matrices::AbstractArray{T}; overQ=true) where
     else
         @info "Radical is trivial, going to semisimple case"
         @savetime invariants = invariant_subspace_semisimple(algebra; overQ=overQ) invariant_subspace_semisimple_times
-        push!(general_kernel_times, 0.0)
+        push!(common_kernel_times, 0.0)
     end
 
     invariants = [basis(linear_span!(inv)) for inv in invariants]

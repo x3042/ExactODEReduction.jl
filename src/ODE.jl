@@ -164,3 +164,54 @@ function Base.show(io::IO, ode::ODE)
 end
 
 #------------------------------------------------------------------------------
+
+"""
+    construct_jacobians(system)
+
+For the given system of polynomials in variables xi
+consturucts a set of matrices Aᵢ over number field
+such that the Jacobian J of the provided system can represented as the sum
+J = Aᵢxⁱ
+"""
+function construct_jacobians(system::AbstractArray{T}) where {T<:MPolyElem}
+    domain = base_ring(first(system))
+    poly_ring = parent(first(system))
+    gen2idx = Dict(x=>i for (i, x) in enumerate(gens(poly_ring)))
+
+    jacobians = Dict()
+
+    for (p_idx, poly) in enumerate(system)
+        for var in vars(poly)
+            v_idx = gen2idx[var]
+            # term is of form α*monomial
+            for term in terms(derivative(poly, var))
+                monom = monomial(term, 1)
+                cf = coeff(term, 1)
+
+                !haskey(jacobians, monom) && (jacobians[monom] = Dict())
+                idx = (v_idx, p_idx)
+                if !haskey(jacobians[monom], idx)
+                    jacobians[monom][idx] = zero(domain)
+                end
+                jacobians[monom][idx] += cf
+            end
+        end
+    end
+
+    m, n = length(system), length(gens(poly_ring))
+    factors = [
+        sparse(coo_to_arrays(jac)..., m, n)
+        for jac in values(jacobians)
+    ]
+
+    @info "constructed a set of $(length(factors)) matrices $m×$n from the system Jacobian"
+
+    factors
+end
+
+function construct_jacobians(system)
+    ring = parent(first(keys(system)))
+    construct_jacobians([system[x] for x in gens(ring)])
+end
+
+#------------------------------------------------------------------------------
