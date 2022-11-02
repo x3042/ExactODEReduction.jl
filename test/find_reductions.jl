@@ -111,6 +111,7 @@ cases = [
         :dims => [Set([2])],
         :constrained => [([x1], 4)]
     ),
+    # two copies of complex numbers
     Dict(
         :sys => ExactODEReduction.@ODEsystem(
             x0'(t) = 0,
@@ -121,7 +122,25 @@ cases = [
         ),
         :dims => [Set([1, 3])],
         :constrained => []
+    ),
+    # two copies of quaternions
+    Dict(
+        :sys => ExactODEReduction.@ODEsystem(
+            x0'(t) = 0,
+	    x1'(t) = x1(t) + x0(t) * x2(t) + x0(t)^2 * x3(t) + x0(t)^3 * x4(t), # 1
+	    x2'(t) = x2(t) - x0(t) * x1(t) - x0(t)^2 * x4(t) + x0(t)^3 * x3(t), # i
+	    x3'(t) = x3(t) + x0(t) * x4(t) - x0(t)^2 * x1(t) - x0(t)^3 * x2(t), # j
+	    x4'(t) = x4(t) - x0(t) * x3(t) + x0(t)^2 * x2(t) - x0(t)^3 * x1(t), # k
+	    x5'(t) = x5(t) + x0(t) * x6(t) + x0(t)^2 * x7(t) + x0(t)^3 * x8(t), # 1
+	    x6'(t) = x6(t) - x0(t) * x5(t) - x0(t)^2 * x8(t) + x0(t)^3 * x7(t), # i
+	    x7'(t) = x7(t) + x0(t) * x8(t) - x0(t)^2 * x5(t) - x0(t)^3 * x6(t), # j
+	    x8'(t) = x8(t) - x0(t) * x7(t) + x0(t)^2 * x6(t) - x0(t)^3 * x5(t), # k
+        ),
+        :dims => [Set([1, 3, 5, 7])],
+        :constrained => [],
+	:iters => 4
     )
+
 ]
 
 #------------------------------------------------------------------------------
@@ -178,7 +197,7 @@ end
             @test f1 == f2
         end
 
-        for i in 1:50
+	for i in 1:get(c, :iters, 50)
             sys_change = random_linear_change(sys)
             reds_change = ExactODEReduction.find_reductions(sys_change; overQ=false)
             for r in reds_change

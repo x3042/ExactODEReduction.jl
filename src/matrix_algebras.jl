@@ -150,7 +150,7 @@ function invariant_subspace_semisimple(algebra::Subspace; overQ=true)
                     continue
                 end
                 eigensp = eigenspaces(Celem)
-                @debug "Eigenspaces of $Zelem done $eigensp"
+                @debug "Eigenspaces of $Celem done $eigensp"
                 to_return = [[]]
                 for j in 1:(length(eigensp) - 1)
                     prev = to_return[end]
