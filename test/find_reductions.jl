@@ -127,20 +127,37 @@ cases = [
     Dict(
         :sys => ExactODEReduction.@ODEsystem(
             x0'(t) = 0,
-	    x1'(t) = x1(t) + x0(t) * x2(t) + x0(t)^2 * x3(t) + x0(t)^3 * x4(t), # 1
-	    x2'(t) = x2(t) - x0(t) * x1(t) - x0(t)^2 * x4(t) + x0(t)^3 * x3(t), # i
-	    x3'(t) = x3(t) + x0(t) * x4(t) - x0(t)^2 * x1(t) - x0(t)^3 * x2(t), # j
-	    x4'(t) = x4(t) - x0(t) * x3(t) + x0(t)^2 * x2(t) - x0(t)^3 * x1(t), # k
-	    x5'(t) = x5(t) + x0(t) * x6(t) + x0(t)^2 * x7(t) + x0(t)^3 * x8(t), # 1
-	    x6'(t) = x6(t) - x0(t) * x5(t) - x0(t)^2 * x8(t) + x0(t)^3 * x7(t), # i
-	    x7'(t) = x7(t) + x0(t) * x8(t) - x0(t)^2 * x5(t) - x0(t)^3 * x6(t), # j
-	    x8'(t) = x8(t) - x0(t) * x7(t) + x0(t)^2 * x6(t) - x0(t)^3 * x5(t), # k
+	        x1'(t) = x1(t) + x0(t) * x2(t) + x0(t)^2 * x3(t) + x0(t)^3 * x4(t), # 1
+	        x2'(t) = x2(t) - x0(t) * x1(t) - x0(t)^2 * x4(t) + x0(t)^3 * x3(t), # i
+	        x3'(t) = x3(t) + x0(t) * x4(t) - x0(t)^2 * x1(t) - x0(t)^3 * x2(t), # j
+	        x4'(t) = x4(t) - x0(t) * x3(t) + x0(t)^2 * x2(t) - x0(t)^3 * x1(t), # k
+	        x5'(t) = x5(t) + x0(t) * x6(t) + x0(t)^2 * x7(t) + x0(t)^3 * x8(t), # 1
+	        x6'(t) = x6(t) - x0(t) * x5(t) - x0(t)^2 * x8(t) + x0(t)^3 * x7(t), # i
+	        x7'(t) = x7(t) + x0(t) * x8(t) - x0(t)^2 * x5(t) - x0(t)^3 * x6(t), # j
+            x8'(t) = x8(t) - x0(t) * x7(t) + x0(t)^2 * x6(t) - x0(t)^3 * x5(t), # k
         ),
         :dims => [Set([1, 3, 5, 7])],
         :constrained => [],
-	:iters => 4
+        :iters => 4
+    ),
+    # Example from Section 2 of https://doi.org/10.1007/978-3-030-51945-2_19
+    Dict(
+        :sys => ExactODEReduction.@ODEsystem(
+            x0'(t) = 0,
+            x1'(t) = x1(t) + x0(t) * x2(t),
+            x2'(t) = x3(t) + x0(t) * x4(t),
+            x3'(t) = x2(t) + x0(t) * x5(t),
+            x4'(t) = x5(t) + x0(t) * x6(t),
+            x5'(t) = x4(t) + x0(t) * x7(t),
+            x6'(t) = x8(t) + x0(t) * x1(t),
+            x7'(t) = x7(t) + x0(t) * x9(t),
+            x8'(t) = x6(t) + x0(t) * x8(t),
+            x9'(t) = -(x1(t) + x2(t) + x3(t) + x4(t) + x5(t) + x6(t) + x7(t) + x8(t) + x9(t)) + x0(t) * x3(t)
+        ),
+        :dims => [Set([1])],
+        :constrained => [],
+        :iters => 4
     )
-
 ]
 
 #------------------------------------------------------------------------------
