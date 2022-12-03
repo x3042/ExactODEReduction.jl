@@ -342,7 +342,11 @@ function load_ODEs(filepath)
     if isempty(strings)
         throw(ParseException("bad file encountered at $filepath, skipping it"))
     end
-    S, xs = Nemo.QQ[strings...]
+    symbs = map(Symbol, strings)
+    EE = Expr(:(=), Expr(:tuple, :S, Expr(:tuple, symbs...)), :(Nemo.QQ[$strings...]))
+    eval(EE)
+
+    xs = gens(S)
 
     # symbol :x to x from QQ[x]
     mapping = Dict{Symbol, fmpq_mpoly}(
