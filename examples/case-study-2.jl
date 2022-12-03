@@ -9,12 +9,13 @@
 
 using DifferentialEquations
 using Plots
+using Nemo
 include("../src/ExactODEReduction.jl")
 
 ### Finding reductions ###
 
 # Load the ODE system from the file
-fname = abspath("BIOMD0000000407.ode")
+fname = "/home/ademin/exactred/Exact-reduction-of-ODE-systems/examples/BIOMD0000000407.ode"
 ode = ExactODEReduction.load_ODE(fname)
 @info "Loaded system" ode
 
@@ -83,20 +84,22 @@ tspan = (start, stop)
 p = eqs
 
 prob = ODEProblem(f!, u0, tspan, p, dense=true)
-sol = solve(prob)
+sol = DifferentialEquations.solve(prob)
 
 # sol - solution of the original system,
 # For example, the solution for A20
 @show sol[var2idx[ExactODEReduction.A20], :]
 
+plt = nothing
 for i in 1:length(interesting_species)
-    p = if i == 1
+    global plt
+    plt = if i == 1
         plot(sol[i, :], label=xs[i], xaxis="t", title="From the 50-dim simulation")
     else
         plot!(sol[i, :], label=xs[i])
     end
 end
-p
+plt
 
 ### solve the reduced system ###
 
@@ -113,7 +116,7 @@ u0_r = [
 p_r = eqs_r
 
 prob_r = ODEProblem(f!, u0_r, tspan, p_r, dense=true)
-sol_r = solve(prob_r)
+sol_r = DifferentialEquations.solve(prob_r)
 
 # y1'(t) = sol_r[1,:]
 # y2'(t) = sol_r[2,:]
@@ -121,14 +124,16 @@ sol_r = solve(prob_r)
 @show sol_r[2, :]  # this one should be constant
 @assert allequal(sol_r[2, :])
 
+plt_r = nothing
 for i in 1:2
-    p_r = if i == 1
+    global plt_r
+    plt_r = if i == 1
         plot(sol_r[i, :], label=xs_r[i], xaxis="t", title="From the reduction")
     else
         plot!(sol_r[i, :], label=xs_r[i])
     end
 end
-p_r
+plt_r
 
 ### check that the results coincide ?
 
@@ -147,13 +152,13 @@ end
 @show sol_c[1]   # inferred y1'
 @show sol_c[2]   # inferred y2'
 
-p_c = nothing
+plt_c = nothing
 for i in 1:2
-    p_c = if i == 1
+    global plt_c
+    plt_c = if i == 1
         plot(sol_c[i, :], label=xs_r[i], xaxis="t", title="From the substitution")
     else
         plot!(sol_c[i, :], label=xs_r[i])
     end
-    p_c
 end
-p_c
+plt_c
