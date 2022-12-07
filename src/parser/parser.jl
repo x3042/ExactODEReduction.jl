@@ -275,7 +275,7 @@ end
 
 # filepath - absolute model file path
 #
-function load_ODEs(filepath)
+function load_ODEs(filepath, load_ic=false)
     # *.ode --> polynomial form of ode system
 
     lines = []
@@ -297,6 +297,22 @@ function load_ODEs(filepath)
 
     if isnothing(findlast(startswith("begin"), lines))
         throw(ParseException("bad file encountered at $filepath, skipping it"))
+    end
+
+    ics = nothing
+    if load_ic
+        # we assume that the initial conditions live in the first block
+        inits = lines[findfirst(startswith("begin"), lines) + 1 : findfirst(startswith("end"), lines) + 1]
+        inits = map(s -> first(split(s, "(")), inits)
+        ics = Dict()
+        for l in inits
+            if '=' in l
+                (var, val) = split(l, "=")
+                ics[strip(var)] = parse(Float64, val)
+            else
+                ics[strip(l)] = 0.0
+            end
+        end
     end
 
     # by default we consider the last begin/end block to yield reactions.
@@ -406,9 +422,16 @@ function load_ODEs(filepath)
 
     # @info "loaded a system of $(length(ODEs)) ODEs from $filepath"
 
+    if load_ic
+        return (ODEs, ics)
+    end
     return ODEs
 end
 
-function load_ODE(filepath)
-    ODE{Nemo.fmpq_mpoly}(load_ODEs(filepath))
+function load_ODE(filepath, load_ic=false)
+    if load_ic
+        (ode, ics) = load_ODEs(filepath, true)
+        return (ODE{Nemo.fmpq_mpoly}(ode), ics)
+    end
+    return ODE{Nemo.fmpq_mpoly}(load_ODEs(filepath))
 end
