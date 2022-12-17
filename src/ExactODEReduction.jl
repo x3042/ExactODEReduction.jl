@@ -114,14 +114,17 @@ Arguments:
  To enable this argument, you should have `Polymake.jl` imported. 
 
  Example:
-```@example
-using ExactODEReduction
-odes = @ODEsystem(
+```julia
+julia> using ExactODEReduction
+julia> odes = @ODEsystem(
     x'(t) = x + y,
     y'(t) = x - y - z,
     z'(t) = 2x - z
 )
-find_some_reduction(odes)
+julia> find_some_reduction(odes)
+Dict{Symbol, Any} with 2 entries:
+  :new_system => y2'(t) = -y1(t) - y2(t)…
+  :new_vars   => Nemo.fmpq_mpoly[y, z - x]
 ```
 
 """
@@ -196,14 +199,17 @@ Arguments:
  To enable this argument, you should have `Polymake.jl` imported. 
 
  Example:
-```@example
-using ExactODEReduction
-odes = @ODEsystem(
+```julia
+julia> using ExactODEReduction
+julia> odes = @ODEsystem(
     x'(t) = x + y,
     y'(t) = x - y - z,
     z'(t) = 2x - z
 )
-find_smallest_constrained_reduction(odes, [y])
+julia> find_smallest_constrained_reduction(odes, [2x + z])
+Dict{Symbol, Any} with 2 entries:
+  :new_system => y2'(t) = 2*y1(t) - y2(t)…
+  :new_vars   => Nemo.fmpq_mpoly[y + 3*x, z + 2*x]
 ```
 
 """
@@ -271,14 +277,20 @@ Arguments:
  To enable this argument, you should have `Polymake.jl` imported. 
 
 Example:
-```@example
-using ExactODEReduction
-odes = @ODEsystem(
+```julia
+julia> using ExactODEReduction
+julia> odes = @ODEsystem(
     x'(t) = x + y,
     y'(t) = x - y - z,
     z'(t) = 2x - z
 )
-find_reductions(odes)
+julia> find_reductions(odes)
+2-element Vector{Dict{Symbol, Any}}:
+ Dict(:new_system => y1'(t) = 0
+, :new_vars => Nemo.fmpq_mpoly[y - z + x])
+ Dict(:new_system => y2'(t) = -y1(t) - y2(t)
+y1'(t) = -y1(t) - y2(t)
+, :new_vars => Nemo.fmpq_mpoly[y, z - x])
 ```
 
 """
