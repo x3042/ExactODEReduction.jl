@@ -1,20 +1,33 @@
-# Exact reduction of ODE systems*
+# Exact reduction of ODE systems
 
 [![Build](https://github.com/x3042/Exact-reduction-of-ODE-systems/actions/workflows/Build.yml/badge.svg)](https://github.com/x3042/Exact-reduction-of-ODE-systems/actions/workflows/Build.yml) [![Runtests](https://github.com/x3042/Exact-reduction-of-ODE-systems/actions/workflows/Runtests.yml/badge.svg)](https://github.com/x3042/Exact-reduction-of-ODE-systems/actions/workflows/Runtests.yml)
 
-**any thoughts on a possible acronym?..*
-
 This repository contains a Julia implementation of algorithms for finding exact reductions of ODE systems via a linear change of variables.
 
-<!--- 
-researching the structure of ODEs of system biology models. The core interface allows to compute invariant subspaces for an exact reduction to be performed. 
---->
+Online documentation could be found at X.
 
-Online documentation could be found at https://x3042.github.io/Exact-reduction-of-ODE-systems/dev/
+## Installation guide
+
+The package works with Julia version 1.6+. To install `Exact-reduction-of-ODE-systems`, run the following command in Julia:
+
+```
+julia> import Pkg
+julia> Pkg.add(url="https://github.com/x3042/Exact-reduction-of-ODE-systems")
+```
+
+If the package is installed correctly, you should be able to import it:
+
+```
+julia> using ExactODEReduction
+```
+
+For the package usage examples, please see examples below in this file.
+
+*Note: the package cannot be installed on Windows OS.* 
 
 ## What is exact reduction?
 
-Exact reduction of the system of differential equations is an exact variable substitution which preserves the invariants of the system. In this project we mainly consider reductions obtained with **linear transformations**. We will explain it using a toy example. Consider the system
+Exact reduction of the system of differential equations is an exact variable substitution which preserves the invariants of the system. In this project we consider reductions obtained with **linear transformations**. We will explain it using a toy example. Consider the system
 
 $$\begin{cases} 
 \dot{x}_1 = x_1^2 + 2x_1x_2,\\ 
@@ -44,9 +57,9 @@ $$\begin{cases}
 
 ## What does this package do and how to use it?
 
-We implement an algorithm that takes as **input** a system of ODEs with polynomial right-hand side and **returns** the list of possible linear transformations.
+We implement an algorithm that takes as **input** a system of ODEs with polynomial right-hand side and **returns** the list of possible linear transformations and corresponding systems.
 
-We will demonstrate the usage on the example above. For more details on package usage, including reading dynamical systems from \*.ode files, please see the documentation.
+We will demonstrate the usage on the example above. For more details on the package usage, including reading dynamical systems from `*.ode` files, please see the documentation.
 
 1. Import the package
 
@@ -65,7 +78,7 @@ odes = @ODEsystem(
 )
 ```
 
-4. Call `find_reductions` providing the system
+3. Call `find_reductions` providing the system
 
 ```julia
 reductions = find_reductions(odes)
