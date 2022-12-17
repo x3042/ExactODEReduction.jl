@@ -38,7 +38,6 @@ const find_radical_times = []
 const common_kernel_times = []
 const invariant_subspace_semisimple_times = []
 const total_times = []
-
 function dump_times()
     data = (find_basis=deepcopy(ExactODEReduction.find_basis_times),
     find_radical=deepcopy(ExactODEReduction.find_radical_times),
@@ -87,6 +86,7 @@ include("basis.jl")
 # Algotirhms for matrix algebra
 include("matrix_algebras.jl")
 
+# By default, Polymake is not loaded
 _ispolymakeloaded() = false
 @noinline _warn_polymakenotloaded() = @warn "Run `import Polymake` to enable parameter `makepositive`."
 function __init__()
@@ -102,13 +102,28 @@ include("parametrization.jl")
 #------------------------------------------------------------------------------
 
 """
-    find_some_reduction(system; backend_algorithm)
+    find_some_reduction(system::ODE, observables; overQ=true, makepositive=false, loglevel=Logging.Info)
 
 Finds a nontrivial linear reduction of the system.
 If there exists a reduction, it will be found.
+
 Arguments:
- - `system` is a list of the right-hand sides of the system, the i-th element is the derivative of the i-th
-   variable in the corresponding polynomial ring
+ - `system` is an ODE system given as `ODE` object,
+ - `overQ` tells the algorithm to search for reductions over rational numbers,
+ - `makepositive` tells the algorithm to search for reductions with positive coefficients;
+ To enable this argument, you should have `Polymake.jl` imported. 
+
+ Example:
+```@example
+using ExactODEReduction
+odes = @ODEsystem(
+    x'(t) = x + y,
+    y'(t) = x - y - z,
+    z'(t) = 2x - z
+)
+find_some_reduction(odes)
+```
+
 """
 function find_some_reduction(
         system::ODE{P};
@@ -168,16 +183,29 @@ end
 #------------------------------------------------------------------------------
 
 """
-    find_smallest_constrained_reduction(system, observables; backend_algorithm)
+    find_smallest_constrained_reduction(system::ODE, observables; overQ=true, makepositive=false, loglevel=Logging.Info)
 
 Finds the best linear reduction of the system.
 If there exists a reduction, it will be found.
 Arguments:
- - `system` is a list of the right-hand sides of the system, the i-th element is the derivative of the i-th
-   variable in the corresponding polynomial ring
- - `observables` is a list of linear functions of initial variables
-   desired to be preserved by reduction.
-   Defaults to an empty list to find the most general reduction.
+ - `system` is an ODE system given as `ODE` object,
+ - `observables` is a list of linear functions of initial variables 
+   desired to be preserved by reduction,
+ - `overQ` tells the algorithm to search for reductions over rational numbers,
+ - `makepositive` tells the algorithm to search for reductions with positive coefficients;
+ To enable this argument, you should have `Polymake.jl` imported. 
+
+ Example:
+```@example
+using ExactODEReduction
+odes = @ODEsystem(
+    x'(t) = x + y,
+    y'(t) = x - y - z,
+    z'(t) = 2x - z
+)
+find_smallest_constrained_reduction(odes, [y])
+```
+
 """
 function find_smallest_constrained_reduction(
         system::ODE{P},
@@ -230,21 +258,35 @@ end
 #------------------------------------------------------------------------------
 
 """
-    find_reductions(system; backend_algorithm)
+    find_reductions(system::ODE; overQ=true, makepositive=false, loglevel=Logging.Info)
 
 Finds reductions of the system corresponding to a Jordan-Hoelder filtration.
 This means that the reduction form a chain, and there are no extra intermediate reduction in this chain.
 In particular, if there exists at least one reduction, it will be found.
+
 Arguments:
- - `system` is a list of the right-hand sides of the system, the i-th element is the derivative of the i-th
-   variable in the corresponding polynomial ring
- - `backend_algorithm` is the linear algebra algorithm used. By default, `invariant_subspace_1`.
+ - `system` is an ODE system given as `ODE` object,
+ - `overQ` tells the algorithm to search for reductions over rational numbers,
+ - `makepositive` tells the algorithm to search for reductions with positive coefficients. 
+ To enable this argument, you should have `Polymake.jl` imported. 
+
+Example:
+```@example
+using ExactODEReduction
+odes = @ODEsystem(
+    x'(t) = x + y,
+    y'(t) = x - y - z,
+    z'(t) = 2x - z
+)
+find_reductions(odes)
+```
+
 """
 function find_reductions(
         system::ODE{P};
         overQ=true,
-        loglevel=Logging.Info,
-        makepositive=false) where {P}
+        makepositive=false,
+        loglevel=Logging.Info) where {P}
 
     package_logger = Logging.ConsoleLogger(stderr, loglevel)
     Logging.global_logger(package_logger)

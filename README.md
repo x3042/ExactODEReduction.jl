@@ -1,10 +1,11 @@
 # Exact reduction of ODE systems
 
-[![Build](https://github.com/x3042/Exact-reduction-of-ODE-systems/actions/workflows/Build.yml/badge.svg)](https://github.com/x3042/Exact-reduction-of-ODE-systems/actions/workflows/Build.yml) [![Runtests](https://github.com/x3042/Exact-reduction-of-ODE-systems/actions/workflows/Runtests.yml/badge.svg)](https://github.com/x3042/Exact-reduction-of-ODE-systems/actions/workflows/Runtests.yml)
+[![Build](https://github.com/x3042/Exact-reduction-of-ODE-systems/actions/workflows/Build.yml/badge.svg)](https://github.com/x3042/Exact-reduction-of-ODE-systems/actions/workflows/Build.yml) [![Runtests](https://github.com/x3042/Exact-reduction-of-ODE-systems/actions/workflows/Runtests.yml/badge.svg)](https://github.com/x3042/Exact-reduction-of-ODE-systems/actions/workflows/Runtests.yml) [![Documentation](https://img.shields.io/badge/docs-dev-blue.svg)](https://x3042.github.io/Exact-reduction-of-ODE-systems/dev)
+
 
 This repository contains a Julia implementation of algorithms for finding exact reductions of ODE systems via a linear change of variables.
 
-Online documentation could be found at 
+Online documentation could be found at [https://x3042.github.io/Exact-reduction-of-ODE-systems/dev](https://x3042.github.io/Exact-reduction-of-ODE-systems/dev).
 
 ## Installation guide
 
@@ -16,8 +17,6 @@ Pkg.add(url="https://github.com/x3042/Exact-reduction-of-ODE-systems")
 ```
 
 For the usage examples, please see examples below in this file.
-
-*Note: the package cannot be installed on Windows OS.* 
 
 ## What is exact reduction?
 
