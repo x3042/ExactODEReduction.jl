@@ -87,8 +87,9 @@ include("basis.jl")
 # Algotirhms for matrix algebra
 include("matrix_algebras.jl")
 
+_ispolymakeloaded() = false
+@noinline _warn_polymakenotloaded() = @warn "Run `import Polymake` to enable parameter `positive`."
 function __init__()
-    ispolymakeloaded() = false
     # Be positive!
     @require Polymake="d720cf60-89b5-51f5-aff5-213f193123e7" include("positivizor.jl")
 end
@@ -129,8 +130,6 @@ function find_some_reduction(
     @debug "Matrices" matrices
     @debug "Densities" map(density, matrices) 
 
-    # @debug "Matrices:" matrices
-
     if length(matrices) == 0
         matrices = [zero_sparse_vector(length(eqs), length(eqs), Nemo.QQ)]
     end
@@ -146,7 +145,11 @@ function find_some_reduction(
     @debug "Linear span" subspace
 
     if positive
-        subspace = positivize(subspace)
+        if _ispolymakeloaded()
+            subspace = positivize(subspace)
+        else
+            _warn_polymakenotloaded()
+        end
     end
 
     @debug "After positivize" subspace
@@ -208,7 +211,13 @@ function find_smallest_constrained_reduction(
     isempty(subspace) && return Dict{Symbol, Vector{fmpq_mpoly}}()
 
     subspace = basis(linear_span!(subspace))
-    subspace = positivize(subspace)
+    if positive
+        if _ispolymakeloaded()
+            subspace = positivize(subspace)
+        else
+            _warn_polymakenotloaded()
+        end
+    end
 
     (transformation, new_equations) = perform_change_of_variables(eqs, subspace)
 
@@ -250,7 +259,11 @@ function find_reductions(
     result = Vector{Dict{Symbol, Any}}()
     for V in invariant_subspaces
         V = basis(linear_span!(V))
-	    V = positivize(V)
+        if _ispolymakeloaded()
+            V = positivize(V)
+        else
+            _warn_polymakenotloaded()
+        end
         poly_ring = parent(system)
 
         # checking if we live over QQBar

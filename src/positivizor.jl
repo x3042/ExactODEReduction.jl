@@ -3,7 +3,7 @@
 
 import Polymake: polytope
 
-ispolymakeloaded() = true
+_ispolymakeloaded() = true
 
 """
     rational_to_int(m)
