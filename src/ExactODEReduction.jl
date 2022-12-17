@@ -88,7 +88,7 @@ include("basis.jl")
 include("matrix_algebras.jl")
 
 _ispolymakeloaded() = false
-@noinline _warn_polymakenotloaded() = @warn "Run `import Polymake` to enable parameter `positive`."
+@noinline _warn_polymakenotloaded() = @warn "Run `import Polymake` to enable parameter `makepositive`."
 function __init__()
     # Be positive!
     @require Polymake="d720cf60-89b5-51f5-aff5-213f193123e7" include("positivizor.jl")
