@@ -1,13 +1,6 @@
-# ExactODEReduction.jl documentation
+# ExactODEReduction.jl
 
-```@docs
-find_reductions
-```
+The package 
 
-```@docs
-find_smallest_constrained_reduction
-```
+See [Guide](@ref) section for the short usage guide.
 
-```@docs
-find_some_reduction
-```
