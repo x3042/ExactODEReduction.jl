@@ -9,3 +9,7 @@ makedocs(
         "Interface" => "interface.md"
     ]
 )
+
+deploydocs(
+    repo = "github.com/x3042/Exact-reduction-of-ODE-systems.git",
+)
