@@ -1,32 +1,16 @@
-# XXX (name removed)
+# Exact-reduction-of-ODE-systems
 
 This repository contains a Julia implementation of algorithms for finding exact reductions of ODE systems via a linear change of variables.
 
-Online documentation could be found at XXX (link removed).
+Online documentation could be found at 
 
 ## Installation guide
 
-0. For the installation, Julia language of version 1.6+ is required. We refer to an official step-by-step Julia installaton guide:
-
-https://julialang.org/downloads/platform/
-
-1. Download the `archive.tar` file from this directory and unpack it. You can do it by either selecting the file in the file-tree and pressing `Download file` in the top-right corner, or getting it directly from `https://anonymous.4open.science/api/repo/056E/file/archive.tar`. For example, type in your favorite terminal:
+The package works with Julia version 1.6+. To install `Exact-reduction-of-ODE-systems`, run the following command in Julia:
 
 ```
-home$ mkdir downloads
-home$ cd downloads
-home/downloads$ wget https://anonymous.4open.science/api/repo/056E/file/archive.tar
-home/downloads$ tar -xvf archive.tar
-```
-
-As a result, directory `home/downloads/ExactODEReduction` will be created.
-
-2. Run julia and install the package. You will need to specify the path to the unpacked archive:
-
-```
-home/downloads$ julia
 julia> import Pkg
-julia> Pkg.develop(path="ExactODEReduction")
+julia> Pkg.add(url="https://github.com/x3042/Exact-reduction-of-ODE-systems")
 ```
 
 If the package is installed correctly, you should be able to import it:
@@ -41,7 +25,7 @@ For the package usage examples, please see examples below in this file.
 
 ## What is exact reduction?
 
-Exact reduction of the system of differential equations is an exact variable substitution which preserves the invariants of the system. In this project we mainly consider reductions obtained with **linear transformations**. We will explain it using a toy example. Consider the system
+Exact reduction of the system of differential equations is an exact variable substitution which preserves the invariants of the system. In this project we consider reductions obtained with **linear transformations**. We will explain it using a toy example. Consider the system
 
 $$\begin{cases} 
 \dot{x}_1 = x_1^2 + 2x_1x_2,\\ 
@@ -71,9 +55,9 @@ $$\begin{cases}
 
 ## What does this package do and how to use it?
 
-We implement an algorithm that takes as **input** a system of ODEs with polynomial right-hand side and **returns** the list of possible linear transformations.
+We implement an algorithm that takes as **input** a system of ODEs with polynomial right-hand side and **returns** the list of possible linear transformations and corresponding systems.
 
-We will demonstrate the usage on the example above. For more details on package usage, including reading dynamical systems from \*.ode files, please see the documentation.
+We will demonstrate the usage on the example above. For more details on the package usage, including reading dynamical systems from `*.ode` files, please see the documentation.
 
 1. Import the package
 
