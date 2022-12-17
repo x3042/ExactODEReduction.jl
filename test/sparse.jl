@@ -1,10 +1,4 @@
 
-#=
-    The File contains tests for sparse matrices add-on functionality
-=#
-
-#------------------------------------------------------------------------------
-
 @testset "Sparse instantiation" begin
     FF = ExactODEReduction.global_field[]
     QQ = Nemo.QQ

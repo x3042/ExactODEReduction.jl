@@ -1,4 +1,3 @@
-
 using Test
 using TestSetExtensions
 
@@ -15,9 +14,8 @@ using .ExactODEReduction
 
 @info "Testing started"
 
-@testset "All tests" begin
-
-    @includetests ["parser"]    
+@testset "All tests" verbose=true begin
+    # @includetests ["parser"]    
     
     @includetests ["modular", "sparse"]
 
@@ -25,11 +23,8 @@ using .ExactODEReduction
 
     @includetests ["indices_conversion", "gizmos", "random_elements"]
 
-    # @includetests ["find_basis", "eigenspaces", 
-     #           "radical", "positivizer", "invariants"]
+    @includetests ["find_basis", "eigenspaces", 
+        "radical", "positivizer", "invariants"]
     
     @includetests ["find_some_reduction", "find_reductions"]
-
-    @includetests ARGS
-
 end

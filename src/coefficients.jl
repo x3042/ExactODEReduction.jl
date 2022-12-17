@@ -1,5 +1,4 @@
-
-# Declaration of domains and their coefficient types
+# Declarations of domains and their coefficient types
 
 # Rational numbers
 const QQFieldT = typeof(Nemo.QQ)

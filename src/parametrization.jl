@@ -48,9 +48,6 @@ function perform_change_of_variables(system, invariants; new_vars_name="y")
     newsystem = zeros(oldring, newdim)
 
     for (i, vv) in enumerate(invariants)
-        # for (idx, val) in vec
-        #     newsystem[i] += system[idx] * val
-        # end
         for (idx, val) in enumerate(vec(vv))
             newsystem[i] += system[idx] * val
         end

@@ -1,8 +1,4 @@
 
-#=
-    The File contains parser tests
-=#
-
 @testset "parser - JSON to DOK_Sparsik" begin
 
     set_fn = "matrices/matrices_1.json"

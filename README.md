@@ -11,17 +11,11 @@ Online documentation could be found at
 The package works with Julia version 1.6+. To install `Exact-reduction-of-ODE-systems`, run the following command in Julia:
 
 ```
-julia> import Pkg
-julia> Pkg.add(url="https://github.com/x3042/Exact-reduction-of-ODE-systems")
+import Pkg
+Pkg.add(url="https://github.com/x3042/Exact-reduction-of-ODE-systems")
 ```
 
-If the package is installed correctly, you should be able to import it:
-
-```
-julia> using ExactODEReduction
-```
-
-For the package usage examples, please see examples below in this file.
+For the usage examples, please see examples below in this file.
 
 *Note: the package cannot be installed on Windows OS.* 
 

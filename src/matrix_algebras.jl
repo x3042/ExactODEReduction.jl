@@ -248,5 +248,3 @@ commuting with all other matrices in `algebra`
 function center(algebra::Subspace)
     return centralizer(algebra, algebra)
 end
-
-#------------------------------------------------------------------------------

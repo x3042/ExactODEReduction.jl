@@ -1,6 +1,10 @@
 # The code in this file has been adapted from https://github.com/xjzhaang/LumpingPostiviser
 # commit 1fec31a493a7884ea8b202a8fe8943bb2d66b853
 
+import Polymake: polytope
+
+ispolymakeloaded() = true
+
 """
     rational_to_int(m)
 
@@ -137,7 +141,3 @@ function sort_matrix(m::Array{BigInt})
     end
     return new_matrix
 end
-
-#------------------------------------------------------------------------------
-
-

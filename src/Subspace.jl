@@ -1,9 +1,4 @@
 
-#=
-    The File contains `Subspace<T>` and related funcs implementation
-=#
-#------------------------------------------------------------------------------
-
 """
     Subspace{F, T}
 

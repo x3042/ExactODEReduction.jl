@@ -1,4 +1,3 @@
-#------------------------------------------------------------------------------
 
 function gram_matrix(As::AbstractArray)
     F = base_ring(As[1])
@@ -14,7 +13,7 @@ function gram_matrix(As::AbstractArray)
 
     # multiply everything with everything
     k = 0
-    for i in 1:n
+    @inbounds for i in 1:n
         for j in i:n
             z = mydot(as[i], ast[j])
             if !iszero(z)
@@ -74,7 +73,7 @@ end
 
 # returns f(x₀)
 # O(d) multiplications/additions of x₀ if d = degree(f)
-function evaluate(f::PolyElem, x₀)
+function evaluate(f::Nemo.PolyElem, x₀)
     d = degree(f)
 
     I = one(x₀)
@@ -88,3 +87,52 @@ function evaluate(f::PolyElem, x₀)
 end
 
 #------------------------------------------------------------------------------
+
+"""
+    construct_jacobians(system)
+
+For the given system of polynomials in variables xi
+consturucts a set of matrices Aᵢ over number field
+such that the Jacobian J of the provided system can represented as the sum
+J = Aᵢxⁱ
+"""
+function construct_jacobians(system::AbstractArray{T}) where {T<:Nemo.MPolyElem}
+    domain = base_ring(first(system))
+    poly_ring = parent(first(system))
+    gen2idx = Dict(x=>i for (i, x) in enumerate(gens(poly_ring)))
+
+    jacobians = Dict()
+
+    for (p_idx, poly) in enumerate(system)
+        for var in vars(poly)
+            v_idx = gen2idx[var]
+            # term is of form α*monomial
+            for term in terms(derivative(poly, var))
+                monom = monomial(term, 1)
+                cf = coeff(term, 1)
+
+                !haskey(jacobians, monom) && (jacobians[monom] = Dict())
+                idx = (v_idx, p_idx)
+                if !haskey(jacobians[monom], idx)
+                    jacobians[monom][idx] = zero(domain)
+                end
+                jacobians[monom][idx] += cf
+            end
+        end
+    end
+
+    m, n = length(system), length(gens(poly_ring))
+    factors = [
+        sparse(coo_to_arrays(jac)..., m, n)
+        for jac in values(jacobians)
+    ]
+
+    @info "Constructed a set of $(length(factors)) matrices $m×$n from the system Jacobian"
+
+    factors
+end
+
+function construct_jacobians(system)
+    ring = parent(first(keys(system)))
+    construct_jacobians([system[x] for x in gens(ring)])
+end

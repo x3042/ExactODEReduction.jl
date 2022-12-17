@@ -87,17 +87,11 @@ function test_find_basis(algorithm)
 
 end
 
-
-#------------------------------------------------------------------------------
-
 @testset "Find basis, just in case" begin
     # This must always pass
     test_find_basis(ExactODEReduction.find_basis_1)
-
 end
 
 @testset "Find basis, β algorithm" begin
-
     test_find_basis(ExactODEReduction.find_basis_1_β)
-
 end

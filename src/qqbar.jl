@@ -1,3 +1,5 @@
+# Extend functions from Base to Nemo.qqbar and Nemo.fmpq;
+# note: this is type piracy
 
 # Define zero, one, dot, abs2 for Nemo rationals 
 # and Nemo extended rationals

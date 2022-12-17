@@ -24,7 +24,7 @@ end
 
 #------------------------------------------------------------------------------
 
-normtime(x) = x/1e9
+second2nanos(x) = x/1e9
 
 # estimates the elapsed time for `ex` and stores the result into the `storage`
 macro savetime(ex, storage)
@@ -32,12 +32,10 @@ macro savetime(ex, storage)
         local t0 = time_ns()
         local val = $(esc(ex))
         local t1 = time_ns()
-        push!($storage, normtime(t1-t0))
+        push!($storage, second2nanos(t1-t0))
         val
     end
 end
-
-#------------------------------------------------------------------------------
 
 # make the given path absolute w.r.t the project and normalize it
 function normalizepath(path)

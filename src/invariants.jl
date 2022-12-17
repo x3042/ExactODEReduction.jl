@@ -1,4 +1,3 @@
-#------------------------------------------------------------------------------
 
 """
     invariant_subspace_global(matrices)
@@ -29,7 +28,7 @@ function invariant_subspace_global(matrices::AbstractArray{T}; overQ=true) where
     end
 
     # generate a basis for the Algebra
-    @savetime algebra = find_basis(deepcopy(matrices)) find_basis_times 
+    algebra = find_basis(deepcopy(matrices)) 
 
     @debug "Dimension of the algebra is $(dim(algebra))"
     if dim(algebra) == size(first(matrices), 1)^2

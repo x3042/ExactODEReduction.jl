@@ -1,6 +1,4 @@
 
-#------------------------------------------------------------------------------
-
 # transformes V to the smallest subspace invariant under
 # the given matrices and containing the original one
 function apply_matrices_inplace!(V::Subspace, matrices; ω=1.)
@@ -14,46 +12,6 @@ function apply_matrices_inplace!(V::Subspace, matrices; ω=1.)
 
         for pivot in pivots_to_process
             for (vectidx, vect) in enumerate(matrices)
-                # Alex: sparse-dense product
-                # 
-                #   S × D
-                #
-                # S is a matrix in CSR format (maybe, absolute column values ?)
-                # 
-                # D is a matrix in Dense format, but nonzero columns indices are stored
-                #
-                # for each nnz row rr in S
-                #   for each nnz col cc in D
-                #       add <rr, cc> to its position in the product 
-                #
-                # if D is Dense then
-                #   <rr, cc> is computed in 
-                #   O(nnz(rr)) flops 
-                #   O(nnz(rr)) loads
-                # if D is Sparse then
-                #   <rr, cc> is computed in 
-                #   O(min(nnz(rr), nnz(cc))) flops, 
-                #   O(nnz(rr) + nnnz(cc)) loads
-                #   try first one !
-                #
-                # matrix --> vector    easily ?
-                # solution: CSR with absolute column indides
-                # example :
-                #   [5, 0, 6]
-                #   [0, 0, 7]
-                #   [8, 9, 0]
-                #
-                #   vals = [5, 6, 7, 8, 9]
-                #   cols = [1, 3, 3, 1, 2]  (relative)
-                #   rows = [1, 3, 4, 4, 6]
-                #   cols = [1, 3, 6, 7, 8]  (absolute)
-                # 
-                # (absolute cols .% n  .+ absolute cols .== n) == relative cols
-                # Compute relative cols on the fly, store only absolute ones!
-                #
-                # Conversion matrix --> vector :
-                #   Take vals and absolute cols from the matrix.
-                #
                 product = V.echelon_form[pivot] * vect
 
                 i += 1
@@ -154,7 +112,6 @@ end
 #       vectors - an array-like of AbstractSparsiks over Q
 # output:
 #       V - a Subspace consisting of basis vectors
-# O(∞)
 """
     find_basis(vectors; used_algorithm, initialprime)
 

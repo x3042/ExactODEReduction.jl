@@ -57,7 +57,7 @@ end
 
 #------------------------------------------------------------------------------
 
-function modular_reduction(x::FracElem, field)
+function modular_reduction(x::Nemo.FracElem, field)
     n, d = field(numerator(x)), field(denominator(x))
     if iszero(d)
         throw(DomainError(

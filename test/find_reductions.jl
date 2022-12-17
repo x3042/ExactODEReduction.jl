@@ -1,4 +1,3 @@
-
 #=
     The File contains tests for main functions
 =#
@@ -183,7 +182,7 @@ function check_reduction(sys, new_vars, new_eqs)
     vect_field = [evaluate(sys.x_equations[x], eval_point) for x in sys.x_vars]
     
     new_eval_point = [evaluate(v, eval_point) for v in new_vars]
-    new_vect_field_1 = [evaluate(eq, new_eval_point) for eq in new_eqs]
+    new_vect_field_1 = [evaluate(eq, new_eval_point) for eq in ExactODEReduction.equations(new_eqs)]
     new_vect_field_2 = [evaluate(v, vect_field) for v in new_vars]
 
     return (new_vect_field_1, new_vect_field_2)

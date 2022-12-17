@@ -10,7 +10,7 @@
             M = S([rand(-2:2) for i in 1:N for j in 1:N])
             chpoly = Nemo.charpoly(Nemo.PolynomialRing(Nemo.QQ, "x")[1], M)
             factors = collect(AbstractAlgebra.factor(chpoly))
-            if any([f[2] != 1 for f in factors])
+            if any([!isone(f[2]) for f in factors])
                 println("rerunning")
                 continue
             end

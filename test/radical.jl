@@ -1,10 +1,4 @@
 
-#=
-    The File contains tests for radical finding algorithms
-=#
-
-#------------------------------------------------------------------------------
-
 cases = [
     Dict(
          :basis => [
@@ -88,7 +82,7 @@ cases = [
         ]
     ),
     Dict(
-        :basis => [
+    :basis => [
 	    sparse(Nemo.QQ.([0 1; 0 0]))
 	],
 	:correct => [
@@ -106,9 +100,6 @@ function test_find_radical(algorithm)
     end
 end
 
-#------------------------------------------------------------------------------
-
 @testset "radical" begin
     test_find_radical(ExactODEReduction.find_radical)
 end
-

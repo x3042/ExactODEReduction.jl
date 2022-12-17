@@ -1,39 +1,38 @@
-
 module ExactODEReduction
 
-import DataStructures
-import Distributions
-import JSON
+# These are extended
+import Base: ==, !=, +, -, *, lcm, rand, zero
+
 import Logging
-import Primes
 
 using SparseArrays
-import SparseArrays: getnzval, getcolptr, getrowval,
-                    nonzeroinds
+import SparseArrays: getnzval, getcolptr, getrowval, nonzeroinds
 
 import LinearAlgebra
+import LinearAlgebra: SingularException
 
 import MacroTools
 import MacroTools: @capture
 
 import Nemo
-import Nemo: FlintIntegerRing, FlintRationalField, FracElem, PolyElem,
-            MPolyElem, gens, vars, derivative, monomial, coeff, characteristic,
-            MatrixSpace, kernel, PolynomialRing, exponent_vector, MPolyBuildCtx,
-            push_term!, finish, degree, gen, coefficients, MPolyElem, MPolyRing,
-            FieldElem, symbols, evaluate, charpoly, lead, divexact
-
-import Polymake: polytope
+import Nemo: PolyElem, MPolyElem, gens, vars, derivative, monomial, coeff, characteristic,
+            MatrixSpace, kernel, PolynomialRing, exponent_vector,
+            push_term!, finish, degree, gen, coefficients, MPolyRing,
+            FieldElem, symbols, evaluate, charpoly, lead, divexact,
+            base_ring, gfp_elem, gfp_fmpz_elem, fmpq_mpoly,
+            fmpq, terms, monomials, fmpz, elem_type, parent
 
 import AbstractAlgebra
 
-# These are extended
-import Base: ==, !=, +, -, *, lcm, rand, zero
-import Base.Iterators: Stateful
-import LinearAlgebra: SingularException
-import Nemo: base_ring, gfp_elem, gfp_fmpz_elem, fmpq_mpoly,
-            fmpq, terms, monomials, fmpz, elem_type, parent
+import Primes
 
+# making Polymake dependency optional
+using Requires
+
+# for parsing
+import JSON
+
+# Measuring running times
 const find_basis_times = []
 const find_radical_times = []
 const common_kernel_times = []
@@ -52,7 +51,7 @@ function dump_times()
     empty!(ExactODEReduction.common_kernel_times)
     empty!(ExactODEReduction.invariant_subspace_semisimple_times)
     empty!(ExactODEReduction.total_times)
-    return data
+    data
 end
 
 #------------------------------------------------------------------------------
@@ -87,8 +86,13 @@ include("ODE.jl")
 include("basis.jl")
 # Algotirhms for matrix algebra
 include("matrix_algebras.jl")
-# Be positive!
-include("positivizor.jl")
+
+function __init__()
+    ispolymakeloaded() = false
+    # Be positive!
+    @require Polymake="d720cf60-89b5-51f5-aff5-213f193123e7" include("positivizor.jl")
+end
+
 # Finding invariant subspaces
 include("invariants.jl")
 # Parametrizing the final system
@@ -108,7 +112,8 @@ Arguments:
 function find_some_reduction(
         system::ODE{P};
 	    overQ=true,
-        loglevel=Logging.Info) where {P}
+        loglevel=Logging.Info,
+        positive=false) where {P}
 
     # hmm
     package_logger = Logging.ConsoleLogger(stderr, loglevel)
@@ -129,7 +134,7 @@ function find_some_reduction(
     if length(matrices) == 0
         matrices = [zero_sparse_vector(length(eqs), length(eqs), Nemo.QQ)]
     end
-    @savetime subspaces = invariant_subspace_global(matrices; overQ=overQ) total_times
+    subspaces = invariant_subspace_global(matrices; overQ=overQ)
 
     @debug "Subspace global" subspaces
 
@@ -140,13 +145,21 @@ function find_some_reduction(
     
     @debug "Linear span" subspace
 
-    subspace = positivize(subspace)
+    if positive
+        subspace = positivize(subspace)
+    end
 
     @debug "After positivize" subspace
 
-    (transformation, new_system) = perform_change_of_variables(eqs, subspace)
+    (transformation, new_equations) = perform_change_of_variables(eqs, subspace)
+    
+    # (!) assumes the correct order in new_equations, i.e.,
+    # ∂y[1] ~ new_equations[1],
+    # ∂y[2] ~ new_equations[2],
+    # ...
+    new_ode = polys_to_ODE_assume_order(new_equations)
 
-    return Dict(:new_vars => transformation, :new_system => new_system)
+    return Dict(:new_vars => transformation, :new_system => new_ode)
 end
 
 #------------------------------------------------------------------------------
@@ -197,9 +210,11 @@ function find_smallest_constrained_reduction(
     subspace = basis(linear_span!(subspace))
     subspace = positivize(subspace)
 
-    (transformation, new_system) = perform_change_of_variables(eqs, subspace)
-    
-    return Dict(:new_vars => transformation, :new_system => new_system)
+    (transformation, new_equations) = perform_change_of_variables(eqs, subspace)
+
+    new_ode = polys_to_ODE_assume_order(new_equations)
+
+    return Dict(:new_vars => transformation, :new_system => new_ode)
 end
 
 #------------------------------------------------------------------------------
@@ -232,7 +247,7 @@ function find_reductions(
         matrices = [zero_sparse_vector(length(eqs), length(eqs), Nemo.QQ)]
     end
     invariant_subspaces = many_invariant_subspaces(matrices, invariant_subspace_global; overQ=overQ)
-    result = Vector{Dict{Symbol, Vector{Any}}}()
+    result = Vector{Dict{Symbol, Any}}()
     for V in invariant_subspaces
         V = basis(linear_span!(V))
 	    V = positivize(V)
@@ -242,8 +257,9 @@ function find_reductions(
         if base_ring(first(V)) != base_ring(poly_ring)
             poly_ring, _ = Nemo.PolynomialRing(base_ring(first(V)), ["$x" for x in gens(poly_ring)])
         end
-        (transformation, new_system) = perform_change_of_variables(eqs, V)
-        push!(result, Dict(:new_vars => transformation, :new_system => new_system))
+        (transformation, new_equations) = perform_change_of_variables(eqs, V)
+        new_ode = polys_to_ODE_assume_order(new_equations)
+        push!(result, Dict(:new_vars => transformation, :new_system => new_ode))
     end
 
     sort!(result, by=r -> length(r[:new_vars]))
@@ -253,10 +269,9 @@ function find_reductions(
     return result
 end
 
-#------------------------------------------------------------------------------
-
 export find_smallest_constrained_reduction, find_reductions, find_some_reduction
 export check_consistency
 export ODE, @ODEsystem, equations
+export load_ODE
 
 end

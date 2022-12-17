@@ -1,12 +1,8 @@
-
 #=
     The File contains tests for some utils and etc..
 =#
 
 @testset "Construct jacobians" begin
-
-    # simple tests #
-
     R, (x₁, x₂, x₃, x₄) = Nemo.QQ["x₁", "x₂", "x₃", "x₄"]
 
     system = [
