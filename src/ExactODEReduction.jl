@@ -114,7 +114,7 @@ function find_some_reduction(
         system::ODE{P};
 	    overQ=true,
         loglevel=Logging.Info,
-        positive=false) where {P}
+        makepositive=false) where {P}
 
     # hmm
     package_logger = Logging.ConsoleLogger(stderr, loglevel)
@@ -144,7 +144,7 @@ function find_some_reduction(
     
     @debug "Linear span" subspace
 
-    if positive
+    if makepositive
         if _ispolymakeloaded()
             subspace = positivize(subspace)
         else
@@ -182,7 +182,8 @@ Arguments:
 function find_smallest_constrained_reduction(
         system::ODE{P},
         observables::Vector{P};
-        loglevel=Logging.Info) where {P}
+        loglevel=Logging.Info,
+        makepositive=false) where {P}
 
     # hmm
     package_logger = Logging.ConsoleLogger(stderr, loglevel)
@@ -211,7 +212,7 @@ function find_smallest_constrained_reduction(
     isempty(subspace) && return Dict{Symbol, Vector{fmpq_mpoly}}()
 
     subspace = basis(linear_span!(subspace))
-    if positive
+    if makepositive
         if _ispolymakeloaded()
             subspace = positivize(subspace)
         else
@@ -241,8 +242,9 @@ Arguments:
 """
 function find_reductions(
         system::ODE{P};
-	overQ=true,
-        loglevel=Logging.Info) where {P}
+        overQ=true,
+        loglevel=Logging.Info,
+        makepositive=false) where {P}
 
     package_logger = Logging.ConsoleLogger(stderr, loglevel)
     Logging.global_logger(package_logger)
@@ -259,10 +261,12 @@ function find_reductions(
     result = Vector{Dict{Symbol, Any}}()
     for V in invariant_subspaces
         V = basis(linear_span!(V))
-        if _ispolymakeloaded()
-            V = positivize(V)
-        else
-            _warn_polymakenotloaded()
+        if makepositive
+            if _ispolymakeloaded()
+                V = positivize(V)
+            else
+                _warn_polymakenotloaded()
+            end
         end
         poly_ring = parent(system)
 

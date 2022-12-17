@@ -36,6 +36,7 @@ end
     @includetests ["find_basis", "eigenspaces", "radical", "invariants"]
 
     if try_import(:Polymake)
+        @warn "Testing using Polymake"
         @includetests ["positivizer"]
     end
 
