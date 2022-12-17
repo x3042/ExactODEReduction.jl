@@ -4,7 +4,7 @@
 
 This repository contains a Julia implementation of algorithms for finding exact reductions of ODE systems via a linear change of variables.
 
-Online documentation could be found at X.
+Online documentation could be found at 
 
 ## Installation guide
 

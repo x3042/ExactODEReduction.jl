@@ -17,18 +17,18 @@ using .ExactODEReduction
 
 @testset "All tests" begin
 
-    # @includetests ["parser"]    
+    @includetests ["parser"]    
     
-    # @includetests ["modular", "sparse"]
+    @includetests ["modular", "sparse"]
 
-    # @includetests ["reconstruction"]
+    @includetests ["reconstruction"]
 
-    # @includetests ["indices_conversion", "gizmos"]
+    @includetests ["indices_conversion", "gizmos", "random_elements"]
 
     # @includetests ["find_basis", "eigenspaces", 
      #           "radical", "positivizer", "invariants"]
     
-    # @includetests ["find_some_reduction", "find_reductions"]
+    @includetests ["find_some_reduction", "find_reductions"]
 
     @includetests ARGS
 
