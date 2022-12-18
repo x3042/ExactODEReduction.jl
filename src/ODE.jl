@@ -1,5 +1,7 @@
 
 """
+    ODE{P}
+
     The main structure that represents input ODE system.
     Stores information about states (`x_vars`), and the equations.
     This structure is constructed via `@ODEmodel` macro.
@@ -21,6 +23,11 @@ struct ODE{P}
     end
 end
 
+"""
+    equations(ode::ODE)
+
+    Returns the equations that define the given ODE system.
+"""
 equations(ode::ODE)   = [ode.x_equations[v] for v in ode.x_vars]
 Nemo.parent(ode::ODE) = ode.poly_ring
 
@@ -66,6 +73,8 @@ end
 #------------------------------------------------------------------------------
 
 """
+    @ODEsystem
+
     Macro for creating an ODE from a list of equations.
     Also injects all variables into the global scope.
     This macro accepts a sybolically written ODE system and generates an `ODE` structure instance:
@@ -74,6 +83,13 @@ end
         x1'(t) = -k1 * x1(t),
         x2'(t) = -k2 * x2(t)
     )
+    [ Info: Summary of the model:
+    [ Info: State variables: x2, x1
+    [ Info: Parameters: k1, k2
+    k2'(t) = 0
+    x2'(t) = -x2(t)*k2(t)
+    x1'(t) = -k1(t)*x1(t)
+    k1'(t) = 0
     ```
 """
 macro ODEsystem(ex::Expr...)

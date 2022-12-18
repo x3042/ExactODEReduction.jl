@@ -1,4 +1,4 @@
-# Interface
+# Functions for finding reductions
 
 ```@docs
 find_reductions

@@ -1,16 +1,33 @@
-# ExactODEReduction.jl
+# ExactODEReduction.jl Documentation
 
-The package provides an algorithm for computing exact linear reductions of ODE systems. It allows computing a longest possible chain of reductions corresponding to a Jordan-Hoelder filtration over rational numbers or its extension.
+The `ExactODEReduction.jl` package provides an algorithm for computing exact linear reductions of ODE systems. It allows computing a longest possible chain of reductions corresponding to a Jordan-Hoelder filtration.
 
-See the [Guide](@ref) section for a quick introduction and an example.
+This documentation contains information about the functionality of the package as well as examples of use cases. See the [Guide](@ref) section for a quick introduction.
 
 ## Installation
 
-The package works with Julia version 1.6+. To install `Exact-reduction-of-ODE-systems`, run the following command in Julia:
+To install `ExactODEReduction.jl`, run the following command in Julia:
 
-```
+```julia
 import Pkg
 Pkg.add(url="https://github.com/x3042/Exact-reduction-of-ODE-systems")
 ```
 
-The dependency on `polymake` is optional; it is loaded lazily if necessary, and most of the package functionality works without it.
+The package dependency on `polymake` is optional; it is loaded lazily if necessary, and most of the package functionality works without it.
+
+## Citation
+
+/\
+
+## Features
+
+Given an ODE system with polynomial right-hand side, `ExactODEReduction.jl` computes a smaller, *reduced* system, with macro-parameters expressed as linear combinations of the original ones. 
+
+The main feature of the package is the algorithm for computing a *longest chain* of such reductions.
+
+### Feature list
+
+ - Computed reductions are always *exact transformations*,
+ - Allows coefficients from rational numbers, as well as *its extension*,
+ - New macro-variables can be *conic combinations* of original ones.
+

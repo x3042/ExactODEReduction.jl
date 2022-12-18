@@ -6,7 +6,10 @@ makedocs(
     pages = [
         "ExactODEReduction" => "index.md",
         "Guide" => "guide.md",
-        "Interface" => "interface.md"
+        "Interface" => [
+            "Functions for creating ODEs" => "io.md",
+            "Functions for finding reductions" => "reductions.md"
+        ]
     ]
 )
 
