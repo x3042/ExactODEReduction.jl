@@ -40,5 +40,7 @@ end
         @includetests ["positivizer"]
     end
 
+    @includetests ["ode"]
+
     @includetests ["find_some_reduction", "find_reductions"]
 end

@@ -34,7 +34,8 @@ Nemo.parent(ode::ODE) = ode.poly_ring
 #------------------------------------------------------------------------------
 
 function macrohelper_extract_vars(equations::Array{Expr, 1})
-    funcs, x_vars, all_symb = Set(), Set(), Set()
+    x_vars = Vector()
+    funcs, all_symb = Set(), Set()
     aux_symb = Set([:(+), :(-), :(=), :(*), :(^), :t, :(/), :(//)])
     for eq in equations
         MacroTools.postwalk(
@@ -52,9 +53,9 @@ function macrohelper_extract_vars(equations::Array{Expr, 1})
             eq
         )
     end
-    io_vars = setdiff(funcs, x_vars)
+    io_vars = setdiff(funcs, Set(x_vars))
     all_symb = collect(all_symb)
-    return collect(x_vars), collect(io_vars), collect(all_symb)
+    return x_vars, collect(io_vars), collect(all_symb)
 end
 
 function macrohelper_extract_vars(equations::Array{Symbol, 1})
@@ -96,6 +97,17 @@ macro ODEsystem(ex::Expr...)
     equations = [ex...]
     x_vars, io_vars, all_symb = macrohelper_extract_vars(equations)
 
+    # order of variables in the polynomial ring is the following:
+    # 1. diferential variables,
+    #   in the order they appear on the left-hand side,
+    # 2. paramenters,
+    #   sorted lexicographically.
+    #
+    # the same order appears when the ODE system is displayed
+    sort!(all_symb, by=x -> !(x in x_vars))
+    all_symb[1:length(x_vars)] = x_vars
+    sort!(view(all_symb, length(x_vars)+1:length(all_symb)))
+
     # creating the polynomial ring
     vars_list = :([$(all_symb...)])
     R = gensym()
@@ -105,7 +117,7 @@ macro ODEsystem(ex::Expr...)
         map(string, $all_symb)
     ))
     assignments = [:($(all_symb[i]) = $vars_aux[$i]) for i in 1:length(all_symb)]
-
+    
     # preparing equations
     equations = map(macrohelper_clean, equations)
     x_dict = gensym()
@@ -172,7 +184,9 @@ end
 function Base.show(io::IO, ode::ODE)
     varstr = Dict(x => var_to_str(x) * "(t)" for x in ode.x_vars)
     R_print, vars_print = Nemo.PolynomialRing(base_ring(ode.poly_ring), [varstr[v] for v in gens(ode.poly_ring)])
-    for (x, eq) in ode.x_equations
+    # output the equations sorted w.r.t. variables
+    for x in ode.x_vars
+        eq = ode.x_equations[x]
         print(io, var_to_str(x) * "'(t) = ")
         print(io, evaluate(eq, vars_print))
         print(io, "\n")
