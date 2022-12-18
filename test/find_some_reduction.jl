@@ -11,7 +11,7 @@ cases = [
             x4'(t) = x1 + x3
       ),
       dim=0,
-      ans=[]
+      ans=[[]]
     ),
     (
         system=ExactODEReduction.@ODEsystem(
@@ -21,7 +21,7 @@ cases = [
             x4'(t) = x1 + x3
       ),
       dim=3,
-      ans=[x2, x3 + x4, x1]
+      ans=[[x1,x2,x3+x4]]
     ),
     (
         system=ExactODEReduction.@ODEsystem(
@@ -29,7 +29,7 @@ cases = [
             x2'(t) = 2 * x2(t),
         ),
         dim=1,
-        ans=[x2]
+        ans=[[x2],[x1]]
     ),
     (
         system=ExactODEReduction.@ODEsystem(
@@ -39,7 +39,7 @@ cases = [
             x4'(t) = x1(t)^3 + x2(t)^6 - 7 * x3(t) * x1(t) - x4(t)
         ),
         dim=2,
-        ans=[x2, x1]
+        ans=[[x1], [x1,x2]]
     ),
     (
         system=ExactODEReduction.@ODEsystem(
@@ -48,7 +48,7 @@ cases = [
                 x3'(t) = 0,
         ),
         dim=1,
-        ans=[x2]
+        ans=[[x1], [x2], [x3]]
     ),
     (
         system=ExactODEReduction.@ODEsystem(
@@ -61,7 +61,7 @@ cases = [
             s5'(t) = 1//200*s4(t)
         ),
         dim=6,
-        ans=[s5, s6, s1, s4, s3, s2]
+        ans=[[s1,s6,s2]]
     ),
 ]
 
@@ -83,12 +83,12 @@ barcases = [
         system = case.system
         reduction = ExactODEReduction.find_some_reduction(system)
         
-        if isempty(case.ans)
+        if case.ans == [[]]
             @test isempty(reduction)
             continue
         end
 
-        @test reduction[:new_vars] == case.ans
+        @test reduction[:new_vars] in case.ans
     end
 end
 

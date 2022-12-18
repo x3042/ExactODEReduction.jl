@@ -136,6 +136,25 @@ function many_invariant_subspaces(
         @info "Calling myself recursively in restricted subspace"
 
         subspaces = many_invariant_subspaces(As_V, find_invariant; overQ=overQ)
+        
+        # An experiment
+        # for sub in map(vs -> lift(vs, first(Vs)), subspaces)
+        #     As_V_sub = factorize(As, sub)
+        #     if !isempty(As_V_sub)
+        #         subspaces_sub = many_invariant_subspaces(As_V_sub, find_invariant; overQ=overQ)
+        #         if length(subspaces_sub) > 0
+        #             lifted_sub = map(
+        #                 vs -> lift(vs, complement_subspace(linear_span!(last(Vs)))),
+        #                 subspaces_sub)
+        #             for l in lifted_sub
+        #                 tail = deepcopy(last(Vs))
+        #                 append!(l, tail)
+        #                 push!(toreturn, l)
+        #             end
+        #         end
+        #     end
+        # end
+        
         toreturn = Vector{Any}([map(vs -> lift(vs, first(Vs)), subspaces)..., toreturn...])
     end
 

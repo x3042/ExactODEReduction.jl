@@ -1,3 +1,46 @@
+
+@testset "struct ODE" begin
+    test_cases = [
+        Dict(
+        :system => ExactODEReduction.@ODEsystem(
+            x'(t) = a*x + y^3 + z,
+            y'(t) = b*x + z,
+            z'(t) = c*z
+            ),
+        :vars => ["x","y","z","a","b","c"],
+        :eqs => ["x*a + y^3 + z","x*b + z", "z*c", "0", "0", "0"]
+        )
+        Dict(
+        :system => ExactODEReduction.@ODEsystem(
+            x'(t) = a*(2//5)*x3 + 1,
+            z'(t) = 5//4,
+            x3'(t) = 0
+            ),
+        :vars => ["x","z","x3","a"],
+        :eqs => ["2//5*x3*a + 1","5//4", "0", "0"]
+        )
+    ]
+
+    for case in test_cases
+        system = case[:system]
+        varsstrs = map(string, ExactODEReduction.vars(system))
+        eqstrs = map(string, ExactODEReduction.equations(system))
+        @test eqstrs == case[:eqs]
+        @test varsstrs == case[:vars]
+    end
+
+    R, (y, x, a, b) = Nemo.QQ["y","x","a","b"]
+    ode = ExactODEReduction.ODE{typeof(y)}(
+        Dict{typeof(x), typeof(a)}(
+            x => x^2 + x + 1,
+            y => R(100)*1//17,
+            a => R(0),
+            b => x
+        )
+    )
+    @test ExactODEReduction.equations(ode) == [R(1)*100//17, x^2 + x + 1, R(0), x]
+end
+
 @testset "Variable order in @ODEsystem" begin
     test_cases = []
 
@@ -9,7 +52,7 @@
             y'(t) = x0(t)
         ),
         "vars" => ["x0","x1","y"],
-        "params" => ["a01", "a12", "a12", "u"]
+        "params" => ["a01", "a12", "a21", "u"]
     ))
 
     push!(test_cases, Dict(
@@ -38,4 +81,26 @@
         str = map(string, ode.x_vars)
         @test str == correct_str
     end
+end
+
+@testset "ODE to MTK and vice versa" begin
+    test_cases = [
+        ExactODEReduction.@ODEsystem(
+            x1'(t) = x1 + a*x2,
+            x3'(t) = x2 + x3,
+            x2'(t) = b
+        ),
+        ExactODEReduction.@ODEsystem(
+            x'(t) = x + y + 5//3,
+            y'(t) = 18,
+            z'(t) = 16//9
+        )
+    ]
+
+    for case in test_cases
+        mtk = ExactODEReduction.ODEtoMTK(case)
+        odeagain = ExactODEReduction.MTKtoODE(mtk)
+        @test ExactODEReduction.equations(case) == ExactODEReduction.equations(odeagain)
+    end
+
 end

@@ -8,6 +8,7 @@ using Primes
 using AbstractAlgebra
 using Nemo
 using SparseArrays
+import ModelingToolkit
 
 include("../src/ExactODEReduction.jl")
 using .ExactODEReduction

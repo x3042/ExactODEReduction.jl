@@ -240,7 +240,8 @@ function ODEtoMTK(ode::ODE)
     gen2mtk = Dict(vars .=> mtkvars) 
     D = ModelingToolkit.Differential(t)
     eqs = Vector{ModelingToolkit.Equation}()
-    for (x, poly) in ode.x_equations
+    for x in vars
+        poly = ode.x_equations[x]
         mtkx = gen2mtk[x]
         mtkpoly = sum(map(t -> Rational(coeff(t, 1)) * prod(mtkvars .^ exponent_vector(t, 1)), collect(Nemo.terms(poly))), init=Rational(0))
         push!(eqs, D(mtkx) ~ mtkpoly)
