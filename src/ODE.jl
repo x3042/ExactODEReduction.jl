@@ -1,6 +1,6 @@
 
 """
-    ODE{P}
+    struct ODE{P}
 
     The main structure that represents input ODE system.
     Stores information about states (`x_vars`), and the equations.
@@ -24,11 +24,19 @@ struct ODE{P}
 end
 
 """
-    equations(ode::ODE)
+    function equations(ode::ODE)
 
     Returns the equations that define the given ODE system.
 """
-equations(ode::ODE)   = [ode.x_equations[v] for v in ode.x_vars]
+equations(ode::ODE) = [ode.x_equations[v] for v in ode.x_vars]
+
+"""
+    function vars(ode::ODE)
+
+    Returns the polynomial variables in the given ODE system.
+"""
+Nemo.vars(ode::ODE)   = ode.x_vars
+
 Nemo.parent(ode::ODE) = ode.poly_ring
 
 #------------------------------------------------------------------------------
@@ -195,6 +203,12 @@ end
 
 #------------------------------------------------------------------------------
 
+# Create an ODE object from the given list of polynomials;
+# Assumes that
+#    x1' = eqs[1],
+#    x2' = eqs[2],
+#   ...
+# where xi are the variables of the base polynomial ring.
 function polys_to_ODE_assume_order(eqs::Vector{T}) where {T}
     R = parent(first(eqs))
     vs = gens(R)
@@ -203,7 +217,77 @@ function polys_to_ODE_assume_order(eqs::Vector{T}) where {T}
     ODE{elem_type(R)}(basedict)
 end
 
-function do_nothing()
-    
+#------------------------------------------------------------------------------
+
+"""
+    function ODEtoMTK(ode::ODE)
+
+Converts an `ODE` object to an `ModelingToolkit.ODESystem` object
+and (!) inserts the MTK variables into the global scope.
+
+Input:
+- `ode` - ODE object
+Output: 
+- `ModelingToolkit.ODESystem` object
+"""
+function ODEtoMTK(ode::ODE)
+    @info "Preproccessing `ExactODEReduction.ODE` object"
+    vars = Nemo.vars(ode)
+    varssym = map(v -> Expr(:call, Symbol(v), :t), vars)
+    varssym = Expr(:tuple, :t, varssym...)
+    mtkvars = @eval ModelingToolkit.@variables ($varssym)
+    t, mtkvars... = mtkvars
+    gen2mtk = Dict(vars .=> mtkvars) 
+    D = ModelingToolkit.Differential(t)
+    eqs = Vector{ModelingToolkit.Equation}()
+    for (x, poly) in ode.x_equations
+        mtkx = gen2mtk[x]
+        mtkpoly = sum(map(t -> Rational(coeff(t, 1)) * prod(mtkvars .^ exponent_vector(t, 1)), collect(Nemo.terms(poly))), init=Rational(0))
+        push!(eqs, D(mtkx) ~ mtkpoly)
+    end
+    ModelingToolkit.ODESystem(eqs, name=gensym())
 end
 
+# Adapted from StructuralIdentifiability.jl
+"""
+    function MTKtoODE(de::ModelingToolkit.ODESystem)
+    
+Converts an `ModelingToolkit.ODESystem` object to an `ODE` object.
+
+Input:
+- `de` - `ModelingToolkit.ODESystem`, a system to be converted
+Output: 
+- `ODE` object suitable for finding reductions
+"""
+function MTKtoODE(de::ModelingToolkit.ODESystem)
+    @info "Preproccessing `ModelingToolkit.ODESystem` object"
+    diff_eqs = filter(eq->!(ModelingToolkit.isoutput(eq.lhs)), ModelingToolkit.equations(de))
+    state_vars = ModelingToolkit.states(de)
+    params = ModelingToolkit.parameters(de)
+    
+    input_symbols = vcat(state_vars, params)
+    generators = string.(input_symbols)
+    generators = map(g->replace(g, "(t)"=>""), generators)
+    R, gens_ = Nemo.PolynomialRing(Nemo.QQ, generators)
+    state_eqn_dict = Dict{ExactODEReduction.Nemo.fmpq_mpoly, ExactODEReduction.Nemo.fmpq_mpoly}()
+    
+    var_gens = map(p -> ModelingToolkit.substitute(p, input_symbols.=>gens_), state_vars)
+    param_gens = map(p -> ModelingToolkit.substitute(p, input_symbols.=>gens_), params)
+
+    @info "Summary of the model:"
+    @info "State variables: " * join(map(string, collect(var_gens)), ", ")
+    @info "Parameters: " * join(map(string, collect(param_gens)), ", ")
+
+    for i in 1:length(diff_eqs)
+        if !(typeof(diff_eqs[i].rhs) <: Number)
+            state_eqn_dict[ModelingToolkit.substitute(state_vars[i], input_symbols.=>gens_)] = eval_at_nemo(diff_eqs[i].rhs, Dict(input_symbols.=>gens_))
+        else
+            state_eqn_dict[ModelingToolkit.substitute(state_vars[i], input_symbols.=>gens_)] = R(diff_eqs[i].rhs) 
+        end
+    end
+    for i in 1:length(param_gens)
+        state_eqn_dict[param_gens[i]] = R()
+    end
+    
+    return ExactODEReduction.ODE{ExactODEReduction.Nemo.fmpq_mpoly}(state_eqn_dict)
+end

@@ -5,6 +5,9 @@ import Base: ==, !=, +, -, *, lcm, rand, zero
 
 import Logging
 
+# for conversions between our and MTK de system types
+import ModelingToolkit
+
 using SparseArrays
 import SparseArrays: getnzval, getcolptr, getrowval, nonzeroinds
 
@@ -342,7 +345,10 @@ end
 
 export find_smallest_constrained_reduction, find_reductions, find_some_reduction
 export check_consistency
-export ODE, @ODEsystem, equations
+export ODE, @ODEsystem, equations, vars
+
 export load_ODE
+
+export ODEtoMTK, MTKtoODE
 
 end
