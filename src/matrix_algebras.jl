@@ -76,7 +76,7 @@ function find_radical(algebra::Subspace)
         push!(rad, reduce(+, vectors))
     end
 
-    @info "computed the radical of dimension $(length(rad))"
+    @debug "computed the radical of dimension $(length(rad))"
 
     return rad
 end

@@ -26,7 +26,7 @@ end
 @info "Testing started"
 
 @testset "All tests" verbose=true begin
-    # @includetests ["parser"]    
+    @includetests ["parser"]    
     
     @includetests ["modular", "sparse"]
 

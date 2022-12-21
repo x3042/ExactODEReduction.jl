@@ -3,41 +3,53 @@
     struct ODE{P}
 
     The main structure that represents input ODE system.
-    Stores information about states (`x_vars`), and the equations.
-    This structure is constructed via `@ODEmodel` macro.
+    Stores information about states and the equations.
+    This structure is constructed via the `@ODEmodel` macro.
 """
 struct ODE{P}
     poly_ring::MPolyRing
     x_vars::Array{P, 1}
     x_equations::Dict{P, P}
+    params::Array{P, 1}
+
+    function ODE(ring)
+        P = elem_type(ring)
+        new{P}(ring, Vector{P}(), Dict{P,P}(), Vector{P}())
+    end
+
+    function ODE{P}(eqs::Dict{P, P}, params::Vector{P}) where {P <: Union{fmpq_mpoly, MPolyElem{<: FieldElem}}}
+        isempty(eqs) && error("Empty ODE system")
+        ring = parent(first(keys(eqs)))
+        vars = gens(ring)
+        @assert all(p -> p in vars, params) "Incompatible polynomial rings of parameters $params"
+        new{P}(ring, vars, eqs, params)
+    end
 
     function ODE{P}(
             eqs::Dict{P, P},
         ) where {P <: Union{fmpq_mpoly, MPolyElem{<: FieldElem}}}
-        # Initialize ODE
-
-        isempty(eqs) && error("Empty ODE system")
-        ring = parent(first(keys(eqs)))
-        vars = gens(ring)
-        new{P}(ring, vars, eqs)
+        ODE{P}(eqs, Vector{P}(undef, 0))        
     end
 end
 
 """
     function equations(ode::ODE)
 
-    Returns the equations that define the given ODE system.
+    Returns the array of equations that define the given ODE system.
 """
 equations(ode::ODE) = [ode.x_equations[v] for v in ode.x_vars]
 
 """
     function vars(ode::ODE)
 
-    Returns the polynomial variables in the given ODE system.
+    Returns the array of polynomial variables in the given ODE system.
 """
 Nemo.vars(ode::ODE)   = ode.x_vars
 
 Nemo.parent(ode::ODE) = ode.poly_ring
+
+Base.isempty(ode::ODE) = isempty(ode.x_equations)
+Base.length(ode::ODE) = length(ode.x_equations)
 
 #------------------------------------------------------------------------------
 
@@ -104,7 +116,7 @@ end
 macro ODEsystem(ex::Expr...)
     equations = [ex...]
     x_vars, io_vars, all_symb = macrohelper_extract_vars(equations)
-
+    
     # order of variables in the polynomial ring is the following:
     # 1. diferential variables,
     #   in the order they appear on the left-hand side,
@@ -163,7 +175,7 @@ macro ODEsystem(ex::Expr...)
     end
 
     u_vars = setdiff(io_vars, y_vars)
-    params = setdiff(all_symb, union(x_vars, y_vars, u_vars))
+    params = union(setdiff(all_symb, union(x_vars, y_vars, u_vars)), io_vars)
 
     # add constant equations
     to_insert = x_dict
@@ -176,7 +188,7 @@ macro ODEsystem(ex::Expr...)
     @info "Parameters: " * join(map(string, collect(params)), ", ")
 
     # creating the ode object
-    ode_expr = :(ExactODEReduction.ODE{ExactODEReduction.Nemo.fmpq_mpoly}($x_dict))
+    ode_expr = :(ExactODEReduction.ODE{ExactODEReduction.Nemo.fmpq_mpoly}($x_dict, Array{ExactODEReduction.Nemo.fmpq_mpoly}([$(params...)])))
 
     result = Expr(
         :block,
@@ -190,15 +202,23 @@ end
 #------------------------------------------------------------------------------
 
 function Base.show(io::IO, ode::ODE)
+    if isempty(ode.x_equations)
+        println(io, "Empty ODE system")
+        return nothing
+    end
     varstr = Dict(x => var_to_str(x) * "(t)" for x in ode.x_vars)
     R_print, vars_print = Nemo.PolynomialRing(base_ring(ode.poly_ring), [varstr[v] for v in gens(ode.poly_ring)])
     # output the equations sorted w.r.t. variables
     for x in ode.x_vars
+        if x in ode.params
+            continue
+        end
         eq = ode.x_equations[x]
         print(io, var_to_str(x) * "'(t) = ")
         print(io, evaluate(eq, vars_print))
         print(io, "\n")
     end
+    return nothing
 end
 
 #------------------------------------------------------------------------------
@@ -209,7 +229,7 @@ end
 #    x2' = eqs[2],
 #   ...
 # where xi are the variables of the base polynomial ring.
-function polys_to_ODE_assume_order(eqs::Vector{T}) where {T}
+function polystoODE_assumeorder(eqs::Vector{T}) where {T}
     R = parent(first(eqs))
     vs = gens(R)
     @assert length(vs) == length(eqs)

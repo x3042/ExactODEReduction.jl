@@ -11,3 +11,7 @@ ODE{P}
 ```@docs
 equations
 ```
+
+```@docs
+vars
+```

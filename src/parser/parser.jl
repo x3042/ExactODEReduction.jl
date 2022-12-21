@@ -191,16 +191,6 @@ end
 
 #------------------------------------------------------------------------------
 
-"""
-    load_ODEs_recursive_if(path; from_size=-Inf, to_size=Inf)
-
-Finds a basis of the algebra generated with the given `vectors`
-using the provived default method `used_algorithm` while reducing input coefficients
-modulo `initialprime`. By default, `find_basis_1_β` stands for the algorithm and
-`2147483647` for the initial reduction modulo.
-
-Each element in `vector` to be a subtype of `AbstractSparseObject`
-"""
 function load_ODEs_recursive_if(
                         path;
                         from_size=-Inf, to_size=Inf,
@@ -426,10 +416,42 @@ function load_ODEs(filepath, load_ic=false)
     return ODEs
 end
 
-function load_ODE(filepath, load_ic=false)
+function detect_params(eqs::Dict{P, P}) where {P}
+    params = Vector{P}(undef, 0)
+    for (x, eq) in eqs
+        if iszero(eq)
+            push!(params, x)
+        end
+    end
+    sort(params, rev=true)
+end
+
+"""
+    function load_ODE_fromfile(filepath, load_ic=false)
+
+    Returns the `ODE` object constructed from equations
+    in the `*.ode` file at `filepath`.
+    
+    The format `*.ode` is TODO.
+    
+    If `load_ic` is set, also returns the list of initial conditions 
+    (if specified in the file). 
+"""
+function load_ODE_fromfile(filepath, load_ic=false)
     if load_ic
         (ode, ics) = load_ODEs(filepath, true)
-        return (ODE{Nemo.fmpq_mpoly}(ode), ics)
+        vars = collect(keys(ode))
+        params = detect_params(ode)
+        @info "Loaded ODE system with $(length(ode) - length(params)) equations."
+        @info "State variables: " * join(map(string, setdiff(vars, params)), ", ")
+        @info "Parameters: " * join(map(string, params), ", ")
+        return (ODE{Nemo.fmpq_mpoly}(ode, params), ics)
     end
-    return ODE{Nemo.fmpq_mpoly}(load_ODEs(filepath))
+    ode = load_ODEs(filepath)
+    vars = collect(keys(ode))
+    params = detect_params(ode)
+    @info "Loaded ODE system with $(length(ode) - length(params)) equations."
+    @info "State variables: " * join(map(string, setdiff(vars, params)), ", ")
+    @info "Parameters: " * join(map(string, params), ", ")
+    return ODE{Nemo.fmpq_mpoly}(ode, params)
 end

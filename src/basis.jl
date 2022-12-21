@@ -15,7 +15,9 @@ function apply_matrices_inplace!(V::Subspace, matrices; ω=1.)
                 product = V.echelon_form[pivot] * vect
 
                 i += 1
-                i % 500 == 0 && print(".")
+                if i % 1000 == 0
+                    @debug "."
+                end
             
                 # Alex: 90% or more of products are zero,
                 # need to detect zero products during matmul:
@@ -125,7 +127,7 @@ Each element in `vector` to be a subtype of `AbstractSparseObject`
 function find_basis(vectors; used_algorithm=find_basis_1_β, initialprime=2^31-1)
     # used_algorithm is assumed not to throw normally
     # and to handle errors by thyself
-    @info "generating a basis for Algebra using $used_algorithm"
+    @debug "generating a basis for Algebra using $used_algorithm"
 
     V = Subspace(Nemo.QQ)
     primes = BigInt[initialprime]
@@ -137,7 +139,7 @@ function find_basis(vectors; used_algorithm=find_basis_1_β, initialprime=2^31-1
         field = Nemo.GF(fmpz(prime))
         set_modular_globals!(field)
 
-        @info "new reduction modulo, $prime"
+        @debug "new reduction modulo, $prime"
 
         xs = [ modular_reduction(x, field)
                for x in vectors ]
@@ -162,7 +164,7 @@ function find_basis(vectors; used_algorithm=find_basis_1_β, initialprime=2^31-1
         i % 10 == 0 && error("something is wrong")
     end
 
-    @info "generated a basis for Algebra of dimension $(dim(V))"
+    @debug "generated a basis for Algebra of dimension $(dim(V))"
 
     return V
 end

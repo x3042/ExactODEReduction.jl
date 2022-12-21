@@ -20,10 +20,4 @@ system = @ODEsystem(
 reductions = find_reductions(system)
 
 @info "Found reductions" reductions
-
-# 5-element Vector{Dict{Symbol, Vector{Any}}}:
-#  Dict(:new_system => [0], :new_vars => [kc])
-#  Dict(:new_system => [0, 0], :new_vars => [kc, kf])
-#  Dict(:new_system => [0, 0, 0], :new_vars => [kc, kf, p + s + es])
-#  Dict(:new_system => [0, 0, 0, 0], :new_vars => [kc, kf, p + s + es, e + es])
-#  Dict(:new_system => [0, 0, 0, 0, 0], :new_vars => [kc, kf, p + s + es, e + es, kr])
+@info "The smallest reduction" reductions[1]

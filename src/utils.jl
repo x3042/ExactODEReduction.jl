@@ -16,6 +16,8 @@ Base.rand(::Nemo.FlintRationalField, n::Int) = [rand(Nemo.QQ) for _ in 1:n]
 Base.rand(::Nemo.FlintIntegerRing) = Nemo.ZZ(rand(-2^16:2^16))
 Base.rand(::Nemo.FlintIntegerRing, n::Int) = [rand(Nemo.ZZ) for _ in 1:n]
 
+getnewrandomseed() = floor(Int, time())
+
 # interesting
 function var_to_str(v::Nemo.MPolyElem)
     ind = findfirst(vv -> vv == v, gens(parent(v)))

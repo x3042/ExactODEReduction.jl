@@ -9,11 +9,11 @@
 # 1. Import the package
 using ExactODEReduction
 
-# 2. Specify the path to a file with ODE system
-fname = abspath("example1.ode")
+# 2. Specify the path to a *.ode file with the ODE system
+fname = (@__DIR__) * "/example1.ode"
 
 # 3. Load the ODE system from the file
-ode = load_ODE(fname)
+ode = load_ODE_fromfile(fname)
 
 @info "Loaded system" ode
 

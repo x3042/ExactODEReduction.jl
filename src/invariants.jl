@@ -9,7 +9,7 @@ common invariant nonzero proper subspace such that
  - for every i, there is no invariant subspace Vi and V(i + 1)
 """
 function invariant_subspace_global(matrices::AbstractArray{T}; overQ=true) where {T}
-    @info "Called invariant_subspace_global on $(length(matrices)) matrices of shape $(size(matrices[1]))"
+    @info "Search for a subspace of $(length(matrices)) matrices $(size(matrices[1], 1))×$(size(matrices[1], 2))"
 
     n = size(first(matrices), 1)
 
@@ -23,11 +23,12 @@ function invariant_subspace_global(matrices::AbstractArray{T}; overQ=true) where
     unit_vect = unit_sparse_vector(n, 1, Nemo.QQ)
     constrained = invariant_subspace_local(matrices, [unit_vect])
     if length(constrained) < n
-        @debug "Found an invariant subspace by saturating the first unit vector"
+        @info "Found an invariant subspace by saturating the first unit vector"
         return [constrained]
     end
 
     # generate a basis for the Algebra
+    @info "Generating a basis for the algebra"
     algebra = find_basis(deepcopy(matrices)) 
 
     @debug "Dimension of the algebra is $(dim(algebra))"
@@ -36,11 +37,11 @@ function invariant_subspace_global(matrices::AbstractArray{T}; overQ=true) where
     end
 
     # find the radical of the Algebra
-    @info "Computing the radical.."
+    @info "Computing the radical"
     @savetime radical = find_radical(algebra) find_radical_times
 
     # @debug "Algebra radical:" radical 
-    @info "Found radical of size $(length(radical))"
+    @info "Size of the radical is $(length(radical))"
 
     # find an invariant subspace
     if length(radical) != 0
@@ -127,34 +128,15 @@ function many_invariant_subspaces(
 
     toreturn = Array{Any, 1}(Vs)
 
-    @info "found $([length(V) for V in Vs])-dim subspaces in ambient $(size(first(As), 1))-dim"
+    @info "Found $([length(V) for V in Vs])-dimensional subspaces in the ambient $(size(first(As), 1))-dimensional space"
 
     # restrict
     if length(first(Vs)) > 1 && base_ring(first(first(Vs))) != Nemo.QQBar        
         As_V = restrict(As, first(Vs))
         
-        @info "Calling myself recursively in restricted subspace"
+        @debug "Calling myself recursively in restricted subspace"
 
         subspaces = many_invariant_subspaces(As_V, find_invariant; overQ=overQ)
-        
-        # An experiment
-        # for sub in map(vs -> lift(vs, first(Vs)), subspaces)
-        #     As_V_sub = factorize(As, sub)
-        #     if !isempty(As_V_sub)
-        #         subspaces_sub = many_invariant_subspaces(As_V_sub, find_invariant; overQ=overQ)
-        #         if length(subspaces_sub) > 0
-        #             lifted_sub = map(
-        #                 vs -> lift(vs, complement_subspace(linear_span!(last(Vs)))),
-        #                 subspaces_sub)
-        #             for l in lifted_sub
-        #                 tail = deepcopy(last(Vs))
-        #                 append!(l, tail)
-        #                 push!(toreturn, l)
-        #             end
-        #         end
-        #     end
-        # end
-        
         toreturn = Vector{Any}([map(vs -> lift(vs, first(Vs)), subspaces)..., toreturn...])
     end
 
@@ -163,7 +145,7 @@ function many_invariant_subspaces(
         As_V = factorize(As, last(Vs))
         if !isempty(As_V)
             
-            @info "Calling myself recursively in complemented subspace"
+            @debug "Calling myself recursively in complemented subspace"
             
             subspaces = many_invariant_subspaces(As_V, find_invariant; overQ=overQ)
             if length(subspaces) > 0

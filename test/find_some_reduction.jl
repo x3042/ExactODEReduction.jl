@@ -61,7 +61,7 @@ cases = [
             s5'(t) = 1//200*s4(t)
         ),
         dim=6,
-        ans=[[s1,s6,s2]]
+        ans=[[s1,s6,s2], [s1,s2,s6], [s1,s6,s2], [s6,s1,s2], [s6,s2,s1], [s2,s1,s6], [s2,s6,s1]]
     ),
 ]
 
@@ -82,13 +82,14 @@ barcases = [
     for case in cases
         system = case.system
         reduction = ExactODEReduction.find_some_reduction(system)
-        
+                
         if case.ans == [[]]
-            @test isempty(reduction)
+            @test isempty(ExactODEReduction.new_vars(reduction))
             continue
         end
 
-        @test reduction[:new_vars] in case.ans
+        nv = ExactODEReduction.vars(ExactODEReduction.new_system(reduction))
+        @test [ExactODEReduction.new_vars(reduction)[v] for v in nv] in case.ans
     end
 end
 
@@ -97,6 +98,6 @@ end
         system = case.system
         reduction = ExactODEReduction.find_some_reduction(system, overQ=false)
 
-        @test length(reduction[:new_vars]) == case.dim
+        @test length(ExactODEReduction.new_vars(reduction)) == case.dim
     end
 end

@@ -4,6 +4,7 @@ module ExactODEReduction
 import Base: ==, !=, +, -, *, lcm, rand, zero
 
 import Logging
+import Random
 
 # for conversions between our and MTK de system types
 import ModelingToolkit
@@ -83,15 +84,18 @@ include("reconstruction.jl")
 include("Subspace.jl")
 # ODE type definition/functionality
 include("ODE.jl")
+# 
+include("Reduction.jl")
 
 # Computing a basis of matrix algebra
 include("basis.jl")
 # Algotirhms for matrix algebra
 include("matrix_algebras.jl")
 
-# By default, Polymake is not loaded
+# By default, Polymake is not loaded, 
+# and the keyword argument `makepositive` does nothing.
 _ispolymakeloaded() = false
-@noinline _warn_polymakenotloaded() = @warn "Run `import Polymake` to enable parameter `makepositive`."
+@noinline _warn_polymakenotloaded() = @warn "Run `import Polymake` to enable keyword argument `makepositive`."
 function __init__()
     # Be positive!
     @require Polymake="d720cf60-89b5-51f5-aff5-213f193123e7" include("positivizor.jl")
@@ -134,12 +138,17 @@ Dict{Symbol, Any} with 2 entries:
 function find_some_reduction(
         system::ODE{P};
 	    overQ=true,
-        loglevel=Logging.Info,
-        makepositive=false) where {P}
+        seed=nothing,
+        makepositive=false,
+        loglevel=Logging.Info) where {P}
 
     # hmm
     package_logger = Logging.ConsoleLogger(stderr, loglevel)
     Logging.global_logger(package_logger)
+
+    isnothing(seed) && (seed = getnewrandomseed())
+    Random.seed!(seed)
+    @info "Global random seed: $seed"
 
     @debug "find_some_reduction of " system
 
@@ -158,9 +167,12 @@ function find_some_reduction(
 
     @debug "Subspace global" subspaces
 
-    isempty(subspaces) && return Dict{Symbol, Vector{fmpq_mpoly}}()
-    subspace = first(subspaces)
+    if isempty(subspaces)
+        @warn "No reductions found"
+        return _emptyreduction(parent(first(vars(system))))
+    end
 
+    subspace = first(subspaces)
     subspace = basis(linear_span!(subspace))
     
     @debug "Linear span" subspace
@@ -181,9 +193,9 @@ function find_some_reduction(
     # ∂y[1] ~ new_equations[1],
     # ∂y[2] ~ new_equations[2],
     # ...
-    new_ode = polys_to_ODE_assume_order(new_equations)
-
-    return Dict(:new_vars => transformation, :new_system => new_ode)
+    new_ode = polystoODE_assumeorder(new_equations)
+    new_vars = Dict(new_ode.x_vars .=> transformation)
+    Reduction(new_ode, new_vars)
 end
 
 #------------------------------------------------------------------------------
@@ -219,12 +231,17 @@ Dict{Symbol, Any} with 2 entries:
 function find_smallest_constrained_reduction(
         system::ODE{P},
         observables::Vector{P};
-        loglevel=Logging.Info,
-        makepositive=false) where {P}
+        seed=nothing,
+        makepositive=false,
+        loglevel=Logging.Info) where {P}
 
     # hmm
     package_logger = Logging.ConsoleLogger(stderr, loglevel)
     Logging.global_logger(package_logger)
+
+    isnothing(seed) && (seed = getnewrandomseed())
+    Random.seed!(seed)
+    @info "Global random seed: $seed"
 
     # Jacobian of system,
     # each subspace invariant under Jacobian corresponds to a reduction
@@ -241,12 +258,15 @@ function find_smallest_constrained_reduction(
 
     subspace = nothing
     if length(matrices) > 0
-        subspace =  invariant_subspace_local(matrices, vector_obs)
+        subspace = invariant_subspace_local(matrices, vector_obs)
     else
         subspace = vector_obs
     end
 
-    isempty(subspace) && return Dict{Symbol, Vector{fmpq_mpoly}}()
+    if isempty(subspace)
+        @warn "No reductions found"
+        return _emptyreduction(parent(first(vars(system))))
+    end
 
     subspace = basis(linear_span!(subspace))
     if makepositive
@@ -259,9 +279,9 @@ function find_smallest_constrained_reduction(
 
     (transformation, new_equations) = perform_change_of_variables(eqs, subspace)
 
-    new_ode = polys_to_ODE_assume_order(new_equations)
-
-    return Dict(:new_vars => transformation, :new_system => new_ode)
+    new_ode = polystoODE_assumeorder(new_equations)
+    new_vars = Dict(new_ode.x_vars .=> transformation)
+    Reduction(new_ode, new_vars)
 end
 
 #------------------------------------------------------------------------------
@@ -301,10 +321,15 @@ function find_reductions(
         system::ODE{P};
         overQ=true,
         makepositive=false,
+        seed=nothing,
         loglevel=Logging.Info) where {P}
 
     package_logger = Logging.ConsoleLogger(stderr, loglevel)
     Logging.global_logger(package_logger)
+
+    isnothing(seed) && (seed = getnewrandomseed())
+    Random.seed!(seed)
+    @info "Global random seed: $seed"
 
     @debug "find_reductions of " system
 
@@ -315,8 +340,22 @@ function find_reductions(
         matrices = [zero_sparse_vector(length(eqs), length(eqs), Nemo.QQ)]
     end
     invariant_subspaces = many_invariant_subspaces(matrices, invariant_subspace_global; overQ=overQ)
-    result = Vector{Dict{Symbol, Any}}()
-    for V in invariant_subspaces
+    
+    poly_ring = parent(system)
+    if isempty(invariant_subspaces)
+        @warn "No reductions found"
+        return ChainOfReductions(Vector{Reduction{elem_type(poly_ring),elem_type(poly_ring),elem_type(poly_ring)}}())
+    end
+
+    # checking if we live over QQBar
+    K = base_ring(first(first(invariant_subspaces)))
+    if K != base_ring(poly_ring)
+        poly_ring, _ = Nemo.PolynomialRing(K, ["$x" for x in gens(poly_ring)])
+    end
+
+    # results = Vector{Reduction{elem_type(poly_ring), elem_type(poly_ring), elem_type(poly_ring)}}()
+    results = Vector{Any}()
+    for (i, V) in enumerate(invariant_subspaces)
         V = basis(linear_span!(V))
         if makepositive
             if _ispolymakeloaded()
@@ -325,30 +364,25 @@ function find_reductions(
                 _warn_polymakenotloaded()
             end
         end
-        poly_ring = parent(system)
-
-        # checking if we live over QQBar
-        if base_ring(first(V)) != base_ring(poly_ring)
-            poly_ring, _ = Nemo.PolynomialRing(base_ring(first(V)), ["$x" for x in gens(poly_ring)])
-        end
-        (transformation, new_equations) = perform_change_of_variables(eqs, V)
-        new_ode = polys_to_ODE_assume_order(new_equations)
-        push!(result, Dict(:new_vars => transformation, :new_system => new_ode))
+        (transformation, new_equations) = perform_change_of_variables(eqs, V)        
+        new_system = polystoODE_assumeorder(new_equations)
+        new_vars = Dict(new_system.x_vars .=> transformation)
+        push!(results, Reduction(new_system, new_vars))
     end
 
-    sort!(result, by=r -> length(r[:new_vars]))
+    sort!(results, by=r -> length(r.new_vars))
 
-    @debug "Found reductions" result
+    @debug "Found reductions" results
 
-    return result
+    ChainOfReductions(results)
 end
 
-export find_smallest_constrained_reduction, find_reductions, find_some_reduction
-export check_consistency
 export ODE, @ODEsystem, equations, vars
 
-export load_ODE
+export find_smallest_constrained_reduction, find_reductions, find_some_reduction
+export new_system, new_vars
 
+export load_ODE_fromfile
 export ODEtoMTK, MTKtoODE
 
 end

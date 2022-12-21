@@ -9,10 +9,10 @@
 
 using ExactODEReduction
 
-fname = abspath("BIOMD0000000365.ode")
+fname = (@__DIR__) * "/BIOMD0000000365.ode"
 
 # Load the ODE system from the file
-ode = load_ODE(fname)
+ode = load_ODE_fromfile(fname)
 
 @info "Loaded system" ode
 
@@ -26,5 +26,5 @@ reductions = find_reductions(ode)
 # observed in the paper
 reduction = reductions[5]
 
-@info "New system" reduction[:new_system]
-@info "New variables" reduction[:new_vars]
+@info "New system" new_system(reduction)
+@info "New variables" new_vars(reduction)
