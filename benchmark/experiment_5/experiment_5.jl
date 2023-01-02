@@ -9,7 +9,7 @@ using InteractiveUtils
 
 const _seed = 888  # use this random seed
 
-const _postfix = ""  # filenames postfix
+const _postfix = "_server"  # filenames postfix
 const _date = Dates.format(now(), "yyyy-mm-dd-HH-MM-SS")  # filename signature
 const _result_dirname = "result_data$(_postfix)"  # directory to write results
 const _skip_models = ["e3.ode"]   # skip these models
@@ -27,7 +27,6 @@ function run_benchmarks(sz...)
     if sz in keys(load_cache)
         dataset = load_cache[sz]
     else
-        @info "" (@__DIR__)*"/../data/ODEs/" 
         dataset = ExactODEReduction.load_ODEs_recursive_if("/data/ODEs/",from_size=from_size, to_size=to_size)
         load_cache[sz] = dataset
     end
@@ -205,7 +204,7 @@ end
 
 # clear_all_data()
 
-for sz in [(2, 100)]
+for sz in [(100, 150)]
     run_benchmarks(sz...)
 end
 
