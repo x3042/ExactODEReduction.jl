@@ -289,8 +289,8 @@ function load_ODEs(filepath, load_ic=false)
 
     ics = nothing
     if load_ic
-        # we assume that the initial conditions live in the first block
-        inits = lines[findfirst(startswith("begin"), lines) + 1 : findfirst(startswith("end"), lines) + 1]
+        inits = lines[findfirst(s -> occursin("begin init", s), lines) + 1 : findfirst(s -> occursin("end init", s), lines) - 1]
+        inits = vcat(inits, lines[findfirst(s -> occursin("begin parameters", s), lines) + 1 : findfirst(s -> occursin("end parameters", s), lines) - 1])
         inits = map(s -> first(split(s, "(")), inits)
         ics = Dict()
         for l in inits
