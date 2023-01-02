@@ -7,126 +7,43 @@
 \end{cases}\]</p><p>To create a system as above in <code>ExactODEReduction</code>, one can use the <code>ODEsystem</code> macro. This is the easiest way to do so.</p><pre><code class="language-julia hljs">using ExactODEReduction
 
 odes = @ODEsystem(
-    x1&#39;(t) = x_1^2 + 2x_1x_2,
-    x2&#39;(t) = x_2^2 + x_3 + x_4,
-    x3&#39;(t) = x_2 + x_4,
-    x4&#39;(t) = x_1 + x_3
-)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">x1&#39;(t) = x_1(t)^2 + 2*x_1x_2(t)
-x2&#39;(t) = x_2(t)^2 + x_3(t) + x_4(t)
-x3&#39;(t) = x_2(t) + x_4(t)
-x4&#39;(t) = x_1(t) + x_3(t)
-</code></pre><p>After using the macro, we can use <code>find_reductions</code> function. This function accepts the ODE model and outputs possible linear reductions.</p><pre><code class="language-julia hljs">reds = find_reductions(odes)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">A chain of 8 reductions of dimensions 1, 2, 3, 4, 5, 6, 7, 8.
+    x1&#39;(t) = x1^2 + 2x1*x2,
+    x2&#39;(t) = x2^2 + x3 + x4,
+    x3&#39;(t) = x2 + x4,
+    x4&#39;(t) = x1 + x3
+)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">x1&#39;(t) = x1(t)^2 + 2*x1(t)*x2(t)
+x2&#39;(t) = x2(t)^2 + x3(t) + x4(t)
+x3&#39;(t) = x2(t) + x4(t)
+x4&#39;(t) = x1(t) + x3(t)
+</code></pre><p>After using the macro, we can use <code>find_reductions</code> function. This function accepts the ODE model and outputs possible linear reductions.</p><pre><code class="language-julia hljs">reds = find_reductions(odes)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">A chain of 2 reductions of dimensions 2, 3.
 ==================================
-1. Reduction of dimension 1.
+1. Reduction of dimension 2.
 New system:
-y1&#39;(t) = 0
+y1&#39;(t) = y1(t)^2 + y2(t)
+y2&#39;(t) = y1(t) + y2(t)
 New variables:
-y1 = x_1
+y1 = x1 + x2
+y2 = x3 + x4
 ==================================
-2. Reduction of dimension 2.
+2. Reduction of dimension 3.
 New system:
-y1&#39;(t) = 0
-y2&#39;(t) = 0
-New variables:
-y1 = x_1
-y2 = x_1x_2
-==================================
-3. Reduction of dimension 3.
-New system:
-y1&#39;(t) = y2(t)^2 + 2*y3(t)
-y2&#39;(t) = 0
-y3&#39;(t) = 0
-New variables:
-y1 = x1
-y2 = x_1
-y3 = x_1x_2
-==================================
-4. Reduction of dimension 4.
-New system:
-y1&#39;(t) = y2(t)^2 + 2*y3(t)
-y2&#39;(t) = 0
-y3&#39;(t) = 0
-y4&#39;(t) = 0
-New variables:
-y1 = x1
-y2 = x_1
-y3 = x_1x_2
-y4 = x_2
-==================================
-5. Reduction of dimension 5.
-New system:
-y1&#39;(t) = y2(t)^2 + 2*y3(t)
-y2&#39;(t) = 0
-y3&#39;(t) = 0
-y4&#39;(t) = 0
-y5&#39;(t) = 0
-New variables:
-y1 = x1
-y2 = x_1
-y3 = x_1x_2
-y4 = x_2
-y5 = x_3 + x_4
-==================================
-6. Reduction of dimension 6.
-New system:
-y1&#39;(t) = y3(t)^2 + 2*y4(t)
-y2&#39;(t) = y5(t)^2 + y6(t)
-y3&#39;(t) = 0
-y4&#39;(t) = 0
-y5&#39;(t) = 0
-y6&#39;(t) = 0
+y1&#39;(t) = y1(t)^2 + 2*y1(t)*y2(t)
+y2&#39;(t) = y2(t)^2 + y3(t)
+y3&#39;(t) = y1(t) + y2(t) + y3(t)
 New variables:
 y1 = x1
 y2 = x2
-y3 = x_1
-y4 = x_1x_2
-y5 = x_2
-y6 = x_3 + x_4
-==================================
-7. Reduction of dimension 7.
+y3 = x3 + x4
+</code></pre><p>The <code>reds</code> object can be treated as an array. For example, to access the second reduction from the list, type</p><pre><code class="language-julia hljs">red = reds[2]</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Reduction of dimension 3.
 New system:
-y1&#39;(t) = y3(t)^2 + 2*y4(t)
-y2&#39;(t) = y5(t)^2 + y6(t) + y7(t)
-y3&#39;(t) = 0
-y4&#39;(t) = 0
-y5&#39;(t) = 0
-y6&#39;(t) = 0
-y7&#39;(t) = 0
+y1&#39;(t) = y1(t)^2 + 2*y1(t)*y2(t)
+y2&#39;(t) = y2(t)^2 + y3(t)
+y3&#39;(t) = y1(t) + y2(t) + y3(t)
 New variables:
 y1 = x1
 y2 = x2
-y3 = x_1
-y4 = x_1x_2
-y5 = x_2
-y6 = x_3
-y7 = x_4
-==================================
-8. Reduction of dimension 8.
-New system:
-y1&#39;(t) = y4(t)^2 + 2*y5(t)
-y2&#39;(t) = y6(t)^2 + y7(t) + y8(t)
-y3&#39;(t) = y6(t) + y8(t)
-y4&#39;(t) = 0
-y5&#39;(t) = 0
-y6&#39;(t) = 0
-y7&#39;(t) = 0
-y8&#39;(t) = 0
-New variables:
-y1 = x1
-y2 = x2
-y3 = x3
-y4 = x_1
-y5 = x_1x_2
-y6 = x_2
-y7 = x_3
-y8 = x_4
-</code></pre><p>The <code>reds</code> object can be treated as an array. For example, to access the second reduction from the list, type</p><pre><code class="language-julia hljs">red = reds[2]</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Reduction of dimension 2.
-New system:
-y1&#39;(t) = 0
-y2&#39;(t) = 0
-New variables:
-y1 = x_1
-y2 = x_1x_2
-</code></pre><p>Further, we can use <code>new_system</code> and <code>new_vars</code> functions to explore this reduction.</p><pre><code class="language-julia hljs">new_ode = new_system(red)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">y1&#39;(t) = 0
-y2&#39;(t) = 0
-</code></pre><pre><code class="language- hljs">new_vars = new_vars(red)</code></pre><p>Note that <code>new_ode</code> from above is again an <code>ODE</code> object. In particular, this means that all functions from Section <a href="../io/#Functions-for-manipulating-ODEs">Functions for manipulating ODEs</a> will also work for it.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« ExactODEReduction</a><a class="docs-footer-nextpage" href="../io/">Functions for manipulating ODEs »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.23 on <span class="colophon-date" title="Monday 2 January 2023 14:54">Monday 2 January 2023</span>. Using Julia version 1.8.4.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+y3 = x3 + x4
+</code></pre><p>Further, we can use <code>new_system</code> and <code>new_vars</code> functions to explore this reduction.</p><pre><code class="language-julia hljs">new_ode = new_system(red)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">y1&#39;(t) = y1(t)^2 + 2*y1(t)*y2(t)
+y2&#39;(t) = y2(t)^2 + y3(t)
+y3&#39;(t) = y1(t) + y2(t) + y3(t)
+</code></pre><pre><code class="language- hljs">new_vars = new_vars(red)</code></pre><p>Note that <code>new_ode</code> from above is again an <code>ODE</code> object. In particular, this means that all functions from Section <a href="../io/#Functions-for-manipulating-ODEs">Functions for manipulating ODEs</a> will also work for it.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« ExactODEReduction</a><a class="docs-footer-nextpage" href="../io/">Functions for manipulating ODEs »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.23 on <span class="colophon-date" title="Monday 2 January 2023 16:28">Monday 2 January 2023</span>. Using Julia version 1.8.4.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
