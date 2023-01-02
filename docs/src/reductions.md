@@ -19,5 +19,5 @@ new_system
 ```
 
 ```@docs
-new_vars
+ExactODEReduction.new_vars
 ```

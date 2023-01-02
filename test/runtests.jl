@@ -1,3 +1,6 @@
+include("../src/ExactODEReduction.jl")
+using .ExactODEReduction
+
 using Test
 using TestSetExtensions
 
@@ -10,9 +13,6 @@ using Nemo
 using SparseArrays
 import ModelingToolkit
 import Random
-
-include("../src/ExactODEReduction.jl")
-using .ExactODEReduction
 
 # Taken from JuMP/test/solvers.jl
 function try_import(name::Symbol)

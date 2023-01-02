@@ -10,7 +10,7 @@ To install `ExactODEReduction.jl`, run the following command in Julia:
 
 ```julia
 import Pkg
-Pkg.add(url="https://github.com/x3042/Exact-reduction-of-ODE-systems")
+Pkg.add(url="https://github.com/x3042/ExactODEReduction.jl")
 ```
 
 The package dependency on `polymake` is optional; it is loaded lazily only if necessary, and most of the package functionality works without it.

@@ -11,7 +11,7 @@ $$\begin{cases}
 \dot{x}_4 = x_1 + x_3 
 \end{cases}$$
 
-To create a system as above in `ExactODEReduction`, one can use the `ODEsystem` macro. This is the easiest way to do so.
+To create a system as above in `ExactODEReduction.jl`, one can use the `ODEsystem` macro. This is the easiest way to do so.
 
 ```@example a
 using ExactODEReduction
