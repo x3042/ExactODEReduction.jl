@@ -1,6 +1,4 @@
-# using ExactODEReduction
-
-include("../../src/ExactODEReduction.jl")
+using ExactODEReduction
 
 using Nemo
 using Distributions
