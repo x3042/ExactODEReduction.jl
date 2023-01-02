@@ -5,6 +5,7 @@ using Distributions
 using Printf
 using Dates
 using Statistics
+using InteractiveUtils
 
 const _seed = 888  # use this random seed
 
@@ -15,6 +16,8 @@ const _skip_models = ["e3.ode"]   # skip these models
 
 const load_cache = Dict()
 const computed_cache = Dict()
+
+julia_info_markdown() = join(split(sprint(versioninfo, context=:compact => false), "\n"), "\n- ")[1:end-2]
 
 #------------------------------------------------------------------------------
 
@@ -145,7 +148,7 @@ function write_md_all()
         md *= "\n"
     end
 
-    md *= "\n$(sprint(versioninfo, context=:compact => false))\n"
+    md *= "\n$(julia_info_markdown())\n"
 
     fnname = "experiment_5_all$(_postfix)_$(_date).md"
     f = open((@__DIR__)*"/$fnname", "w")
@@ -184,7 +187,7 @@ function write_md_aggregate(thresholds)
         md *= "\n"
     end
 
-    md *= "\n$(sprint(versioninfo, context=:compact => false))\n"
+    md *= "\n$(julia_info_markdown())\n"
 
     fnname = "experiment_5$(_postfix)_$(_date).md"
     f = open((@__DIR__)*"/$fnname", "w")
@@ -202,7 +205,7 @@ end
 
 # clear_all_data()
 
-for sz in [(2, 10)]
+for sz in [(2, 100)]
     run_benchmarks(sz...)
 end
 
