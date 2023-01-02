@@ -17,10 +17,10 @@ To create a system as above in `ExactODEReduction`, one can use the `ODEsystem` 
 using ExactODEReduction
 
 odes = @ODEsystem(
-    x1'(t) = x_1^2 + 2x_1x_2,
-    x2'(t) = x_2^2 + x_3 + x_4,
-    x3'(t) = x_2 + x_4,
-    x4'(t) = x_1 + x_3
+    x1'(t) = x1^2 + 2x1*x2,
+    x2'(t) = x2^2 + x3 + x4,
+    x3'(t) = x2 + x4,
+    x4'(t) = x1 + x3
 )
 ```
 

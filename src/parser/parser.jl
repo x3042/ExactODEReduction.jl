@@ -348,9 +348,7 @@ function load_ODEs(filepath, load_ic=false)
     end
     symbs = map(Symbol, strings)
     EE = Expr(:(=), Expr(:tuple, :S, Expr(:tuple, symbs...)), :(Nemo.QQ[$strings...]))
-    eval(EE)
-
-    xs = gens(S)
+    S, xs = eval(EE)
 
     # symbol :x to x from QQ[x]
     mapping = Dict{Symbol, fmpq_mpoly}(
