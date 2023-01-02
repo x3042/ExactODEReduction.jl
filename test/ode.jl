@@ -83,6 +83,31 @@ end
     end
 end
 
+@testset "ODE ad-hoc stuff" begin
+    # Test `set_parameter_values`
+    odes = @ODEsystem(
+        x'(t) = x + y,
+        y'(t) = a*x - (a + b^2)*y - z,
+        z'(t) = 2x - c*z
+    )
+    @test ExactODEReduction.equations(odes)[1:3] == [x + y, a*x - (a + b^2)*y - z, 2x - c*z]
+    @test ExactODEReduction.vars(odes)[1:3] == [x,y,z]
+
+    new_ode = ExactODEReduction.set_parameter_values(odes, Dict(a => 3))
+    new_vs = ExactODEReduction.vars(new_ode)
+    @test length(new_vs) == 5
+    @test map(string, new_vs) == ["x","y","z","b","c"]
+    x, y, z, b, c = new_vs
+    @test ExactODEReduction.equations(new_ode) == [x + y, 3*x - (3 + b^2)*y - z, 2x - c*z, zero(x), zero(x)]
+
+    new_ode2 = ExactODEReduction.set_parameter_values(new_ode, Dict(b => 4, c => 5))
+    new_vs2 = ExactODEReduction.vars(new_ode2)
+    @test length(new_vs2) == 3
+    @test map(string, new_vs2) == ["x","y","z"]
+    x, y, z = new_vs2
+    @test ExactODEReduction.equations(new_ode2) == [x + y, 3*x - (3 + 16)*y - z, 2x - 5*z]
+end
+
 @testset "ODE to MTK and vice versa" begin
     test_cases = [
         ExactODEReduction.@ODEsystem(

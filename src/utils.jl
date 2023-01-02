@@ -27,6 +27,24 @@ end
 # ------------------------------------------------------------------------------
 # This section is adapted from StructuralIdentifiability.jl
 
+function str_to_var(s::String, ring::Nemo.MPolyRing)
+    ind = findfirst(v -> (string(v) == s), symbols(ring))
+    if ind === nothing
+        throw(Base.KeyError("Variable $s is not found in ring $ring"))
+    end
+    return gens(ring)[ind]
+end
+
+"""
+    eval_at_dict(f, d)
+Evaluates a polynomial/rational function on a dictionary of type `var => val` and missing values are replaced with zeroes
+"""
+function eval_at_dict(poly::P, d::Dict{P,T}) where {P <: Nemo.MPolyElem, T}
+    R = parent(first(values(d)))
+    point = [get(d, v, zero(R)) for v in gens(parent(poly))]
+    return evaluate(poly, point)
+end
+
 function eval_at_nemo(e::ModelingToolkit.Num, vals::Dict)
     e = ModelingToolkit.Symbolics.value(e)
     return eval_at_nemo(e, vals)

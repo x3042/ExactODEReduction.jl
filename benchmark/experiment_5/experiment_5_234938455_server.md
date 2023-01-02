@@ -1,6 +1,6 @@
 #2022-10-11T22:59:59.674
 
-## (Segregated) Benchmark results for `find_reductions`.
+## (Aggregated) Benchmark results for `find_reductions`.
 All systems.
 
 

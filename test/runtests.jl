@@ -9,6 +9,7 @@ using AbstractAlgebra
 using Nemo
 using SparseArrays
 import ModelingToolkit
+import Random
 
 include("../src/ExactODEReduction.jl")
 using .ExactODEReduction
@@ -41,7 +42,7 @@ end
         @includetests ["positivizer"]
     end
 
-    @includetests ["ode"]
+    @includetests ["ode", "reduction"]
 
     @includetests ["find_some_reduction", "find_reductions"]
 end

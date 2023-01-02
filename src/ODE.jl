@@ -53,6 +53,29 @@ Base.length(ode::ODE) = length(ode.x_equations)
 
 #------------------------------------------------------------------------------
 
+# This is adapted from StructuralIdentifiability.jl
+
+"""
+    set_parameter_values(ode, param_values)
+Input:
+- `ode` - an `ODE` object
+- `param_values` - values for (possibly, some of) the parameters as dictionary `parameter` => `value`
+Output: 
+- new ode with the parameters in param_values plugged with the given numbers
+"""
+function set_parameter_values(ode::ODE{P}, param_values::Dict{P, T}) where {P, T}
+    new_vars = map(var_to_str, [v for v in gens(ode.poly_ring) if !(v in keys(param_values))])
+    small_ring, small_vars = Nemo.PolynomialRing(base_ring(ode.poly_ring), new_vars)
+    eval_dict = Dict(str_to_var(v, ode.poly_ring) => str_to_var(v, small_ring) for v in new_vars)
+    merge!(eval_dict, Dict(p => small_ring(val) for (p, val) in param_values))
+
+    return ODE{P}(
+        Dict{P, P}(eval_at_dict(v, eval_dict) => eval_at_dict(f, eval_dict) for (v, f) in ode.x_equations)
+    )
+end
+
+#------------------------------------------------------------------------------
+
 function macrohelper_extract_vars(equations::Array{Expr, 1})
     x_vars = Vector()
     funcs, all_symb = Set(), Set()

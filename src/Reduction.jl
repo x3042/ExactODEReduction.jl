@@ -5,19 +5,31 @@ struct Reduction{P, A, B}
 end
 
 """
-    function new_system(r::Reduction)
+    new_system(r::Reduction)
 
     Returns the `ODE` object that defines the reduced system.
 """
 new_system(r::Reduction) = r.new_system
 
 """
-    function new_system(r::Reduction)
+    new_system(r::Reduction)
 
     Returns the dictionary of new macro-variables expressed
     as linear combinations of the original variables.
 """
 new_vars(r::Reduction) = r.new_vars
+
+"""
+    new_initialconds(r::Reduction, ics::Dict)
+
+    Returns a dictionary of initial conditions for the new variables
+    as defined by the given reduction.
+"""
+function new_initialconds(r::Reduction, ics::Dict{P, T}) where {P, T}
+    newv = new_vars(r)
+    newics = Dict(v => eval_at_dict(expr, ics) for (v, expr) in newv)
+    newics
+end
 
 Base.isempty(r::Reduction) = isempty(r.new_system)
 Base.length(r::Reduction) = length(r.new_system)
@@ -41,7 +53,9 @@ function Base.show(io::IO, red::Reduction)
     nothing
 end
 
+
 struct ChainOfReductions#{P, A, B}
+    # this is actually a vector of Reduction{A, A, A}
     reductions#::Vector{Reduction{P, A, B}}
 end
 

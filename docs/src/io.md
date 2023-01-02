@@ -15,3 +15,11 @@ equations
 ```@docs
 vars
 ```
+
+```@docs
+ODEtoMTK
+```
+
+```@docs
+MTKtoODE
+```

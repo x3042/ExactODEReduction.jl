@@ -427,12 +427,12 @@ function detect_params(eqs::Dict{P, P}) where {P}
 end
 
 """
-    function load_ODE_fromfile(filepath, load_ic=false)
+    load_ODE_fromfile(filepath, load_ic=false)
 
     Returns the `ODE` object constructed from equations
     in the `*.ode` file at `filepath`.
     
-    The format `*.ode` is TODO.
+    For the format `*.ode` see the `examples` folder.
     
     If `load_ic` is set, also returns the list of initial conditions 
     (if specified in the file). 

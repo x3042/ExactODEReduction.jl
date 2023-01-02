@@ -378,9 +378,10 @@ function find_reductions(
 end
 
 export ODE, @ODEsystem, equations, vars
+export set_parameter_values
 
 export find_smallest_constrained_reduction, find_reductions, find_some_reduction
-export new_system, new_vars
+export new_system, new_vars, new_initialconds
 
 export load_ODE_fromfile
 export ODEtoMTK, MTKtoODE

@@ -1,7 +1,5 @@
 
-include("../../src/ExactODEReduction.jl")
-
-#------------------------------------------------------------------------------
+using ExactODEReduction
 
 using Nemo
 using Distributions
@@ -9,18 +7,19 @@ using Printf
 using Dates
 using Statistics
 
-#------------------------------------------------------------------------------
+_seed = 888  # use this random seed
 
-postfix = "_server"
-Experiment_dir = "/home/sumiya11/exactreduction/Exact-reduction-of-ODE-systems/benchmark/experiment_5"
-Result_dirname = "result_data$(postfix)"
-
-skip_models = ["e3.ode"]
+_postfix = "_server"  # files postfix
+_result_dirname = "result_data$(postfix)"  # directory to write results
+_skip_models = ["e3.ode"]   # skip these models
 
 const load_cache = Dict()
 const computed_cache = Dict()
 
-function uwuwu(sz...)
+#------------------------------------------------------------------------------
+
+# run benchmarks on sizes [from_size, to to_size]
+function run_benchmarks(sz...)
     from_size, to_size = sz
     if sz in keys(load_cache)
         dataset = load_cache[sz]
@@ -39,26 +38,52 @@ function uwuwu(sz...)
             continue
         end
         ODE = ExactODEReduction.ODE{fmpq_mpoly}(system)
-        x = @timed ExactODEReduction.find_reductions(ODE)
+        x = @timed find_reductions(ODE)
         computed_cache[filename] = [length(system), x.time, x.value]
     end
 end
 
 #------------------------------------------------------------------------------
 
-function dumpdata()
+function count_nontrivial_reductions(reductions)
     is_first_integral_reduction = ExactODEReduction.is_first_integral_reduction
+    length(reductions) - count(
+        red -> is_first_integral_reduction(new_system(red)),
+        reductions
+    )
+end
+
+function count_nontrivial_reductions_honest(reductions)
+    n_intereting = count_nontrivial_reductions(reductions)
+    correction = 0
+    for i in 1:length(reductions) - 1
+        r1, r2 = reductions[i], reductions[i+1]
+        nv1, nv2 = new_vars(r1), new_vars(r2)
+        ne1, ne2 = new_system(r1), new_system(r2)
+        v1, v2 = vars(ne1), vars(ne2)
+        e1, e2 = equations(ne1), equations(ne2)
+        part_1a = [evaluate(e, v2[1:length(v1)]) for e in e1]
+        part_2a = e2[1:length(e1)]
+        if part_1 == part_2
+            part_2b = e2[length(e1)+1:end]
+            if all(part_2b, iszero(delta))
+                correction += 1
+            end
+        end
+    end
+    n_interesting - correction
+end
+
+function dumpdata()
     for (modelname, modeldata) in computed_cache
         dimension, runtime, reductions = modeldata
+
         open("$Experiment_dir/$Result_dirname/$modelname", "w") do f
             println(f, dimension)
             println(f, runtime)
             println(f, length(reductions))
-            println(f,
-                length(reductions) - count(
-                    red -> is_first_integral_reduction(red[:new_system]),
-                    reductions)
-            )
+            println(f, count_nontrivial_reductions(reductions))
+            println(f, count_nontrivial_reductions_honest(reductions))
         end
     end
 end
@@ -113,9 +138,9 @@ function write_md_all()
     close(f)
 end
 
-function write_md_segregate(thresholds)
+function write_md_aggregate(thresholds)
     md = "#$(now())\n\n"
-    md *= "## (Segregated) Benchmark results for `find_reductions`.\n"
+    md *= "## (Aggregated) Benchmark results for `find_reductions`.\n"
     md *= "All systems.\n\n"
 
     round4 = x -> round(x, digits=2)
@@ -167,14 +192,14 @@ end
 # clear_all_data()
 
 for sz in [(150, 300)]
-    uwuwu(sz...)
+    run_benchmarks(sz...)
 end
 
 dumpdata()
 
 write_md_all()
 
-write_md_segregate([(2, 9), (10, 19), (20, 29),
+write_md_aggregate([(2, 9), (10, 19), (20, 29),
                     (30, 39),
                     (40, 59), (60, 79), (80, 99),
                     (100, 150)])
