@@ -15,5 +15,5 @@ makedocs(
 )
 
 deploydocs(
-    repo = "github.com/x3042/Exact-reduction-of-ODE-systems.git",
+    repo = "github.com/x3042/ExactODEReduction.git",
 )

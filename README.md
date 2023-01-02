@@ -1,23 +1,23 @@
 # ExactODEReduction
 
-<!--- [![Build](https://github.com/x3042/Exact-reduction-of-ODE-systems/actions/workflows/Build.yml/badge.svg)](https://github.com/x3042/Exact-reduction-of-ODE-systems/actions/workflows/Build.yml) --->
-[![Runtests](https://github.com/x3042/Exact-reduction-of-ODE-systems/actions/workflows/Runtests.yml/badge.svg)](https://github.com/x3042/Exact-reduction-of-ODE-systems/actions/workflows/Runtests.yml) [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://x3042.github.io/Exact-reduction-of-ODE-systems/dev)
+<!--- [![Build](https://github.com/x3042/ExactODEReduction.jl/actions/workflows/Build.yml/badge.svg)](https://github.com/x3042/ExactODEReduction.jl/actions/workflows/Build.yml) --->
+[![Runtests](https://github.com/x3042/ExactODEReduction.jl/actions/workflows/Runtests.yml/badge.svg)](https://github.com/x3042/ExactODEReduction.jl/actions/workflows/Runtests.yml) [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://x3042.github.io/ExactODEReduction.jl/dev)
 
 
 This repository contains a Julia implementation of algorithms for finding exact reductions of ODE systems via a linear change of variables.
 
-Online documentation could be found at [https://x3042.github.io/Exact-reduction-of-ODE-systems](https://x3042.github.io/Exact-reduction-of-ODE-systems).
+Online documentation could be found at [https://x3042.github.io/ExactODEReduction.jl](https://x3042.github.io/ExactODEReduction.jl).
 
 ## Installation
 
-To install `ExactODEReduction`, run the following command in Julia:
+To install `ExactODEReduction.jl`, run the following in Julia:
 
 ```julia
 import Pkg
-Pkg.add(url="https://github.com/x3042/Exact-reduction-of-ODE-systems")
+Pkg.add(url="https://github.com/x3042/ExactODEReduction.jl")
 ```
 
-For the usage examples, please see examples below in this file.
+For the usage examples, please see examples below in this file, or in the `examples` directory.
 
 ## What is exact reduction?
 
@@ -140,4 +140,4 @@ Dict{Symbol, Vector{Nemo.fmpq_mpoly}} with 2 entries:
 
 --->
 
-For more examples we refer to the documentation and the `examples` folder.
+For more examples we refer to the documentation and the `examples` directory.

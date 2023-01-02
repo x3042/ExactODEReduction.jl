@@ -9,7 +9,7 @@ using InteractiveUtils
 
 const _seed = 888  # use this random seed
 
-const _postfix = "_server"  # filenames postfix
+const _postfix = ""  # filenames postfix
 const _date = Dates.format(now(), "yyyy-mm-dd-HH-MM-SS")  # filename signature
 const _result_dirname = "result_data$(_postfix)"  # directory to write results
 const _skip_models = ["e3.ode"]   # skip these models
@@ -202,9 +202,12 @@ end
 
 #------------------------------------------------------------------------------
 
+# uncomment this if benchmark results in `result_data` 
+# should be deleted and later updated
+#
 # clear_all_data()
 
-for sz in [(100, 150)]
+for sz in [(1, 150)]
     run_benchmarks(sz...)
 end
 
