@@ -1,5 +1,5 @@
-# Functions for loading from a file
+# Functions for loading ODEs from a file
 
 ```@docs
-load_ODE
+load_ODE_fromfile
 ```

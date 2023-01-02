@@ -1,4 +1,4 @@
-# Functions for creating ODEs
+# Functions for manipulating ODEs
 
 ```@docs
 @ODEsystem
@@ -8,6 +8,10 @@
 ODE{P}
 ```
 
+### Accessing ODE data
+
+```@docs
+
 ```@docs
 equations
 ```
@@ -15,6 +19,8 @@ equations
 ```@docs
 vars
 ```
+
+### Converting ODE to `MTK.jl` and back
 
 ```@docs
 ODEtoMTK

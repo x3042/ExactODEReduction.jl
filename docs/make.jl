@@ -7,9 +7,9 @@ makedocs(
         "ExactODEReduction" => "index.md",
         "Guide" => "guide.md",
         "Interface" => [
-            "Functions for creating ODEs" => "io.md",
+            "Functions for manipulating ODEs" => "io.md",
             "Functions for finding reductions" => "reductions.md",
-            "Functions for loading from a file" => "load.md"
+            "Functions for loading ODEs from a file" => "load.md"
         ]
     ]
 )

@@ -1,6 +1,6 @@
 # ExactODEReduction.jl Documentation
 
-The `ExactODEReduction.jl` package provides an algorithm for computing exact linear reductions of ODE systems. It allows finding a longest possible chain of reductions corresponding to Jordan-Hoelder filtration.
+The `ExactODEReduction.jl` package provides an algorithm for computing exact linear reductions of ODE systems. It finds a longest possible chain of reductions corresponding to Jordan-Hoelder filtration.
 
 This documentation contains information about the functionality of the package as well as examples of use cases. See the [Guide](@ref) section for a quick introduction.
 
