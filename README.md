@@ -36,11 +36,11 @@ $$y_1 = x_1 + x_2 \quad \text{  and  } \quad y_2 = x_3 + x_4$$
 
 The important feature of variables $y_1, y_2$ is that their derivatives can be written in terms of $y_1$ and $y_2$ only:
 
-$$\dot{y_1} = \dot{x_1} + \dot{x_2} = y_1^2 + y_2$$
+$$\dot{y}_1 = \dot{x}_1 + \dot{x}_2 = y_1^2 + y_2$$
 
 and
 
-$$\dot{y_2} = \dot{x_3} + \dot{x_4} = y_1 + y_2$$
+$$\dot{y}_2 = \dot{x}_3 + \dot{x}_4 = y_1 + y_2$$
 
 Therefore, the original system can be **reduced exactly** to the following system:
 
