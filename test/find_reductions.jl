@@ -179,11 +179,14 @@ end
 
 function check_reduction(sys, new_vars, new_eqs)
     eval_point = [Nemo.QQ(rand(1:100)) for _ in ExactODEReduction.vars(sys)]
-    vect_field = [evaluate(sys.x_equations[x], eval_point) for x in ExactODEReduction.vars(sys)]
+    vect_field = [evaluate(sys.x_equations[x], eval_point) for x in ExactODEReduction.states(sys)]
     
     new_eval_point = [evaluate(new_vars[v], eval_point) for v in ExactODEReduction.vars(new_eqs)]
+    @info new_vars, new_eqs
+    @info [eq for eq in ExactODEReduction.equations(new_eqs)]
+    @info [new_vars[v] for v in ExactODEReduction.states(new_eqs)]
     new_vect_field_1 = [evaluate(eq, new_eval_point) for eq in ExactODEReduction.equations(new_eqs)]
-    new_vect_field_2 = [evaluate(new_vars[v], vect_field) for v in ExactODEReduction.vars(new_eqs)]
+    new_vect_field_2 = [evaluate(new_vars[v], vect_field) for v in ExactODEReduction.states(new_eqs)]
 
     return (new_vect_field_1, new_vect_field_2)
 end

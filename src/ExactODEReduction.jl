@@ -154,7 +154,7 @@ function find_some_reduction(
 
     # Jacobian of system,
     # each subspace invariant under Jacobian corresponds to a reduction
-    eqs = equations(system)
+    eqs = equations_extended(system)
     matrices = construct_jacobians(eqs)
 
     @debug "Matrices" matrices
@@ -245,7 +245,7 @@ function find_smallest_constrained_reduction(
 
     # Jacobian of system,
     # each subspace invariant under Jacobian corresponds to a reduction
-    eqs = equations(system)
+    eqs = equations_extended(system)
     matrices = construct_jacobians(eqs)
 
     # constructing vectors from the observables
@@ -333,7 +333,7 @@ function find_reductions(
 
     @debug "find_reductions of " system
 
-    eqs = equations(system)
+    eqs = equations_extended(system)
     matrices = construct_jacobians(eqs)
 
     if length(matrices) == 0
@@ -378,7 +378,7 @@ function find_reductions(
 end
 
 export ODE, @ODEsystem, equations, vars
-export set_parameter_values
+export set_parameter_values, to_state, to_parameter
 
 export find_smallest_constrained_reduction, find_reductions, find_some_reduction
 export new_system, new_vars, new_initialconds

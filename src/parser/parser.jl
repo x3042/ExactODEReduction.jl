@@ -261,9 +261,15 @@ function load_ODEs_if(;testspath = "data/ODEs/", from_size=-Inf, to_size=Inf)
     models
 end
 
-# filepath - absolute model file path
-#
-function load_ODEs(filepath, load_ic=false)
+"""
+    load_ODE_fromfile(filepath)
+
+    Returns the `ODE` object constructed from equations
+    in the `*.ode` file at `filepath`.
+    
+    For the format `*.ode` see the `examples` folder.
+"""
+function load_ODE_fromfile(filepath)
     # *.ode --> polynomial form of ode system
 
     lines = []
@@ -287,22 +293,22 @@ function load_ODEs(filepath, load_ic=false)
         throw(ParseException("bad file encountered at $filepath, skipping it"))
     end
 
-    ics = nothing
-    if load_ic
-        inits = lines[findfirst(s -> occursin("begin init", s), lines) + 1 : findfirst(s -> occursin("end init", s), lines) - 1]
-        inits = vcat(inits, lines[findfirst(s -> occursin("begin parameters", s), lines) + 1 : findfirst(s -> occursin("end parameters", s), lines) - 1])
-        inits = map(s -> first(split(s, "(")), inits)
-        ics = Dict()
-        for l in inits
-            if '=' in l
-                (var, val) = split(l, "=")
-                ics[strip(var)] = parse(Float64, val)
-            else
-                ics[strip(l)] = 0.0
-            end
+    ics = Dict()
+    param_vals = Dict()
+    for (d, name) in [(ics, "init"), (param_vals, "parameters")]
+        if !isnothing(findfirst(s -> occursin("begin " * name, s), lines))
+            inits = lines[findfirst(s -> occursin("begin " * name, s), lines) + 1 : findfirst(s -> occursin("end " * name, s), lines) - 1]
+            for l in inits
+               if '=' in l
+                   (var, val) = split(l, "=")
+                   d[strip(var)] = parse(Float64, val)
+               else
+                   d[strip(l)] = 0.0
+               end
+           end
         end
     end
-
+       
     # by default we consider the last begin/end block to yield reactions.
     # If this conjecture is false, we do not work
     reactions = filter(!isempty, map(strip, lines[
@@ -406,50 +412,18 @@ function load_ODEs(filepath, load_ic=false)
         end
     end
 
-    # @info "loaded a system of $(length(ODEs)) ODEs from $filepath"
-
-    if load_ic
-        return (ODEs, ics)
+    ODEs = Dict(x => f for (x, f) in ODEs if !("$x" in keys(param_vals)))
+    x_vars = [x for x in xs if x in keys(ODEs)]
+    params = [x for x in xs if "$x" in keys(param_vals)]
+    ode = ODE{Nemo.fmpq_mpoly}(x_vars, params, ODEs)
+    for (i, x) in enumerate(x_vars)
+        ode.ic[i] = get(ics, "$x", missing)
     end
-    return ODEs
-end
-
-function detect_params(eqs::Dict{P, P}) where {P}
-    params = Vector{P}(undef, 0)
-    for (x, eq) in eqs
-        if iszero(eq)
-            push!(params, x)
-        end
+    for (i, p) in enumerate(params)
+        ode.param_vals[i] = get(param_vals, "$p", missing)
     end
-    sort(params, rev=true)
-end
 
-"""
-    load_ODE_fromfile(filepath, load_ic=false)
+    @info "Loaded an ODE system with $(length(states(ode))) states and $(length(parameters(ode))) parameters"
 
-    Returns the `ODE` object constructed from equations
-    in the `*.ode` file at `filepath`.
-    
-    For the format `*.ode` see the `examples` folder.
-    
-    If `load_ic` is set, also returns the list of initial conditions 
-    (if specified in the file). 
-"""
-function load_ODE_fromfile(filepath, load_ic=false)
-    if load_ic
-        (ode, ics) = load_ODEs(filepath, true)
-        vars = collect(keys(ode))
-        params = detect_params(ode)
-        @info "Loaded ODE system with $(length(ode) - length(params)) equations."
-        @info "State variables: " * join(map(string, setdiff(vars, params)), ", ")
-        @info "Parameters: " * join(map(string, params), ", ")
-        return (ODE{Nemo.fmpq_mpoly}(ode, params), ics)
-    end
-    ode = load_ODEs(filepath)
-    vars = collect(keys(ode))
-    params = detect_params(ode)
-    @info "Loaded ODE system with $(length(ode) - length(params)) equations."
-    @info "State variables: " * join(map(string, setdiff(vars, params)), ", ")
-    @info "Parameters: " * join(map(string, params), ", ")
-    return ODE{Nemo.fmpq_mpoly}(ode, params)
+    return ode
 end
