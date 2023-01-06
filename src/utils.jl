@@ -18,6 +18,9 @@ Base.rand(::Nemo.FlintIntegerRing, n::Int) = [rand(Nemo.ZZ) for _ in 1:n]
 
 getnewrandomseed() = floor(Int, time())
 
+Base.:*(::AbstractAlgebra.RingElem, ::Missing) = missing
+Base.:*(::Missing, ::AbstractAlgebra.RingElem) = missing
+
 # interesting
 function var_to_str(v::Nemo.MPolyElem)
     ind = findfirst(vv -> vv == v, gens(parent(v)))

@@ -2,6 +2,48 @@
 struct Reduction{P, A, B}
     new_system::ODE{P}
     new_vars::Dict{A, B}
+
+    function Reduction{P, A, B}(new_system::ODE{P}, new_vars::Dict{A, B}) where {P, A, B}
+        return new{P, A, B}(new_system, new_vars)
+    end
+
+    function Reduction{P}(old_ode::ODE{P}, subspace, parameter_strategy=:inhertiance) where {P}
+        (transformation, new_equations) = perform_change_of_variables(equations_extended(old_ode), subspace)
+    
+        # (!) assumes the correct order in new_equations, i.e.,
+        # ∂y[1] ~ new_equations[1],
+        # ∂y[2] ~ new_equations[2],
+        # ...
+        new_ode = polystoODE_assumeorder(new_equations)
+        new_vars = Dict(new_ode.x_vars .=> transformation)
+
+        eval_point = merge(
+            Dict(string.(states(old_ode)) .=> initial_conditions(old_ode)), 
+            Dict(string.(parameters(old_ode)) .=> parameter_values(old_ode))
+        )
+        allvars = gens(parent(first(transformation)))
+        for i in 1:length(states(new_ode))
+            initial_conditions(new_ode)[i] = sum([eval_point[string(x)] * coeff(transformation[i], x) for x in allvars])
+        end
+
+        if parameter_strategy == :inheritance
+            for (v, trans) in new_vars
+                if all(x -> x in parameters(old_ode), vars(trans))
+                    new_ode = to_parameter(new_ode, v) 
+                end
+            end
+        elseif parameter_strategy == :constants
+            for v in states(new_ode)
+                if iszero(new_ode.x_equations[v])
+                    new_ode = to_parameter(new_ode, v) 
+                end
+            end
+        elseif parameter_strategy != :none
+            @warn "Unknown parameter handling strategy $parameter_strategy, using none"
+        end
+
+        return new{elem_type(parent(new_ode)), elem_type(parent(new_ode)), elem_type(parent(first(transformation)))}(new_ode, new_vars)
+    end
 end
 
 """
@@ -34,7 +76,7 @@ end
 Base.isempty(r::Reduction) = isempty(r.new_system)
 Base.length(r::Reduction) = length(r.new_system)
 
-_emptyreduction(ring) = Reduction(ODE(ring), Dict{elem_type(ring), elem_type(ring)}())
+_emptyreduction(ring) = Reduction{elem_type(ring), elem_type(ring), elem_type(ring)}(ODE(ring), Dict{elem_type(ring), elem_type(ring)}())
 
 function Base.show(io::IO, red::Reduction)
     if isempty(equations(red.new_system))

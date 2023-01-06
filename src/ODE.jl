@@ -20,8 +20,8 @@ struct ODE{P}
     end
 
     function ODE{P}(x_vars::Vector{P}, params::Vector{P}, eqs::Dict{P, P}, ic::Vector, param_vals::Vector) where {P <: Union{fmpq_mpoly, MPolyElem{<: FieldElem}}}
-        isempty(eqs) && error("Empty ODE system")
-        ring = parent(first(x_vars))
+        iszero(length(x_vars) + length(params)) && error("Empty ODE system")
+        ring = parent(first(vcat(x_vars, params)))
         vars = gens(ring)
         @assert all(p -> p in vars, params) "Incompatible polynomial rings of parameters $params"
         @assert all(x -> x in vars, x_vars) "Incompatible polynomial ring of states $x_vars"
@@ -360,7 +360,6 @@ function MTKtoODE(de::ModelingToolkit.ODESystem)
     diff_eqs = filter(eq->!(ModelingToolkit.isoutput(eq.lhs)), ModelingToolkit.equations(de))
     state_vars = ModelingToolkit.states(de)
     params = ModelingToolkit.parameters(de)
-    @info params
 
     input_symbols = vcat(state_vars, params)
     generators = string.(input_symbols)

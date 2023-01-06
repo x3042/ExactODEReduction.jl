@@ -51,6 +51,14 @@ function positivize(subspace)
     return [sparse([positivized[i, j] for j in 1:nc]) for i in 1:nr] 
 end
 
+function positivize_safe(subspace)
+    if _ispolymakeloaded()
+        return positivize(subspace)
+    else
+        _warn_polymakenotloaded()
+    end
+end
+
 #------------------------------------------------------------------------------
 
 """

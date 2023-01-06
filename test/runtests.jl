@@ -45,4 +45,6 @@ end
     @includetests ["ode", "reduction"]
 
     @includetests ["find_some_reduction", "find_reductions"]
+
+    @includetests ["find_reductions_params"]
 end
