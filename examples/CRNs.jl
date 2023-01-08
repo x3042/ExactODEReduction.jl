@@ -146,9 +146,16 @@ rs = @reaction_network begin
     (1, 1), E <--> E⁺
   end
 
+# rs = @reaction_network begin
+# (c1, c2), E + S <--> ES
+# (c3, c4), ES <--> E + P
+# (c5), ES --> E⁺ + S
+# (c6, c7), E <--> E⁺
+# end
+
 odesys = convert(ODESystem, rs)
 sys = MTKtoODE(odesys)
-reductions = find_reductions(sys, seed=SEED)
+reductions = find_reductions(sys, seed=1)
 
 #######
 
