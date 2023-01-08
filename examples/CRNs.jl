@@ -140,17 +140,6 @@ and its inactivated form (again, trivial one?).
 SEED = 42
 
 rs = @reaction_network begin
-    (1), E + S <-- ES
-    (1), ES <-- E + P
-    (1), ES --> E⁺ + S
-    (1), E <-- E⁺
-  end
-
-odesys = convert(ODESystem, rs)
-sys = MTKtoODE(odesys)
-reductions = find_reductions(sys, seed=SEED)
-
-rs = @reaction_network begin
     (1, 1), E + S <--> ES
     (1, 1), ES <--> E + P
     (1), ES --> E⁺ + S
