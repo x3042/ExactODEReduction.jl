@@ -341,7 +341,11 @@ function ODEtoMTK(ode::ODE)
         mtkpoly = sum(map(t -> Rational(coeff(t, 1)) * prod(eval_point .^ exponent_vector(t, 1)), collect(Nemo.terms(poly))), init=Rational(0))
         push!(eqs, D(mtkx) ~ mtkpoly)
     end
-    ModelingToolkit.ODESystem(eqs, name=gensym())
+
+    ic_dict = Dict(gen2mtk[ode.x_vars[i]] => ode.ic[i] for i in 1:length(ode.x_vars))
+    param_dict = Dict(gen2mtk[ode.params[i]] => ode.param_vals[i] for i in 1:length(ode.params))
+
+    return (ModelingToolkit.ODESystem(eqs, name=gensym()), ic_dict, param_dict)
 end
 
 # Adapted from StructuralIdentifiability.jl

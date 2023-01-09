@@ -109,7 +109,7 @@ end
     ]
 
     for case in test_cases
-        mtk = ExactODEReduction.ODEtoMTK(case)
+        (mtk, ic, p) = ExactODEReduction.ODEtoMTK(case)
         odeagain = ExactODEReduction.MTKtoODE(mtk)
         @test ExactODEReduction.equations(case) == ExactODEReduction.equations(odeagain)
     end
