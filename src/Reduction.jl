@@ -1,10 +1,11 @@
 
-struct Reduction{P, A, B}
-    new_system::ODE{P}
+struct Reduction{A, B, C}
+    new_system::ODE{A}
     new_vars::Dict{A, B}
+    old_system::ODE{C}
 
-    function Reduction{P, A, B}(new_system::ODE{P}, new_vars::Dict{A, B}) where {P, A, B}
-        return new{P, A, B}(new_system, new_vars)
+    function Reduction{A, B, C}(new_system::ODE{A}, new_vars::Dict{A, B}, old_system::ODE{C}) where {A, B, C}
+        return new{A, B, C}(new_system, new_vars, old_system)
     end
 
     function Reduction{P}(old_ode::ODE{P}, subspace, parameter_strategy=:inhertiance) where {P}
@@ -22,8 +23,12 @@ struct Reduction{P, A, B}
             Dict(string.(parameters(old_ode)) .=> parameter_values(old_ode))
         )
         allvars = gens(parent(first(transformation)))
-        for i in 1:length(states(new_ode))
-            initial_conditions(new_ode)[i] = sum([eval_point[string(x)] * coeff(transformation[i], x) for x in allvars])
+        if elem_type(parent(new_ode)) == fmpq_mpoly
+            for i in 1:length(states(new_ode))
+                initial_conditions(new_ode)[i] = sum([eval_point[string(x)] * convert(Float64, coeff(transformation[i], x)) for x in allvars])
+            end
+        else
+            @warn "Complex-valued reduction, skipping the initial conditions"
         end
 
         if parameter_strategy == :inheritance
@@ -42,7 +47,7 @@ struct Reduction{P, A, B}
             @warn "Unknown parameter handling strategy $parameter_strategy, using none"
         end
 
-        return new{elem_type(parent(new_ode)), elem_type(parent(new_ode)), elem_type(parent(first(transformation)))}(new_ode, new_vars)
+        return new{elem_type(parent(new_ode)), elem_type(parent(first(transformation))), elem_type(parent(old_ode))}(new_ode, new_vars, old_ode)
     end
 end
 
@@ -61,6 +66,8 @@ new_system(r::Reduction) = r.new_system
 """
 new_vars(r::Reduction) = r.new_vars
 
+old_system(r::Reduction) = r.old_system
+
 """
     new_initialconds(r::Reduction, ics::Dict)
 
@@ -71,6 +78,26 @@ function new_initialconds(r::Reduction, ics::Dict{P, T}) where {P, T}
     newv = new_vars(r)
     newics = Dict(v => eval_at_dict(expr, ics) for (v, expr) in newv)
     newics
+end
+
+"""
+    reduce_data(data::Array{Any, 2}, r::Reduction)
+
+    For a time-series data for the original system, returns 
+    the corresponding time series for the reduction
+"""
+function reduce_data(data::Matrix, r::Reduction)
+    old_sys = old_system(r)
+    new_sys = new_system(r)
+    result = Matrix{Any}(undef, length(states(new_sys)), size(data, 2))
+    eval_param = Dict{fmpq_mpoly, Any}(p => parameter_values(old_sys)[i] for (i, p) in enumerate(parameters(old_sys)))
+    for i in 1:size(data, 2)
+        eval_point = merge(eval_param, Dict{fmpq_mpoly, Any}(x => data[j, i] for (j, x) in enumerate(states(old_sys))))
+        for j in 1:size(result, 1)
+            result[j, i] = eval_at_dict(new_vars(r)[states(new_sys)[j]], eval_point)
+        end
+    end
+    return result
 end
 
 Base.isempty(r::Reduction) = isempty(r.new_system)

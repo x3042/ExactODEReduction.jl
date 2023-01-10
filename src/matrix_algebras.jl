@@ -132,8 +132,11 @@ function invariant_subspace_semisimple(algebra::Subspace; overQ=true)
                 if length(C) < length(Z) * num_blocks^2
                     continue
                 end
-                @warn """There are subspaces defined over Q but they come only from equal blocks.
-                If you wish to compute them, run the code over Qbar"""
+                if overQ
+                    @warn """There are subspaces defined over Q but they come only from equal blocks.
+                    If you wish to compute them, run the code over Qbar"""
+                    return []
+                end
             end
 
             @info "Computing eigenspaces a random element in the centralizer"

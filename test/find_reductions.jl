@@ -177,7 +177,10 @@ function random_linear_change(sys)
     end
 end
 
-function check_reduction(sys, new_vars, new_eqs)
+function check_reduction(red)
+    new_vars = ExactODEReduction.new_vars(red)
+    new_eqs = ExactODEReduction.new_system(red)
+    sys = ExactODEReduction.old_system(red)
     eval_point = [Nemo.QQ(rand(1:100)) for _ in ExactODEReduction.vars(sys)]
     vect_field = [evaluate(sys.x_equations[x], eval_point) for x in ExactODEReduction.states(sys)]
     
@@ -198,21 +201,31 @@ end
     for c in cases
         sys = c[:sys]
         @info "Testing the system $sys"
+        for i in 1:length(ExactODEReduction.states(sys))
+            sys.ic[i] = rand()
+        end
+
         red = ExactODEReduction.find_some_reduction(sys; overQ=false)
-        (f1, f2) = check_reduction(sys, ExactODEReduction.new_vars(red), ExactODEReduction.new_system(red))
+        (f1, f2) = check_reduction(red)
         @test f1 == f2
 
-        reds = ExactODEReduction.find_reductions(sys; overQ=false)
+        reds = ExactODEReduction.find_reductions(sys; overQ=true)
         for r in reds
-            (f1, f2) = check_reduction(sys, ExactODEReduction.new_vars(r), ExactODEReduction.new_system(r))
+            (f1, f2) = check_reduction(r)
             @test f1 == f2
+            ics_old = reshape(ExactODEReduction.initial_conditions(sys), length(ExactODEReduction.states(sys)), 1)
+            ics_old_red = ExactODEReduction.reduce_data(ics_old, r)
+            new_sys = ExactODEReduction.new_system(r)
+            ics_new = reshape(ExactODEReduction.initial_conditions(new_sys), length(ExactODEReduction.states(new_sys)), 1)
+            @test ics_new == ics_old_red
         end
+        reds = ExactODEReduction.find_reductions(sys; overQ=false) 
         @test Set([length(ExactODEReduction.new_vars(r)) for r in reds]) in c[:dims]
 
         for (obs, dim) in c[:constrained]
             red = ExactODEReduction.find_smallest_constrained_reduction(sys, obs)
             @test length(ExactODEReduction.new_vars(red)) == dim
-            (f1, f2) = check_reduction(sys, ExactODEReduction.new_vars(red), ExactODEReduction.new_system(red))
+            (f1, f2) = check_reduction(red)
             @test f1 == f2
         end
 
@@ -220,7 +233,7 @@ end
             sys_change = random_linear_change(sys)
             reds_change = ExactODEReduction.find_reductions(sys_change; overQ=false)
             for r in reds_change
-                (f1, f2) = check_reduction(sys_change, ExactODEReduction.new_vars(r), ExactODEReduction.new_system(r))
+                (f1, f2) = check_reduction(red)
                 @test f1 == f2
             end
             @test Set([length(ExactODEReduction.new_vars(r)) for r in reds_change]) in c[:dims]

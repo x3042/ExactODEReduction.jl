@@ -7,6 +7,7 @@ Base.convert(::Type{Int}, x::Nemo.gfp_elem) = Int(data(x))
 Base.convert(::Type{BigInt}, x::Nemo.gfp_fmpz_elem) = BigInt(data(x))
 Base.convert(::Type{Nemo.FlintIntegerRing}, x::Nemo.gfp_fmpz_elem) = Nemo.ZZ(data(x))
 Base.convert(::Type{Nemo.FlintIntegerRing}, x::Nemo.gfp_elem) = Nemo.ZZ(data(x))
+Base.convert(::Type{Float64}, x::Nemo.fmpq) = convert(Float64, numerator(x)) / convert(Float64, denominator(x))
 
 # extends random generator to Nemo Rational field
 Base.rand(::Nemo.FlintRationalField) = Nemo.QQ(rand(-2^16:2^16))
@@ -20,6 +21,18 @@ getnewrandomseed() = floor(Int, time())
 
 Base.:*(::AbstractAlgebra.RingElem, ::Missing) = missing
 Base.:*(::Missing, ::AbstractAlgebra.RingElem) = missing
+
+# -----------------------------------------------------------------------------
+
+function evaluate(p::fmpq_mpoly, v::Vector{<: Union{Float64, Missing}})
+    result = 0.0
+    for (c, m) in zip(Nemo.coefficients(p), Nemo.exponent_vectors(p))
+        result += convert(Float64, c) * prod([(b == 0 ? 1 : a^b) for (a, b) in zip(v, m)])
+    end
+    return result
+end
+
+# -----------------------------------------------------------------------------
 
 # interesting
 function var_to_str(v::Nemo.MPolyElem)
