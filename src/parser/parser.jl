@@ -298,6 +298,7 @@ function load_ODE_fromfile(filepath)
     for (d, name) in [(ics, "init"), (param_vals, "parameters")]
         if !isnothing(findfirst(s -> occursin("begin " * name, s), lines))
             inits = lines[findfirst(s -> occursin("begin " * name, s), lines) + 1 : findfirst(s -> occursin("end " * name, s), lines) - 1]
+            inits = map(s -> replace(s, r"\(.*\)" => ""), inits)
             for l in inits
                if '=' in l
                    (var, val) = split(l, "=")
