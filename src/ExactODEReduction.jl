@@ -170,7 +170,7 @@ function find_some_reduction(
 
     if isempty(subspaces)
         @warn "No reductions found"
-        return _emptyreduction(parent(first(vars(system))))
+        return _emptyreduction(system)
     end
 
     subspace = first(subspaces)
@@ -255,7 +255,7 @@ function find_smallest_constrained_reduction(
 
     if isempty(subspace)
         @warn "No reductions found"
-        return _emptyreduction(parent(first(vars(system))))
+        return _emptyreduction(system)
     end
 
     subspace = basis(linear_span!(subspace))

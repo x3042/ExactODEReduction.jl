@@ -103,7 +103,7 @@ end
 Base.isempty(r::Reduction) = isempty(r.new_system)
 Base.length(r::Reduction) = length(r.new_system)
 
-_emptyreduction(ring) = Reduction{elem_type(ring), elem_type(ring), elem_type(ring)}(ODE(ring), Dict{elem_type(ring), elem_type(ring)}())
+_emptyreduction(ode::ODE{P}) where {P} = Reduction{P, P, P}(ODE(parent(ode)), Dict{P, P}(), ode)
 
 function Base.show(io::IO, red::Reduction)
     if isempty(equations(red.new_system))
