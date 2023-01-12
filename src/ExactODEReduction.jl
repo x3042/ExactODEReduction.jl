@@ -4,6 +4,7 @@ module ExactODEReduction
 import Base: ==, !=, +, -, *, lcm, rand, zero
 
 import Logging
+import Logging: ConsoleLogger
 import Random
 
 # for conversions between our and MTK de system types
@@ -156,9 +157,7 @@ function find_some_reduction(
         loglevel=Logging.Info,
         parameter_strategy=:inheritance) where {P}
 
-    # hmm
-    package_logger = Logging.ConsoleLogger(stderr, loglevel)
-    Logging.global_logger(package_logger)
+    prev_logger = Logging.global_logger(ConsoleLogger(stderr, loglevel))
 
     isnothing(seed) && (seed = getnewrandomseed())
     Random.seed!(seed)
@@ -196,6 +195,9 @@ function find_some_reduction(
     end
 
     @debug "After positivize" subspace
+
+    # revert the global logger
+    Logging.global_logger(prev_logger)
 
     return Reduction{Nemo.fmpq_mpoly}(system, subspace, parameter_strategy)
 end
@@ -238,9 +240,7 @@ function find_smallest_constrained_reduction(
         loglevel=Logging.Info,
         parameter_strategy=:inheritance) where {P}
 
-    # hmm
-    package_logger = Logging.ConsoleLogger(stderr, loglevel)
-    Logging.global_logger(package_logger)
+    prev_logger = Logging.global_logger(ConsoleLogger(stderr, loglevel))
 
     isnothing(seed) && (seed = getnewrandomseed())
     Random.seed!(seed)
@@ -275,6 +275,8 @@ function find_smallest_constrained_reduction(
     if makepositive
         subspace = positivize_safe(subspace)
     end
+
+    Logging.global_logger(prev_logger)
 
     return Reduction{Nemo.fmpq_mpoly}(system, subspace, parameter_strategy)
 end
@@ -324,8 +326,7 @@ function find_reductions(
         loglevel=Logging.Info,
         parameter_strategy=:inheritance) where {P}
 
-    package_logger = Logging.ConsoleLogger(stderr, loglevel)
-    Logging.global_logger(package_logger)
+    prev_logger = Logging.global_logger(ConsoleLogger(stderr, loglevel))
 
     isnothing(seed) && (seed = getnewrandomseed())
     Random.seed!(seed)
@@ -366,6 +367,8 @@ function find_reductions(
     sort!(results, by=r -> length(r.new_vars))
 
     @debug "Found reductions" results
+
+    Logging.global_logger(prev_logger)
 
     ChainOfReductions(results)
 end
