@@ -8,6 +8,7 @@ import Random
 
 # for conversions between our and MTK de system types
 import ModelingToolkit
+import ModelingToolkit: states, parameters, equations
 
 using SparseArrays
 import SparseArrays: getnzval, getcolptr, getrowval, nonzeroinds

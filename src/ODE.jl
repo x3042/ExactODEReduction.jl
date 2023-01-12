@@ -42,16 +42,13 @@ struct ODE{P}
     end
 end
 
-"""
-    function equations(ode::ODE)
+ModelingToolkit.equations(ode::ODE) = [ode.x_equations[v] for v in ode.x_vars]
 
-    Returns the array of equations that define the given ODE system.
-"""
-equations(ode::ODE) = [ode.x_equations[v] for v in ode.x_vars]
+# returns equations with zero equations for the parameters
 equations_extended(ode::ODE) = [get(ode.x_equations, v, zero(parent(ode))) for v in gens(parent(ode))]
 
-parameters(ode::ODE) = ode.params
-states(ode::ODE) = ode.x_vars
+ModelingToolkit.parameters(ode::ODE) = ode.params
+ModelingToolkit.states(ode::ODE) = ode.x_vars
 
 initial_conditions(ode::ODE) = ode.ic
 parameter_values(ode::ODE) = ode.param_vals

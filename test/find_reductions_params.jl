@@ -47,7 +47,7 @@ cases = [
         for strategy in [:inheritance, :constants, :none]
             @info "Strategy $strategy"
             reds = ExactODEReduction.find_reductions(sys; overQ=false, parameter_strategy=strategy)
-            dims = Set([(length(ExactODEReduction.states(new_system(r))), length(ExactODEReduction.parameters(new_system(r)))) for r in reds])
+            dims = Set([(length(states(new_system(r))), length(parameters(new_system(r)))) for r in reds])
             @info dims
             @test dims in c[:dims][strategy]
         end

@@ -23,8 +23,8 @@
 
     for case in test_cases
         system = case[:system]
-        varsstrs = map(string, ExactODEReduction.vars(system))
-        eqstrs = map(string, ExactODEReduction.equations(system))
+        varsstrs = map(string, vars(system))
+        eqstrs = map(string, equations(system))
         @test eqstrs == case[:eqs]
         @test varsstrs == case[:vars]
     end
@@ -90,8 +90,8 @@ end
         y'(t) = a*x(t) - (a + b^2)*y(t) - z(t),
         z'(t) = 2 * x(t) - c*z(t)
     )
-    @test ExactODEReduction.equations(odes)[1:3] == [x + y, a*x - (a + b^2)*y - z, 2x - c*z]
-    @test ExactODEReduction.vars(odes)[1:3] == [x,y,z]
+    @test equations(odes)[1:3] == [x + y, a*x - (a + b^2)*y - z, 2x - c*z]
+    @test vars(odes)[1:3] == [x,y,z]
 end
 
 @testset "ODE to MTK and vice versa" begin
@@ -109,9 +109,9 @@ end
     ]
 
     for case in test_cases
-        (mtk, ic, p) = ExactODEReduction.ODEtoMTK(case)
-        odeagain = ExactODEReduction.MTKtoODE(mtk)
-        @test ExactODEReduction.equations(case) == ExactODEReduction.equations(odeagain)
+        (mtk, ic, p) = ODEtoMTK(case)
+        odeagain = MTKtoODE(mtk)
+        @test equations(case) == equations(odeagain)
     end
 
 end

@@ -13,11 +13,11 @@
     )
     correct_vars = ExactODEReduction.vars(correct_ode)
 
-    eqs = ExactODEReduction.equations(ode)
+    eqs = equations(ode)
     eqs = map(e -> evaluate(e, correct_vars), eqs)
 
     @test length(ode) == length(correct_ode)
-    @test eqs == ExactODEReduction.equations(correct_ode)
+    @test eqs == equations(correct_ode)
 end
 
 
