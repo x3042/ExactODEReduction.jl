@@ -106,7 +106,7 @@ Base.length(r::Reduction) = length(r.new_system)
 _emptyreduction(ode::ODE{P}) where {P} = Reduction{P, P, P}(ODE(parent(ode)), Dict{P, P}(), ode)
 
 function Base.show(io::IO, red::Reduction)
-    if isempty(equations(red.new_system))
+    if isempty(equations(red.new_system)) && isempty(parameters(red.new_system))
         println(io, "Empty reduction")
         return nothing
     end

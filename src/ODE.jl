@@ -273,7 +273,11 @@ end
 
 function Base.show(io::IO, ode::ODE)
     if isempty(ode.x_equations)
-        println(io, "Empty ODE system")
+        if isempty(ode.params)
+            println(io, "Empty ODE system")
+        else
+            println(io, "ODE system without states and with parameters " * join(map(var_to_str, ode.params), ", "))
+        end
         return nothing
     end
     varstr = Dict(x => var_to_str(x) * "(t)" for x in ode.x_vars)
