@@ -19,8 +19,8 @@ Base.rand(::Nemo.FlintIntegerRing, n::Int) = [rand(Nemo.ZZ) for _ in 1:n]
 
 getnewrandomseed() = floor(Int, time())
 
-Base.:*(::AbstractAlgebra.RingElem, ::Missing) = missing
-Base.:*(::Missing, ::AbstractAlgebra.RingElem) = missing
+Base.:*(::Union{fmpq_mpoly, fmpq, Nemo.qqbar}, ::Missing) = missing
+Base.:*(::Missing, ::Union{fmpq_mpoly, fmpq, Nemo.qqbar}) = missing
 
 # -----------------------------------------------------------------------------
 
