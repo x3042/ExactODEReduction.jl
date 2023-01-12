@@ -358,10 +358,11 @@ function find_reductions(
 end
 
 export ODE, @ODEsystem, equations, vars
+export states, parameters, initial_conditions, parameter_values
 export set_parameter_values, to_state, to_parameter
 
 export find_smallest_constrained_reduction, find_reductions, find_some_reduction
-export new_system, new_vars, new_initialconds
+export new_system, new_vars, new_initialconds, old_system
 
 export load_ODE_fromfile
 export ODEtoMTK, MTKtoODE
