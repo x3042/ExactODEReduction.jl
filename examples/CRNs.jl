@@ -392,3 +392,67 @@ odesys = convert(ODESystem, rs)
 sys = MTKtoODE(odesys)
 reductions = find_reductions(sys)
 
+#######
+
+rs = @reaction_network begin
+    (1), X2 --> X1 + X2
+    (1), X1 + X5 --> X2 + X5
+    (1), 2X5 + X1 --> X5 + X1
+    (1), X2 + X5 --> X3 + X5
+    (1), 2X5 + X2 --> X5 + X2
+    (1), X2 + X5 --> X5
+    (1), X2 + X5 --> X2
+    (1), X3 + X5 --> X4 + X5
+    (1), X3 + X5 --> X3 + 2X5
+    (1), X3 + X4 + X5 --> X4 + X5
+    (1), X3 + X4 + X5 --> X3 + X5
+    (1), X3 + X4 + X5 --> X3 + X4 + 2X5
+    (1), 2X5 --> X5
+  end
+
+odesys = convert(ODESystem, rs)
+sys = MTKtoODE(odesys)
+reductions = find_reductions(sys)
+
+#######
+
+rs = @reaction_network begin
+    (1), 0 --> X1
+    (1), X1 + X3 --> X3 + X2
+    (1), X2 --> X3
+    (1), X1 + X2 --> X1 + X4
+    (1), X3 --> 0
+    (1), X4 --> 0
+  end
+
+odesys = convert(ODESystem, rs)
+sys = MTKtoODE(odesys)
+reductions = find_reductions(sys)
+
+#######
+
+rs = @reaction_network begin
+    (a), T + V --> I + V
+    (b), I --> 0
+    (c), I --> I + V
+    (d), V --> 0
+  end
+
+odesys = convert(ODESystem, rs)
+sys = MTKtoODE(odesys)
+reductions = find_reductions(sys)
+
+#######
+
+rs = @reaction_network begin
+    (1), T + V --> I1 + V
+    (1), I1 --> I2
+    (1), I2 --> 0
+    (1), I2 --> I2 + V
+    (1), V --> 0
+  end
+
+odesys = convert(ODESystem, rs)
+sys = MTKtoODE(odesys)
+reductions = find_reductions(sys)
+
