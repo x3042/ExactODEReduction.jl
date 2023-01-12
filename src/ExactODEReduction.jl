@@ -92,6 +92,7 @@ include("basis.jl")
 # Algotirhms for matrix algebra
 include("matrix_algebras.jl")
 
+# ------------------------------------------------------------------------------
 # By default, Polymake is not loaded, 
 # and the keyword argument `makepositive` does nothing.
 _ispolymakeloaded() = false
@@ -100,6 +101,17 @@ function __init__()
     # Be positive!
     @require Polymake="d720cf60-89b5-51f5-aff5-213f193123e7" include("positivizor.jl")
 end
+
+# See positivizor.jl for details
+function positivize_safe(subspace)
+    if _ispolymakeloaded()
+        return positivize(subspace)
+    else
+        _warn_polymakenotloaded()
+    end
+end
+
+# ------------------------------------------------------------------------------
 
 # Finding invariant subspaces
 include("invariants.jl")
