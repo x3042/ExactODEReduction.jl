@@ -8,7 +8,7 @@
             z'(t) = c*z
             ),
         :vars => ["x","y","z","a","b","c"],
-        :eqs => ["x*a + y^3 + z","x*b + z", "z*c", "0", "0", "0"]
+        :eqs => ["x*a + y^3 + z","x*b + z", "z*c"]
         )
         Dict(
         :system => ExactODEReduction.@ODEsystem(
@@ -17,14 +17,14 @@
             x3'(t) = 0
             ),
         :vars => ["x","z","x3","a"],
-        :eqs => ["2//5*x3*a + 1","5//4", "0", "0"]
+        :eqs => ["2//5*x3*a + 1","5//4","0"]
         )
     ]
 
     for case in test_cases
         system = case[:system]
-        varsstrs = map(string, ExactODEReduction.vars(system))
-        eqstrs = map(string, ExactODEReduction.equations(system))
+        varsstrs = map(string, vars(system))
+        eqstrs = map(string, equations(system))
         @test eqstrs == case[:eqs]
         @test varsstrs == case[:vars]
     end
@@ -47,7 +47,7 @@ end
     # 2-compartiment model
     push!(test_cases, Dict(
         "ode" => ExactODEReduction.@ODEsystem(
-            x0'(t) = -(a01 + a21) * x0(t) + a12 * x1(t) + u(t),
+            x0'(t) = -(a01 + a21) * x0(t) + a12 * x1(t) + u,
             x1'(t) = a21 * x0(t) - a12 * x1(t),
             y'(t) = x0(t)
         ),
@@ -78,7 +78,7 @@ end
     for case in test_cases
         ode = case["ode"]
         correct_str = [case["vars"]..., case["params"]...]
-        str = map(string, ode.x_vars)
+        str = map(string, vcat(ode.x_vars, ode.params))
         @test str == correct_str
     end
 end
@@ -86,46 +86,32 @@ end
 @testset "ODE ad-hoc stuff" begin
     # Test `set_parameter_values`
     odes = @ODEsystem(
-        x'(t) = x + y,
-        y'(t) = a*x - (a + b^2)*y - z,
-        z'(t) = 2x - c*z
+        x'(t) = x(t) + y(t),
+        y'(t) = a*x(t) - (a + b^2)*y(t) - z(t),
+        z'(t) = 2 * x(t) - c*z(t)
     )
-    @test ExactODEReduction.equations(odes)[1:3] == [x + y, a*x - (a + b^2)*y - z, 2x - c*z]
-    @test ExactODEReduction.vars(odes)[1:3] == [x,y,z]
-
-    new_ode = ExactODEReduction.set_parameter_values(odes, Dict(a => 3))
-    new_vs = ExactODEReduction.vars(new_ode)
-    @test length(new_vs) == 5
-    @test map(string, new_vs) == ["x","y","z","b","c"]
-    x, y, z, b, c = new_vs
-    @test ExactODEReduction.equations(new_ode) == [x + y, 3*x - (3 + b^2)*y - z, 2x - c*z, zero(x), zero(x)]
-
-    new_ode2 = ExactODEReduction.set_parameter_values(new_ode, Dict(b => 4, c => 5))
-    new_vs2 = ExactODEReduction.vars(new_ode2)
-    @test length(new_vs2) == 3
-    @test map(string, new_vs2) == ["x","y","z"]
-    x, y, z = new_vs2
-    @test ExactODEReduction.equations(new_ode2) == [x + y, 3*x - (3 + 16)*y - z, 2x - 5*z]
+    @test equations(odes)[1:3] == [x + y, a*x - (a + b^2)*y - z, 2x - c*z]
+    @test vars(odes)[1:3] == [x,y,z]
 end
 
 @testset "ODE to MTK and vice versa" begin
     test_cases = [
         ExactODEReduction.@ODEsystem(
-            x1'(t) = x1 + a*x2,
-            x3'(t) = x2 + x3,
+            x1'(t) = x1(t) + a*x2(t),
+            x3'(t) = x2(t) + x3(t),
             x2'(t) = b
         ),
         ExactODEReduction.@ODEsystem(
-            x'(t) = x + y + 5//3,
+            x'(t) = x(t) + y(t) + 5//3,
             y'(t) = 18,
             z'(t) = 16//9
         )
     ]
 
     for case in test_cases
-        mtk = ExactODEReduction.ODEtoMTK(case)
-        odeagain = ExactODEReduction.MTKtoODE(mtk)
-        @test ExactODEReduction.equations(case) == ExactODEReduction.equations(odeagain)
+        (mtk, ic, p) = ODEtoMTK(case)
+        odeagain = MTKtoODE(mtk)
+        @test equations(case) == equations(odeagain)
     end
 
 end

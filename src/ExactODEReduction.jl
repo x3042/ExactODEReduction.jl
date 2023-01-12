@@ -8,6 +8,7 @@ import Random
 
 # for conversions between our and MTK de system types
 import ModelingToolkit
+import ModelingToolkit: states, parameters, equations
 
 using SparseArrays
 import SparseArrays: getnzval, getcolptr, getrowval, nonzeroinds
@@ -92,6 +93,7 @@ include("basis.jl")
 # Algotirhms for matrix algebra
 include("matrix_algebras.jl")
 
+# ------------------------------------------------------------------------------
 # By default, Polymake is not loaded, 
 # and the keyword argument `makepositive` does nothing.
 _ispolymakeloaded() = false
@@ -100,6 +102,17 @@ function __init__()
     # Be positive!
     @require Polymake="d720cf60-89b5-51f5-aff5-213f193123e7" include("positivizor.jl")
 end
+
+# See positivizor.jl for details
+function positivize_safe(subspace)
+    if _ispolymakeloaded()
+        return positivize(subspace)
+    else
+        _warn_polymakenotloaded()
+    end
+end
+
+# ------------------------------------------------------------------------------
 
 # Finding invariant subspaces
 include("invariants.jl")
@@ -140,7 +153,8 @@ function find_some_reduction(
 	    overQ=true,
         seed=nothing,
         makepositive=false,
-        loglevel=Logging.Info) where {P}
+        loglevel=Logging.Info,
+        parameter_strategy=:inheritance) where {P}
 
     # hmm
     package_logger = Logging.ConsoleLogger(stderr, loglevel)
@@ -154,7 +168,7 @@ function find_some_reduction(
 
     # Jacobian of system,
     # each subspace invariant under Jacobian corresponds to a reduction
-    eqs = equations(system)
+    eqs = equations_extended(system)
     matrices = construct_jacobians(eqs)
 
     @debug "Matrices" matrices
@@ -169,7 +183,7 @@ function find_some_reduction(
 
     if isempty(subspaces)
         @warn "No reductions found"
-        return _emptyreduction(parent(first(vars(system))))
+        return _emptyreduction(system)
     end
 
     subspace = first(subspaces)
@@ -178,24 +192,12 @@ function find_some_reduction(
     @debug "Linear span" subspace
 
     if makepositive
-        if _ispolymakeloaded()
-            subspace = positivize(subspace)
-        else
-            _warn_polymakenotloaded()
-        end
+        subspace = positivize_safe(subspace)
     end
 
     @debug "After positivize" subspace
 
-    (transformation, new_equations) = perform_change_of_variables(eqs, subspace)
-    
-    # (!) assumes the correct order in new_equations, i.e.,
-    # ∂y[1] ~ new_equations[1],
-    # ∂y[2] ~ new_equations[2],
-    # ...
-    new_ode = polystoODE_assumeorder(new_equations)
-    new_vars = Dict(new_ode.x_vars .=> transformation)
-    Reduction(new_ode, new_vars)
+    return Reduction{Nemo.fmpq_mpoly}(system, subspace, parameter_strategy)
 end
 
 #------------------------------------------------------------------------------
@@ -233,7 +235,8 @@ function find_smallest_constrained_reduction(
         observables::Vector{P};
         seed=nothing,
         makepositive=false,
-        loglevel=Logging.Info) where {P}
+        loglevel=Logging.Info,
+        parameter_strategy=:inheritance) where {P}
 
     # hmm
     package_logger = Logging.ConsoleLogger(stderr, loglevel)
@@ -245,7 +248,7 @@ function find_smallest_constrained_reduction(
 
     # Jacobian of system,
     # each subspace invariant under Jacobian corresponds to a reduction
-    eqs = equations(system)
+    eqs = equations_extended(system)
     matrices = construct_jacobians(eqs)
 
     # constructing vectors from the observables
@@ -265,23 +268,15 @@ function find_smallest_constrained_reduction(
 
     if isempty(subspace)
         @warn "No reductions found"
-        return _emptyreduction(parent(first(vars(system))))
+        return _emptyreduction(system)
     end
 
     subspace = basis(linear_span!(subspace))
     if makepositive
-        if _ispolymakeloaded()
-            subspace = positivize(subspace)
-        else
-            _warn_polymakenotloaded()
-        end
+        subspace = positivize_safe(subspace)
     end
 
-    (transformation, new_equations) = perform_change_of_variables(eqs, subspace)
-
-    new_ode = polystoODE_assumeorder(new_equations)
-    new_vars = Dict(new_ode.x_vars .=> transformation)
-    Reduction(new_ode, new_vars)
+    return Reduction{Nemo.fmpq_mpoly}(system, subspace, parameter_strategy)
 end
 
 #------------------------------------------------------------------------------
@@ -297,7 +292,11 @@ Arguments:
  - `system` is an ODE system given as `ODE` object,
  - `overQ` tells the algorithm to search for reductions over rational numbers,
  - `makepositive` tells the algorithm to search for reductions with positive coefficients. 
- To enable this argument, you should have `Polymake.jl` imported. 
+ To enable this argument, you should have `Polymake.jl` imported.
+ - `parameter_strategy` prescribes the way the parameter in the resulting system will be recognized:
+   * `:inheritance` (default) the parameters in the new system are exactly combinations of the original parameters
+   * `:constants` the parameters in the new system will be the variables with zero dynamics
+   * `:none` - no parameters in the result
 
 Example:
 ```julia
@@ -322,7 +321,8 @@ function find_reductions(
         overQ=true,
         makepositive=false,
         seed=nothing,
-        loglevel=Logging.Info) where {P}
+        loglevel=Logging.Info,
+        parameter_strategy=:inheritance) where {P}
 
     package_logger = Logging.ConsoleLogger(stderr, loglevel)
     Logging.global_logger(package_logger)
@@ -333,7 +333,7 @@ function find_reductions(
 
     @debug "find_reductions of " system
 
-    eqs = equations(system)
+    eqs = equations_extended(system)
     matrices = construct_jacobians(eqs)
 
     if length(matrices) == 0
@@ -358,16 +358,9 @@ function find_reductions(
     for (i, V) in enumerate(invariant_subspaces)
         V = basis(linear_span!(V))
         if makepositive
-            if _ispolymakeloaded()
-                V = positivize(V)
-            else
-                _warn_polymakenotloaded()
-            end
+            V = positivize_safe(V)
         end
-        (transformation, new_equations) = perform_change_of_variables(eqs, V)        
-        new_system = polystoODE_assumeorder(new_equations)
-        new_vars = Dict(new_system.x_vars .=> transformation)
-        push!(results, Reduction(new_system, new_vars))
+        push!(results, Reduction{Nemo.fmpq_mpoly}(system, V, parameter_strategy))
     end
 
     sort!(results, by=r -> length(r.new_vars))
@@ -378,10 +371,11 @@ function find_reductions(
 end
 
 export ODE, @ODEsystem, equations, vars
-export set_parameter_values
+export states, parameters, initial_conditions, parameter_values
+export set_parameter_values, to_state, to_parameter
 
 export find_smallest_constrained_reduction, find_reductions, find_some_reduction
-export new_system, new_vars, new_initialconds
+export new_system, new_vars, new_initialconds, old_system
 
 export load_ODE_fromfile
 export ODEtoMTK, MTKtoODE

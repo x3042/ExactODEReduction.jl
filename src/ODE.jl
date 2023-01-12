@@ -9,42 +9,56 @@
 struct ODE{P}
     poly_ring::MPolyRing
     x_vars::Array{P, 1}
+    params::Array{P, 1} 
     x_equations::Dict{P, P}
-    params::Array{P, 1}
+    ic::Array{Any, 1}
+    param_vals::Array{Any, 1}
 
     function ODE(ring)
         P = elem_type(ring)
-        new{P}(ring, Vector{P}(), Dict{P,P}(), Vector{P}())
+        new{P}(ring, Vector{P}(), Vector{P}(), Dict{P,P}(), Vector{Any}(), Vector{Any}())
     end
 
-    function ODE{P}(eqs::Dict{P, P}, params::Vector{P}) where {P <: Union{fmpq_mpoly, MPolyElem{<: FieldElem}}}
-        isempty(eqs) && error("Empty ODE system")
-        ring = parent(first(keys(eqs)))
+    function ODE{P}(x_vars::Vector{P}, params::Vector{P}, eqs::Dict{P, P}, ic::Vector, param_vals::Vector) where {P <: Union{fmpq_mpoly, MPolyElem{<: FieldElem}}}
+        iszero(length(x_vars) + length(params)) && error("Empty ODE system")
+        ring = parent(first(vcat(x_vars, params)))
         vars = gens(ring)
         @assert all(p -> p in vars, params) "Incompatible polynomial rings of parameters $params"
-        new{P}(ring, vars, eqs, params)
+        @assert all(x -> x in vars, x_vars) "Incompatible polynomial ring of states $x_vars"
+        @assert Set(x_vars) == Set(keys(eqs)) "Incompatible equations and state variables"
+        @assert length(params) == length(param_vals) "Incorrect number of parameter values"
+        @assert length(eqs) == length(ic) "Incorrect number of initial conditions"
+        new{P}(ring, x_vars, params, eqs, ic, param_vals)
+    end
+
+    function ODE{P}(x_vars::Vector{P}, params::Vector{P}, eqs::Dict{P, P}) where {P <: Union{fmpq_mpoly, MPolyElem{<: FieldElem}}}
+        ODE{P}(x_vars, params, eqs, Vector{Any}(missing, length(x_vars)), Vector{Any}(missing, length(params)))
     end
 
     function ODE{P}(
             eqs::Dict{P, P},
         ) where {P <: Union{fmpq_mpoly, MPolyElem{<: FieldElem}}}
-        ODE{P}(eqs, Vector{P}(undef, 0))        
+            ODE{P}(gens(parent(first(keys(eqs)))), Vector{P}(undef, 0), eqs)
     end
 end
 
-"""
-    function equations(ode::ODE)
+ModelingToolkit.equations(ode::ODE) = [ode.x_equations[v] for v in ode.x_vars]
 
-    Returns the array of equations that define the given ODE system.
-"""
-equations(ode::ODE) = [ode.x_equations[v] for v in ode.x_vars]
+# returns equations with zero equations for the parameters
+equations_extended(ode::ODE) = [get(ode.x_equations, v, zero(parent(ode))) for v in gens(parent(ode))]
+
+ModelingToolkit.parameters(ode::ODE) = ode.params
+ModelingToolkit.states(ode::ODE) = ode.x_vars
+
+initial_conditions(ode::ODE) = ode.ic
+parameter_values(ode::ODE) = ode.param_vals
 
 """
     function vars(ode::ODE)
 
     Returns the array of polynomial variables in the given ODE system.
 """
-Nemo.vars(ode::ODE)   = ode.x_vars
+Nemo.vars(ode::ODE)   = gens(parent(ode))
 
 Nemo.parent(ode::ODE) = ode.poly_ring
 
@@ -55,25 +69,62 @@ Base.getindex(ode::ODE{P}, p::P) where {P} = ode.x_equations[p]
 
 #------------------------------------------------------------------------------
 
-# This is adapted from StructuralIdentifiability.jl
+"""
+    function to_state(ode::ODE, p)
+
+    Return a new ODE in which the parameter p is a state with zero dynamics
+"""
+
+function to_state(ode::ODE{P}, p::P) where {P}
+    @assert p in ode.params "$p is not a parameter"
+    p_ind = findfirst(x -> x == p, ode.params)
+
+    new_xvars = copy(ode.x_vars)
+    push!(new_xvars, p)
+
+    new_eqs = copy(ode.x_equations)
+    new_eqs[p] = zero(parent(ode))
+
+    new_params = copy(ode.params)
+    deleteat!(new_params, p_ind)
+
+    new_ic = copy(initial_conditions(ode))
+    push!(new_ic, parameter_values(ode)[p_ind])
+
+    new_param_vals = copy(parameter_values(ode))
+    deleteat!(new_param_vals, p_ind)
+
+    return ODE{P}(new_xvars, new_params, new_eqs, new_ic, new_param_vals)
+end
 
 """
-    set_parameter_values(ode, param_values)
-Input:
-- `ode` - an `ODE` object
-- `param_values` - values for (possibly, some of) the parameters as dictionary `parameter` => `value`
-Output: 
-- new ode with the parameters in param_values plugged with the given numbers
-"""
-function set_parameter_values(ode::ODE{P}, param_values::Dict{P, T}) where {P, T}
-    new_vars = map(var_to_str, [v for v in gens(ode.poly_ring) if !(v in keys(param_values))])
-    small_ring, small_vars = Nemo.PolynomialRing(base_ring(ode.poly_ring), new_vars)
-    eval_dict = Dict(str_to_var(v, ode.poly_ring) => str_to_var(v, small_ring) for v in new_vars)
-    merge!(eval_dict, Dict(p => small_ring(val) for (p, val) in param_values))
+    function to_parameter(ode::ODE, x)
 
-    return ODE{P}(
-        Dict{P, P}(eval_at_dict(v, eval_dict) => eval_at_dict(f, eval_dict) for (v, f) in ode.x_equations)
-    )
+    Return a new ODE in which the state x with zero dynamics is a parameter
+"""
+
+function to_parameter(ode::ODE{P}, x::P) where {P}
+    @assert x in ode.x_vars "$x is not a state"
+    @assert iszero(ode.x_equations[x]) "$x has a non-constant dynamics"
+
+    x_ind = findfirst(p -> x == p, ode.x_vars)
+
+    new_xvars = copy(ode.x_vars)
+    deleteat!(new_xvars, x_ind)
+
+    new_eqs = copy(ode.x_equations)
+    delete!(new_eqs, x)
+
+    new_params = copy(ode.params)
+    push!(new_params, x)
+
+    new_param_vals = copy(parameter_values(ode))
+    push!(new_param_vals, initial_conditions(ode)[x_ind])
+
+    new_ic = copy(initial_conditions(ode))
+    deleteat!(new_ic, x_ind)
+
+    return ODE{P}(new_xvars, new_params, new_eqs, new_ic, new_param_vals)
 end
 
 #------------------------------------------------------------------------------
@@ -169,13 +220,7 @@ macro ODEsystem(ex::Expr...)
     # preparing equations
     equations = map(macrohelper_clean, equations)
     x_dict = gensym()
-    y_dict = gensym()
-    y_vars = Set()
     x_dict_create_expr = :($x_dict = Dict{
-        ExactODEReduction.Nemo.fmpq_mpoly,
-        ExactODEReduction.Nemo.fmpq_mpoly
-    }())
-    y_dict_create_expr = :($y_dict = Dict{
         ExactODEReduction.Nemo.fmpq_mpoly,
         ExactODEReduction.Nemo.fmpq_mpoly
     }())
@@ -189,9 +234,6 @@ macro ODEsystem(ex::Expr...)
         to_insert = undef
         if lhs in x_vars
             to_insert = x_dict
-        elseif lhs in io_vars
-            to_insert = y_dict
-            push!(y_vars, lhs)
         else
             throw("Unknown left-hand side $lhs")
         end
@@ -202,26 +244,23 @@ macro ODEsystem(ex::Expr...)
         end
     end
 
-    u_vars = setdiff(io_vars, y_vars)
-    params = union(setdiff(all_symb, union(x_vars, y_vars, u_vars)), io_vars)
-
-    # add constant equations
-    to_insert = x_dict
-    for p in params
-        push!(eqs_expr, :($to_insert[$p] = $R($0)))
-    end
+    params = union(setdiff(all_symb, x_vars), io_vars)
 
     @info "Summary of the model:"
-    @info "State variables: " * join(map(string, collect(x_vars)), ", ")
-    @info "Parameters: " * join(map(string, collect(params)), ", ")
+    @info "State variables: " * join(map(string, x_vars), ", ")
+    @info "Parameters: " * join(map(string, params), ", ")
 
     # creating the ode object
-    ode_expr = :(ExactODEReduction.ODE{ExactODEReduction.Nemo.fmpq_mpoly}($x_dict, Array{ExactODEReduction.Nemo.fmpq_mpoly}([$(params...)])))
+    ode_expr = :(ExactODEReduction.ODE{ExactODEReduction.Nemo.fmpq_mpoly}(
+        Array{ExactODEReduction.Nemo.fmpq_mpoly}([$(x_vars...)]), 
+        Array{ExactODEReduction.Nemo.fmpq_mpoly}([$(params...)]),
+        $x_dict
+    ))
 
     result = Expr(
         :block,
         exp_ring, assignments...,
-        x_dict_create_expr, y_dict_create_expr, eqs_expr...,
+        x_dict_create_expr, eqs_expr...,
         ode_expr
     )
     return esc(result)
@@ -231,16 +270,17 @@ end
 
 function Base.show(io::IO, ode::ODE)
     if isempty(ode.x_equations)
-        println(io, "Empty ODE system")
+        if isempty(ode.params)
+            println(io, "Empty ODE system")
+        else
+            println(io, "ODE system without states and with parameters " * join(map(var_to_str, ode.params), ", "))
+        end
         return nothing
     end
     varstr = Dict(x => var_to_str(x) * "(t)" for x in ode.x_vars)
-    R_print, vars_print = Nemo.PolynomialRing(base_ring(ode.poly_ring), [varstr[v] for v in gens(ode.poly_ring)])
+    R_print, vars_print = Nemo.PolynomialRing(base_ring(ode.poly_ring), [get(varstr, v, "$v") for v in gens(ode.poly_ring)])
     # output the equations sorted w.r.t. variables
     for x in ode.x_vars
-        if x in ode.params
-            continue
-        end
         eq = ode.x_equations[x]
         print(io, var_to_str(x) * "'(t) = ")
         print(io, evaluate(eq, vars_print))
@@ -280,21 +320,33 @@ Output:
 """
 function ODEtoMTK(ode::ODE)
     @info "Preproccessing `ExactODEReduction.ODE` object"
-    vars = Nemo.vars(ode)
-    varssym = map(v -> Expr(:call, Symbol(v), :t), vars)
-    varssym = Expr(:tuple, :t, varssym...)
-    mtkvars = @eval ModelingToolkit.@variables ($varssym)
-    t, mtkvars... = mtkvars
-    gen2mtk = Dict(vars .=> mtkvars) 
+    xs = states(ode)
+    ps = parameters(ode)
+
+    psym = map(v -> Symbol(v), ps)
+    psym = Expr(:tuple, :t, psym...)
+    mtkparams = @eval ModelingToolkit.@parameters ($psym)
+    t, mtkparams... = mtkparams
+
+    xsym = map(v -> Expr(:call, Symbol(v), :t), xs)
+    xsym = Expr(:tuple, xsym...)
+    mtkvars = @eval ModelingToolkit.@variables ($xsym)
+    
+    gen2mtk = merge(Dict(xs .=> mtkvars), Dict(ps .=> mtkparams))
     D = ModelingToolkit.Differential(t)
     eqs = Vector{ModelingToolkit.Equation}()
-    for x in vars
+    eval_point = [gen2mtk[x] for x in gens(parent(ode))]
+    for x in xs
         poly = ode.x_equations[x]
         mtkx = gen2mtk[x]
-        mtkpoly = sum(map(t -> Rational(coeff(t, 1)) * prod(mtkvars .^ exponent_vector(t, 1)), collect(Nemo.terms(poly))), init=Rational(0))
+        mtkpoly = sum(map(t -> Rational(coeff(t, 1)) * prod(eval_point .^ exponent_vector(t, 1)), collect(Nemo.terms(poly))), init=Rational(0))
         push!(eqs, D(mtkx) ~ mtkpoly)
     end
-    ModelingToolkit.ODESystem(eqs, name=gensym())
+
+    ic_dict = Dict(gen2mtk[ode.x_vars[i]] => ode.ic[i] for i in 1:length(ode.x_vars))
+    param_dict = Dict(gen2mtk[ode.params[i]] => ode.param_vals[i] for i in 1:length(ode.params))
+
+    return (ModelingToolkit.ODESystem(eqs, name=gensym()), ic_dict, param_dict)
 end
 
 # Adapted from StructuralIdentifiability.jl
@@ -313,7 +365,7 @@ function MTKtoODE(de::ModelingToolkit.ODESystem)
     diff_eqs = filter(eq->!(ModelingToolkit.isoutput(eq.lhs)), ModelingToolkit.equations(de))
     state_vars = ModelingToolkit.states(de)
     params = ModelingToolkit.parameters(de)
-    
+
     input_symbols = vcat(state_vars, params)
     generators = string.(input_symbols)
     generators = map(g->replace(g, "(t)"=>""), generators)
@@ -321,7 +373,7 @@ function MTKtoODE(de::ModelingToolkit.ODESystem)
     state_eqn_dict = Dict{ExactODEReduction.Nemo.fmpq_mpoly, ExactODEReduction.Nemo.fmpq_mpoly}()
     
     var_gens = map(p -> ModelingToolkit.substitute(p, input_symbols.=>gens_), state_vars)
-    param_gens = map(p -> ModelingToolkit.substitute(p, input_symbols.=>gens_), params)
+    param_gens = Array{ExactODEReduction.Nemo.fmpq_mpoly, 1}(map(p -> ModelingToolkit.substitute(p, input_symbols.=>gens_), params))
 
     @info "Summary of the model:"
     @info "State variables: " * join(map(string, collect(var_gens)), ", ")
@@ -334,9 +386,6 @@ function MTKtoODE(de::ModelingToolkit.ODESystem)
             state_eqn_dict[ModelingToolkit.substitute(state_vars[i], input_symbols.=>gens_)] = R(diff_eqs[i].rhs) 
         end
     end
-    for i in 1:length(param_gens)
-        state_eqn_dict[param_gens[i]] = R()
-    end
     
-    return ExactODEReduction.ODE{ExactODEReduction.Nemo.fmpq_mpoly}(state_eqn_dict)
+    return ExactODEReduction.ODE{ExactODEReduction.Nemo.fmpq_mpoly}(var_gens, param_gens, state_eqn_dict)
 end

@@ -132,8 +132,11 @@ function invariant_subspace_semisimple(algebra::Subspace; overQ=true)
                 if length(C) < length(Z) * num_blocks^2
                     continue
                 end
-                @warn """There are subspaces defined over Q but they come only from equal blocks.
-                If you wish to compute them, run the code over Qbar"""
+                if overQ
+                    @warn """There are subspaces defined over Q but they come only from equal blocks.
+                    If you wish to compute them, run the code over Qbar"""
+                    return []
+                end
             end
 
             @info "Computing eigenspaces a random element in the centralizer"
@@ -167,20 +170,23 @@ function invariant_subspace_semisimple(algebra::Subspace; overQ=true)
             end
         end
 
-        f = first(factors)[1]
-        # computing the kernel of f(M)
-        factored = evaluate(f, M)
-        V = last(kernel(MSpace(collect(factored))))
+        V = nothing
+        for (f, _) in factors
+            factored = evaluate(f, M)
+            V = last(kernel(MSpace(collect(factored))))
+            # convert to sparse representation
+            V = [
+                sparse(v)
+                for v in [[V[:, j]...]
+                    for j in 1:size(V, 2)]
+            ]
+            if !all(iszero, map(v -> M * v, V))
+                break
+            end
+        end
         
         @debug "Eval in invariant_subspace_semisimple" factored
 
-        # convert to sparse repr
-        V = [
-            sparse(v)
-            for v in [[V[:, j]...]
-                for j in 1:size(V, 2)]
-        ]
-        
         @debug "V in invariant_subspace_semisimple" V
 
         # if is proper and invaiant

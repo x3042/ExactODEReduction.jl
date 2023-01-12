@@ -5,19 +5,19 @@
     ode = ExactODEReduction.load_ODE_fromfile(fn)
 
     correct_ode = ExactODEReduction.@ODEsystem(
-        Ap'(t) = -Ap(t)*B(t)*r3(t) - Ap(t)*r2(t) + ApB(t)*r4(t) + Au(t)*r1(t),
-        ApB'(t) = Ap(t)*B(t)*r3(t) - ApB(t)*r4(t),
-        Au'(t) = Ap(t)*r2(t) - Au(t)*B(t)*r3(t) - Au(t)*r1(t) + AuB(t)*r4(t),
-        AuB'(t) = Au(t)*B(t)*r3(t) - AuB(t)*r4(t),
-        B'(t) = -Ap(t)*B(t)*r3(t) + ApB(t)*r4(t) - Au(t)*B(t)*r3(t) + AuB(t)*r4(t)
+        Ap'(t) = -Ap(t)*B(t)*r3 - Ap(t)*r2 + ApB(t)*r4 + Au(t)*r1,
+        ApB'(t) = Ap(t)*B(t)*r3 - ApB(t)*r4,
+        Au'(t) = Ap(t)*r2 - Au(t)*B(t)*r3 - Au(t)*r1 + AuB(t)*r4,
+        AuB'(t) = Au(t)*B(t)*r3 - AuB(t)*r4,
+        B'(t) = -Ap(t)*B(t)*r3 + ApB(t)*r4 - Au(t)*B(t)*r3 + AuB(t)*r4
     )
     correct_vars = ExactODEReduction.vars(correct_ode)
 
-    eqs = ExactODEReduction.equations(ode)
+    eqs = equations(ode)
     eqs = map(e -> evaluate(e, correct_vars), eqs)
 
     @test length(ode) == length(correct_ode)
-    @test eqs == ExactODEReduction.equations(correct_ode)
+    @test eqs == equations(correct_ode)
 end
 
 
