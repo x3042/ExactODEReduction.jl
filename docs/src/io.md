@@ -13,27 +13,27 @@ ODE{P}
 ### Accessing ODE data
 
 ```@docs
-equations
+equations(ode::ODE)
 ```
 
 ```@docs
-states
+states(ode::ODE)
 ```
 
 ```@docs
-parameters
+parameters(ode::ODE)
 ```
 
 ```@docs
-initial_conditions
+initial_conditions(ode::ODE)
 ```
 
 ```@docs
-parameter_values
+parameter_values(ode::ODE)
 ```
 
 ```@docs
-vars
+vars(ode::ODE)
 ```
 
 ```@docs

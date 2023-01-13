@@ -404,6 +404,7 @@ export ODE, @ODEsystem, equations, vars
 export states, parameters, initial_conditions, parameter_values
 export set_parameter_values, to_state, to_parameter
 
+export Reduction, ChainOfReductions
 export find_smallest_constrained_reduction, find_reductions, find_some_reduction
 export new_system, new_vars, new_initialconds, old_system, reduce_data
 

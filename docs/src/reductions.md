@@ -42,17 +42,17 @@ new_initialconds
 reduce_data
 ```
 
-The function `find_reduction` returns a `ReductionChain` object,
+The function `find_reduction` returns a `ChainOfReductions` object,
 which, in practice, can be treated as `Vector{Reduction}`.
 
 ```@docs
-ReductionChain
+ChainOfReductions
 ```
 
 ```@docs
-length(::ReductionChain)
+length(::ChainOfReductions)
 ```
 
 ```@docs
-getindex(::ReductionChain, ::Integer)
+getindex(::ChainOfReductions, ::Integer)
 ```
