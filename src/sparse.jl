@@ -72,7 +72,8 @@ for (op, args) in ((:MySparseVector, (:n, :inds, :vals)),
             end
             
             function random_sparse_vector(n_or_mn::Tuple, field::$fieldT; density=0.1)
-                random_sparse_vector(n_or_mn..., field, density=density)
+                @assert 0 <= density <= 1
+                $coeffT.(SparseArrays.sprand(Int, n_or_mn..., density))
             end
 
             function unit_sparse_vector($(n_or_mn...), i, field::$fieldT)

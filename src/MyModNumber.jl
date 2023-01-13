@@ -22,9 +22,8 @@ end
 # MyModNumber 
 struct MyModNumber <: Number
     x::Nemo.gfp_fmpz_elem
+    MyModNumber(y) = new(global_field[](y))
 end
-
-MyModNumber(y) = MyModNumber(global_field[](y))
 
 Nemo.data(x::MyModNumber) = x.x
 

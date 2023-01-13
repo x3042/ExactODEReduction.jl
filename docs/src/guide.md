@@ -49,7 +49,7 @@ new_ode = new_system(reduction2)
 Note that `new_ode` from above is again an `ODE` object. In particular, this means that all functions from (Section [Functions for manipulating ODEs](@ref)) will also work for it.
 
 ```@example a
-new_vars = new_vars(reduction2)
+new_var = new_vars(reduction2)
 ```
 
 The function `find_reductions` additionaly provides several useful keyword arguments, which are described in [Finding reductions](@ref).

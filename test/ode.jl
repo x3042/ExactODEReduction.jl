@@ -85,7 +85,7 @@ end
 
 @testset "ODE ad-hoc stuff" begin
     # Test `set_parameter_values`
-    odes = @ODEsystem(
+    odes = ExactODEReduction.@ODEsystem(
         x'(t) = x(t) + y(t),
         y'(t) = a*x(t) - (a + b^2)*y(t) - z(t),
         z'(t) = 2 * x(t) - c*z(t)

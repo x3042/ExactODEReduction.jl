@@ -19,6 +19,11 @@
     @test iszero(x)
     @test ExactODEReduction.dim(x) == 2
     @test ExactODEReduction.density(x) == 0.0
+
+    ExactODEReduction.random_sparse_vector(2, QQ; density=0.5)
+    ExactODEReduction.random_sparse_vector(2, 2, QQ; density=0.5)
+    ExactODEReduction.random_sparse_vector((2, 2), QQ; density=0.5)
+    ExactODEReduction.random_sparse_vector((1), QQ; density=0.5)
 end
 
 @testset "Sparse add-on functions" begin
