@@ -456,3 +456,30 @@ odesys = convert(ODESystem, rs)
 sys = MTKtoODE(odesys)
 reductions = find_reductions(sys)
 
+#######
+
+# The two models below are relatives of the model (!!!!)2
+# but come from a published paper:
+#    https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1151550/pdf/biochemj00150-0091.pdf , page 89, mechanisms A and B
+
+rs = @reaction_network begin
+    (1), E + S <--> C1
+    (1), C1 --> C2
+    (1, 1), C1 <--> Eplus
+    (1), C2 --> P + E
+end
+
+odesys = convert(ODESystem, rs)
+sys = MTKtoODE(odesys)
+reductions = find_reductions(sys)
+
+rs = @reaction_network begin
+    (1, 1), E + S <--> C1
+    (1), C1 --> C2
+    (1, 1), E + S <--> Eplus
+    (1), C2 --> P + E
+end
+
+odesys = convert(ODESystem, rs)
+sys = MTKtoODE(odesys)
+reductions = find_reductions(sys)
