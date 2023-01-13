@@ -178,15 +178,15 @@ function random_linear_change(sys)
 end
 
 function check_reduction(red)
-    nv = new_vars(red)
-    new_eqs = new_system(red)
-    sys = old_system(red)
-    eval_point = [Nemo.QQ(rand(1:100)) for _ in vars(sys)]
-    vect_field = [evaluate(sys.x_equations[x], eval_point) for x in states(sys)]
+    nv = ExactODEReduction.new_vars(red)
+    new_eqs = ExactODEReduction.new_system(red)
+    sys = ExactODEReduction.old_system(red)
+    eval_point = [Nemo.QQ(rand(1:100)) for _ in ExactODEReduction.vars(sys)]
+    vect_field = [evaluate(sys.x_equations[x], eval_point) for x in ExactODEReduction.states(sys)]
     
     new_eval_point = [evaluate(nv[v], eval_point) for v in ExactODEReduction.vars(new_eqs)]
-    new_vect_field_1 = [evaluate(eq, new_eval_point) for eq in equations(new_eqs)]
-    new_vect_field_2 = [evaluate(nv[v], vect_field) for v in states(new_eqs)]
+    new_vect_field_1 = [evaluate(eq, new_eval_point) for eq in ExactODEReduction.equations(new_eqs)]
+    new_vect_field_2 = [evaluate(nv[v], vect_field) for v in ExactODEReduction.states(new_eqs)]
 
     return (new_vect_field_1, new_vect_field_2)
 end
@@ -198,7 +198,7 @@ end
     for c in cases
         sys = c[:sys]
         @info "Testing the system $sys"
-        for i in 1:length(states(sys))
+        for i in 1:length(ExactODEReduction.states(sys))
             sys.ic[i] = rand()
         end
 
@@ -213,15 +213,15 @@ end
             ics_old = reshape(ExactODEReduction.initial_conditions(sys), length(states(sys)), 1)
             ics_old_red = ExactODEReduction.reduce_data(ics_old, r)
             new_sys = ExactODEReduction.new_system(r)
-            ics_new = reshape(ExactODEReduction.initial_conditions(new_sys), length(states(new_sys)), 1)
+            ics_new = reshape(ExactODEReduction.initial_conditions(new_sys), length(ExactODEReduction.states(new_sys)), 1)
             @test ics_new == ics_old_red
         end
         reds = ExactODEReduction.find_reductions(sys; overQ=false) 
-        @test Set([length(new_vars(r)) for r in reds]) in c[:dims]
+        @test Set([length(ExactODEReduction.new_vars(r)) for r in reds]) in c[:dims]
 
         for (obs, dim) in c[:constrained]
             red = ExactODEReduction.find_smallest_constrained_reduction(sys, obs)
-            @test length(new_vars(red)) == dim
+            @test length(ExactODEReduction.new_vars(red)) == dim
             (f1, f2) = check_reduction(red)
             @test f1 == f2
         end
@@ -233,7 +233,7 @@ end
                 (f1, f2) = check_reduction(red)
                 @test f1 == f2
             end
-            @test Set([length(new_vars(r)) for r in reds_change]) in c[:dims]
+            @test Set([length(ExactODEReduction.new_vars(r)) for r in reds_change]) in c[:dims]
         end
     end
 
