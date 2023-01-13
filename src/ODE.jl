@@ -1,10 +1,10 @@
 
 """
-    struct ODE{P}
+    ODE{P}
 
-    The main structure that represents input ODE system.
-    Stores information about states and the equations.
-    This structure is constructed via the `@ODEmodel` macro.
+The main structure that represents input ODE system.
+Stores information about states, initial conditions, and the equations.
+This structure is constructed via the `@ODEmodel` macro.
 """
 struct ODE{P}
     poly_ring::MPolyRing
@@ -42,21 +42,48 @@ struct ODE{P}
     end
 end
 
+"""
+    equations(ode::ODE)
+
+Returns the array of equations of the given ODE system.
+"""
 ModelingToolkit.equations(ode::ODE) = [ode.x_equations[v] for v in ode.x_vars]
 
 # returns equations with zero equations for the parameters
 equations_extended(ode::ODE) = [get(ode.x_equations, v, zero(parent(ode))) for v in gens(parent(ode))]
 
+"""
+    parameters(ode::ODE)
+
+Returns the array of parameters of the given ODE system.
+"""
 ModelingToolkit.parameters(ode::ODE) = ode.params
+
+"""
+    states(ode::ODE)
+
+Returns the array of states of the given ODE system.
+"""
 ModelingToolkit.states(ode::ODE) = ode.x_vars
 
+"""
+    initial_conditions(ode::ODE)
+
+Returns the array of initial conditions of the given ODE system.
+"""
 initial_conditions(ode::ODE) = ode.ic
+
+"""
+    parameter_values(ode::ODE)
+
+Returns the array of parameter values of the given ODE system.
+"""
 parameter_values(ode::ODE) = ode.param_vals
 
 """
-    function vars(ode::ODE)
+    vars(ode::ODE)
 
-    Returns the array of polynomial variables in the given ODE system.
+    Returns the array of polynomial variables of the given ODE system.
 """
 Nemo.vars(ode::ODE)   = gens(parent(ode))
 
@@ -70,11 +97,10 @@ Base.getindex(ode::ODE{P}, p::P) where {P} = ode.x_equations[p]
 #------------------------------------------------------------------------------
 
 """
-    function to_state(ode::ODE, p)
+    to_state(ode::ODE, p)
 
-    Return a new ODE in which the parameter p is a state with zero dynamics
+Returns a new ODE in which the parameter `p` is a state with zero dynamics.
 """
-
 function to_state(ode::ODE{P}, p::P) where {P}
     @assert p in ode.params "$p is not a parameter"
     p_ind = findfirst(x -> x == p, ode.params)
@@ -98,9 +124,9 @@ function to_state(ode::ODE{P}, p::P) where {P}
 end
 
 """
-    function to_parameter(ode::ODE, x)
+    to_parameter(ode::ODE, x)
 
-    Return a new ODE in which the state x with zero dynamics is a parameter
+Returns a new ODE in which the state `x` with zero dynamics is a parameter.
 """
 
 function to_parameter(ode::ODE{P}, x::P) where {P}
@@ -183,12 +209,10 @@ ode = @ODEsystem(
     x2'(t) = -k2 * x2(t)
 )
 [ Info: Summary of the model:
-[ Info: State variables: x2, x1
+[ Info: State variables: x1, x2
 [ Info: Parameters: k1, k2
-k2'(t) = 0
-x2'(t) = -x2(t)*k2(t)
-x1'(t) = -k1(t)*x1(t)
-k1'(t) = 0
+x1'(t) = -x1(t)*k1
+x2'(t) = -x2(t)*k2
 ```
 
 """
@@ -308,7 +332,7 @@ end
 #------------------------------------------------------------------------------
 
 """
-    function ODEtoMTK(ode::ODE)
+    ODEtoMTK(ode::ODE)
 
 Converts an `ODE` object to an `ModelingToolkit.ODESystem` object
 and (!) inserts the MTK variables into the global scope.
@@ -351,7 +375,7 @@ end
 
 # Adapted from StructuralIdentifiability.jl
 """
-    function MTKtoODE(de::ModelingToolkit.ODESystem)
+    MTKtoODE(de::ModelingToolkit.ODESystem)
     
 Converts an `ModelingToolkit.ODESystem` object to an `ODE` object.
 

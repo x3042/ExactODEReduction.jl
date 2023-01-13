@@ -94,6 +94,7 @@ include("basis.jl")
 include("matrix_algebras.jl")
 
 # ------------------------------------------------------------------------------
+
 # By default, Polymake is not loaded, 
 # and the keyword argument `makepositive` does nothing.
 _ispolymakeloaded() = false
@@ -122,16 +123,22 @@ include("parametrization.jl")
 #------------------------------------------------------------------------------
 
 """
-    find_some_reduction(system::ODE, observables; overQ=true, makepositive=false, loglevel=Logging.Info)
+    find_some_reduction(system::ODE; overQ, seed, makepositive, loglevel, parameter_strategy)
 
 Finds a nontrivial linear reduction of the system.
 If there exists a reduction, it will be found.
 
 Arguments:
  - `system` is an ODE system given as `ODE` object,
- - `overQ` tells the algorithm to search for reductions over rational numbers,
- - `makepositive` tells the algorithm to search for reductions with positive coefficients;
+ - `overQ` tells the algorithm to search for reductions over rational numbers. Is `true` by default,
+ - `seed` is a seed for the random number generator,
+ - `makepositive` tells the algorithm to search for reductions with positive coefficients. `false` by default.
  To enable this argument, you should have `Polymake.jl` imported. 
+ - `loglevel` is a level of logging. `Logging.Info` by default.
+ - `parameter_strategy` prescribes the way the parameter in the resulting system will be recognized:
+   * `:inheritance` (default) the parameters in the new system are exactly combinations of the original parameters
+   * `:constants` the parameters in the new system will be the variables with zero dynamics
+   * `:none` - no parameters in the result
 
  Example:
 ```julia
@@ -142,9 +149,11 @@ julia> odes = @ODEsystem(
     z'(t) = 2x - z
 )
 julia> find_some_reduction(odes)
-Dict{Symbol, Any} with 2 entries:
-  :new_system => y2'(t) = -y1(t) - y2(t)…
-  :new_vars   => Nemo.fmpq_mpoly[y, z - x]
+Reduction of dimension 1.
+New system:
+y1'(t) = -2*y1(t)
+New variables:
+y1 = x - y - z
 ```
 
 """
@@ -207,13 +216,19 @@ end
 
 Finds the best linear reduction of the system.
 If there exists a reduction, it will be found.
+
 Arguments:
  - `system` is an ODE system given as `ODE` object,
- - `observables` is a list of linear functions of initial variables 
-   desired to be preserved by reduction,
- - `overQ` tells the algorithm to search for reductions over rational numbers,
- - `makepositive` tells the algorithm to search for reductions with positive coefficients;
+ - `observables` is a list of linear functions of initial variables desired to be preserved by reduction,
+ - `overQ` tells the algorithm to search for reductions over rational numbers. Is `true` by default,
+ - `seed` is a seed for the random number generator,
+ - `makepositive` tells the algorithm to search for reductions with positive coefficients. `false` by default.
  To enable this argument, you should have `Polymake.jl` imported. 
+ - `loglevel` is a level of logging. `Logging.Info` by default.
+ - `parameter_strategy` prescribes the way the parameter in the resulting system will be recognized:
+   * `:inheritance` (default) the parameters in the new system are exactly combinations of the original parameters
+   * `:constants` the parameters in the new system will be the variables with zero dynamics
+   * `:none` - no parameters in the result
 
  Example:
 ```julia
@@ -223,10 +238,14 @@ julia> odes = @ODEsystem(
     y'(t) = x - y - z,
     z'(t) = 2x - z
 )
-julia> find_smallest_constrained_reduction(odes, [2x + z])
-Dict{Symbol, Any} with 2 entries:
-  :new_system => y2'(t) = 2*y1(t) - y2(t)…
-  :new_vars   => Nemo.fmpq_mpoly[y + 3*x, z + 2*x]
+julia> find_smallest_constrained_reduction(odes, [x + (1//2)*z])
+Reduction of dimension 2.
+New system:
+y1'(t) = 2*y1(t) + y2(t)
+y2'(t) = -2*y1(t) - y2(t)
+New variables:
+y1 = x + 1//2*z
+y2 = y - 3//2*z
 ```
 
 """
@@ -290,9 +309,11 @@ In particular, if there exists at least one reduction, it will be found.
 
 Arguments:
  - `system` is an ODE system given as `ODE` object,
- - `overQ` tells the algorithm to search for reductions over rational numbers,
- - `makepositive` tells the algorithm to search for reductions with positive coefficients. 
- To enable this argument, you should have `Polymake.jl` imported.
+ - `overQ` tells the algorithm to search for reductions over rational numbers. Is `true` by default,
+ - `seed` is a seed for the random number generator,
+ - `makepositive` tells the algorithm to search for reductions with positive coefficients. `false` by default.
+ To enable this argument, you should have `Polymake.jl` imported. 
+ - `loglevel` is a level of logging. `Logging.Info` by default.
  - `parameter_strategy` prescribes the way the parameter in the resulting system will be recognized:
    * `:inheritance` (default) the parameters in the new system are exactly combinations of the original parameters
    * `:constants` the parameters in the new system will be the variables with zero dynamics
@@ -307,12 +328,21 @@ julia> odes = @ODEsystem(
     z'(t) = 2x - z
 )
 julia> find_reductions(odes)
-2-element Vector{Dict{Symbol, Any}}:
- Dict(:new_system => y1'(t) = 0
-, :new_vars => Nemo.fmpq_mpoly[y - z + x])
- Dict(:new_system => y2'(t) = -y1(t) - y2(t)
-y1'(t) = -y1(t) - y2(t)
-, :new_vars => Nemo.fmpq_mpoly[y, z - x])
+A chain of 2 reductions of dimensions 1, 2.
+==================================
+1. Reduction of dimension 1.
+New system:
+y1'(t) = 0
+New variables:
+y1 = x + y - z
+==================================
+2. Reduction of dimension 2.
+New system:
+y1'(t) = -y1(t) + y2(t)
+y2'(t) = y1(t) - y2(t)
+New variables:
+y1 = x - z
+y2 = y
 ```
 
 """
@@ -375,7 +405,7 @@ export states, parameters, initial_conditions, parameter_values
 export set_parameter_values, to_state, to_parameter
 
 export find_smallest_constrained_reduction, find_reductions, find_some_reduction
-export new_system, new_vars, new_initialconds, old_system
+export new_system, new_vars, new_initialconds, old_system, reduce_data
 
 export load_ODE_fromfile
 export ODEtoMTK, MTKtoODE

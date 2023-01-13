@@ -1,5 +1,7 @@
 # Functions for finding reductions
 
+### Finding reductions
+
 ```@docs
 find_reductions
 ```
@@ -12,12 +14,45 @@ find_smallest_constrained_reduction
 find_some_reduction
 ```
 
-## Functions for exploring found reductions
+### Exploring found reductions
+
+The functions `find_some_reduction` and `find_smallest_constrained_reduction` return a `Reduction` object.
+
+```@docs
+Reduction
+```
 
 ```@docs
 new_system
 ```
 
 ```@docs
-ExactODEReduction.new_vars
+new_vars
+```
+
+```@docs
+old_system
+```
+
+```@docs
+new_initialconds
+```
+
+```@docs
+reduce_data
+```
+
+The function `find_reduction` returns a `ReductionChain` object,
+which, in practice, can be treated as `Vector{Reduction}`.
+
+```@docs
+ReductionChain
+```
+
+```@docs
+length(::ReductionChain)
+```
+
+```@docs
+getindex(::ReductionChain, ::Integer)
 ```

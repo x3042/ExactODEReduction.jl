@@ -264,10 +264,10 @@ end
 """
     load_ODE_fromfile(filepath)
 
-    Returns the `ODE` object constructed from equations
-    in the `*.ode` file at `filepath`.
-    
-    For the format `*.ode` see the `examples` folder.
+Returns the `ODE` object constructed from equations
+in the `*.ode` file at the given `filepath`.
+
+For the format `*.ode` see the `examples` folder in the repository.
 """
 function load_ODE_fromfile(filepath)
     # *.ode --> polynomial form of ode system

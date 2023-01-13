@@ -1,4 +1,39 @@
 
+"""
+    Reduction
+
+Represents a single reduction of some ODE system. 
+This is returned from reduction functions.
+
+Example:
+```julia
+using ExactODEReduction
+odes = @ODEsystem(
+    x'(t) = x + y,
+    y'(t) = x - y - z,
+    z'(t) = 2x - z
+)
+
+reduction = find_some_reduction(odes)
+
+## prints
+Reduction of dimension 1.
+New system:
+y1'(t) = y1(t)
+New variables:
+y1 = x + 1//2*y - 1//4*z
+
+new_system(reduction)
+## prints
+y1'(t) = y1(t)
+
+new_vars(reduction)
+## prints
+Dict{Nemo.fmpq_mpoly, Nemo.fmpq_mpoly} with 1 entry:
+  y1 => x + 1//2*y - 1//4*z
+```
+
+"""
 struct Reduction{A, B, C}
     new_system::ODE{A}
     new_vars::Dict{A, B}
@@ -54,25 +89,30 @@ end
 """
     new_system(r::Reduction)
 
-    Returns the `ODE` object that defines the reduced system.
+Returns the `ODE` object that defines the reduced system.
 """
 new_system(r::Reduction) = r.new_system
 
 """
     new_system(r::Reduction)
 
-    Returns the dictionary of new macro-variables expressed
-    as linear combinations of the original variables.
+Returns the dictionary of new macro-variables expressed
+as linear combinations of the original variables.
 """
 new_vars(r::Reduction) = r.new_vars
 
+"""
+    old_system(r::Reduction)
+
+Returns the `ODE` object that defines the original system.
+"""
 old_system(r::Reduction) = r.old_system
 
 """
     new_initialconds(r::Reduction, ics::Dict)
 
-    Returns a dictionary of initial conditions for the new variables
-    as defined by the given reduction.
+Returns a dictionary of initial conditions for the new variables
+as defined by the given reduction.
 """
 function new_initialconds(r::Reduction, ics::Dict{P, T}) where {P, T}
     newv = new_vars(r)
@@ -83,8 +123,8 @@ end
 """
     reduce_data(data::Array{Any, 2}, r::Reduction)
 
-    For a time-series data for the original system, returns 
-    the corresponding time series for the reduction
+For a time-series data for the original system, returns 
+the corresponding time series for the reduction
 """
 function reduce_data(data::Matrix, r::Reduction)
     old_sys = old_system(r)
@@ -122,13 +162,70 @@ function Base.show(io::IO, red::Reduction)
     nothing
 end
 
+"""
+    Reduction
 
+Represents a chain of `Reduction`s of some ODE system. 
+This is returned from the `find_reductions` function.
+
+Example:
+```julia
+using ExactODEReduction
+odes = @ODEsystem(
+    x'(t) = x + y,
+    y'(t) = x - y - z,
+    z'(t) = 2x - z
+)
+
+reductions = find_reductions(odes)
+
+## prints
+A chain of 2 reductions of dimensions 1, 2.
+==================================
+1. Reduction of dimension 1.
+New system:
+y1'(t) = y1(t)
+New variables:
+y1 = x + 1//2*y - 1//4*z
+==================================
+2. Reduction of dimension 2.
+New system:
+y1'(t) = y2(t)
+y2'(t) = 2*y1(t) - y2(t)
+New variables:
+y1 = x - 1//2*z
+y2 = y + 1//2*z
+
+reduction2 = reductions[2]
+## prints
+Reduction of dimension 2.
+New system:
+y1'(t) = y2(t)
+y2'(t) = 2*y1(t) - y2(t)
+New variables:
+y1 = x - 1//2*z
+y2 = y + 1//2*z
+
+```
+
+"""
 struct ChainOfReductions#{P, A, B}
     # this is actually a vector of Reduction{A, A, A}
     reductions#::Vector{Reduction{P, A, B}}
 end
 
+"""
+    length(cor::ChainOfReductions)
+
+Returns the number of reductions in the chain.
+"""
 Base.length(cor::ChainOfReductions) = length(cor.reductions)
+
+"""
+    getindex(cor::ChainOfReductions, i::Integer)
+
+Returns the `i`-th reduction in the chain. Returned object is of type `Reduction`.
+"""
 Base.getindex(cor::ChainOfReductions, i::Integer) = cor.reductions[i]
 
 Base.isempty(cor::ChainOfReductions) = isempty(cor.reductions)
