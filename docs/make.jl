@@ -1,7 +1,7 @@
 using Documenter, ExactODEReduction
 
 makedocs(
-    sitename="ExactODEReduction",
+    sitename="ExactODEReduction.jl",
     modules = [ExactODEReduction],
     pages = [
         "ExactODEReduction" => "index.md",
@@ -16,5 +16,5 @@ makedocs(
 )
 
 deploydocs(
-    repo = "github.com/x3042/ExactODEReduction.git",
+    repo = "github.com/x3042/ExactODEReduction.jl.git",
 )

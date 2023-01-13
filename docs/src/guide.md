@@ -18,7 +18,7 @@ To create a system as above in `ExactODEReduction.jl`, use the `ODEsystem` macro
 ```@example a
 using ExactODEReduction
 
-@ODEsystem(   
+odes = @ODEsystem(   
     x1'(t) = x1^2 + 2x1*x2,     
     x2'(t) = x2^2 + x3 + x4,    
     x3'(t) = x2 + x4,

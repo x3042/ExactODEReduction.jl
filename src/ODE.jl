@@ -128,7 +128,6 @@ end
 
 Returns a new ODE in which the state `x` with zero dynamics is a parameter.
 """
-
 function to_parameter(ode::ODE{P}, x::P) where {P}
     @assert x in ode.x_vars "$x is not a state"
     @assert iszero(ode.x_equations[x]) "$x has a non-constant dynamics"
