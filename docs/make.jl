@@ -11,7 +11,8 @@ makedocs(
             "Functions for finding reductions" => "reductions.md",
             "Functions for loading ODEs from a file" => "load.md"
         ]
-    ]
+    ],
+    format = Documenter.HTML(analytics = "G-ETWS53KF64"),
 )
 
 deploydocs(
