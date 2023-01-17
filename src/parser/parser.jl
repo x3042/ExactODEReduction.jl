@@ -213,7 +213,7 @@ function load_ODEs_recursive_if(
                 if endswith(fname, ext)
                     @info "Load: " "$pathname/$fname"
                     try
-                        model = load_ODEs("$pathname/$fname")
+                        model = load_ODE_fromfile("$pathname/$fname")
                         if from_size <= length(model) <= to_size
                             push!(models, [fname, model])
                         end

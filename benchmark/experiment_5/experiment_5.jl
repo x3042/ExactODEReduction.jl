@@ -40,8 +40,7 @@ function run_benchmarks(sz...)
             @warn "skipping $filename -- just skipping"
             continue
         end
-        ODE = ExactODEReduction.ODE{fmpq_mpoly}(system)
-        x = @timed ExactODEReduction.find_reductions(ODE, seed=_seed)
+        x = @timed ExactODEReduction.find_reductions(system, seed=_seed)
         computed_cache[filename] = [length(system), x.time, x.value]
     end
 end
@@ -61,7 +60,7 @@ function count_nontrivial_reductions_honest(reductions)
     correction = 0
     # for each pair of consecutive reductions..
     for i in 1:length(reductions) - 1            
-        r1, r2 = reductions[i], reductions[i+1]
+        r1, r2 = reductions[i], reductions[i + 1]
         # if r2 is constant, mark r2 as *not interesting* and continue to the next pair
         if is_first_integral_reduction(ExactODEReduction.equations(ExactODEReduction.new_system(r2)))
             correction += 1
@@ -69,7 +68,7 @@ function count_nontrivial_reductions_honest(reductions)
         end
         # if delta(r1, r2) is constant, mark r2 as *not interesting*.
         # We find delta by searching for a perfect match between new variables of r1 and r2.
-        newode1, newode2 = ExactODEReduction.new_system(r1), ExactODEReduction.new_system(r2)
+        newode1, newode2 = [ExactODEReduction.new_system(r).x_equations for r in [r1, r2]]
         newvardict1, newvardict2 = ExactODEReduction.new_vars(r1), ExactODEReduction.new_vars(r2)
         visited = Dict()
         for (_, newexpr1) in newvardict1
@@ -79,10 +78,7 @@ function count_nontrivial_reductions_honest(reductions)
         end
         # check if each of the new variables of r1 is matched to one var from r2
         length(visited) != length(newvardict1) && continue
-        delta = [
-            newode2[var] for var in keys(newvardict2)
-            if !(haskey(visited, var))
-        ]
+        delta = [eq for (var, eq) in newode2 if !haskey(visited, var)]
         if all(iszero, delta)
             correction += 1
         end
@@ -205,9 +201,9 @@ end
 # uncomment this if benchmark results in `result_data` 
 # should be deleted and later updated
 #
-# clear_all_data()
+clear_all_data()
 
-for sz in [(1, 150)]
+for sz in [(1, 10)]
     run_benchmarks(sz...)
 end
 
