@@ -203,7 +203,7 @@ end
 #
 clear_all_data()
 
-for sz in [(1, 10)]
+for sz in [(1, 150)]
     run_benchmarks(sz...)
 end
 
