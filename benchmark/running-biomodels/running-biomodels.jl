@@ -145,7 +145,7 @@ function write_md_all()
 
     md *= "\n$(julia_info_markdown())\n"
 
-    fnname = "experiment_5_all$(_postfix)_$(_date).md"
+    fnname = "biomodels_results$(_postfix)_$(_date).md"
     f = open((@__DIR__)*"/$fnname", "w")
     write(f, md)
     close(f)
@@ -184,7 +184,7 @@ function write_md_aggregate(thresholds)
 
     md *= "\n$(julia_info_markdown())\n"
 
-    fnname = "experiment_5$(_postfix)_$(_date).md"
+    fnname = "aggregated_biomodels_results$(_postfix)_$(_date).md"
     f = open((@__DIR__)*"/$fnname", "w")
     write(f, md)
     close(f)
@@ -201,7 +201,7 @@ end
 # uncomment this if benchmark results in `result_data` 
 # should be deleted and later updated
 #
-clear_all_data()
+# clear_all_data()
 
 for sz in [(1, 150)]
     run_benchmarks(sz...)
