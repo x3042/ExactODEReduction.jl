@@ -90,7 +90,7 @@ Nemo.vars(ode::ODE)   = gens(parent(ode))
 Nemo.parent(ode::ODE) = ode.poly_ring
 
 Base.isempty(ode::ODE) = isempty(ode.x_equations)
-Base.length(ode::ODE) = length(ode.x_equations)
+Base.length(ode::ODE) = length(ode.x_vars) + length(ode.params)
 
 Base.getindex(ode::ODE{P}, p::P) where {P} = ode.x_equations[p]
 
