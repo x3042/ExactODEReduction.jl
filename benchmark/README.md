@@ -2,11 +2,11 @@
 
 This directory contains benchmarks for the various components of `ExactODEReduction` package.
 
-- `experiment_5` -- benchmark results and source code. Used in the paper TBD. 
+- `running-biomodels` -- benchmarks for `find_reductions` function used on biomodels. Used in the paper with **doi:** TBD. 
 
    One can run benchmarks with the following command:
    
-   `$ julia experiment_5/experiment_5.jl`
+   `$ julia running-biomodels/running-biomodels.jl`
    
-   Results will be written to `experiment_5` directory in files `experiment_5_[all]_[current-date].md`.
+   Results will be written to `running-biomodels` directory in the files `biomodels_results_[current-date].md`.
    
