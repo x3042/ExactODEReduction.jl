@@ -34,7 +34,7 @@ begin
     );
 
     n = 10001 # number of timepoints
-    ts = range(first(tspan), stop=last(tspan)+1, length=n)
+    ts = range(first(tspan), stop=last(tspan), length=n)
 
     begin 
         a = plot(
@@ -89,7 +89,7 @@ begin
     );
 
     n = 101 # number of timepoints
-    ts = range(first(tspan), stop=last(tspan)+1, length=n)
+    ts = range(first(tspan), stop=last(tspan), length=n)
 
     begin 
         a = plot(
@@ -129,7 +129,7 @@ begin
     );
 
     n = 101 # number of timepoints
-    ts = range(first(tspan), stop=last(tspan)+1, length=n)
+    ts = range(first(tspan), stop=last(tspan), length=n)
 
     begin 
         a = plot(
