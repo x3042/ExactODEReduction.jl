@@ -1,9 +1,23 @@
-using ExactODEReduction
+include((@__DIR__) * "/../../src/ExactODEReduction.jl")
 using Nemo
+using NaturalSort
+
+# We need to be careful with the order of variables.
+# In clue-dump-matrices.py, we have 80 variables initially:
+# 48 are constant parameters, 32 are variables.
+#
+# (?) As I understand, these are turned to 32 variables
+# via a random substitution. As a result,
+# 32 by 32 matrices are obtained from clue-dump-matrices.py
+# and written to file ode.txt 
+# (file ode.ode contains same equations, but preluded/concluded with begin/end)
+
+# See below in this file
 
 ##################
-# Parse
+# Parse matrices
 
+# load the matrix from `lines` until separator is met
 function readmatrix(lines; separator="==============")
     j = 1
     while !occursin(separator, lines[j])
@@ -19,6 +33,7 @@ function readmatrix(lines; separator="==============")
     lines, matrix
 end
 
+# load and return all matrices from the filename
 function readmatrices(filename)
     fin = open(filename, "r")
     lines = readlines(fin)
@@ -31,13 +46,15 @@ function readmatrices(filename)
     matrices
 end
 
+# (!!!) Note: 32 by 32 matrices.
+# one dimension per each variable, params excluded
 matrices = readmatrices((@__DIR__)*"/matrices.txt")
 
 @assert length(unique(map(size, matrices))) == 1
 @info "$(length(matrices)) matrices, each is $(size(matrices[1]))"
 
 ##################
-# Find reductions 
+# Find invariant subspaces
 
 our_matrices = map(
     m -> ExactODEReduction.sparse(m), 
@@ -47,32 +64,92 @@ our_matrices = map(
 invariant_subspaces = ExactODEReduction.many_invariant_subspaces(our_matrices, ExactODEReduction.invariant_subspace_global)
 
 ##################
-# Show reductions as systems
+# Show reductions as systems in polynomial variables
 
-# results = Vector{Any}()
-# for (i, V) in enumerate(invariant_subspaces)
-#     V = ExactODEReduction.basis(ExactODEReduction.linear_span!(V))
-#     push!(results, ExactODEReduction.Reduction{Nemo.fmpq_mpoly}(system, V, :inheritance))
-# end
+# We use some legacy code, without ODE structs,
+# for system-less transformation
+include("legacy.jl")
 
-# sort!(results, by=r -> length(r.new_vars))
+# vars contains 80 things,
+# first 48 are k1, k2, ..., k48 (constant parameters)
+# last 32 are x1, x2, ..., x32
+# (!!!) we will need to change the order of variables
+ODEs, vars, params = ExactODEReduction.load_ODE_fromfile((@__DIR__) * "\\ode.ode", return_dict=true)
 
-# varnames = [
-#     "x1", "x2", "x3", "x4", "x5", 
-#     "x6", "x7", "x8", "x9", "x10", 
-#     "x11", "x12", "x13", "x14", "x15", 
-#     "x16", "x17", "x18", "x19", "x20", 
-#     "x21", "x22", "x23", "x24", "x25", 
-#     "x26", "x27", "x28", "x29", "x30", 
-#     "x31", "x32",
-#     "k1", "k2", "k3", "k4", "k5", "k6", 
-#     "k7", "k8", "k9", "k10", "k11", "k12", 
-#     "k13", "k14", "k15", "k16", "k17", "k18", 
-#     "k19", "k20", "k21", "k22", "k23", "k24", 
-#     "k25", "k26", "k27", "k28", "k29", "k30", 
-#     "k31", "k32", "k33", "k34", "k35", "k36", 
-#     "k37", "k38", "k39", "k40", "k41", "k42", 
-#     "k43", "k44", "k45", "k46", "k47", "k48",
-# ]
+# (!!!) Exactly 32 equations in the correct order
 
-# poly_ring, xs = PolynomialRing(QQ, varnames)
+eqs = [ODEs[x] for x in filter(var -> occursin("x", string(var)), sort(vars, by=string, lt=natural))]
+correctRing, correctVars = PolynomialRing(QQ,
+    ["x$i" for i in 1:32]
+)
+
+# Change the order of variables in eq
+# (!!!) and substitute 48 ones for parameters
+forty_eight_ones = [one(correctRing) for i in 1:48]
+eqs = map(eq -> evaluate(eq, [forty_eight_ones..., correctVars...]), eqs)
+
+results = Vector{Any}()
+for (i, V) in enumerate(invariant_subspaces)
+    V = ExactODEReduction.basis(ExactODEReduction.linear_span!(V))
+    (transformation, new_system) = perform_change_of_variables(eqs, V)
+    push!(results, Dict(:new_vars => transformation, :new_system => new_system))
+end
+
+# We find 24 reductions in total.
+# Out of those, there are some (the list is unexaustive)
+# with non-trivial dynamics:
+
+results[3][:new_system]
+#=
+3-element Vector{AbstractAlgebra.Generic.Frac{fmpq_mpoly}}:
+ -y1*y2 + y3
+ -y1*y2 + y3
+ y1*y2 - y3
+=#
+
+results[6][:new_system]
+#=
+6-element Vector{AbstractAlgebra.Generic.Frac{fmpq_mpoly}}:
+ -y1*y3 + y4
+ -y2*y5 + y6
+ -y1*y3 + y4
+ y1*y3 - y4
+ -y2*y5 + y6
+ y2*y5 - y6
+=#
+
+results[17][:new_system]
+#=
+17-element Vector{AbstractAlgebra.Generic.Frac{fmpq_mpoly}}:
+ -y1*y3 + y4
+ -y2*y5 + y6
+ -y1*y3 + y4
+ y1*y3 - y4
+ -y2*y5 + y6
+ y2*y5 - y6
+ 0
+ 0
+ ...
+ 0
+ (-y6*y17)//(y17 + 1)
+=#
+
+results[23][:new_system]
+#=
+23-element Vector{AbstractAlgebra.Generic.Frac{fmpq_mpoly}}:
+ -y1*y3 + y4
+ -y2*y5 + y6
+ -y1*y3 + y4
+ y1*y3 - y4
+ -y2*y5 + y6
+ y2*y5 - y6
+ 0
+ ...
+ 0
+ (-y6*y17)//(y17 + 1)
+ (y6*y17)//(y17 + 1)
+ (-y18*y19*y20 - y18*y19 + y19*y20*y21 + y20*y21)//(y19*y20 + y19 + y20 + 1)
+ (y18*y19*y20 + y18*y19 - y19*y20*y21 - y20*y21)//(y19*y20 + y19 + y20 + 1) 0
+ 0
+ ...
+=#

@@ -33,14 +33,11 @@ for r in fin.readlines():
         lines.append(r[s+1:])
 fin.close()
 
+# Note the order of variables and parameters!!!
 eqs = [
     RationalFunction.from_string(line, varnames + parnames)
     for line in lines
 ]
-# eqs = eqs + [
-#     RationalFunction.from_string("0", varnames + parnames) 
-#     for _ in range(len(parnames))
-# ]
 
 system = FODESystem(eqs, variables = varnames)
 

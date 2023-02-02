@@ -35,6 +35,8 @@ import Primes
 # making Polymake dependency optional
 using Requires
 
+using NaturalSort
+
 # for parsing
 import JSON
 
