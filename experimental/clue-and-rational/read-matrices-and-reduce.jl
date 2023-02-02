@@ -7,12 +7,13 @@ using NaturalSort
 # 48 are constant parameters, 32 are variables.
 #
 # (?) As I understand, these are turned to 32 variables
-# via a random substitution. As a result,
-# 32 by 32 matrices are obtained from clue-dump-matrices.py
+# via a random substitution of parameters. As a result,
+# 32 by 32 matrices are obtained in clue-dump-matrices.py
 # and written to file ode.txt 
 # (file ode.ode contains same equations, but preluded/concluded with begin/end)
 
-# See below in this file
+# This file reads those matrices from ode.txt,
+# runs subspace search, and finally tries to convert subspaces into systems
 
 ##################
 # Parse matrices
