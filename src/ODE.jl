@@ -406,7 +406,7 @@ function MTKtoODE(de::ModelingToolkit.ODESystem)
         if !(typeof(diff_eqs[i].rhs) <: Number)
             state_eqn_dict[ModelingToolkit.substitute(state_vars[i], input_symbols.=>gens_)] = eval_at_nemo(diff_eqs[i].rhs, Dict(input_symbols.=>gens_))
         else
-            state_eqn_dict[ModelingToolkit.substitute(state_vars[i], input_symbols.=>gens_)] = R(diff_eqs[i].rhs) 
+            state_eqn_dict[ModelingToolkit.substitute(state_vars[i], input_symbols.=>gens_)] = R(eval_at_nemo(diff_eqs[i].rhs, Dict(input_symbols.=>gens_)))
         end
     end
     

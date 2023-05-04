@@ -86,6 +86,9 @@ end
 
 function eval_at_nemo(e::Union{ModelingToolkit.Symbolics.Sym,ModelingToolkit.Symbolics.Term}, vals::Dict)
     if typeof(e) <: ModelingToolkit.Symbolics.Term{Real,Nothing}
+        if e in keys(vals)
+            return vals[e]
+        end
         throw(Base.ArgumentError("Function $(ModelingToolkit.Symbolics.operation(e)) is not supported"))
     end
     return get(vals, e, e)
