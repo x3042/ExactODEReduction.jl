@@ -80,6 +80,9 @@ function eval_at_nemo(e, vals::Dict)
             end
             return 1 // args[1]^(-args[2])
         end
+        if e in keys(vals)
+            return vals[e]
+        end
         throw(Base.ArgumentError("Function $(ModelingToolkit.Symbolics.operation(e)) is not supported"))
     end
 end
