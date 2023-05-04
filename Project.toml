@@ -16,6 +16,7 @@ Primes = "27ebfcd6-29c5-5fa9-bf4b-fb8fc14df3ae"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
 Requires = "ae029012-a4dd-5104-9daa-d747884805df"
 SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
+SymbolicUtils = "d1185830-fcd6-423d-90d6-eec64667417b"
 
 [compat]
 AbstractAlgebra = "0.23, 0.24, 0.25, 0.26, 0.27"
