@@ -61,47 +61,40 @@ function eval_at_dict(poly::P, d::Dict{P,T}) where {P <: Nemo.MPolyElem, T}
     return evaluate(poly, point)
 end
 
-function eval_at_nemo(e::ModelingToolkit.Num, vals::Dict)
-    e = ModelingToolkit.Symbolics.value(e)
+function eval_at_nemo(e::Num, vals::Dict)
+    e = Symbolics.value(e)
     return eval_at_nemo(e, vals)
 end
 
-function eval_at_nemo(e, vals::Dict)
-    if ModelingToolkit.Symbolics.istree(e)
-        args = map(a -> eval_at_nemo(a, vals), ModelingToolkit.Symbolics.arguments(e))
-        if ModelingToolkit.Symbolics.operation(e) in [+, -, *]
-            return ModelingToolkit.Symbolics.operation(e)(args...)
-        elseif isequal(ModelingToolkit.Symbolics.operation(e), /)
-            return //(args...)
+function eval_at_nemo(e::SymbolicUtils.BasicSymbolic, vals::Dict)
+    if Symbolics.istree(e)
+        # checking if it is a function of the form x(t), a bit dirty
+        if length(Symbolics.arguments(e)) == 1 && "$(first(Symbolics.arguments(e)))" == "t"
+            return vals[e]
         end
-        if ModelingToolkit.Symbolics.operation(e) === ^
+        # otherwise, this is a term
+        args = map(a -> eval_at_nemo(a, vals), Symbolics.arguments(e))
+        if Symbolics.operation(e) in (+, -, *)
+            return Symbolics.operation(e)(args...)
+        elseif isequal(Symbolics.operation(e), /)
+            return //(args...)
+        elseif isequal(Symbolics.operation(e), ^)
             if args[2] >= 0
                 return args[1]^args[2]
             end
             return 1 // args[1]^(-args[2])
         end
-        if e in keys(vals)
-            return vals[e]
-        end
-        throw(Base.ArgumentError("Function $(ModelingToolkit.Symbolics.operation(e)) is not supported"))
+        throw(Base.ArgumentError("Function $(Symbolics.operation(e)) is not supported"))
+    elseif e isa Symbolics.Symbolic
+        return get(vals, e, e)
     end
 end
 
-function eval_at_nemo(e::Union{ModelingToolkit.Symbolics.Sym,ModelingToolkit.Symbolics.Term}, vals::Dict)
-    if typeof(e) <: ModelingToolkit.Symbolics.Term{Real,Nothing}
-        if e in keys(vals)
-            return vals[e]
-        end
-        throw(Base.ArgumentError("Function $(ModelingToolkit.Symbolics.operation(e)) is not supported"))
-    end
-    return get(vals, e, e)
-end
-
-function eval_at_nemo(e::Union{Integer,Rational}, vals::Dict)
+function eval_at_nemo(e::Union{Integer, Rational}, vals::Dict)
     return e
 end
 
-function eval_at_nemo(e::Union{Float16,Float32,Float64}, vals::Dict)
+function eval_at_nemo(e::Union{Float16, Float32, Float64}, vals::Dict)
     if isequal(e % 1, 0)
         out = Int(e)
     else
@@ -110,6 +103,7 @@ function eval_at_nemo(e::Union{Float16,Float32,Float64}, vals::Dict)
     @warn "Floating points are not allowed, value $e will be converted to $(out)."
     return out
 end
+
 
 #------------------------------------------------------------------------------
 
