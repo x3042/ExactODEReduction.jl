@@ -1,159 +1,111 @@
-# This file was used to produce the plots in the paper
+# This file was used to produce the data for the plots in the paper
+
+import Pkg; Pkg.activate(temp=true);
+Pkg.develop(path=(@__DIR__)*"/../../../")
+Pkg.add("DifferentialEquations"); Pkg.add("ModelingToolkit")
 
 using DifferentialEquations, ModelingToolkit
 using ExactODEReduction
-using Plots
 
 ############
 ############
 
-# Loading the model from file into our main ODE datastructure
-fname = (@__DIR__) * "/../BIOMD0000000365.ode"
-ode = load_ODE_fromfile(fname)
+# Loading the model from file into our ODE datastructure
+modelname = (@__DIR__) * "/../BIOMD0000000365.ode"
+ode = load_ODE_fromfile(modelname)
 
 ############
 ############
 
-# Converting ODE datastructure into an MTK problem and integrating
-(mtkprob, ic, p) = ODEtoMTK(ode)
-tspan = (0.0, 1200.0) # timespan from the paper
-prob = ODEProblem(mtkprob, ic, tspan, p)
-sol = solve(prob, Rosenbrock23())
+solver = Rosenbrock23()
+
+# Converting ODE datastructure into an MTK problem and integrating it
+(mtksystem, initialconds, params) = ODEtoMTK(ode)
+# Timespan from the paper
+#   https://pubs.acs.org/doi/10.1021/bi981966e
+timespan = (0.0, 1200.0)
+problem = ODEProblem(mtksystem, initialconds, timespan, params)
+solution = solve(problem, solver)
+@assert SciMLBase.successful_retcode(solution.retcode)
 
 ############
 ############
+# Searching for reductions
+
+reductions = find_reductions(ode)
+# The fifth reduction is interesting
+reduced = reductions[5]
+
+@show new_vars(reduced)
+# New states are y1, y2, y3
+# y1 => APC
+# y2 => LC + Va + Va3 + Va36 + Va5 + Va53 + Va536 + Va56 + VaLCA1
+# y3 => LC_APC + Va36_APC + Va3_APC + Va536_APC + Va53_APC + Va56_APC + Va5_APC + VaLCA1_APC + Va_APC
+
+ode_reduced = new_system(reduced)
+(mtkproblem_reduced, initialconds_reduced, params_reduced) = ODEtoMTK(ode_reduced)
+timespan_reduced = (0.0, 1.0) # NOTE the new timespan
+problem_reduced = ODEProblem(mtkproblem_reduced, initialconds_reduced, timespan_reduced, params_reduced)
+solution_reduced = solve(problem_reduced, solver)
+@assert SciMLBase.successful_retcode(solution_reduced.retcode)
+
+############
+############
+# Write the solutions to ODEs to files
+
+N = length(states(mtksystem))
+@show states(mtksystem)
+
+state_to_index = Dict(states(mtksystem) .=> 1:N)
+string_to_state = str -> states(mtksystem)[findfirst(==(str*"(t)"), map(string, states(mtksystem)))]
+@assert state_to_index[string_to_state("APC")] == 1
+
+y1_states = map(string_to_state, ["APC"])
+y2_states = map(string_to_state, ["LC", "Va", "Va3", "Va36", "Va5", "Va53", "Va536", "Va56", "VaLCA1"])
+y3_states = map(string_to_state, ["LC_APC", "Va36_APC", "Va3_APC", "Va536_APC", "Va53_APC", "Va56_APC", "Va5_APC", "VaLCA1_APC", "Va_APC"])
+
+plot_ntimestamps = 30
+
+datadir = (@__DIR__)*"/plot_data"
+mkpath(datadir)
 
 begin
-    gr()
-
-    linestyles = repeat([:solid, :dash, :dot, :dashdot, :dashdotdot], 3)
-    indices = [9, 11, 12, 13, 16, 17, 18, 21, 28]
-    colors = distinguishable_colors(
-        length(indices), 
-        [RGB(0.1,0.9,0.1)]
-    );
-
-    n = 10001 # number of timepoints
-    ts = range(first(tspan), stop=last(tspan), length=n)
-
-    begin 
-        a = plot(
-            #size=(800, 600), 
-            dpi=400, 
-            legendfontsize=9,
-            xtickfontsize=8,ytickfontsize=8,
-            xguidefontsize=10,
-            legend=:right)
-        for reli in 1:length(indices)
-            idx = indices[reli]
-            var = ode.x_vars[idx]
-            plot!(
-                a,
-                sol(ts,idxs=idx), 
-                linewidth=3, 
-                label=" $var", 
-                #color=colors[reli], 
-                linestyle=linestyles[reli],
-                thickness_scaling = 1
-            )
+    plot_timespan = range(first(timespan), stop=last(timespan), length=plot_ntimestamps)
+    for state in y2_states
+        index = state_to_index[state]
+        filename = "y2_$(string(state)[1:end-3]).dat" # erase "(t)"
+        out = open(datadir*"/"*filename, "w")
+        println(out, "t\ty")
+        for (t, y) in zip(plot_timespan, solution(plot_timespan, idxs=index))
+            println(out, "$t\t$y")
         end
-        xaxis!("Time (s)")
-        savefig((@__DIR__)*"/figure-1.png")
-        plot(a)
+        close(out)
     end
 end
 
-############
-############
-
-reds = find_reductions(ode);
-r = reds[5];
-
-############
-############
-
-ode_red = new_system(r)
-(mtkprob_red, ic_red, p_red) = ODEtoMTK(ode_red)
-tspan = (0.0, 1.0) # NOTE the new timespan
-prob_red = ODEProblem(mtkprob_red, ic_red, tspan, p_red)
-sol_red = solve(prob_red, Rosenbrock23())
-
-############
-############
-
 begin
-    indices = [1, 3]
-    colors = distinguishable_colors(
-        length(indices), 
-        [RGB(0.1,0.7,0.1)]
-    );
-
-    n = 101 # number of timepoints
-    ts = range(first(tspan), stop=last(tspan), length=n)
-
-    begin 
-        a = plot(
-            #size=(800, 600), 
-            dpi=400, 
-            legendfontsize=9,
-            xtickfontsize=8,ytickfontsize=8,
-            xguidefontsize=10,
-            legend=:right)
-        for reli in 1:length(indices)
-            idx = indices[reli]
-            var = ode_red.x_vars[idx]
-            plot!(
-                a,
-                sol_red(ts,idxs=idx), 
-                linewidth=3, 
-                label=" $var", 
-                color=colors[reli], 
-                linestyle=linestyles[reli],
-                thickness_scaling = 1
-            )
+    plot_timespan = range(first(timespan), stop=last(timespan), length=plot_ntimestamps)
+    for state in y3_states
+        index = state_to_index[state]
+        filename = "y3_$(string(state)[1:end-3]).dat" # erase "(t)"
+        out = open(datadir*"/"*filename, "w")
+        println(out, "t\ty")
+        for (t, y) in zip(plot_timespan, solution(plot_timespan, idxs=index))
+            println(out, "$t\t$y")
         end
-        xaxis!("Time (s)")
-        savefig((@__DIR__)*"/figure-2.png")
-        plot(a)
+        close(out)
     end
 end
 
-############
-############
-
 begin
-    indices = [2]
-    colors = distinguishable_colors(
-        length(indices), 
-        [RGB(0.1,0.9,0.1)]
-    );
-
-    n = 101 # number of timepoints
-    ts = range(first(tspan), stop=last(tspan), length=n)
-
-    begin 
-        a = plot(
-            #size=(800, 600), 
-            dpi=400, 
-            legendfontsize=9,
-            xtickfontsize=8,ytickfontsize=8,
-            xguidefontsize=10,
-            legend=:right)
-        for reli in 1:length(indices)
-            idx = indices[reli]
-            var = ode_red.x_vars[idx]
-            plot!(
-                a,
-                sol_red(ts,idxs=idx), 
-                linewidth=3, 
-                label=" $var", 
-                #color=colors[reli], 
-                linestyle=linestyles[reli],
-                thickness_scaling = 1
-            )
+    plot_timespan = range(first(timespan_reduced), stop=last(timespan_reduced), length=plot_ntimestamps)
+    for index in 1:3
+        filename = "y$index.dat" 
+        out = open(datadir*"/"*filename, "w")
+        println(out, "t\ty")
+        for (t, y) in zip(plot_timespan, solution_reduced(plot_timespan, idxs=index))
+            println(out, "$t\t$y")
         end
-        xaxis!("Time (s)")
-        savefig((@__DIR__)*"/figure-3.png")
-        plot(a)
+        close(out)
     end
 end
