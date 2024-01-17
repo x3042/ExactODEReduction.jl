@@ -262,22 +262,20 @@ function load_ODEs_if(;testspath = "data/ODEs/", from_size=-Inf, to_size=Inf)
 end
 
 """
-    load_ODE_fromfile(filepath)
+    load_ODE_fromfile(filepath; return_dict=false)
 
 Returns the `ODE` object constructed from equations
 in the `*.ode` file at the given `filepath`.
 
 For the format `*.ode` see the `examples` folder in the repository.
 """
-function load_ODE_fromfile(filepath)
+function load_ODE_fromfile(filepath; return_dict=false)
     # *.ode --> polynomial form of ode system
 
     lines = []
     open(filepath, "r") do inputs
         lines = map(strip, readlines(inputs))
     end
-
-    # @info "Loading $filepath"
 
     if isnothing(findlast(startswith("begin"), lines))
         throw(ParseException("bad file encountered at $filepath, skipping it"))
@@ -331,6 +329,8 @@ function load_ODE_fromfile(filepath)
         and we will try to dispatch on it
     =#
 
+    contains_fractions = occursin("/", prod(reactions))
+
     sep = occursin("->", prod(reactions)) ? "->" : "="
 
     # scan reactions to discover all variables
@@ -347,7 +347,7 @@ function load_ODE_fromfile(filepath)
     end
 
     # we want to agree with CLUE in variable order
-    strings = sort(strings)
+    strings = sort(strings, lt=natural)
     #
     @debug "Variables parsed " * join(strings, ", ")
     if isempty(strings)
@@ -363,7 +363,12 @@ function load_ODE_fromfile(filepath)
         for (i, x) in enumerate(strings)
     )
 
-    ODEs = Dict(x => S(0) for x in xs)
+    if !contains_fractions
+        ODEs = Dict(x => S(0) for x in xs)
+    else
+        ODEs = Dict(x => S(0)//S(1) for x in xs)
+    end
+    T = valtype(ODEs)
 
     if sep === "->"
         sep2 = r"(->)|(,)"
@@ -408,15 +413,22 @@ function load_ODE_fromfile(filepath)
                 x -> myeval(x, mapping),
                 (lhs, rhs)
             )
-
-            ODEs[ẋ] = rhs
+            if !isa(rhs, Nemo.fmpq_mpoly) && !isa(rhs, T)
+                rhs = S(rhs)
+            end
+            ODEs[ẋ] = rhs // S(1)
         end
     end
 
     ODEs = Dict(x => f for (x, f) in ODEs if !("$x" in keys(param_vals)))
     x_vars = [x for x in xs if x in keys(ODEs)]
     params = [x for x in xs if "$x" in keys(param_vals)]
-    ode = ODE{Nemo.fmpq_mpoly}(x_vars, params, ODEs)
+
+    if return_dict
+        return ODEs, x_vars, params
+    end
+
+    ode = ODE{T}(x_vars, params, ODEs)
     for (i, x) in enumerate(x_vars)
         ode.ic[i] = get(ics, "$x", missing)
     end

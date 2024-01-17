@@ -96,11 +96,6 @@ end
 
 # Division
 function _myeval(::Val{:/}, args, map::Dict{Symbol,fmpq_mpoly})
-    if typeof(_myeval(args[2], map)) <: fmpq_mpoly
-        @warn "We can not parse polynomial fractions, sorry"
-        throw(ParseException("Polynomial fractions are not supported"))
-    end
-
     return _myeval(args[1], map) // _myeval(args[2], map)
 end
 
