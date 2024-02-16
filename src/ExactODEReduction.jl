@@ -405,6 +405,28 @@ function find_reductions(
     ChainOfReductions(results)
 end
 
+function find_conservation_laws(system::ODE{P}; seed=nothing, loglevel=Logging.Info) where {P}
+    prev_logger = Logging.global_logger(ConsoleLogger(stderr, loglevel))
+
+    isnothing(seed) && (seed = getnewrandomseed())
+    Random.seed!(seed)
+    @info "Global random seed: $seed"
+
+    eqs = equations_extended(system)
+
+    basis, kerdim, ker, relations = constant_linear_relations(eqs)
+    _relations_sym = ker * basis
+    relations_sym = [_relations_sym[i, :] for i in 1:kerdim]
+
+    Logging.global_logger(prev_logger)
+
+    laws = []
+    for i in 1:kerdim
+        push!(laws, (basis=basis, matrix=relations[i], law=relations_sym[i]))
+    end
+    laws
+end
+
 export ODE, @ODEsystem, equations, vars
 export states, parameters, initial_conditions, parameter_values
 export set_parameter_values, to_state, to_parameter
