@@ -38,14 +38,18 @@ struct Reduction{A, B, C}
     new_system::ODE{A}
     new_vars::Dict{A, B}
     old_system::ODE{C}
+    lumping_matrix::Matrix{Any}
 
     function Reduction{A, B, C}(new_system::ODE{A}, new_vars::Dict{A, B}, old_system::ODE{C}) where {A, B, C}
-        return new{A, B, C}(new_system, new_vars, old_system)
+        lumping_vars = [new_vars[x] for x in gens(parent(old_system))]
+        lumping_combs = [sum(collect(coefficients(comb)) .* exponent_vectors(comb)) for comb in lumping_vars]
+        lumping_matrix = mapreduce(permutedims, vcat, lumping_combs)
+        return new{A, B, C}(new_system, new_vars, old_system, lumping_matrix)
     end
 
     function Reduction{P}(old_ode::ODE{P}, subspace, parameter_strategy=:inhertiance) where {P}
-        (transformation, new_equations) = perform_change_of_variables(equations_extended(old_ode), subspace)
-    
+        (lumping_matrix, transformation, new_equations) = perform_change_of_variables(equations_extended(old_ode), subspace)
+        
         # (!) assumes the correct order in new_equations, i.e.,
         # ∂y[1] ~ new_equations[1],
         # ∂y[2] ~ new_equations[2],
@@ -82,7 +86,7 @@ struct Reduction{A, B, C}
             @warn "Unknown parameter handling strategy $parameter_strategy, using none"
         end
 
-        return new{elem_type(parent(new_ode)), elem_type(parent(first(transformation))), elem_type(parent(old_ode))}(new_ode, new_vars, old_ode)
+        return new{elem_type(parent(new_ode)), elem_type(parent(first(transformation))), elem_type(parent(old_ode))}(new_ode, new_vars, old_ode, lumping_matrix)
     end
 end
 
