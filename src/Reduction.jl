@@ -41,7 +41,7 @@ struct Reduction{A, B, C}
     lumping_matrix::Matrix{Any}
 
     function Reduction{A, B, C}(new_system::ODE{A}, new_vars::Dict{A, B}, old_system::ODE{C}) where {A, B, C}
-        lumping_vars = [new_vars[x] for x in gens(parent(old_system))]
+        lumping_vars = [new_vars[x] for x in gens(parent(new_system))]
         lumping_combs = [sum(collect(coefficients(comb)) .* exponent_vectors(comb)) for comb in lumping_vars]
         lumping_matrix = mapreduce(permutedims, vcat, lumping_combs)
         return new{A, B, C}(new_system, new_vars, old_system, lumping_matrix)
