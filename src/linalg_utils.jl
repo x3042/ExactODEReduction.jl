@@ -136,3 +136,24 @@ function construct_jacobians(system)
     ring = parent(first(keys(system)))
     construct_jacobians([system[x] for x in gens(ring)])
 end
+
+#------------------------------------------------------------------------------
+
+# Find the left kernel of a Macaulay matrix of `system`.
+function constant_linear_relations(system::AbstractArray{T}) where {T<:Nemo.MPolyElem}
+    domain = base_ring(first(system))
+    poly_ring = parent(first(system))
+    m = length(system)
+    labels = unique(sort(reduce(vcat, map(collect ∘ monomials, system)), rev=true))
+    n = length(labels)
+    S = Nemo.MatrixSpace(domain, m, n)
+    A = zero(S)
+    for (p_idx, poly) in enumerate(system)
+        for (l_idx, label) in enumerate(labels)
+            A[p_idx, l_idx] = coeff(poly, label)
+        end
+    end
+    kerdim, ker = Nemo.left_kernel(A)
+    relations = [ker[i, :] for i in 1:kerdim]
+    gens(poly_ring), kerdim, ker, relations
+end

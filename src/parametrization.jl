@@ -55,7 +55,7 @@ function perform_change_of_variables(system, invariants; new_vars_name="y")
 
     newsystem = [Nemo.evaluate(p, substitutions) for p in newsystem]
 
-    return (transform, newsystem)
+    return (Matrix(transform_matrix), transform, newsystem)
 end
 
 """
