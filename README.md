@@ -141,3 +141,24 @@ Dict{Symbol, Vector{Nemo.fmpq_mpoly}} with 2 entries:
 --->
 
 For more examples we refer to the documentation and the `examples` directory.
+
+## Citation
+
+If you use this package, the right way to cite is currently:
+
+```
+@article{DDP24,
+title = {Exact hierarchical reductions of dynamical models via linear transformations},
+journal = {Communications in Nonlinear Science and Numerical Simulation},
+volume = {131},
+pages = {107816},
+year = {2024},
+issn = {1007-5704},
+doi = {https://doi.org/10.1016/j.cnsns.2024.107816},
+url = {https://www.sciencedirect.com/science/article/pii/S1007570424000029},
+author = {Alexander Demin and Elizaveta Demitraki and Gleb Pogudin},
+keywords = {Ordinary differential equations, Exact reduction, Lumping, Dimensionality reduction, Matrix algebras},
+abstract = {Dynamical models described by ordinary differential equations (ODEs) are a fundamental tool in the sciences and engineering. Exact reduction aims at producing a lower-dimensional model in which each macro-variable can be directly related to the original variables, and it is thus a natural step towards the model’s formal analysis and mechanistic understanding. We present an algorithm which, given a polynomial ODE model, computes a longest possible chain of exact linear reductions of the model such that each reduction refines the previous one, thus giving a user control of the level of detail preserved by the reduction. This significantly generalizes over the existing approaches which compute only the reduction of the lowest dimension subject to an approach-specific constraint. The algorithm reduces finding exact linear reductions to a question about representations of finite-dimensional algebras. We provide an implementation of the algorithm, demonstrate its performance on a set of benchmarks, and illustrate the applicability via case studies. Our implementation is freely available at https://github.com/x3042/ExactODEReduction.jl.}
+}
+```
+
